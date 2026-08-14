@@ -38,7 +38,9 @@ build:
 # ─────────────────────────────────────────────────────────────
 deploy:
   stage: deploy
-  image: $AWS_CLI_IMAGE
+  image:
+    name: $AWS_CLI_IMAGE
+    entrypoint: [""]
   dependencies:
     - build
   before_script:
