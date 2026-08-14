@@ -1,11 +1,11 @@
+import { COLOR_PALETTE_BG_ALPHA, withAlpha } from '@/shared/colors';
 import {
+  HIDDEN_AMOUNT,
+  useAmountsVisibility,
   useBreakpoint,
   useCapital,
   useGlobalBalance,
-  HIDDEN_AMOUNT,
-  useAmountsVisibility,
 } from '@/shared/hooks';
-import { COLOR_PALETTE_BG_ALPHA, withAlpha } from '@/shared/colors';
 import {
   HelpIcon,
   HomeIcon,

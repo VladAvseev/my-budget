@@ -1,0 +1,51 @@
+# Полный пайплайн: сборка React → генерация .env из переменных GitLab → заливка в Object Storage
+
+stages:
+  - build
+  - deploy
+
+variables:
+  # Общие переменные для всех джоб (не секретные)
+  NODE_IMAGE: node:20-alpine
+  AWS_CLI_IMAGE: amazon/aws-cli:latest
+
+# ─────────────────────────────────────────────────────────────
+# Этап 1: Сборка React-приложения
+# ─────────────────────────────────────────────────────────────
+build:
+  stage: build
+  image: $NODE_IMAGE
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 hour
+  only:
+    - main
+
+# ─────────────────────────────────────────────────────────────
+# Этап 2: Деплой в Object Storage
+# ─────────────────────────────────────────────────────────────
+deploy:
+  stage: deploy
+  image: $AWS_CLI_IMAGE
+  dependencies:
+    - build
+  before_script:
+    # Генерируем .env из переменных GitLab CI/CD.
+    # Ключи НЕ лежат в репозитории — они заданы в Settings → CI/CD → Variables.
+    - echo "SUPABASE_URL=$SUPABASE_URL" > .env
+    - echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
+    # Проверка, что файл создан (для отладки; секреты не печатаем)
+    - cat .env | sed 's/=.*/=***/'
+  script:
+    # Настройка AWS CLI на Yandex Object Storage
+    - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+    - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
+    - aws configure set default.region ru-central1
+    # Синхронизация собранной статики в бакет
+    - aws --endpoint-url=https://storage.yandexcloud.net \
+        s3 sync build/ s3://$BUCKET_NAME --delete
+  only:
+    - main
