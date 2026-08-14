@@ -1,0 +1,26 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-m);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
+.value {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+}
+
+.percent {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}

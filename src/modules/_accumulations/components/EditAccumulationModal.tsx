@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { TrashIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Accumulation } from '@/shared/supabase/services/accumulations';
-import { useThemeStyles } from '@/shared/theme';
+import modalStyles from '@/shared/styles/modal.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VIconButton } from '@/shared/ui/VIconButton';
@@ -19,7 +19,6 @@ interface EditAccumulationModalProps {
 }
 
 export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulationModalProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const updateAccumulation = useUpdateAccumulation(userId);
@@ -102,24 +101,17 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
       onClose={handleClose}
       error={submitError}
       footer={
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: styles.spacing.m,
-            width: '100%',
-          }}
-        >
+        <div className={modalStyles.footerSplit}>
           <VIconButton
             ariaLabel="Удалить накопление"
             onClick={handleDelete}
             isLoading={removeAccumulation.isPending}
             isDisabled={isPending}
-            color={styles.colors.error}
+            color="var(--color-error)"
           >
-            <TrashIcon size={24} color={styles.colors.error} />
+            <TrashIcon size={24} color="currentColor" />
           </VIconButton>
-          <div style={{ display: 'flex', gap: styles.spacing.m }}>
+          <div className={modalStyles.footerRight}>
             <VButton variant="secondary" onClick={handleClose} isDisabled={isPending}>
               Отмена
             </VButton>
@@ -134,7 +126,7 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
         </div>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={modalStyles.content}>
         <VTextInput
           label="Сумма"
           numeric

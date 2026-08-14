@@ -1,6 +1,6 @@
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Report } from '@/shared/supabase/services/reports';
-import { useThemeStyles } from '@/shared/theme';
+import modalStyles from '@/shared/styles/modal.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
@@ -16,7 +16,6 @@ interface CreateStandardModalProps {
 }
 
 export const CreateStandardModal = ({ type, report, onClose }: CreateStandardModalProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const createOperation = useCreateOperation(report.id);
 
@@ -82,7 +81,7 @@ export const CreateStandardModal = ({ type, report, onClose }: CreateStandardMod
         </>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={modalStyles.content}>
         <VTextInput
           label="Сумма"
           numeric

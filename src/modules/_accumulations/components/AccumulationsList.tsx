@@ -1,6 +1,5 @@
 import { useAuth } from '@/shared/supabase/authProvider';
 import { useAccumulations } from '@/shared/hooks';
-import { useThemeStyles } from '@/shared/theme';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -9,9 +8,9 @@ import { formatAmount } from '@/shared/utils';
 import { useCategories } from '../api/useCategories';
 import { groupItemsByCategory } from '../utils/groupByCategory';
 import { AccumulationCard } from './AccumulationCard';
+import styles from './AccumulationsList.module.css';
 
 export const AccumulationsList = () => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const accumulationsQuery = useAccumulations(userId);
@@ -27,13 +26,13 @@ export const AccumulationsList = () => {
   );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+    <div className={styles.root}>
       {accumulationsQuery.error && (
         <VBanner type="error" visible message="Не удалось загрузить накопления" />
       )}
 
       {accumulationsQuery.isLoading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+        <div className={styles.loaderWrap}>
           <VLoader size={28} />
         </div>
       )}
@@ -42,28 +41,23 @@ export const AccumulationsList = () => {
         !accumulationsQuery.error &&
         accumulations.length === 0 && (
           <VCard>
-            <div style={{ color: styles.colors.textSecondary }}>Нет накоплений</div>
+            <div className={styles.empty}>Нет накоплений</div>
           </VCard>
         )}
 
       {!accumulationsQuery.isLoading && accumulations.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
+        <div className={styles.list}>
           {groups.map((group) => (
             <VAccordion
               key={group.key}
               header={
-                <span style={{ display: 'flex', alignItems: 'center', gap: styles.spacing.m }}>
+                <span className={styles.accordionHeader}>
                   <span
-                    style={{
-                      width: 12,
-                      height: 12,
-                      flexShrink: 0,
-                      borderRadius: styles.radius.round,
-                      backgroundColor: group.color ?? styles.colors.border,
-                    }}
+                    className={styles.accordionDot}
+                    style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
                   />
-                  <span style={{ flex: 1, minWidth: 0 }}>{group.label}</span>
-                  <span style={{ fontWeight: styles.typography.fontWeight.bold }}>
+                  <span className={styles.accordionLabel}>{group.label}</span>
+                  <span className={styles.accordionTotal}>
                     {formatAmount(
                       group.items.reduce(
                         (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
@@ -74,7 +68,7 @@ export const AccumulationsList = () => {
                 </span>
               }
             >
-              <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
+              <div className={styles.items}>
                 {group.items.map((accumulation) => (
                   <AccumulationCard
                     key={accumulation.id}

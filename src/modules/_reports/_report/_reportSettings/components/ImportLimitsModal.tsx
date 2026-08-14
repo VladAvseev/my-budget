@@ -1,6 +1,6 @@
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Report } from '@/shared/supabase/services/reports';
-import { useThemeStyles } from '@/shared/theme';
+import modalStyles from '@/shared/styles/modal.module.css';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -12,6 +12,7 @@ import { useReports } from '../../../api/useReports';
 import { useCategoryLimits } from '../../api/useCategoryLimits';
 import { useCategories } from '../../api/useCategories';
 import { useSetCategoryLimits } from '../api/useSetCategoryLimits';
+import settingsStyles from '../settingsCard.module.css';
 
 interface ImportLimitsModalProps {
   report: Report;
@@ -20,7 +21,6 @@ interface ImportLimitsModalProps {
 }
 
 export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModalProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
 
@@ -93,7 +93,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
         </>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={modalStyles.content}>
         <VSelect
           label="Отчёт"
           options={reportOptions}
@@ -107,14 +107,14 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
         />
 
         {!hasSelection && (
-          <div style={{ color: styles.colors.textSecondary }}>
+          <div className={settingsStyles.text}>
             Выберите отчёт, чтобы посмотреть его лимиты. Они полностью заменят текущие лимиты отчёта
             «{report.name}».
           </div>
         )}
 
         {hasSelection && sourceLimitsQuery.isLoading && (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+          <div className={settingsStyles.loaderWrap}>
             <VLoader size={28} />
           </div>
         )}
@@ -124,72 +124,27 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
         )}
 
         {hasSelection && !sourceLimitsQuery.isLoading && !sourceLimitsQuery.error && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: styles.spacing.m,
-              padding: styles.spacing.m,
-              borderRadius: styles.radius.m,
-              border: `1px solid ${styles.colors.border}`,
-              backgroundColor: styles.colors.bgSurface,
-            }}
-          >
-            <div
-              style={{
-                fontSize: styles.typography.fontSize.s,
-                fontWeight: styles.typography.fontWeight.medium,
-                color: styles.colors.textSecondary,
-              }}
-            >
-              Лимиты выбранного отчёта
-            </div>
+          <div className={settingsStyles.importBox}>
+            <div className={settingsStyles.importLabel}>Лимиты выбранного отчёта</div>
             {sourceLimits.length === 0 && (
-              <div style={{ color: styles.colors.textSecondary }}>
+              <div className={settingsStyles.text}>
                 У выбранного отчёта нет лимитов.
               </div>
             )}
             {sourceLimits.map((limit) => {
               const category = categoriesById.get(limit.category_id);
               return (
-                <div
-                  key={limit.id}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: styles.spacing.m,
-                  }}
-                >
-                  <span
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: styles.spacing.s,
-                      minWidth: 0,
-                    }}
-                  >
+                <div key={limit.id} className={settingsStyles.importRow}>
+                  <span className={settingsStyles.importName}>
                     <span
-                      style={{
-                        width: 12,
-                        height: 12,
-                        flexShrink: 0,
-                        borderRadius: styles.radius.round,
-                        backgroundColor: category?.color ?? styles.colors.border,
-                      }}
+                      className={settingsStyles.importDot}
+                      style={{ backgroundColor: category?.color ?? 'var(--color-border)' }}
                     />
-                    <span
-                      style={{
-                        color: styles.colors.textPrimary,
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
+                    <span className={settingsStyles.importLabelText}>
                       {category?.name ?? 'Категория удалена'}
                     </span>
                   </span>
-                  <span style={{ fontWeight: styles.typography.fontWeight.bold, flexShrink: 0 }}>
+                  <span className={settingsStyles.importAmount}>
                     {formatAmount(Number(limit.amount))}
                   </span>
                 </div>

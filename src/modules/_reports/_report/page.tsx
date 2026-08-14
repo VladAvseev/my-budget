@@ -1,5 +1,5 @@
 import { SettingsIcon } from '@/shared/icons';
-import { useThemeStyles } from '@/shared/theme';
+import commonStyles from '@/shared/styles/common.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
@@ -15,7 +15,6 @@ import { CreateOperationModal } from './components/CreateOperationModal';
 import { EditOperationModal } from './components/EditOperationModal';
 
 export const Page: React.FC = () => {
-  const styles = useThemeStyles();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { data: report, isLoading, error } = useReport(id ?? '');
@@ -23,13 +22,7 @@ export const Page: React.FC = () => {
   const [operationModal, setOperationModal] = useAtom(operationModalAtom);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: styles.spacing.l,
-      }}
-    >
+    <div className={commonStyles.page}>
       <VPageHeader
         title={report?.name ?? 'Отчёт'}
         onBack={() => navigate('/reports')}
@@ -39,23 +32,23 @@ export const Page: React.FC = () => {
             <VIconButton
               ariaLabel="Настройки отчёта"
               onClick={() => navigate(`/reports/${report.id}/settings`)}
-              color={styles.colors.textPrimary}
+              color="var(--color-text-primary)"
             >
-              <SettingsIcon size={24} color={styles.colors.textPrimary} />
+              <SettingsIcon size={24} color="currentColor" />
             </VIconButton>
           ) : undefined
         }
       />
 
       {isLoading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+        <div className={commonStyles.loaderContainer}>
           <VLoader size={28} />
         </div>
       )}
 
       {!isLoading && (error || !report) && (
         <VCard>
-          <div style={{ color: styles.colors.textSecondary }}>Отчёт не найден</div>
+          <div className={commonStyles.textSecondary}>Отчёт не найден</div>
         </VCard>
       )}
 

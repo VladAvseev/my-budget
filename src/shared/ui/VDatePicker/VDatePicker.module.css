@@ -1,0 +1,192 @@
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  padding: var(--space-s);
+  border-radius: var(--radius-m);
+  font-size: var(--font-size-m);
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.15s ease;
+}
+
+.trigger[data-has-value='true'] {
+  color: var(--color-text-primary);
+}
+
+.trigger[data-open='true'] {
+  border-color: var(--color-accent);
+}
+
+.trigger[data-invalid='true'] {
+  border-color: var(--color-error);
+}
+
+.trigger:hover:not([data-disabled='true']):not([data-invalid='true']):not([data-open='true']) {
+  border-color: var(--color-text-secondary);
+}
+
+.trigger[data-disabled='true'] {
+  background-color: transparent;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.triggerText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.triggerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  flex-shrink: 0;
+}
+
+.clearButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.calendarIcon {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-secondary);
+}
+
+.error {
+  font-size: var(--font-size-s);
+  color: var(--color-error);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  padding: var(--space-m);
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-l);
+}
+
+.navRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.monthButton {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-xs);
+}
+
+.weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 28px;
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: var(--radius-s);
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.day:hover:not(.daySelected) {
+  color: var(--color-accent);
+  background-color: var(--color-accent-light);
+}
+
+.daySelected {
+  color: var(--color-bg-primary);
+  background-color: var(--color-accent);
+  font-weight: var(--font-weight-medium);
+}
+
+.dayToday {
+  border: 1px solid var(--color-accent);
+}
+
+.dayToday:not(.daySelected) {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-medium);
+}
+
+.dayOutOfMonth {
+  opacity: 0.5;
+  color: var(--color-text-secondary);
+}
+
+.dayOutOfMonth.dayToday {
+  color: var(--color-accent);
+}

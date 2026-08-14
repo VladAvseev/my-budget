@@ -1,12 +1,11 @@
 import { CheckIcon } from '@/shared/icons';
-import { useThemeStyles } from '@/shared/theme';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { useCompleteOnboarding } from '../api/useCompleteOnboarding';
 import { useOnboardingChecklist } from '../api/useOnboardingChecklist';
+import styles from '../homeCard.module.css';
 
 export const OnboardingCard = () => {
-  const styles = useThemeStyles();
   const { items, allDone, onboarded, isLoading, error } = useOnboardingChecklist();
   const completeOnboarding = useCompleteOnboarding();
 
@@ -15,61 +14,30 @@ export const OnboardingCard = () => {
   }
 
   return (
-    <VCard
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: styles.spacing.l,
-        height: '100%',
-        flex: '1 1 300px',
-        minWidth: 300,
-      }}
-    >
-      <div
-        style={{
-          fontSize: styles.typography.fontSize.l,
-          fontWeight: styles.typography.fontWeight.bold,
-          color: styles.colors.textPrimary,
-        }}
-      >
-        С чего начать?
-      </div>
+    <VCard className={styles.cardGrow}>
+      <div className={styles.title}>С чего начать?</div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.s }}>
+      <div className={styles.checklist}>
         {items.map((item) => (
-          <div
-            key={item.id}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: styles.spacing.m,
-            }}
-          >
+          <div key={item.id} className={styles.checklistItem}>
             <div
-              style={{
-                fontSize: styles.typography.fontSize.s,
-                color: item.done ? styles.colors.textPrimary : styles.colors.textSecondary,
-              }}
+              className={`${styles.checklistLabel}${item.done ? ` ${styles.checklistLabelDone}` : ` ${styles.checklistLabelPending}`}`}
             >
               {item.label}
             </div>
-            {item.done && (
-              <CheckIcon size={18} color={styles.colors.accent} style={{ flexShrink: 0 }} />
-            )}
+            <CheckIcon
+              size={18}
+              color={item.done ? 'var(--color-success)' : 'var(--color-text-secondary)'}
+            />
           </div>
         ))}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <VButton
-          variant={allDone ? 'primary' : 'secondary'}
-          onClick={() => completeOnboarding.mutate()}
-          isLoading={completeOnboarding.isPending}
-        >
-          {allDone ? 'Завершить' : 'Пропустить'}
+      {allDone && (
+        <VButton onClick={() => completeOnboarding.mutate()} isLoading={completeOnboarding.isPending}>
+          Отлично!
         </VButton>
-      </div>
+      )}
     </VCard>
   );
 };

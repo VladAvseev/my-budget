@@ -1,8 +1,8 @@
 import { LogoutIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useThemeStyles } from '@/shared/theme';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VIconButton } from '@/shared/ui/VIconButton';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AccountCard } from './components/AccountCard';
@@ -11,7 +11,6 @@ import { StartBalanceCard } from './components/StartBalanceCard';
 import { ThemeCard } from './components/ThemeCard';
 
 export const Page: React.FC = () => {
-  const styles = useThemeStyles();
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -26,13 +25,7 @@ export const Page: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: styles.spacing.l,
-      }}
-    >
+    <div className={commonStyles.page}>
       <VPageHeader
         title="Профиль"
         onBack={() => navigate('/')}
@@ -43,9 +36,9 @@ export const Page: React.FC = () => {
             onClick={handleSignOut}
             isDisabled={isSigningOut}
             isLoading={isSigningOut}
-            color={styles.colors.error}
+            color="var(--color-error)"
           >
-            <LogoutIcon size={24} color={styles.colors.error} />
+            <LogoutIcon size={24} color="currentColor" />
           </VIconButton>
         }
       />

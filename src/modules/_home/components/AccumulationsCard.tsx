@@ -1,7 +1,6 @@
 import { useAccumulationsTotal, useAmountsVisibility } from '@/shared/hooks';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/services/operations';
-import { useThemeStyles } from '@/shared/theme';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { useMemo } from 'react';
@@ -9,9 +8,9 @@ import { Link } from 'react-router-dom';
 import { useCategories } from '../api/useCategories';
 import { useSavingsOperations } from '../api/useSavingsOperations';
 import { AccumulationsStructure } from './AccumulationsStructure';
+import styles from '../homeCard.module.css';
 
 export const AccumulationsCard = () => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const accumulationsQuery = useAccumulationsTotal(userId);
@@ -41,15 +40,7 @@ export const AccumulationsCard = () => {
 
   if (isLoading) {
     return (
-      <VCard
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: styles.spacing.xl,
-          flex: '1 1 300px',
-          minWidth: 300,
-        }}
-      >
+      <VCard className={styles.loadingCard}>
         <VLoader size={28} />
       </VCard>
     );
@@ -60,15 +51,7 @@ export const AccumulationsCard = () => {
   }
 
   return (
-    <Link
-      to="/accumulations"
-      style={{
-        textDecoration: 'none',
-        display: 'block',
-        flex: '1 1 300px',
-        minWidth: 300,
-      }}
-    >
+    <Link to="/accumulations" className={styles.link}>
       <AccumulationsStructure
         items={structureItems}
         categories={categories}

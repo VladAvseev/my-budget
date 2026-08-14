@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ClearIcon } from '@/shared/icons';
-import { useThemeStyles } from '@/shared/theme';
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import styles from './VSelect.module.css';
 
 export interface VSelectOption {
   value: string;
@@ -17,6 +17,7 @@ export interface VSelectProps {
   disabled?: boolean;
   onChange?: (value: string) => void;
   style?: CSSProperties;
+  className?: string;
 }
 
 export const VSelect = ({
@@ -28,22 +29,13 @@ export const VSelect = ({
   disabled,
   onChange,
   style,
+  className,
 }: VSelectProps) => {
-  const styles = useThemeStyles();
   const [isOpen, setIsOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const hasError = Boolean(error);
   const hasValue = value !== '';
-
-  const borderColor = hasError
-    ? styles.colors.error
-    : isOpen
-      ? styles.colors.accent
-      : isHovered
-        ? styles.colors.textSecondary
-        : styles.colors.border;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -64,21 +56,8 @@ export const VSelect = ({
   };
 
   return (
-    <div
-      ref={containerRef}
-      style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.xs, ...style }}
-    >
-      {label && (
-        <label
-          style={{
-            fontSize: styles.typography.fontSize.s,
-            fontWeight: styles.typography.fontWeight.medium,
-            color: styles.colors.textSecondary,
-          }}
-        >
-          {label}
-        </label>
-      )}
+    <div ref={containerRef} className={`${styles.root}${className ? ` ${className}` : ''}`} style={style}>
+      {label && <label className={styles.label}>{label}</label>}
       <div
         role="combobox"
         aria-expanded={isOpen}
@@ -89,45 +68,17 @@ export const VSelect = ({
             setIsOpen((prev) => !prev);
           }
         }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: styles.spacing.s,
-          borderRadius: styles.radius.m,
-          fontSize: styles.typography.fontSize.m,
-          backgroundColor: disabled ? 'transparent' : styles.colors.bgSurface,
-          color: hasValue ? styles.colors.textPrimary : styles.colors.textSecondary,
-          border: `1px solid ${borderColor}`,
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          opacity: disabled ? 0.5 : 1,
-          userSelect: 'none',
-        }}
+        className={styles.trigger}
+        data-has-value={hasValue ? 'true' : undefined}
+        data-open={isOpen ? 'true' : undefined}
+        data-invalid={hasError ? 'true' : undefined}
+        data-disabled={disabled ? 'true' : undefined}
       >
-        <span
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: styles.spacing.s,
-            overflow: 'hidden',
-          }}
-        >
+        <span className={styles.triggerText}>
           {selectedOption?.prefix}
-          <span
-            style={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {displayText}
-          </span>
+          <span className={styles.triggerTextValue}>{displayText}</span>
         </span>
-        <span
-          style={{ display: 'flex', alignItems: 'center', gap: styles.spacing.s, flexShrink: 0 }}
-        >
+        <span className={styles.triggerActions}>
           {hasValue && !disabled && (
             <button
               type="button"
@@ -136,57 +87,32 @@ export const VSelect = ({
                 event.stopPropagation();
                 handleSelect('');
               }}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 0,
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer',
-              }}
+              className={styles.clearButton}
             >
-              <ClearIcon size={16} color={styles.colors.textSecondary} />
+              <ClearIcon size={16} color="currentColor" />
             </button>
           )}
-          <ChevronDownIcon
-            size={16}
-            color={styles.colors.textSecondary}
-            style={{
-              transform: isOpen ? 'rotate(180deg)' : 'none',
-              transition: 'transform 0.15s ease',
-            }}
-          />
+          <span
+            className={styles.chevron}
+            style={{ transform: isOpen ? 'rotate(180deg)' : 'none' }}
+          >
+            <ChevronDownIcon size={16} color="currentColor" />
+          </span>
         </span>
       </div>
       {isOpen && !disabled && (
-        <div
-          role="listbox"
-          style={{
-            backgroundColor: styles.colors.bgSurface,
-            borderRadius: styles.radius.m,
-            boxShadow: styles.shadow.l,
-            maxHeight: '240px',
-            overflowY: 'auto',
-            zIndex: 10,
-          }}
-        >
+        <div role="listbox" className={styles.dropdown}>
           {options.map((option) => (
             <Option
               key={option.value}
               option={option}
               isSelected={option.value === value}
-              styles={styles}
               onClick={() => handleSelect(option.value)}
             />
           ))}
         </div>
       )}
-      {hasError && (
-        <span style={{ fontSize: styles.typography.fontSize.s, color: styles.colors.error }}>
-          {error}
-        </span>
-      )}
+      {hasError && <span className={styles.error}>{error}</span>}
     </div>
   );
 };
@@ -194,35 +120,20 @@ export const VSelect = ({
 interface OptionProps {
   option: VSelectOption;
   isSelected: boolean;
-  styles: ReturnType<typeof useThemeStyles>;
   onClick: () => void;
 }
 
-const Option = ({ option, isSelected, styles, onClick }: OptionProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-
+const Option = ({ option, isSelected, onClick }: OptionProps) => {
   return (
     <div
       role="option"
       aria-selected={isSelected}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: styles.spacing.s,
-        padding: `${styles.spacing.s} ${styles.spacing.m}`,
-        fontSize: styles.typography.fontSize.m,
-        color: isSelected || isHovered ? styles.colors.accent : styles.colors.textPrimary,
-        backgroundColor: isHovered ? styles.colors.accentLight : 'transparent',
-        cursor: 'pointer',
-      }}
+      className={styles.option}
+      data-selected={isSelected ? 'true' : undefined}
     >
       {option.prefix}
-      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        {option.label}
-      </span>
+      <span className={styles.optionText}>{option.label}</span>
     </div>
   );
 };

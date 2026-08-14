@@ -16,7 +16,7 @@ export const CreateOperationModal = ({ type, report, onClose }: CreateOperationM
     return <CreateDailyModal report={report} onClose={onClose} />;
   }
   if (isSavingsType(type)) {
-    return <CreateSavingsModal type={type} report={report} onClose={onClose} />;
+    return <CreateSavingsModal type={type as 'savings' | 'savings_out'} report={report} onClose={onClose} />;
   }
-  return <CreateStandardModal type={type} report={report} onClose={onClose} />;
+  return <CreateStandardModal type={type as 'income' | 'expense'} report={report} onClose={onClose} />;
 };

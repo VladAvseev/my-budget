@@ -1,11 +1,11 @@
 import type { Category } from '@/shared/supabase/services/categories';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/services/operations';
-import { useThemeStyles } from '@/shared/theme';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import { useNavigate } from 'react-router-dom';
 import type { SavingsOperation } from '../api/useSavingsOperations';
+import styles from './SavingsOperationCard.module.css';
 
 interface SavingsOperationCardProps {
   operation: SavingsOperation;
@@ -13,7 +13,6 @@ interface SavingsOperationCardProps {
 }
 
 export const SavingsOperationCard = ({ operation, category }: SavingsOperationCardProps) => {
-  const styles = useThemeStyles();
   const navigate = useNavigate();
 
   const isWithdrawal = operation.type === 'savings_out';
@@ -30,64 +29,21 @@ export const SavingsOperationCard = ({ operation, category }: SavingsOperationCa
           navigate(`/reports/${operation.report_id}`);
         }
       }}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: styles.spacing.m,
-        cursor: 'pointer',
-      }}
+      className={styles.card}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.xs, minWidth: 0 }}>
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.l,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: isWithdrawal ? styles.colors.error : styles.colors.textPrimary,
-          }}
-        >
+      <div className={styles.left}>
+        <div className={`${styles.amount}${isWithdrawal ? ` ${styles.amountWithdrawal}` : ''}`}>
           {formatAmount(amount)}
         </div>
         {operation.description && (
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.s,
-              color: styles.colors.textSecondary,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {operation.description}
-          </div>
+          <div className={styles.subtitle}>{operation.description}</div>
         )}
         {operation.reportName && (
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.s,
-              color: styles.colors.textSecondary,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {operation.reportName}
-          </div>
+          <div className={styles.subtitle}>{operation.reportName}</div>
         )}
       </div>
       {category?.name ? (
-        <VBadge
-          color={category?.color ?? undefined}
-          style={{
-            fontSize: styles.typography.fontSize.m,
-            fontWeight: styles.typography.fontWeight.medium,
-            color: styles.colors.textPrimary,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            flexShrink: 0,
-          }}
-        >
+        <VBadge color={category?.color ?? undefined} className={styles.badge}>
           {category?.name}
         </VBadge>
       ) : null}

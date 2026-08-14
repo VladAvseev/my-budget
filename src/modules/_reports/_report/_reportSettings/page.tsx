@@ -1,4 +1,4 @@
-import { useThemeStyles } from '@/shared/theme';
+import commonStyles from '@/shared/styles/common.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
@@ -10,19 +10,12 @@ import { RemoveReportCard } from './components/RemoveReportCard';
 import { ReportNameCard } from './components/ReportNameCard';
 
 export const Page: React.FC = () => {
-  const styles = useThemeStyles();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { data: report, isLoading, error } = useReport(id ?? '');
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: styles.spacing.l,
-      }}
-    >
+    <div className={commonStyles.page}>
       <VPageHeader
         title={report ? `Настройки отчёта «${report.name}»` : 'Настройки отчёта'}
         onBack={() => navigate(`/reports/${id ?? ''}`)}
@@ -30,14 +23,14 @@ export const Page: React.FC = () => {
       />
 
       {isLoading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+        <div className={commonStyles.loaderContainer}>
           <VLoader size={28} />
         </div>
       )}
 
       {!isLoading && (error || !report) && (
         <VCard>
-          <div style={{ color: styles.colors.textSecondary }}>Отчёт не найден</div>
+          <div className={commonStyles.textSecondary}>Отчёт не найден</div>
         </VCard>
       )}
 

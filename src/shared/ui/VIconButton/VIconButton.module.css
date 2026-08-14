@@ -1,0 +1,23 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs);
+  border: none;
+  border-radius: var(--radius-s);
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.button:hover:not(:disabled) {
+  background-color: var(--color-bg-surface-hover);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+.button:disabled:not([aria-busy='true']) {
+  opacity: 0.5;
+}

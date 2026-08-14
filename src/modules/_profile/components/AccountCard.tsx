@@ -1,28 +1,19 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useThemeStyles } from '@/shared/theme';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { changePasswordOpenAtom } from '../atoms/profile';
 import { ChangePasswordModal } from './ChangePasswordModal';
 
 export const AccountCard = () => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useAtom(changePasswordOpenAtom);
 
   return (
     <VCard>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.xl,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
-          Аккаунт
-        </div>
+      <div className={commonStyles.columnL}>
+        <div className={commonStyles.titleXl}>Аккаунт</div>
 
         <InfoRow label="Email" value={user?.email ?? '—'} />
 
@@ -47,23 +38,10 @@ interface InfoRowProps {
 }
 
 const InfoRow = ({ label, value }: InfoRowProps) => {
-  const styles = useThemeStyles();
-
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: styles.spacing.m,
-      }}
-    >
-      <span style={{ fontSize: styles.typography.fontSize.m, color: styles.colors.textSecondary }}>
-        {label}
-      </span>
-      <span style={{ fontSize: styles.typography.fontSize.m, color: styles.colors.textPrimary }}>
-        {value}
-      </span>
+    <div className={commonStyles.infoRow}>
+      <span className={commonStyles.infoLabel}>{label}</span>
+      <span className={commonStyles.infoValue}>{value}</span>
     </div>
   );
 };

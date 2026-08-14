@@ -1,4 +1,3 @@
-import { withAlpha } from '@/shared/colors';
 import { useStyles, type ThemeName } from './useStyles';
 import {
   createContext,
@@ -18,26 +17,14 @@ interface ThemeContextValue {
 
 const DEFAULT_THEME: ThemeName = 'dark';
 
-const SCROLLBAR_THUMB_ALPHA = 0.4;
-const SCROLLBAR_THUMB_HOVER_ALPHA = 0.6;
-
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setThemeState] = useState<ThemeName>(() => getStoredTheme() ?? DEFAULT_THEME);
-  const styles = useStyles(theme);
 
   useEffect(() => {
-    const root = document.documentElement;
-    root.style.setProperty(
-      '--app-scrollbar-thumb',
-      withAlpha(styles.colors.textSecondary, SCROLLBAR_THUMB_ALPHA),
-    );
-    root.style.setProperty(
-      '--app-scrollbar-thumb-hover',
-      withAlpha(styles.colors.textSecondary, SCROLLBAR_THUMB_HOVER_ALPHA),
-    );
-  }, [styles.colors.textSecondary]);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   const setTheme = useCallback((next: ThemeName) => {
     setThemeState(next);
@@ -58,6 +45,5 @@ export function useTheme(): ThemeContextValue {
 }
 
 export function useThemeStyles() {
-  const { theme } = useTheme();
-  return useStyles(theme);
+  return useStyles();
 }

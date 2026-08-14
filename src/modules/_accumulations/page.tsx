@@ -2,9 +2,9 @@ import { PlusIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { useAccumulations } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/services/operations';
-import { useThemeStyles } from '@/shared/theme';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VIconButton } from '@/shared/ui/VIconButton';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { accumulationModalAtom } from './atoms/accumulations';
@@ -17,7 +17,6 @@ import { EditAccumulationModal } from './components/EditAccumulationModal';
 import { SavingsOperationsList } from './components/SavingsOperationsList';
 
 export const Page: React.FC = () => {
-  const styles = useThemeStyles();
   const navigate = useNavigate();
   const { user } = useAuth();
   const userId = user?.id ?? '';
@@ -42,13 +41,7 @@ export const Page: React.FC = () => {
   ];
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: styles.spacing.l,
-      }}
-    >
+    <div className={commonStyles.page}>
       <VPageHeader
         title="Накопления"
         onBack={() => navigate('/')}
@@ -58,9 +51,9 @@ export const Page: React.FC = () => {
             ariaLabel="Добавить накопление"
             onClick={() => setAccumulationModal({ accumulation: null })}
             isDisabled={accumulationsQuery.isLoading}
-            color={styles.colors.accent}
+            color="var(--color-accent)"
           >
-            <PlusIcon size={24} color={styles.colors.accent} />
+            <PlusIcon size={24} color="currentColor" />
           </VIconButton>
         }
       />
@@ -69,22 +62,8 @@ export const Page: React.FC = () => {
 
       <AccumulationsList />
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: styles.spacing.m,
-        }}
-      >
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.xl,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
-          Накопления из отчётов
-        </div>
+      <div className={commonStyles.row}>
+        <div className={commonStyles.titleXl}>Накопления из отчётов</div>
       </div>
 
       <SavingsOperationsList />

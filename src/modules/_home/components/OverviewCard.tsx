@@ -1,15 +1,15 @@
 import { useUserSummary } from '@/shared/hooks';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { profilesService } from '@/shared/supabase/services/profiles';
-import { useThemeStyles } from '@/shared/theme';
+import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import styles from '../homeCard.module.css';
 
 export const OverviewCard = () => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const { data: summary, isFetched: summaryFetched } = useUserSummary(userId);
@@ -27,15 +27,7 @@ export const OverviewCard = () => {
 
   if (!profileQuery.isFetched || !summaryFetched) {
     return (
-      <VCard
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: styles.spacing.xl,
-          flex: '1 1 300px',
-          minWidth: 300,
-        }}
-      >
+      <VCard className={styles.loadingCard}>
         <VLoader size={28} />
       </VCard>
     );
@@ -52,87 +44,40 @@ export const OverviewCard = () => {
       label: 'Доходы',
       value: formatAmount(income),
       percent: null,
-      color: styles.colors.success,
+      color: 'var(--color-success)',
     },
     {
       label: 'Расходы',
       value: formatAmount(summary.expense + summary.daily),
       percent: percentOfIncome(summary.expense + summary.daily),
-      color: styles.colors.error,
+      color: 'var(--color-error)',
     },
     {
       label: 'Накопления',
       value: formatAmount(summary.savings),
       percent: percentOfIncome(summary.savings),
-      color: styles.colors.warning,
+      color: 'var(--color-warning)',
     },
     {
       label: 'Баланс',
       value: formatAmount(balance),
       percent: percentOfIncome(balance),
-      color: balance >= 0 ? styles.colors.success : styles.colors.error,
+      color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
     },
   ];
 
   return (
-    <Link
-      to="/overview"
-      style={{ textDecoration: 'none', display: 'block', flex: '1 1 300px', minWidth: 300 }}
-    >
-      <VCard
-        interactive
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: styles.spacing.m,
-          height: '100%',
-        }}
-      >
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.l,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
-          Обзор
-        </div>
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.s,
-            color: styles.colors.textSecondary,
-          }}
-        >
-          Последний отчёт
-        </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) auto auto',
-            columnGap: styles.spacing.m,
-            rowGap: styles.spacing.s,
-          }}
-        >
+    <Link to="/overview" className={styles.link}>
+      <VCard interactive className={styles.card}>
+        <div className={summaryStyles.title}>Обзор</div>
+        <div className={summaryStyles.subtitle}>Последний отчёт</div>
+        <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
-            <div
-              key={`${item.label}-label`}
-              style={{
-                fontSize: styles.typography.fontSize.s,
-                color: styles.colors.textSecondary,
-              }}
-            >
+            <div key={`${item.label}-label`} className={summaryStyles.label}>
               {item.label}
             </div>,
             item.percent != null ? (
-              <div
-                key={`${item.label}-percent`}
-                style={{
-                  fontSize: styles.typography.fontSize.s,
-                  color: styles.colors.textSecondary,
-                  textAlign: 'right',
-                  whiteSpace: 'nowrap',
-                }}
-              >
+              <div key={`${item.label}-percent`} className={summaryStyles.percent}>
                 {item.percent}% от доходов
               </div>
             ) : (
@@ -140,12 +85,8 @@ export const OverviewCard = () => {
             ),
             <div
               key={`${item.label}-value`}
-              style={{
-                fontSize: styles.typography.fontSize.m,
-                fontWeight: styles.typography.fontWeight.bold,
-                color: item.color,
-                textAlign: 'right',
-              }}
+              className={summaryStyles.value}
+              style={{ color: item.color }}
             >
               {item.value}
             </div>,

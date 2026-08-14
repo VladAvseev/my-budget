@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useState } from 'react';
-import { useThemeStyles } from '@/shared/theme';
+import modalStyles from '@/shared/styles/modal.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VModal } from '@/shared/ui/VModal';
@@ -38,7 +38,6 @@ const RU_MONTHS = [
 ];
 
 export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) => {
-  const styles = useThemeStyles();
   const [name, setName] = useAtom(reportNameAtom);
   const [hasDailyExpenses, setHasDailyExpenses] = useAtom(hasDailyExpensesAtom);
   const [hasDailyBudget, setHasDailyBudget] = useAtom(hasDailyBudgetAtom);
@@ -155,7 +154,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
         </>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={modalStyles.content}>
         <VTextInput
           label="Название отчёта"
           placeholder={namePlaceholder}

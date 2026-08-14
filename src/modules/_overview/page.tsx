@@ -1,9 +1,9 @@
 import type { Operation } from '@/shared/supabase/services/operations';
-import { useThemeStyles } from '@/shared/theme';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,6 @@ import { SummaryCard } from './components/SummaryCard';
 import { emptyAmounts, sumOperations } from './utils/overview';
 
 export const Page: React.FC = () => {
-  const styles = useThemeStyles();
   const navigate = useNavigate();
   const reportsQuery = useReports();
   const [excludedIds] = useAtom(excludedReportIdsAtom);
@@ -54,13 +53,7 @@ export const Page: React.FC = () => {
   const operationsError = operationsQueries.find((query) => query.error)?.error;
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: styles.spacing.l,
-      }}
-    >
+    <div className={commonStyles.page}>
       <VPageHeader
         title="Обзор"
         onBack={() => navigate('/')}
@@ -70,7 +63,7 @@ export const Page: React.FC = () => {
       <OverviewTabs reports={reports} />
 
       {reportsQuery.isLoading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+        <div className={commonStyles.loaderContainer}>
           <VLoader size={28} />
         </div>
       )}
@@ -79,7 +72,7 @@ export const Page: React.FC = () => {
 
       {!reportsQuery.isLoading && !reportsQuery.error && reports.length === 0 && (
         <VCard>
-          <div style={{ color: styles.colors.textSecondary }}>
+          <div className={commonStyles.textSecondary}>
             Нет созданных отчётов. Создайте отчёт в разделе «Отчёты».
           </div>
         </VCard>
@@ -89,7 +82,7 @@ export const Page: React.FC = () => {
         <>
           {selectedReports.length === 0 && (
             <VCard>
-              <div style={{ color: styles.colors.textSecondary }}>
+              <div className={commonStyles.textSecondary}>
                 Не выбран ни один отчёт. Выберите отчёты в списке выше.
               </div>
             </VCard>
@@ -102,9 +95,7 @@ export const Page: React.FC = () => {
               )}
 
               {operationsLoading ? (
-                <div
-                  style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}
-                >
+                <div className={commonStyles.loaderContainer}>
                   <VLoader size={28} />
                 </div>
               ) : (

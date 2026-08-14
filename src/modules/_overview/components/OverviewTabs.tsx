@@ -1,16 +1,15 @@
 import { EyeIcon, EyeOffIcon } from '@/shared/icons';
 import type { Report } from '@/shared/supabase/services/reports';
-import { useThemeStyles } from '@/shared/theme';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { useAtom } from 'jotai';
 import { excludedReportIdsAtom, tabsExpandedAtom } from '../atoms/overview';
+import styles from './OverviewTabs.module.css';
 
 interface OverviewTabsProps {
   reports: Report[];
 }
 
 export const OverviewTabs = ({ reports }: OverviewTabsProps) => {
-  const styles = useThemeStyles();
   const [isExpanded, setIsExpanded] = useAtom(tabsExpandedAtom);
   const [excludedIds, setExcludedIds] = useAtom(excludedReportIdsAtom);
 
@@ -34,56 +33,29 @@ export const OverviewTabs = ({ reports }: OverviewTabsProps) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: styles.spacing.m,
-        }}
-      >
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.l,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.title}>
           Отчёты
-          <span
-            style={{
-              marginLeft: styles.spacing.s,
-              fontSize: styles.typography.fontSize.m,
-              fontWeight: styles.typography.fontWeight.regular,
-              color: styles.colors.textSecondary,
-            }}
-          >
+          <span className={styles.counter}>
             выбрано {selectedCount} из {reports.length}
           </span>
         </div>
         <VIconButton
           ariaLabel={isExpanded ? 'Скрыть отчёты' : 'Показать отчёты'}
           onClick={() => setIsExpanded((prev) => !prev)}
-          color={styles.colors.textPrimary}
+          color="var(--color-text-primary)"
         >
           {isExpanded ? (
-            <EyeOffIcon size={24} color={styles.colors.textPrimary} />
+            <EyeOffIcon size={24} color="currentColor" />
           ) : (
-            <EyeIcon size={24} color={styles.colors.textPrimary} />
+            <EyeIcon size={24} color="currentColor" />
           )}
         </VIconButton>
       </div>
 
       {isExpanded && (
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            gap: styles.spacing.s,
-          }}
-        >
+        <div className={styles.buttonsWrap}>
           {reports.map((report) => {
             const isSelected = !excluded.has(report.id);
             return (
@@ -91,20 +63,7 @@ export const OverviewTabs = ({ reports }: OverviewTabsProps) => {
                 key={report.id}
                 type="button"
                 onClick={() => toggleReport(report.id)}
-                style={{
-                  padding: `${styles.spacing.s} ${styles.spacing.m}`,
-                  borderRadius: styles.radius.m,
-                  border: `1px solid ${isSelected ? styles.colors.accent : styles.colors.border}`,
-                  backgroundColor: isSelected ? styles.colors.accentLight : styles.colors.bgSurface,
-                  fontSize: styles.typography.fontSize.m,
-                  fontWeight: isSelected
-                    ? styles.typography.fontWeight.medium
-                    : styles.typography.fontWeight.regular,
-                  color: isSelected ? styles.colors.accent : styles.colors.textSecondary,
-                  cursor: 'pointer',
-                  transition:
-                    'background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease',
-                }}
+                className={`${styles.button}${isSelected ? ` ${styles.buttonActive}` : ''}`}
               >
                 {report.name}
               </button>

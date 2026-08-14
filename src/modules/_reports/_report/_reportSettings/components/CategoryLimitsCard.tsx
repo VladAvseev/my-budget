@@ -2,7 +2,6 @@ import { ImportIcon, TrashIcon } from '@/shared/icons';
 import { createOptimisticId } from '@/shared/optimistic';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Report } from '@/shared/supabase/services/reports';
-import { useThemeStyles } from '@/shared/theme';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
@@ -17,6 +16,7 @@ import { useCategories } from '../../api/useCategories';
 import { useCategoryLimits } from '../../api/useCategoryLimits';
 import { useSetCategoryLimits } from '../api/useSetCategoryLimits';
 import { ImportLimitsModal } from './ImportLimitsModal';
+import styles from '../settingsCard.module.css';
 
 interface CategoryLimitsCardProps {
   report: Report;
@@ -42,7 +42,6 @@ const mapLimitsToDraft = (limits: CategoryLimit[]): LimitDraft[] =>
   }));
 
 export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
 
@@ -180,27 +179,19 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
 
   return (
     <VCard>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.xl,
-              fontWeight: styles.typography.fontWeight.bold,
-              color: styles.colors.textPrimary,
-            }}
-          >
-            Лимиты по категориям
-          </div>
+      <div className={styles.content}>
+        <div className={styles.titleRow}>
+          <div className={styles.title}>Лимиты по категориям</div>
           <VIconButton
             ariaLabel="Импортировать лимиты"
             onClick={() => setIsImportOpen(true)}
-            color={styles.colors.accent}
+            color="var(--color-accent)"
           >
-            <ImportIcon size={24} color={styles.colors.accent} />
+            <ImportIcon size={24} color="currentColor" />
           </VIconButton>
         </div>
 
-        <div style={{ color: styles.colors.textSecondary }}>
+        <div className={styles.text}>
           Установите максимальную сумму расходов по категориям на вкладке «Расходы».
         </div>
 
@@ -214,26 +205,19 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
         {isSaved && !submitError && <VBanner type="success" visible message="Лимиты сохранены" />}
 
         {isLoading && (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+          <div className={styles.loaderWrap}>
             <VLoader size={28} />
           </div>
         )}
 
         {!isLoading && isEmpty && (
-          <div style={{ color: styles.colors.textSecondary }}>Лимиты по категориям не заданы.</div>
+          <div className={styles.text}>Лимиты по категориям не заданы.</div>
         )}
 
         {!isLoading &&
           draftLimits.map((limit, index) => (
-            <div
-              key={limit.id}
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: styles.spacing.m,
-              }}
-            >
-              <div style={{ flex: 1, minWidth: 0 }}>
+            <div key={limit.id} className={styles.fieldGroupTop}>
+              <div className={styles.fieldGrow}>
                 <VSelect
                   options={optionsByRow[index]}
                   value={limit.categoryId}
@@ -243,7 +227,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
                   onChange={(value) => updateLimit(limit.id, { categoryId: value })}
                 />
               </div>
-              <div style={{ width: 80, flexShrink: 0 }}>
+              <div className={styles.fieldFixed}>
                 <VTextInput
                   numeric
                   placeholder="0.00"
@@ -257,9 +241,9 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
                 ariaLabel="Удалить лимит"
                 onClick={() => removeLimit(limit.id)}
                 isDisabled={setLimits.isPending}
-                color={styles.colors.error}
+                color="var(--color-error)"
               >
-                <TrashIcon size={24} color={styles.colors.error} />
+                <TrashIcon size={24} color="currentColor" />
               </VIconButton>
             </div>
           ))}
@@ -272,7 +256,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
           </div>
         )}
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: styles.spacing.m }}>
+        <div className={styles.rowEndGap}>
           <VButton
             variant="secondary"
             onClick={handleCancel}

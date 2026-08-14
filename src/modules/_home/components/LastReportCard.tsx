@@ -1,13 +1,13 @@
 import { useReports } from '../api/useReports';
 import { useSummary } from '../api/useSummary';
-import { useThemeStyles } from '@/shared/theme';
+import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
 import { Link } from 'react-router-dom';
+import styles from '../homeCard.module.css';
 
 export const LastReportCard = () => {
-  const styles = useThemeStyles();
   const reportsQuery = useReports();
   const reports = reportsQuery.data ?? [];
   const lastReport = reports[0];
@@ -15,15 +15,7 @@ export const LastReportCard = () => {
 
   if (reportsQuery.isLoading) {
     return (
-      <VCard
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: styles.spacing.xl,
-          flex: '1 1 300px',
-          minWidth: 300,
-        }}
-      >
+      <VCard className={styles.loadingCard}>
         <VLoader size={28} />
       </VCard>
     );
@@ -31,43 +23,11 @@ export const LastReportCard = () => {
 
   if (reportsQuery.error || !lastReport) {
     return (
-      <Link
-        to="/reports"
-        style={{ textDecoration: 'none', display: 'block', flex: '1 1 300px', minWidth: 300 }}
-      >
-        <VCard
-          interactive
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: styles.spacing.m,
-            height: '100%',
-          }}
-        >
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.l,
-              fontWeight: styles.typography.fontWeight.bold,
-              color: styles.colors.textPrimary,
-            }}
-          >
-            Последний отчёт
-          </div>
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.m,
-              fontWeight: styles.typography.fontWeight.medium,
-              color: styles.colors.textPrimary,
-            }}
-          >
-            Отчёты не найдены
-          </div>
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.s,
-              color: styles.colors.textSecondary,
-            }}
-          >
+      <Link to="/reports" className={styles.link}>
+        <VCard interactive className={styles.card}>
+          <div className={styles.title}>Последний отчёт</div>
+          <div className={styles.emptyMessage}>Отчёты не найдены</div>
+          <div className={styles.subtitle}>
             Перейдите в раздел «Отчёты» и создайте отчёт.
           </div>
         </VCard>
@@ -77,15 +37,7 @@ export const LastReportCard = () => {
 
   if (!summaryFetched) {
     return (
-      <VCard
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: styles.spacing.xl,
-          flex: '1 1 300px',
-          minWidth: 300,
-        }}
-      >
+      <VCard className={styles.loadingCard}>
         <VLoader size={28} />
       </VCard>
     );
@@ -101,87 +53,40 @@ export const LastReportCard = () => {
       label: 'Доходы',
       value: formatAmount(summary.income),
       percent: null,
-      color: styles.colors.success,
+      color: 'var(--color-success)',
     },
     {
       label: 'Расходы',
       value: formatAmount(expenses),
       percent: percentOfIncome(expenses),
-      color: styles.colors.error,
+      color: 'var(--color-error)',
     },
     {
       label: 'Накопления',
       value: formatAmount(summary.savings),
       percent: percentOfIncome(summary.savings),
-      color: styles.colors.warning,
+      color: 'var(--color-warning)',
     },
     {
       label: 'Остаток',
       value: formatAmount(balance),
       percent: percentOfIncome(balance),
-      color: balance >= 0 ? styles.colors.success : styles.colors.error,
+      color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
     },
   ];
 
   return (
-    <Link
-      to={`/reports/${lastReport.id}`}
-      style={{ textDecoration: 'none', display: 'block', flex: '1 1 300px', minWidth: 300 }}
-    >
-      <VCard
-        interactive
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: styles.spacing.m,
-          height: '100%',
-        }}
-      >
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.l,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
-          Последний отчёт
-        </div>
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.s,
-            color: styles.colors.textSecondary,
-          }}
-        >
-          {lastReport.name}
-        </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) auto auto',
-            columnGap: styles.spacing.m,
-            rowGap: styles.spacing.s,
-          }}
-        >
+    <Link to={`/reports/${lastReport.id}`} className={styles.link}>
+      <VCard interactive className={styles.card}>
+        <div className={styles.title}>Последний отчёт</div>
+        <div className={styles.subtitle}>{lastReport.name}</div>
+        <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
-            <div
-              key={`${item.label}-label`}
-              style={{
-                fontSize: styles.typography.fontSize.s,
-                color: styles.colors.textSecondary,
-              }}
-            >
+            <div key={`${item.label}-label`} className={summaryStyles.label}>
               {item.label}
             </div>,
             item.percent != null ? (
-              <div
-                key={`${item.label}-percent`}
-                style={{
-                  fontSize: styles.typography.fontSize.s,
-                  color: styles.colors.textSecondary,
-                  textAlign: 'right',
-                  whiteSpace: 'nowrap',
-                }}
-              >
+              <div key={`${item.label}-percent`} className={summaryStyles.percent}>
                 {item.percent}% от доходов
               </div>
             ) : (
@@ -189,12 +94,8 @@ export const LastReportCard = () => {
             ),
             <div
               key={`${item.label}-value`}
-              style={{
-                fontSize: styles.typography.fontSize.m,
-                fontWeight: styles.typography.fontWeight.bold,
-                color: item.color,
-                textAlign: 'right',
-              }}
+              className={summaryStyles.value}
+              style={{ color: item.color }}
             >
               {item.value}
             </div>,

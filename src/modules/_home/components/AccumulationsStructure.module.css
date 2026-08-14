@@ -1,0 +1,101 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.message {
+  color: var(--color-text-secondary);
+}
+
+.body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.ring {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: var(--radius-round);
+  background: var(--ring-gradient);
+  flex-shrink: 0;
+}
+
+.ringHole {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-round);
+  background-color: var(--color-bg-surface);
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) 56px 104px;
+  align-items: center;
+  column-gap: var(--space-m);
+  row-gap: var(--space-m);
+  width: fit-content;
+  max-width: 100%;
+  min-width: 200px;
+}
+
+.legendFull {
+  width: 100%;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-round);
+}
+
+.dotAccent {
+  background-color: var(--color-accent);
+  box-shadow: var(--shadow-s);
+}
+
+.dotSegment {
+  background-color: var(--segment-color);
+}
+
+.textM {
+  font-size: var(--font-size-m);
+}
+
+.textBold {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.textMedium {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+}
+
+.justifyEnd {
+  justify-self: end;
+}

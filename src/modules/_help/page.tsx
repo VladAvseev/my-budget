@@ -1,7 +1,8 @@
-import { useThemeStyles } from '@/shared/theme';
 import { VCard } from '@/shared/ui/VCard';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useNavigate } from 'react-router-dom';
+import styles from './page.module.css';
 
 interface SectionItem {
   type: 'paragraph';
@@ -102,47 +103,21 @@ const SECTIONS: Section[] = [
 ];
 
 export const Page: React.FC = () => {
-  const styles = useThemeStyles();
   const navigate = useNavigate();
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: styles.spacing.l,
-      }}
-    >
+    <div className={commonStyles.page}>
       <VPageHeader title="Помощь" onBack={() => navigate('/')} backAriaLabel="Назад на главную" />
 
       {SECTIONS.map((section) => (
-        <VCard
-          key={section.title}
-          style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.s }}
-        >
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.l,
-              fontWeight: styles.typography.fontWeight.bold,
-              color: styles.colors.textPrimary,
-            }}
-          >
-            {section.title}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.s }}>
-            {section.items.map((item, index) => {
-              const textStyle = {
-                fontSize: styles.typography.fontSize.m,
-                lineHeight: styles.typography.lineHeight.normal,
-                color: styles.colors.textSecondary,
-              };
-
-              return (
-                <div key={index} style={textStyle}>
-                  {item.text}
-                </div>
-              );
-            })}
+        <VCard key={section.title} className={styles.card}>
+          <div className={commonStyles.titleL}>{section.title}</div>
+          <div className={styles.items}>
+            {section.items.map((item, index) => (
+              <div key={index} className={styles.item}>
+                {item.text}
+              </div>
+            ))}
           </div>
         </VCard>
       ))}

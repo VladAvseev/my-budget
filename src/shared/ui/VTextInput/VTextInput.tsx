@@ -1,5 +1,5 @@
-import { useId, useState, type ChangeEvent, type InputHTMLAttributes, type ReactNode } from 'react';
-import { useThemeStyles } from '@/shared/theme';
+import { useId, type ChangeEvent, type InputHTMLAttributes, type ReactNode } from 'react';
+import styles from './VTextInput.module.css';
 
 export interface VTextInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   label?: string;
@@ -17,27 +17,13 @@ export const VTextInput = ({
   onChange,
   onFocus,
   onBlur,
-  onMouseEnter,
-  onMouseLeave,
-  disabled,
   style,
   trailingIcon,
+  className,
   ...rest
 }: VTextInputProps) => {
-  const styles = useThemeStyles();
   const errorId = useId();
-  const [isFocused, setIsFocused] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-
   const hasError = Boolean(error);
-
-  const borderColor = hasError
-    ? styles.colors.error
-    : isFocused
-      ? styles.colors.accent
-      : isHovered
-        ? styles.colors.textSecondary
-        : styles.colors.border;
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     let nextValue = event.target.value;
@@ -48,74 +34,23 @@ export const VTextInput = ({
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.xs, ...style }}>
-      {label && (
-        <label
-          style={{
-            fontSize: styles.typography.fontSize.s,
-            fontWeight: styles.typography.fontWeight.medium,
-            color: styles.colors.textSecondary,
-          }}
-        >
-          {label}
-        </label>
-      )}
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', width: '100%' }}>
+    <div className={`${styles.root}${className ? ` ${className}` : ''}`} style={style}>
+      {label && <label className={styles.label}>{label}</label>}
+      <div className={styles.wrapper}>
         <input
           value={value}
           onChange={handleChange}
-          onFocus={(e) => {
-            setIsFocused(true);
-            onFocus?.(e);
-          }}
-          onBlur={(e) => {
-            setIsFocused(false);
-            onBlur?.(e);
-          }}
-          onMouseEnter={(e) => {
-            setIsHovered(true);
-            onMouseEnter?.(e);
-          }}
-          onMouseLeave={(e) => {
-            setIsHovered(false);
-            onMouseLeave?.(e);
-          }}
-          style={{
-            padding: styles.spacing.s,
-            paddingRight: trailingIcon ? 40 : styles.spacing.s,
-            width: '100%',
-            borderRadius: styles.radius.m,
-            fontSize: styles.typography.fontSize.m,
-            backgroundColor: styles.colors.bgSurface,
-            color: styles.colors.textPrimary,
-            border: `1px solid ${borderColor}`,
-            outline: 'none',
-            cursor: disabled ? 'not-allowed' : 'auto',
-            opacity: disabled ? 0.5 : 1,
-            transition: 'border-color 0.15s ease',
-          }}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          className={`${styles.input}${trailingIcon ? ` ${styles.inputWithTrailing}` : ''}`}
           aria-invalid={hasError}
           aria-describedby={hasError ? errorId : undefined}
           {...rest}
         />
-        {trailingIcon && (
-          <span
-            style={{
-              position: 'absolute',
-              right: styles.spacing.s,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              display: 'flex',
-              alignItems: 'center',
-              flexShrink: 0,
-            }}
-          >
-            {trailingIcon}
-          </span>
-        )}
+        {trailingIcon && <span className={styles.trailing}>{trailingIcon}</span>}
       </div>
       {hasError && (
-        <span id={errorId} style={{ fontSize: styles.typography.fontSize.s, color: styles.colors.error }}>
+        <span id={errorId} className={styles.error}>
           {error}
         </span>
       )}

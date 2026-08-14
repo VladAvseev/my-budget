@@ -1,8 +1,8 @@
 import type { OperationSummary } from '@/shared/supabase/services/operations';
-import { useThemeStyles } from '@/shared/theme';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import { useMemo } from 'react';
+import styles from './SummaryCards.module.css';
 
 interface SummaryCardsProps {
   summary: OperationSummary;
@@ -16,8 +16,6 @@ type SummaryItem = {
 };
 
 export const SummaryCards = ({ summary }: SummaryCardsProps) => {
-  const styles = useThemeStyles();
-
   const expenses = summary.expense + summary.daily;
 
   const items = useMemo<SummaryItem[]>(() => {
@@ -30,68 +28,39 @@ export const SummaryCards = ({ summary }: SummaryCardsProps) => {
         label: 'Доходы',
         value: summary.income,
         percent: null,
-        color: styles.colors.success,
+        color: 'var(--color-success)',
       },
       {
         label: 'Расходы',
         value: expenses,
         percent: percentOfIncome(expenses),
-        color: styles.colors.error,
+        color: 'var(--color-error)',
       },
       {
         label: 'Накопления',
         value: summary.savings,
         percent: percentOfIncome(summary.savings),
-        color: styles.colors.warning,
+        color: 'var(--color-warning)',
       },
       {
         label: 'Остаток',
         value: balance,
         percent: summary.income > 0 ? Math.max(0, Math.round((balance / summary.income) * 100)) : 0,
-        color: balance >= 0 ? styles.colors.success : styles.colors.error,
+        color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
       },
     ];
-  }, [summary, expenses, styles]);
+  }, [summary, expenses]);
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-        gap: styles.spacing.m,
-      }}
-    >
+    <div className={styles.grid}>
       {items.map((item) => (
-        <VCard
-          key={item.label}
-          style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.xs }}
-        >
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.s,
-              color: styles.colors.textSecondary,
-            }}
-          >
-            {item.label}
-          </div>
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.l,
-              fontWeight: styles.typography.fontWeight.bold,
-              color: item.color,
-            }}
-          >
+        <VCard key={item.label} className={styles.card}>
+          <div className={styles.label}>{item.label}</div>
+          <div className={styles.value} style={{ color: item.color }}>
             {formatAmount(item.value)}
           </div>
           {item.percent != null && (
-            <div
-              style={{
-                fontSize: styles.typography.fontSize.s,
-                color: styles.colors.textSecondary,
-              }}
-            >
-              {item.percent}% от доходов
-            </div>
+            <div className={styles.percent}>{item.percent}% от доходов</div>
           )}
         </VCard>
       ))}

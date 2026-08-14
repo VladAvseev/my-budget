@@ -1,0 +1,107 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.sectionLabel {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.sectionAverage {
+  font-size: var(--font-size-m);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.strong {
+  font-weight: var(--font-weight-bold);
+}
+
+.accordionList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.accordionRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.accordionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+}
+
+.accordionDot {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  border-radius: var(--radius-round);
+  background-color: var(--color-border);
+}
+
+.accordionGrow {
+  flex: 1;
+  min-width: 0;
+}
+
+.accordionSummary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  white-space: nowrap;
+}
+
+.accordionSummaryLine {
+  font-size: var(--font-size-m);
+  color: var(--color-text-secondary);
+}
+
+.linkRow {
+  text-decoration: none;
+  display: block;
+}
+
+.linkRowCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.linkRowName {
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+}
+
+.linkRowAmount {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-l);
+}

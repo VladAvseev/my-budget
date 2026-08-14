@@ -1,18 +1,21 @@
 import { ChevronLeftIcon } from '@/shared/icons';
-import { useThemeStyles } from '@/shared/theme';
 import { VIconButton } from '@/shared/ui/VIconButton';
 
 interface BackButtonProps {
   ariaLabel: string;
   onClick: () => void;
+  className?: string;
 }
 
-export const BackButton = ({ ariaLabel, onClick }: BackButtonProps) => {
-  const styles = useThemeStyles();
-
+export const BackButton = ({ ariaLabel, onClick, className }: BackButtonProps) => {
   return (
-    <VIconButton ariaLabel={ariaLabel} onClick={onClick} color={styles.colors.textPrimary}>
-      <ChevronLeftIcon size={24} color={styles.colors.textPrimary} />
+    <VIconButton
+      ariaLabel={ariaLabel}
+      onClick={onClick}
+      className={className}
+      color="var(--color-text-primary)"
+    >
+      <ChevronLeftIcon size={24} color="currentColor" />
     </VIconButton>
   );
 };

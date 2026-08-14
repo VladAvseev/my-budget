@@ -1,0 +1,41 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.title {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  column-gap: var(--space-m);
+  row-gap: var(--space-s);
+}
+
+.label {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
+.percent {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.value {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  text-align: right;
+}

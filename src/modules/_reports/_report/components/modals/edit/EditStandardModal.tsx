@@ -3,7 +3,7 @@ import { useAuth } from '@/shared/supabase/authProvider';
 import type { CategoryType } from '@/shared/supabase/services/categories';
 import type { Operation } from '@/shared/supabase/services/operations';
 import type { Report } from '@/shared/supabase/services/reports';
-import { useThemeStyles } from '@/shared/theme';
+import modalStyles from '@/shared/styles/modal.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
@@ -21,7 +21,6 @@ interface EditStandardModalProps {
 }
 
 export const EditStandardModal = ({ operation, report, onClose }: EditStandardModalProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const updateOperation = useUpdateOperation(report.id);
   const removeOperation = useRemoveOperation(report.id);
@@ -88,24 +87,17 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
       onClose={handleClose}
       error={submitError}
       footer={
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: styles.spacing.m,
-            width: '100%',
-          }}
-        >
+        <div className={modalStyles.footerSplit}>
           <VIconButton
             ariaLabel="Удалить операцию"
             onClick={handleDelete}
             isLoading={removeOperation.isPending}
             isDisabled={isPending}
-            color={styles.colors.error}
+            color="var(--color-error)"
           >
-            <TrashIcon size={24} color={styles.colors.error} />
+            <TrashIcon size={24} color="currentColor" />
           </VIconButton>
-          <div style={{ display: 'flex', gap: styles.spacing.m }}>
+          <div className={modalStyles.footerRight}>
             <VButton variant="secondary" onClick={handleClose} isDisabled={isPending}>
               Отмена
             </VButton>
@@ -120,7 +112,7 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
         </div>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={modalStyles.content}>
         <VTextInput
           label="Сумма"
           numeric

@@ -1,0 +1,53 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  padding: var(--space-m) var(--space-l);
+  border-radius: var(--radius-m);
+  border: 1px solid;
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-s);
+  animation: vbanner-in 0.25s ease;
+}
+
+.success {
+  color: var(--color-success);
+  background-color: var(--color-success-bg);
+  border-color: var(--color-success-border);
+}
+
+.warning {
+  color: var(--color-warning);
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+}
+
+.error {
+  color: var(--color-error);
+  background-color: var(--color-error-bg);
+  border-color: var(--color-error-border);
+}
+
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+@keyframes vbanner-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

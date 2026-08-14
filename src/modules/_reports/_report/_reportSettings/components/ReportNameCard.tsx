@@ -1,18 +1,17 @@
 import { useState } from 'react';
-import { useThemeStyles } from '@/shared/theme';
 import type { Report } from '@/shared/supabase/services/reports';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { useUpdateReport } from '../api/useUpdateReport';
+import styles from '../settingsCard.module.css';
 
 interface ReportNameCardProps {
   report: Report;
 }
 
 export const ReportNameCard = ({ report }: ReportNameCardProps) => {
-  const styles = useThemeStyles();
   const updateReport = useUpdateReport(report.id);
 
   const [name, setName] = useState(report.name);
@@ -40,22 +39,14 @@ export const ReportNameCard = ({ report }: ReportNameCardProps) => {
 
   return (
     <VCard>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.xl,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
-          Название отчёта
-        </div>
+      <div className={styles.content}>
+        <div className={styles.title}>Название отчёта</div>
 
         {isSaved && !submitError && <VBanner type="success" visible message="Название сохранено" />}
         {submitError && <VBanner type="error" visible message={submitError} />}
 
-        <div style={{ display: 'flex', gap: styles.spacing.m, alignItems: 'flex-end' }}>
-          <div style={{ flex: 1 }}>
+        <div className={styles.fieldGroup}>
+          <div className={styles.fieldGrow}>
             <VTextInput
               label="Название"
               placeholder="Например, Август 2026"

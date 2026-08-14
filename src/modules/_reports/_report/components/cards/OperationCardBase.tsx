@@ -1,9 +1,9 @@
 import type { Category } from '@/shared/supabase/services/categories';
-import { useThemeStyles } from '@/shared/theme';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
+import styles from './operationCard.module.css';
 
 interface OperationCardBaseProps {
   amount: number;
@@ -22,8 +22,6 @@ export const OperationCardBase = ({
   pending = false,
   onOpen,
 }: OperationCardBaseProps) => {
-  const styles = useThemeStyles();
-
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (!pending && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
@@ -42,55 +40,18 @@ export const OperationCardBase = ({
         }
       }}
       onKeyDown={handleKeyDown}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: styles.spacing.m,
-        cursor: pending ? 'default' : 'pointer',
-      }}
+      className={`${styles.card}${pending ? ` ${styles.cardPending}` : ''}`}
     >
-      <div
-        style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.xs, minWidth: 0 }}
-      >
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.l,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: amountColor,
-          }}
-        >
+      <div className={styles.left}>
+        <div className={styles.amount} style={{ color: amountColor }}>
           {formatAmount(amount)}
         </div>
-        {description && (
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.s,
-              color: styles.colors.textSecondary,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {description}
-          </div>
-        )}
+        {description && <div className={styles.subtitle}>{description}</div>}
       </div>
       {pending ? (
         <VLoader size={16} />
       ) : category?.name ? (
-        <VBadge
-          color={category?.color ?? undefined}
-          style={{
-            fontSize: styles.typography.fontSize.m,
-            fontWeight: styles.typography.fontWeight.medium,
-            color: styles.colors.textPrimary,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            flexShrink: 0,
-          }}
-        >
+        <VBadge color={category?.color ?? undefined} className={styles.badge}>
           {category?.name}
         </VBadge>
       ) : null}

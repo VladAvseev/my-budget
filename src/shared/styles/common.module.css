@@ -1,0 +1,183 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.columnL {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.gapXs {
+  gap: var(--space-xs);
+}
+
+.gapS {
+  gap: var(--space-s);
+}
+
+.gapM {
+  gap: var(--space-m);
+}
+
+.gapL {
+  gap: var(--space-l);
+}
+
+.gapXl {
+  gap: var(--space-xl);
+}
+
+.gapXxl {
+  gap: var(--space-xxl);
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.flex1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.minWidth0 {
+  min-width: 0;
+}
+
+.noShrink {
+  flex-shrink: 0;
+}
+
+.textSecondary {
+  color: var(--color-text-secondary);
+}
+
+.titleXl {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.titleL {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.titleM {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.linkRow {
+  display: flex;
+  justify-content: center;
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
+.link {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.cardTitle {
+  margin: 0;
+  margin-bottom: var(--space-l);
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.textM {
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+}
+
+.centeredContent {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-l);
+  background-color: var(--color-bg-primary);
+}
+
+.centeredCard {
+  width: 100%;
+  max-width: 400px;
+}
+
+.cardList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-l);
+  width: 100%;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  flex-wrap: wrap;
+}
+
+.infoLabel {
+  font-size: var(--font-size-m);
+  color: var(--color-text-secondary);
+}
+
+.infoValue {
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+}
+
+.infoValueBold {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-s);
+  flex-shrink: 0;
+}
+
+.formRow {
+  display: flex;
+  gap: var(--space-m);
+  align-items: flex-end;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl);
+}

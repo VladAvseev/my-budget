@@ -14,6 +14,7 @@ export interface VConfirmModalProps {
   onCancel: () => void;
   onConfirm: () => void;
   style?: CSSProperties;
+  className?: string;
 }
 
 export const VConfirmModal = ({
@@ -28,6 +29,7 @@ export const VConfirmModal = ({
   onCancel,
   onConfirm,
   style,
+  className,
 }: VConfirmModalProps) => {
   return (
     <VModal
@@ -37,6 +39,7 @@ export const VConfirmModal = ({
       error={error}
       width={width}
       style={style}
+      className={className}
       footer={
         <>
           <VButton variant="secondary" onClick={onCancel} isDisabled={isLoading}>

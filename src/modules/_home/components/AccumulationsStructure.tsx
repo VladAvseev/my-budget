@@ -1,8 +1,8 @@
 import type { Category } from '@/shared/supabase/services/categories';
 import { HIDDEN_AMOUNT } from '@/shared/hooks';
-import { useThemeStyles } from '@/shared/theme';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
+import styles from './AccumulationsStructure.module.css';
 
 export interface AccumulationsStructureItem {
   categoryId: string | null;
@@ -17,9 +17,6 @@ interface AccumulationsStructureProps {
   maskAmounts?: boolean;
   interactive?: boolean;
 }
-
-const RING_SIZE = 200;
-const HOLE_SIZE = 120;
 
 interface CategorySegment {
   key: string;
@@ -39,7 +36,6 @@ export const AccumulationsStructure = ({
   maskAmounts = false,
   interactive = false,
 }: AccumulationsStructureProps) => {
-  const styles = useThemeStyles();
   const categoriesById = new Map(categories.map((category) => [category.id, category]));
 
   const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
@@ -55,7 +51,7 @@ export const AccumulationsStructure = ({
     } else {
       groupedTotals.set(key, {
         label: category ? category.name : 'Без категории',
-        color: category?.color ?? styles.colors.border,
+        color: category?.color ?? 'var(--color-border)',
         total: value,
       });
     }
@@ -85,166 +81,51 @@ export const AccumulationsStructure = ({
   return (
     <VCard
       interactive={interactive}
-      style={{
-        height: interactive ? '100%' : undefined,
-      }}
+      style={{ height: interactive ? '100%' : undefined }}
     >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: styles.spacing.l,
-        }}
-      >
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.xl,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
-          {title}
-        </div>
+      <div className={styles.content}>
+        <div className={styles.title}>{title}</div>
 
-        {segments.length === 0 && (
-          <div style={{ color: styles.colors.textSecondary }}>Накоплений нет</div>
-        )}
+        {segments.length === 0 && <div className={styles.message}>Накоплений нет</div>}
 
         {segments.length > 0 && total <= 0 && (
-          <div style={{ color: styles.colors.textSecondary }}>
-            Доли накоплений невозможно отобразить
-          </div>
+          <div className={styles.message}>Доли накоплений невозможно отобразить</div>
         )}
 
         {segments.length > 0 && (
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              gap: styles.spacing.xl,
-            }}
-          >
+          <div className={styles.body}>
             {!hideRing && total > 0 && (
               <div
-                style={{
-                  position: 'relative',
-                  width: RING_SIZE,
-                  height: RING_SIZE,
-                  borderRadius: styles.radius.round,
-                  background: `conic-gradient(${gradient})`,
-                  flexShrink: 0,
-                }}
+                className={styles.ring}
+                style={{ ['--ring-gradient' as string]: `conic-gradient(${gradient})` }}
               >
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    width: HOLE_SIZE,
-                    height: HOLE_SIZE,
-                    transform: 'translate(-50%, -50%)',
-                    borderRadius: styles.radius.round,
-                    backgroundColor: styles.colors.bgSurface,
-                  }}
-                />
+                <div className={styles.ringHole} />
               </div>
             )}
 
             <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '16px minmax(0, 1fr) 56px 104px',
-                alignItems: 'center',
-                columnGap: styles.spacing.m,
-                rowGap: styles.spacing.m,
-                width: hideRing ? '100%' : 'fit-content',
-                maxWidth: '100%',
-                minWidth: 200,
-              }}
+              className={`${styles.legend}${hideRing ? ` ${styles.legendFull}` : ''}`}
             >
-              <span
-                style={{
-                  width: 16,
-                  height: 16,
-                  borderRadius: styles.radius.round,
-                  backgroundColor: styles.colors.accent,
-                  boxShadow: styles.shadow.s,
-                }}
-              />
-              <span
-                style={{
-                  fontSize: styles.typography.fontSize.m,
-                  fontWeight: styles.typography.fontWeight.bold,
-                  color: styles.colors.textPrimary,
-                }}
-              >
-                Всего
-              </span>
-              <span
-                style={{
-                  justifySelf: 'end',
-                  fontSize: styles.typography.fontSize.m,
-                  fontWeight: styles.typography.fontWeight.medium,
-                  color: styles.colors.textSecondary,
-                }}
-              >
-                100%
-              </span>
-              <span
-                style={{
-                  justifySelf: 'end',
-                  fontSize: styles.typography.fontSize.m,
-                  fontWeight: styles.typography.fontWeight.bold,
-                  color: styles.colors.textPrimary,
-                }}
-              >
+              <span className={`${styles.dot} ${styles.dotAccent}`} />
+              <span className={styles.textBold}>Всего</span>
+              <span className={`${styles.textMedium} ${styles.justifyEnd}`}>100%</span>
+              <span className={`${styles.textBold} ${styles.justifyEnd}`}>
                 {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total)}
               </span>
 
               {segments.flatMap((segment) => [
                 <span
                   key={`${segment.key}-dot`}
-                  style={{
-                    width: 16,
-                    height: 16,
-                    borderRadius: styles.radius.round,
-                    backgroundColor: segment.color,
-                  }}
+                  className={`${styles.dot} ${styles.dotSegment}`}
+                  style={{ ['--segment-color' as string]: segment.color }}
                 />,
-                <span
-                  key={`${segment.key}-label`}
-                  style={{
-                    minWidth: 0,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    fontSize: styles.typography.fontSize.m,
-                    color: styles.colors.textPrimary,
-                  }}
-                >
+                <span key={`${segment.key}-label`} className={styles.ellipsis}>
                   {segment.label}
                 </span>,
-                <span
-                  key={`${segment.key}-percent`}
-                  style={{
-                    justifySelf: 'end',
-                    fontSize: styles.typography.fontSize.m,
-                    fontWeight: styles.typography.fontWeight.medium,
-                    color: styles.colors.textSecondary,
-                  }}
-                >
+                <span key={`${segment.key}-percent`} className={`${styles.textMedium} ${styles.justifyEnd}`}>
                   {segment.percent.toFixed(1)}%
                 </span>,
-                <span
-                  key={`${segment.key}-amount`}
-                  style={{
-                    justifySelf: 'end',
-                    fontSize: styles.typography.fontSize.m,
-                    fontWeight: styles.typography.fontWeight.bold,
-                    color: styles.colors.textPrimary,
-                  }}
-                >
+                <span key={`${segment.key}-amount`} className={`${styles.textBold} ${styles.justifyEnd}`}>
                   {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total)}
                 </span>,
               ])}

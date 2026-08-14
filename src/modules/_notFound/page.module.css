@@ -1,0 +1,17 @@
+.card {
+  text-align: center;
+}
+
+.code {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  margin-bottom: var(--space-s);
+}
+
+.text {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-l);
+}

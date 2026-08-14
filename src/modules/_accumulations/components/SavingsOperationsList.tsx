@@ -1,6 +1,5 @@
 import { useAuth } from '@/shared/supabase/authProvider';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/services/operations';
-import { useThemeStyles } from '@/shared/theme';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -10,9 +9,9 @@ import { useCategories } from '../api/useCategories';
 import { useSavingsOperations } from '../api/useSavingsOperations';
 import { groupItemsByCategory } from '../utils/groupByCategory';
 import { SavingsOperationCard } from './SavingsOperationCard';
+import styles from './AccumulationsList.module.css';
 
 export const SavingsOperationsList = () => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const operationsQuery = useSavingsOperations(userId);
@@ -36,13 +35,13 @@ export const SavingsOperationsList = () => {
   );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+    <div className={styles.root}>
       {operationsQuery.error && (
         <VBanner type="error" visible message="Не удалось загрузить накопления из отчётов" />
       )}
 
       {operationsQuery.isLoading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+        <div className={styles.loaderWrap}>
           <VLoader size={28} />
         </div>
       )}
@@ -51,30 +50,25 @@ export const SavingsOperationsList = () => {
         !operationsQuery.error &&
         operations.length === 0 && (
           <VCard>
-            <div style={{ color: styles.colors.textSecondary }}>
+            <div className={styles.empty}>
               Нет накоплений из отчётов
             </div>
           </VCard>
         )}
 
       {!operationsQuery.isLoading && operations.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
+        <div className={styles.list}>
           {groups.map((group) => (
             <VAccordion
               key={group.key}
               header={
-                <span style={{ display: 'flex', alignItems: 'center', gap: styles.spacing.m }}>
+                <span className={styles.accordionHeader}>
                   <span
-                    style={{
-                      width: 12,
-                      height: 12,
-                      flexShrink: 0,
-                      borderRadius: styles.radius.round,
-                      backgroundColor: group.color ?? styles.colors.border,
-                    }}
+                    className={styles.accordionDot}
+                    style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
                   />
-                  <span style={{ flex: 1, minWidth: 0 }}>{group.label}</span>
-                  <span style={{ fontWeight: styles.typography.fontWeight.bold }}>
+                  <span className={styles.accordionLabel}>{group.label}</span>
+                  <span className={styles.accordionTotal}>
                     {formatAmount(
                       group.items.reduce(
                         (sum, operation) =>
@@ -90,7 +84,7 @@ export const SavingsOperationsList = () => {
                 </span>
               }
             >
-              <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
+              <div className={styles.items}>
                 {group.items.map(renderCard)}
               </div>
             </VAccordion>

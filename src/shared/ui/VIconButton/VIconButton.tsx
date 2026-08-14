@@ -1,10 +1,10 @@
-import { useThemeStyles } from '@/shared/theme';
 import { VLoader } from '@/shared/ui/VLoader';
-import { useState, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import styles from './VIconButton.module.css';
 
 export interface VIconButtonProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
-  'onClick' | 'type'
+  'onClick' | 'type' | 'className'
 > {
   ariaLabel: string;
   onClick?: () => void;
@@ -12,6 +12,7 @@ export interface VIconButtonProps extends Omit<
   isLoading?: boolean;
   color?: string;
   children?: ReactNode;
+  className?: string;
 }
 
 export const VIconButton = ({
@@ -21,9 +22,8 @@ export const VIconButton = ({
   isLoading,
   color,
   children,
+  className,
 }: VIconButtonProps) => {
-  const styles = useThemeStyles();
-  const [isHovered, setIsHovered] = useState(false);
   const disabled = isDisabled || isLoading;
 
   return (
@@ -33,20 +33,8 @@ export const VIconButton = ({
       aria-busy={isLoading}
       disabled={disabled}
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: styles.spacing.xs,
-        border: 'none',
-        borderRadius: styles.radius.s,
-        backgroundColor: isHovered ? styles.colors.bgSurfaceHover : 'transparent',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        opacity: isDisabled && !isLoading ? 0.5 : 1,
-        transition: 'background-color 0.15s ease',
-      }}
+      className={`${styles.button}${className ? ` ${className}` : ''}`}
+      style={color ? { color } : undefined}
     >
       {isLoading ? <VLoader size={24} color={color} /> : children}
     </button>

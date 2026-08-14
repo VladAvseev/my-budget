@@ -1,34 +1,25 @@
 import { HIDDEN_AMOUNT, useAmountsVisibility, useCapital } from '@/shared/hooks';
-import { useThemeStyles } from '@/shared/theme';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { VToggle } from '@/shared/ui/VToggle';
+import commonStyles from '@/shared/styles/common.module.css';
 import { formatAmount } from '@/shared/utils';
 import { useState } from 'react';
 import { useProfile } from '../api/useProfile';
 import { useUpdateStartBalance } from '../api/useUpdateStartBalance';
 
 export const StartBalanceCard = () => {
-  const styles = useThemeStyles();
   const { data: profile, isLoading } = useProfile();
   const { balance, capital, isLoading: isAmountsLoading } = useCapital();
   const { showBalance, showCapital, setShowBalance, setShowCapital } = useAmountsVisibility();
 
   return (
     <VCard>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.xl,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
-          Баланс
-        </div>
+      <div className={commonStyles.columnL}>
+        <div className={commonStyles.titleXl}>Баланс</div>
 
         <AmountRow
           label="Отображение Капитала"
@@ -44,7 +35,7 @@ export const StartBalanceCard = () => {
         />
 
         {isLoading && (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+          <div className={commonStyles.loaderContainer}>
             <VLoader size={28} />
           </div>
         )}
@@ -65,31 +56,11 @@ interface AmountRowProps {
 }
 
 const AmountRow = ({ label, value, visible, onToggle }: AmountRowProps) => {
-  const styles = useThemeStyles();
-
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: styles.spacing.m,
-        flexWrap: 'wrap',
-      }}
-    >
-      <span style={{ fontSize: styles.typography.fontSize.m, color: styles.colors.textSecondary }}>
-        {label}
-      </span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: styles.spacing.m }}>
-        <span
-          style={{
-            fontSize: styles.typography.fontSize.m,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
-          {visible ? value : HIDDEN_AMOUNT}
-        </span>
+    <div className={commonStyles.infoRow}>
+      <span className={commonStyles.infoLabel}>{label}</span>
+      <div className={`${commonStyles.row} ${commonStyles.gapM}`}>
+        <span className={commonStyles.infoValueBold}>{visible ? value : HIDDEN_AMOUNT}</span>
         <VToggle checked={visible} onChange={onToggle} />
       </div>
     </div>
@@ -102,7 +73,6 @@ interface StartBalanceFormProps {
 }
 
 const StartBalanceForm = ({ userId, initialBalance }: StartBalanceFormProps) => {
-  const styles = useThemeStyles();
   const updateStartBalance = useUpdateStartBalance(userId);
 
   const [value, setValue] = useState(initialBalance);
@@ -131,8 +101,8 @@ const StartBalanceForm = ({ userId, initialBalance }: StartBalanceFormProps) => 
       {isSaved && !submitError && <VBanner type="success" visible message="Баланс сохранён" />}
       {submitError && <VBanner type="error" visible message={submitError} />}
 
-      <div style={{ display: 'flex', gap: styles.spacing.m, alignItems: 'flex-end' }}>
-        <div style={{ flex: 1 }}>
+      <div className={commonStyles.formRow}>
+        <div className={commonStyles.flex1}>
           <VTextInput
             label="Начальный баланс"
             numeric

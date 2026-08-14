@@ -2,7 +2,6 @@ import { PlusIcon } from '@/shared/icons';
 import { useMemo } from 'react';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Operation, OperationType } from '@/shared/supabase/services/operations';
-import { useThemeStyles } from '@/shared/theme';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -19,6 +18,7 @@ import { useOperations, useSavingsReportOperations } from '../api/useOperations'
 import { OperationCard } from './OperationCard';
 import { CategoryLimitsSummary, formatLimitValue, getLimitColor } from './CategoryLimitsSummary';
 import { isSavingsType, signedOperationAmount } from '@/shared/supabase/services/operations';
+import styles from './operationList.module.css';
 
 interface OperationListProps {
   reportId: string;
@@ -26,7 +26,6 @@ interface OperationListProps {
 }
 
 export const OperationList = ({ reportId, type }: OperationListProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const operationsQuery = useOperations(reportId, type);
@@ -86,45 +85,38 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   }, [isSavings, operations, operationsQuery.data, categoriesQuery.data]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+    <div className={styles.root}>
       {type === 'expense' && (
         <CategoryLimitsSummary operations={operations} limits={limits} categories={categories} />
       )}
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: styles.spacing.m,
-        }}
-      >
+      <div className={styles.toolbar}>
         <VToggle label="Группировать по категориям" checked={isGrouped} onChange={toggleGrouping} />
         <VIconButton
           ariaLabel="Новая операция"
           onClick={() => setModal({ type, operation: null })}
-          color={styles.colors.accent}
+          color="var(--color-accent)"
         >
-          <PlusIcon size={24} color={styles.colors.accent} />
+          <PlusIcon size={24} color="currentColor" />
         </VIconButton>
       </div>
 
       {operationsError && <VBanner type="error" visible message="Не удалось загрузить операции" />}
 
       {operationsLoading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+        <div className={styles.loaderWrap}>
           <VLoader size={28} />
         </div>
       )}
 
       {!operationsLoading && operations.length === 0 && (
         <VCard>
-          <div style={{ color: styles.colors.textSecondary }}>Операции не найдены</div>
+          <div className={styles.empty}>Операции не найдены</div>
         </VCard>
       )}
 
       {!operationsLoading && operations.length > 0 && !isGrouped && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
+        <div className={styles.list}>
           {operations.map((operation) => (
             <OperationCard
               key={operation.id}
@@ -137,7 +129,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
       )}
 
       {!operationsLoading && isGrouped && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
+        <div className={styles.list}>
           {groups.map((group) => {
             const limit = limitsByCategory.get(group.key);
             const groupTotal = group.operations.reduce(
@@ -150,37 +142,26 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
               ? formatLimitValue(groupTotal, limitAmount)
               : formatAmount(groupTotal);
             const headerColor = limit
-              ? getLimitColor(groupTotal, limitAmount, styles.colors)
-              : styles.colors.textPrimary;
+              ? getLimitColor(groupTotal, limitAmount)
+              : 'var(--color-text-primary)';
 
             return (
               <VAccordion
                 key={group.key}
                 header={
-                  <span style={{ display: 'flex', alignItems: 'center', gap: styles.spacing.m }}>
+                  <span className={styles.accordionHeader}>
                     <span
-                      style={{
-                        width: 12,
-                        height: 12,
-                        flexShrink: 0,
-                        borderRadius: styles.radius.round,
-                        backgroundColor: group.color ?? styles.colors.border,
-                      }}
+                      className={styles.accordionDot}
+                      style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
                     />
-                    <span style={{ flex: 1, minWidth: 0 }}>{group.label}</span>
-                    <span
-                      style={{
-                        fontWeight: styles.typography.fontWeight.bold,
-                        color: headerColor,
-                        flexShrink: 0,
-                      }}
-                    >
+                    <span className={styles.accordionLabel}>{group.label}</span>
+                    <span className={styles.accordionTotal} style={{ color: headerColor }}>
                       {headerValue}
                     </span>
                   </span>
                 }
               >
-                <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
+                <div className={styles.list}>
                   {group.operations.map((operation) => (
                     <OperationCard
                       key={operation.id}

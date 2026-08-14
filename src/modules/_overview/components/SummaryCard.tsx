@@ -1,6 +1,6 @@
-import { useThemeStyles } from '@/shared/theme';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
+import summaryStyles from '@/shared/styles/summary.module.css';
 import { percentOfIncome } from '../utils/overview';
 
 interface SummaryCardProps {
@@ -10,8 +10,6 @@ interface SummaryCardProps {
 }
 
 export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => {
-  const styles = useThemeStyles();
-
   const balance = income - expenses - savings;
 
   const items = [
@@ -19,78 +17,45 @@ export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => 
       label: 'Доходы',
       value: income,
       percent: percentOfIncome(income, income),
-      color: styles.colors.success,
+      color: 'var(--color-success)',
     },
     {
       label: 'Расходы',
       value: expenses,
       percent: percentOfIncome(expenses, income),
-      color: styles.colors.error,
+      color: 'var(--color-error)',
     },
     {
       label: 'Накопления',
       value: savings,
       percent: percentOfIncome(savings, income),
-      color: styles.colors.warning,
+      color: 'var(--color-warning)',
     },
     {
       label: 'Остаток',
       value: balance,
       percent: balance >= 0 ? percentOfIncome(balance, income) : 0,
-      color: balance >= 0 ? styles.colors.success : styles.colors.error,
+      color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
     },
   ];
 
   return (
-    <VCard style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
-      <div
-        style={{
-          fontSize: styles.typography.fontSize.l,
-          fontWeight: styles.typography.fontWeight.bold,
-          color: styles.colors.textPrimary,
-        }}
-      >
-        Сводка
-      </div>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1fr) auto auto',
-          columnGap: styles.spacing.m,
-          rowGap: styles.spacing.s,
-        }}
-      >
+    <VCard className={summaryStyles.card}>
+      <div className={summaryStyles.title}>Сводка</div>
+      <div className={summaryStyles.grid}>
         {items.flatMap((item) => [
-          <div
-            key={`${item.label}-label`}
-            style={{
-              fontSize: styles.typography.fontSize.s,
-              color: styles.colors.textSecondary,
-            }}
-          >
+          <div key={`${item.label}-label`} className={summaryStyles.label}>
             {item.label}
           </div>,
           <div
             key={`${item.label}-value`}
-            style={{
-              fontSize: styles.typography.fontSize.m,
-              fontWeight: styles.typography.fontWeight.bold,
-              color: item.color,
-              textAlign: 'right',
-            }}
+            className={summaryStyles.value}
+            style={{ color: item.color }}
           >
             {formatAmount(item.value)}
           </div>,
           item.percent != null ? (
-            <div
-              key={`${item.label}-percent`}
-              style={{
-                fontSize: styles.typography.fontSize.s,
-                color: styles.colors.textSecondary,
-                textAlign: 'right',
-                whiteSpace: 'nowrap',
-              }}
-            >
+            <div key={`${item.label}-percent`} className={summaryStyles.percent}>
               {item.percent}% от доходов
             </div>
           ) : (

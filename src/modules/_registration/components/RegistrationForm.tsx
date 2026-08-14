@@ -1,8 +1,8 @@
-import { useThemeStyles } from '@/shared/theme';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VPasswordInput } from '@/shared/ui/VPasswordInput';
 import { VTextInput } from '@/shared/ui/VTextInput';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,6 @@ import { confirmPasswordAtom, emailAtom, errorAtom, passwordAtom } from '../atom
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const RegistrationForm = () => {
-  const styles = useThemeStyles();
   const [email, setEmail] = useAtom(emailAtom);
   const [password, setPassword] = useAtom(passwordAtom);
   const [confirmPassword, setConfirmPassword] = useAtom(confirmPasswordAtom);
@@ -62,7 +61,7 @@ export const RegistrationForm = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
+    <div className={commonStyles.form}>
       <VBanner
         type="error"
         visible={Boolean(error)}
@@ -114,16 +113,9 @@ export const RegistrationForm = () => {
         Зарегистрироваться
       </VButton>
 
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          fontSize: styles.typography.fontSize.s,
-          color: styles.colors.textSecondary,
-        }}
-      >
+      <div className={commonStyles.linkRow}>
         <span>Уже есть аккаунт?&nbsp;</span>
-        <Link to="/login" style={{ color: styles.colors.accent, textDecoration: 'none' }}>
+        <Link to="/login" className={commonStyles.link}>
           Войти
         </Link>
       </div>

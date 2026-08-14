@@ -1,6 +1,5 @@
 import { PlusIcon } from '@/shared/icons';
 import type { Report } from '@/shared/supabase/services/reports';
-import { useThemeStyles } from '@/shared/theme';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
@@ -11,13 +10,13 @@ import { useMemo } from 'react';
 import { useOperations } from '../api/useOperations';
 import { operationModalAtom } from '../atoms/report';
 import { DailyOperationCard } from './cards/DailyOperationCard';
+import styles from './DailyOperationsTab.module.css';
 
 interface DailyOperationsTabProps {
   report: Report;
 }
 
 export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
-  const styles = useThemeStyles();
   const dailyBudget = Number(report.daily_budget) || 0;
   const hasBudget = report.daily_budget != null;
   const operationsQuery = useOperations(report.id, 'daily');
@@ -48,57 +47,36 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
   const isAddBlocked = dayCount > 0 && operations.length >= dayCount;
 
   return (
-    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+    <div className={styles.root}>
       {hasBudget && (
         <VCard>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
-            <div
-              style={{
-                fontSize: styles.typography.fontSize.l,
-                fontWeight: styles.typography.fontWeight.bold,
-                color: styles.colors.textPrimary,
-              }}
-            >
-              Сводка
-            </div>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                gap: styles.spacing.m,
-              }}
-            >
+          <div className={styles.summaryContent}>
+            <div className={styles.summaryTitle}>Сводка</div>
+            <div className={styles.summaryGrid}>
               <SummaryValue
                 label="Бюджет на период"
                 value={budgetPeriod}
-                color={styles.colors.textPrimary}
+                color="var(--color-text-primary)"
               />
-              <SummaryValue label="Сумма расходов" value={spentTotal} color={styles.colors.error} />
+              <SummaryValue label="Сумма расходов" value={spentTotal} color="var(--color-error)" />
               <SummaryValue
                 label="Остаток за период"
                 value={deviationsSum >= 0 ? deviationsSum : deviationsSum * -1}
-                color={deviationsSum > 0 ? styles.colors.error : styles.colors.success}
+                color={deviationsSum > 0 ? 'var(--color-error)' : 'var(--color-success)'}
               />
             </div>
           </div>
         </VCard>
       )}
 
-      <div
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}
-      >
+      <div className={styles.addButtonWrap}>
         <VIconButton
           ariaLabel="Новая операция"
           onClick={() => setModal({ type: 'daily', operation: null })}
           isDisabled={isAddBlocked}
-          color={styles.colors.accent}
+          color="var(--color-accent)"
         >
-          <PlusIcon size={24} color={styles.colors.accent} />
+          <PlusIcon size={24} color="currentColor" />
         </VIconButton>
       </div>
 
@@ -107,18 +85,18 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
       )}
 
       {operationsQuery.isLoading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+        <div className={styles.loaderWrap}>
           <VLoader size={28} />
         </div>
       )}
 
       {!operationsQuery.isLoading && operations.length === 0 && (
         <VCard>
-          <div style={{ color: styles.colors.textSecondary }}>Операции не найдены</div>
+          <div className={styles.empty}>Операции не найдены</div>
         </VCard>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.m }}>
+      <div className={styles.list}>
         {operations.map((operation) => (
           <DailyOperationCard
             key={operation.id}
@@ -138,22 +116,11 @@ interface SummaryValueProps {
   color: string;
 }
 
-const SummaryValue = ({ label, value, color }: SummaryValueProps) => {
-  const styles = useThemeStyles();
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.xs }}>
-      <div style={{ fontSize: styles.typography.fontSize.s, color: styles.colors.textSecondary }}>
-        {label}
-      </div>
-      <div
-        style={{
-          fontSize: styles.typography.fontSize.l,
-          fontWeight: styles.typography.fontWeight.bold,
-          color,
-        }}
-      >
-        {formatAmount(value)}
-      </div>
+const SummaryValue = ({ label, value, color }: SummaryValueProps) => (
+  <div className={styles.summaryItem}>
+    <div className={styles.summaryItemLabel}>{label}</div>
+    <div className={styles.summaryItemValue} style={{ color }}>
+      {formatAmount(value)}
     </div>
-  );
-};
+  </div>
+);

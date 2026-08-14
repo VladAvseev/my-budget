@@ -1,12 +1,12 @@
 import type { Category } from '@/shared/supabase/services/categories';
 import type { Accumulation } from '@/shared/supabase/services/accumulations';
-import { useThemeStyles } from '@/shared/theme';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
 import { useSetAtom } from 'jotai';
 import { accumulationModalAtom } from '../atoms/accumulations';
+import styles from './AccumulationCard.module.css';
 
 interface AccumulationCardProps {
   accumulation: Accumulation;
@@ -19,7 +19,6 @@ export const AccumulationCard = ({
   category,
   pending = false,
 }: AccumulationCardProps) => {
-  const styles = useThemeStyles();
   const setModal = useSetAtom(accumulationModalAtom);
 
   const handleOpen = () => {
@@ -42,69 +41,21 @@ export const AccumulationCard = ({
       aria-disabled={pending}
       onClick={handleOpen}
       onKeyDown={handleKeyDown}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: styles.spacing.m,
-        cursor: pending ? 'default' : 'pointer',
-      }}
+      className={`${styles.card}${pending ? ` ${styles.cardPending}` : ''}`}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: styles.spacing.m, minWidth: 0 }}>
+      <div className={styles.left}>
         {category?.color ? (
           <VCategoryDot color={category.color} />
         ) : (
-          <span
-            style={{
-              width: 16,
-              height: 16,
-              flexShrink: 0,
-              borderRadius: styles.radius.round,
-              backgroundColor: styles.colors.bgSurface,
-              border: `1px solid ${styles.colors.border}`,
-            }}
-          />
+          <span className={styles.dot} />
         )}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: styles.spacing.xs,
-            minWidth: 0,
-          }}
-        >
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.l,
-              fontWeight: styles.typography.fontWeight.bold,
-              color: styles.colors.textPrimary,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {accumulation.description}
-          </div>
+        <div className={styles.info}>
+          <div className={styles.title}>{accumulation.description}</div>
         </div>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: styles.spacing.m,
-          flexShrink: 0,
-        }}
-      >
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.l,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-          }}
-        >
-          {formatAmount(Number(accumulation.amount))}
-        </div>
+      <div className={styles.right}>
+        <div className={styles.amount}>{formatAmount(Number(accumulation.amount))}</div>
         {pending && <VLoader size={16} />}
       </div>
     </VCard>

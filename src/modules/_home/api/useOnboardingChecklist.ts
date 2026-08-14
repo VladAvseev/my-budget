@@ -1,11 +1,8 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import {
-  profilesService,
-  type Profile,
-} from '@/shared/supabase/services/profiles';
 import { categoriesService } from '@/shared/supabase/services/categories';
-import { reportsService } from '@/shared/supabase/services/reports';
 import { operationsService } from '@/shared/supabase/services/operations';
+import { profilesService, type Profile } from '@/shared/supabase/services/profiles';
+import { reportsService } from '@/shared/supabase/services/reports';
 import { useQuery } from '@tanstack/react-query';
 
 export interface OnboardingItem {
@@ -71,7 +68,7 @@ export const useOnboardingChecklist = () => {
     },
     {
       id: 'categories',
-      label: 'Добавьте категории операций в разделе "Профиль"',
+      label: 'Добавьте категории расходов в разделе "Профиль"',
       done: (categoriesQuery.data ?? 0) > 0,
     },
     {
@@ -81,7 +78,7 @@ export const useOnboardingChecklist = () => {
     },
     {
       id: 'operations',
-      label: 'Откройте новый отчёт и добавьте первую операцию',
+      label: 'Откройте новый отчёт и запишите первую операцию',
       done: (operationsQuery.data ?? 0) > 0,
     },
   ];
@@ -96,9 +93,6 @@ export const useOnboardingChecklist = () => {
       reportsQuery.isLoading ||
       operationsQuery.isLoading,
     error:
-      profileQuery.error ??
-      categoriesQuery.error ??
-      reportsQuery.error ??
-      operationsQuery.error,
+      profileQuery.error ?? categoriesQuery.error ?? reportsQuery.error ?? operationsQuery.error,
   };
 };

@@ -1,7 +1,7 @@
-import { useThemeStyles } from '@/shared/theme';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VPasswordInput } from '@/shared/ui/VPasswordInput';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { useChangePassword } from '../api/useChangePassword';
@@ -13,7 +13,6 @@ interface ChangePasswordModalProps {
 }
 
 export const ChangePasswordModal = ({ visible, onClose }: ChangePasswordModalProps) => {
-  const styles = useThemeStyles();
   const [newPassword, setNewPassword] = useAtom(newPasswordAtom);
   const [confirmPassword, setConfirmPassword] = useAtom(confirmNewPasswordAtom);
   const [newPasswordError, setNewPasswordError] = useState<string>();
@@ -82,7 +81,7 @@ export const ChangePasswordModal = ({ visible, onClose }: ChangePasswordModalPro
         </>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={commonStyles.columnL}>
         <VPasswordInput
           label="Новый пароль"
           autoComplete="new-password"

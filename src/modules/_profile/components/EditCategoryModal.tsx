@@ -1,10 +1,11 @@
 import type { Category } from '@/shared/supabase/services/categories';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useThemeStyles } from '@/shared/theme';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useState } from 'react';
+import type { CategoryType } from '@/shared/supabase/services/categories';
 import { useCategories } from '../api/useCategories';
 import { useUpdateCategory } from '../api/useUpdateCategory';
 import { CategoryColorPalette } from './CategoryColorPalette';
@@ -16,11 +17,10 @@ interface EditCategoryModalProps {
 }
 
 export const EditCategoryModal = ({ category, visible, onClose }: EditCategoryModalProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const updateCategory = useUpdateCategory(userId);
-  const categoriesQuery = useCategories(userId, category?.type);
+  const categoriesQuery = useCategories(userId, category?.type as CategoryType | undefined);
 
   const [name, setName] = useState(category?.name ?? '');
   const [color, setColor] = useState(category?.color ?? '');
@@ -84,7 +84,7 @@ export const EditCategoryModal = ({ category, visible, onClose }: EditCategoryMo
         </>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={commonStyles.columnL}>
         <VTextInput
           label="Название категории"
           value={name}

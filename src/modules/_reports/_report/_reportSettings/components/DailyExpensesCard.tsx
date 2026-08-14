@@ -1,5 +1,4 @@
 import type { Report } from '@/shared/supabase/services/reports';
-import { useThemeStyles } from '@/shared/theme';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
@@ -10,13 +9,13 @@ import { VToggle } from '@/shared/ui/VToggle';
 import { useState } from 'react';
 import { useDisableDailyExpenses } from '../api/useDisableDailyExpenses';
 import { useUpdateReport } from '../api/useUpdateReport';
+import styles from '../settingsCard.module.css';
 
 interface DailyExpensesCardProps {
   report: Report;
 }
 
 export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
-  const styles = useThemeStyles();
   const updateReport = useUpdateReport(report.id);
   const disableDailyExpenses = useDisableDailyExpenses(report.id);
 
@@ -114,16 +113,8 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
 
   return (
     <VCard>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
-        <div
-          style={{
-            fontSize: styles.typography.fontSize.xl,
-            fontWeight: styles.typography.fontWeight.bold,
-            color: styles.colors.textPrimary,
-            display: 'flex',
-            gap: styles.spacing.m,
-          }}
-        >
+      <div className={styles.content}>
+        <div className={styles.titleGrow}>
           Ежедневные расходы
           <VToggle
             checked={isEnabled}
@@ -137,24 +128,9 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
         )}
         {submitError && <VBanner type="error" visible message={submitError} />}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: styles.spacing.m,
-            }}
-          >
-            <div
-              style={{
-                fontSize: styles.typography.fontSize.m,
-                fontWeight: styles.typography.fontWeight.bold,
-                color: styles.colors.textPrimary,
-              }}
-            >
-              Ежедневный бюджет
-            </div>
+        <div className={styles.content}>
+          <div className={styles.row}>
+            <div className={styles.label}>Ежедневный бюджет</div>
             <VToggle
               checked={isBudgetEnabled}
               disabled={!isEnabled || updateReport.isPending}
@@ -200,7 +176,7 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
               setIsSaved(false);
             }}
           />
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div className={styles.rowEnd}>
             <VButton
               onClick={handleSave}
               isLoading={updateReport.isPending}

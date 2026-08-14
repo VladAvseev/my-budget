@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useThemeStyles } from '@/shared/theme';
+import modalStyles from '@/shared/styles/modal.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VModal } from '@/shared/ui/VModal';
@@ -14,7 +14,6 @@ interface CreateAccumulationModalProps {
 }
 
 export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const createAccumulation = useCreateAccumulation(userId);
@@ -93,7 +92,7 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
         </>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={modalStyles.content}>
         <VTextInput
           label="Сумма"
           numeric

@@ -1,4 +1,4 @@
-import { useThemeStyles } from '@/shared/theme';
+import commonStyles from '@/shared/styles/common.module.css';
 import { VLoader } from '@/shared/ui/VLoader';
 import type { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -10,20 +10,10 @@ interface PublicRouteProps {
 
 export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-  const styles = useThemeStyles();
 
   if (loading) {
     return (
-      <div
-        style={{
-          width: '100vw',
-          height: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: styles.colors.bgPrimary,
-        }}
-      >
+      <div className={commonStyles.centeredContent}>
         <VLoader size={32} />
       </div>
     );

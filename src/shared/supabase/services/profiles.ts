@@ -24,9 +24,11 @@ class ProfilesService {
   }
 
   async createProfile(userId: string, input: ProfileInput = {}) {
-    const insert: ProfileInsert = { user_id: userId };
+    const insert: ProfileInsert = {
+      user_id: userId,
+      start_balance: input.startBalance !== undefined ? String(input.startBalance) : undefined,
+    };
     if (input.email !== undefined) insert.email = input.email;
-    insert.start_balance = input.startBalance !== undefined ? String(input.startBalance) : null;
     return supabase.from('profiles').insert(trimStrings(insert)).select().single();
   }
 

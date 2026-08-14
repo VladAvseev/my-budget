@@ -1,6 +1,5 @@
 import { useAtom } from 'jotai';
 import { Link } from 'react-router-dom';
-import { useThemeStyles } from '@/shared/theme';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -8,9 +7,9 @@ import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils';
 import { useReports } from '../api/useReports';
 import { searchQueryAtom } from '../atoms/reports';
+import styles from './ReportsList.module.css';
 
 export const ReportsList = () => {
-  const styles = useThemeStyles();
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
   const { data, isLoading, error } = useReports();
 
@@ -22,7 +21,7 @@ export const ReportsList = () => {
     : reports;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+    <div className={styles.root}>
       <VTextInput
         label="Поиск"
         placeholder="Поиск по названию"
@@ -35,14 +34,14 @@ export const ReportsList = () => {
       )}
 
       {isLoading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: styles.spacing.xl }}>
+        <div className={styles.loaderWrap}>
           <VLoader size={28} />
         </div>
       )}
 
       {!isLoading && !error && filtered.length === 0 && (
         <VCard>
-          <div style={{ color: styles.colors.textSecondary }}>
+          <div className={styles.empty}>
             {reports.length === 0
               ? 'Нет созданных отчётов'
               : 'Ничего не найдено'}
@@ -56,22 +55,9 @@ export const ReportsList = () => {
 
           const content = (
             <>
-              <div
-                style={{
-                  fontSize: styles.typography.fontSize.l,
-                  fontWeight: styles.typography.fontWeight.bold,
-                  color: styles.colors.textPrimary,
-                }}
-              >
-                {report.name}
-              </div>
+              <div className={styles.title}>{report.name}</div>
               {report.has_daily_expenses && (
-                <div
-                  style={{
-                    fontSize: styles.typography.fontSize.s,
-                    color: styles.colors.textSecondary,
-                  }}
-                >
+                <div className={styles.period}>
                   {report.period_start && report.period_end
                     ? ` ${formatDisplay(report.period_start)} – ${formatDisplay(report.period_end)}`
                     : ''}
@@ -82,15 +68,7 @@ export const ReportsList = () => {
 
           if (isOptimistic) {
             return (
-              <VCard
-                key={report.id}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: styles.spacing.m,
-                }}
-              >
+              <VCard key={report.id} className={styles.cardRow}>
                 {content}
                 <VLoader size={16} />
               </VCard>
@@ -101,15 +79,9 @@ export const ReportsList = () => {
             <Link
               key={report.id}
               to={`/reports/${report.id}`}
-              style={{ textDecoration: 'none', display: 'block' }}
+              className={styles.link}
             >
-              <VCard
-                interactive
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                }}
-              >
+              <VCard interactive className={styles.cardRowAlignStart}>
                 {content}
               </VCard>
             </Link>

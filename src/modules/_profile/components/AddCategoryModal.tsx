@@ -1,9 +1,9 @@
 import type { CategoryType } from '@/shared/supabase/services/categories';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useThemeStyles } from '@/shared/theme';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useState } from 'react';
 import { useCategories } from '../api/useCategories';
 import { useCreateCategory } from '../api/useCreateCategory';
@@ -16,7 +16,6 @@ interface AddCategoryModalProps {
 }
 
 export const AddCategoryModal = ({ type, visible, onClose }: AddCategoryModalProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const createCategory = useCreateCategory(userId);
@@ -80,7 +79,7 @@ export const AddCategoryModal = ({ type, visible, onClose }: AddCategoryModalPro
         </>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={commonStyles.columnL}>
         <VTextInput
           label="Название категории"
           placeholder="Например, Продукты"

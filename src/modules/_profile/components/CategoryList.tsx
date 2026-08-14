@@ -2,17 +2,18 @@ import type { CategoryType } from '@/shared/supabase/services/categories';
 import type { Category } from '@/shared/supabase/services/categories';
 import { PencilIcon, PlusIcon, TrashIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useThemeStyles } from '@/shared/theme';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VIconButton } from '@/shared/ui/VIconButton';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useState } from 'react';
 import { useCategories } from '../api/useCategories';
 import { useRemoveCategory } from '../api/useRemoveCategory';
 import { AddCategoryModal } from './AddCategoryModal';
 import { EditCategoryModal } from './EditCategoryModal';
+import styles from './CategoryList.module.css';
 
 interface CategoryListProps {
   type: CategoryType;
@@ -20,7 +21,6 @@ interface CategoryListProps {
 }
 
 export const CategoryList = ({ type, title }: CategoryListProps) => {
-  const styles = useThemeStyles();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const categoriesQuery = useCategories(userId, type);
@@ -34,30 +34,15 @@ export const CategoryList = ({ type, title }: CategoryListProps) => {
 
   return (
     <VCard>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: styles.spacing.m,
-          }}
-        >
-          <div
-            style={{
-              fontSize: styles.typography.fontSize.xl,
-              fontWeight: styles.typography.fontWeight.bold,
-              color: styles.colors.textPrimary,
-            }}
-          >
-            {title}
-          </div>
+      <div className={styles.cardBody}>
+        <div className={styles.header}>
+          <div className={commonStyles.titleXl}>{title}</div>
           <VIconButton
             ariaLabel={`Добавить категорию в разделе «${title}»`}
             onClick={() => setIsAddOpen(true)}
-            color={styles.colors.accent}
+            color="var(--color-accent)"
           >
-            <PlusIcon size={24} color={styles.colors.accent} />
+            <PlusIcon size={24} color="currentColor" />
           </VIconButton>
         </div>
 
@@ -66,19 +51,13 @@ export const CategoryList = ({ type, title }: CategoryListProps) => {
         )}
 
         {categoriesQuery.isLoading && (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              padding: styles.spacing.xl,
-            }}
-          >
+          <div className={commonStyles.loaderContainer}>
             <VLoader size={28} />
           </div>
         )}
 
         {!categoriesQuery.isLoading && !categoriesQuery.error && categories.length === 0 && (
-          <div style={{ color: styles.colors.textSecondary }}>Нет категорий</div>
+          <div className={commonStyles.textSecondary}>Нет категорий</div>
         )}
 
         {!categoriesQuery.isLoading &&
@@ -88,63 +67,35 @@ export const CategoryList = ({ type, title }: CategoryListProps) => {
             return (
               <div
                 key={category.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: styles.spacing.m,
-                  paddingBottom: styles.spacing.m,
-                  borderBottom:
-                    index < categories.length - 1 ? `1px solid ${styles.colors.border}` : 'none',
-                }}
+                className={`${styles.item}${index < categories.length - 1 ? ` ${styles.itemBorder}` : ''}`}
               >
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: styles.spacing.s,
-                    minWidth: 0,
-                  }}
-                >
+                <div className={styles.itemBody}>
                   <span
+                    className={styles.itemDot}
                     style={{
-                      width: 16,
-                      height: 16,
-                      flexShrink: 0,
-                      borderRadius: styles.radius.round,
-                      backgroundColor: category.color ?? styles.colors.bgSurface,
-                      border: `1px solid ${category.color ?? styles.colors.border}`,
+                      backgroundColor: category.color ?? 'var(--color-bg-surface)',
+                      borderColor: category.color ?? 'var(--color-border)',
                     }}
                   />
-                  <span
-                    style={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      fontSize: styles.typography.fontSize.m,
-                      color: styles.colors.textPrimary,
-                    }}
-                  >
-                    {category.name}
-                  </span>
+                  <span className={styles.itemName}>{category.name}</span>
                 </div>
                 {isOptimistic ? (
                   <VLoader size={16} />
                 ) : (
-                  <div style={{ display: 'flex', gap: styles.spacing.s, flexShrink: 0 }}>
+                  <div className={commonStyles.actions}>
                     <VIconButton
                       ariaLabel={`Изменить категорию «${category.name}»`}
                       onClick={() => setEditingCategory(category)}
-                      color={styles.colors.accent}
+                      color="var(--color-accent)"
                     >
-                      <PencilIcon size={18} color={styles.colors.accent} />
+                      <PencilIcon size={18} color="currentColor" />
                     </VIconButton>
                     <VIconButton
                       ariaLabel={`Удалить категорию «${category.name}»`}
                       onClick={() => setDeletingCategory(category)}
-                      color={styles.colors.error}
+                      color="var(--color-error)"
                     >
-                      <TrashIcon size={18} color={styles.colors.error} />
+                      <TrashIcon size={18} color="currentColor" />
                     </VIconButton>
                   </div>
                 )}

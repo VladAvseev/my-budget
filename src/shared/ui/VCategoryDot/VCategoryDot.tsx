@@ -1,22 +1,15 @@
-import { useThemeStyles } from '@/shared/theme';
+import styles from './VCategoryDot.module.css';
 
 interface VCategoryDotProps {
   color: string;
+  className?: string;
 }
 
-export const VCategoryDot = ({ color }: VCategoryDotProps) => {
-  const styles = useThemeStyles();
-
+export const VCategoryDot = ({ color, className }: VCategoryDotProps) => {
   return (
     <span
-      style={{
-        width: 16,
-        height: 16,
-        flexShrink: 0,
-        borderRadius: styles.radius.round,
-        backgroundColor: color,
-        border: `1px solid ${color}`,
-      }}
+      className={`${styles.dot}${className ? ` ${className}` : ''}`}
+      style={{ backgroundColor: color, border: `1px solid ${color}` }}
     />
   );
 };

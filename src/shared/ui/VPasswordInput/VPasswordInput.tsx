@@ -1,7 +1,7 @@
 import { EyeIcon, EyeOffIcon } from '@/shared/icons';
-import { useThemeStyles } from '@/shared/theme';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { useState } from 'react';
+import styles from './VPasswordInput.module.css';
 
 export interface VPasswordInputProps {
   label?: string;
@@ -11,6 +11,7 @@ export interface VPasswordInputProps {
   disabled?: boolean;
   autoComplete?: string;
   onChange?: (value: string) => void;
+  className?: string;
 }
 
 export const VPasswordInput = ({
@@ -21,8 +22,8 @@ export const VPasswordInput = ({
   disabled,
   autoComplete,
   onChange,
+  className,
 }: VPasswordInputProps) => {
-  const styles = useThemeStyles();
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -35,24 +36,16 @@ export const VPasswordInput = ({
       error={error}
       disabled={disabled}
       onChange={onChange}
+      className={className}
       trailingIcon={
         <button
           type="button"
           aria-label={isVisible ? 'Скрыть пароль' : 'Показать пароль'}
           onClick={() => setIsVisible((prev) => !prev)}
           disabled={disabled}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 0,
-            border: 'none',
-            background: 'transparent',
-            color: styles.colors.textSecondary,
-            cursor: disabled ? 'not-allowed' : 'pointer',
-          }}
+          className={styles.toggle}
         >
-          {isVisible ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+          {isVisible ? <EyeOffIcon size={18} color="currentColor" /> : <EyeIcon size={18} color="currentColor" />}
         </button>
       }
     />

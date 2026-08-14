@@ -1,5 +1,5 @@
 import type { Report } from '@/shared/supabase/services/reports';
-import { useThemeStyles } from '@/shared/theme';
+import modalStyles from '@/shared/styles/modal.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
@@ -13,7 +13,6 @@ interface CreateDailyModalProps {
 }
 
 export const CreateDailyModal = ({ report, onClose }: CreateDailyModalProps) => {
-  const styles = useThemeStyles();
   const createDailyExpense = useCreateDailyExpense(report.id);
 
   const [amount, setAmount] = useState('');
@@ -69,7 +68,7 @@ export const CreateDailyModal = ({ report, onClose }: CreateDailyModalProps) => 
         </>
       }
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
+      <div className={modalStyles.content}>
         <VTextInput
           label="Сумма"
           numeric

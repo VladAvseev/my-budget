@@ -1,0 +1,22 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+.spinner {
+  animation: vloader-spin 1s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+@keyframes vloader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

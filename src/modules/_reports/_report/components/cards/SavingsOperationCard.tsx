@@ -1,7 +1,6 @@
 import type { Category } from '@/shared/supabase/services/categories';
 import type { Operation, OperationType } from '@/shared/supabase/services/operations';
 import { signedOperationAmount } from '@/shared/supabase/services/operations';
-import { useThemeStyles } from '@/shared/theme';
 import { useSetAtom } from 'jotai';
 import { operationModalAtom } from '../../atoms/report';
 import { OperationCardBase } from './OperationCardBase';
@@ -13,7 +12,6 @@ interface SavingsOperationCardProps {
 }
 
 export const SavingsOperationCard = ({ operation, category, pending = false }: SavingsOperationCardProps) => {
-  const styles = useThemeStyles();
   const setModal = useSetAtom(operationModalAtom);
 
   const isWithdrawal = operation.type === 'savings_out';
@@ -22,7 +20,7 @@ export const SavingsOperationCard = ({ operation, category, pending = false }: S
   return (
     <OperationCardBase
       amount={amount}
-      amountColor={isWithdrawal ? styles.colors.error : styles.colors.textPrimary}
+      amountColor={isWithdrawal ? 'var(--color-error)' : 'var(--color-text-primary)'}
       description={operation.description}
       category={category}
       pending={pending}

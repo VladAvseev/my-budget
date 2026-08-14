@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import type { Report } from '@/shared/supabase/services/reports';
 import type { OperationType } from '@/shared/supabase/services/operations';
-import { useThemeStyles } from '@/shared/theme';
 import { OperationList } from './OperationList';
 import { DailyOperationsTab } from './DailyOperationsTab';
+import tabsStyles from './tabs.module.css';
 
 interface OperationsTabsProps {
   report: Report;
@@ -12,7 +12,6 @@ interface OperationsTabsProps {
 export type OperationsTab = 'expense' | 'income' | 'savings' | 'daily';
 
 export const OperationsTabs = ({ report }: OperationsTabsProps) => {
-  const styles = useThemeStyles();
   const [activeTab, setActiveTab] = useState<OperationsTab>(report.has_daily_expenses ? 'daily' : 'expense');
   const [hoveredTab, setHoveredTab] = useState<OperationsTab | null>(null);
 
@@ -24,17 +23,11 @@ export const OperationsTabs = ({ report }: OperationsTabsProps) => {
   tabs.push({ key: 'savings', label: 'Накопления' });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: styles.spacing.l }}>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: styles.spacing.s,
-          flexWrap: 'wrap',
-        }}
-      >
+    <div className={tabsStyles.tabsColumn}>
+      <div className={tabsStyles.tabs}>
         {tabs.map((tab) => {
           const isActive = activeTab === tab.key;
+          const isHovered = hoveredTab === tab.key;
           return (
             <button
               key={tab.key}
@@ -42,21 +35,7 @@ export const OperationsTabs = ({ report }: OperationsTabsProps) => {
               onClick={() => setActiveTab(tab.key)}
               onMouseEnter={() => setHoveredTab(tab.key)}
               onMouseLeave={() => setHoveredTab(null)}
-              style={{
-                padding: `${styles.spacing.s} ${styles.spacing.l}`,
-                borderRadius: styles.radius.m,
-                border: isActive ? 'none' : `1px solid ${styles.colors.border}`,
-                backgroundColor: isActive
-                  ? styles.colors.accent
-                  : hoveredTab === tab.key
-                    ? styles.colors.bgSurfaceHover
-                    : styles.colors.bgSurface,
-                color: isActive ? styles.colors.bgPrimary : styles.colors.textSecondary,
-                fontSize: styles.typography.fontSize.m,
-                fontWeight: styles.typography.fontWeight.medium,
-                cursor: 'pointer',
-                transition: 'background-color 0.15s ease, color 0.15s ease',
-              }}
+              className={`${tabsStyles.tab}${isActive ? ` ${tabsStyles.tabActive}` : ''}${!isActive && isHovered ? ` ${tabsStyles.tabHover}` : ''}`}
             >
               {tab.label}
             </button>

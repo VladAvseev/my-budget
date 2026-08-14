@@ -1,6 +1,6 @@
 import { supabase } from '../supabase';
 import type { Database } from '../types/database.types';
-import type { PostgrestError } from '@supabase/supabase-js';
+import { PostgrestError } from '@supabase/supabase-js';
 import { parseISO, toISODate } from '@/shared/utils/date';
 import { trimStrings } from '@/shared/utils';
 
@@ -198,12 +198,12 @@ class OperationsService {
   ) {
     const date = await this.getNextFreeDate(reportId, periodStart, periodEnd);
     if (!date) {
-      const error: PostgrestError = {
+      const error: PostgrestError = new PostgrestError({
         message: 'Нет свободных дат в отчётном периоде',
         details: '',
         hint: '',
         code: 'P0001',
-      };
+      });
       return { data: null, error };
     }
     return this.createOperation(reportId, userId, {
