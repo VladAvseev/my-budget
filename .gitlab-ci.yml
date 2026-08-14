@@ -56,7 +56,6 @@ deploy:
     - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
     - aws configure set default.region ru-central1
     # Синхронизация собранной статики в бакет
-    - aws --endpoint-url=https://storage.yandexcloud.net \
-        s3 sync dist/ s3://$BUCKET_NAME --delete
+    - aws --endpoint-url=https://storage.yandexcloud.net s3 sync dist/ s3://$BUCKET_NAME --delete
   only:
     - develop
