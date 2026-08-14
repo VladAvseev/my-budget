@@ -8,4 +8,5 @@ export const invalidateReportCache = (
   queryClient.invalidateQueries({ queryKey: ['reports', reportId, 'summary'] });
   queryClient.invalidateQueries({ queryKey: ['userSummary'] });
   queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
+  queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
 };

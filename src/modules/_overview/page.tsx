@@ -24,18 +24,16 @@ export const Page: React.FC = () => {
   const excluded = new Set(excludedIds);
   const selectedReports = reports.filter((report) => !excluded.has(report.id));
 
-  const operationsQueries = useOverviewOperationsMap(selectedReports.map((report) => report.id));
+  const {
+    data: operationsMap,
+    isLoading: operationsLoading,
+    error: operationsError,
+  } = useOverviewOperationsMap(selectedReports.map((report) => report.id));
 
-  const operationsByReport = useMemo(() => {
-    const map = new Map<string, Operation[]>();
-    selectedReports.forEach((report, index) => {
-      const data = operationsQueries[index]?.data;
-      if (data) {
-        map.set(report.id, data);
-      }
-    });
-    return map;
-  }, [selectedReports, operationsQueries]);
+  const operationsByReport = useMemo(
+    () => operationsMap ?? new Map<string, Operation[]>(),
+    [operationsMap],
+  );
 
   const totals = useMemo(() => {
     const total = { ...emptyAmounts };
@@ -48,9 +46,6 @@ export const Page: React.FC = () => {
     }
     return total;
   }, [operationsByReport]);
-
-  const operationsLoading = operationsQueries.some((query) => query.isLoading);
-  const operationsError = operationsQueries.find((query) => query.error)?.error;
 
   return (
     <div className={commonStyles.page}>

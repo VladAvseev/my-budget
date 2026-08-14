@@ -49,6 +49,33 @@ class OperationsService {
       .order('created_at', { ascending: false });
   }
 
+  async listOperationsByReports(reportIds: string[]): Promise<Operation[]> {
+    if (reportIds.length === 0) return [];
+
+    const all: Operation[] = [];
+    const chunkSize = 50;
+    const pageSize = 1000;
+
+    for (let i = 0; i < reportIds.length; i += chunkSize) {
+      const chunk = reportIds.slice(i, i + chunkSize);
+      let start = 0;
+      while (true) {
+        const { data, error } = await supabase
+          .from('operations')
+          .select('report_id, type, amount, category_id')
+          .in('report_id', chunk)
+          .order('id', { ascending: true })
+          .range(start, start + pageSize - 1);
+        if (error) throw error;
+        const rows = (data ?? []) as unknown as Operation[];
+        all.push(...rows);
+        if (rows.length < pageSize) break;
+        start += pageSize;
+      }
+    }
+    return all;
+  }
+
   async listByType(reportId: string, type: OperationType) {
     const query = supabase
       .from('operations')
