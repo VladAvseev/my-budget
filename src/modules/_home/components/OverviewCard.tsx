@@ -10,7 +10,8 @@ import styles from '../homeCard.module.css';
 export const OverviewCard = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
-  const { data: summary, isFetched: summaryFetched } = useUserSummary(userId);
+  const { data: summaryData, isFetched: summaryFetched } = useUserSummary(userId);
+  const summary = summaryData ?? { income: 0, expense: 0, savings: 0, daily: 0 };
   const profileQuery = useProfile();
 
   if (!profileQuery.isFetched || !summaryFetched) {

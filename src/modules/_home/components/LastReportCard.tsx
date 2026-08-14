@@ -11,7 +11,8 @@ export const LastReportCard = () => {
   const reportsQuery = useReports();
   const reports = reportsQuery.data ?? [];
   const lastReport = reports[0];
-  const { data: summary, isFetched: summaryFetched } = useSummary(lastReport?.id ?? '');
+  const { data: summaryData, isFetched: summaryFetched } = useSummary(lastReport?.id ?? '');
+  const summary = summaryData ?? { income: 0, expense: 0, savings: 0, daily: 0 };
 
   if (reportsQuery.isLoading) {
     return (

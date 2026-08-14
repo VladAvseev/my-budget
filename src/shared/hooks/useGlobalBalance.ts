@@ -13,7 +13,7 @@ export const useUserSummary = (userId: string) =>
       const summary = await operationsService.getUserSummary(userId);
       return summary;
     },
-    initialData: { income: 0, expense: 0, savings: 0, daily: 0 },
+    placeholderData: { income: 0, expense: 0, savings: 0, daily: 0 },
   });
 
 export const useGlobalBalance = () => {

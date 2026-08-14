@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import styles from './SummaryCards.module.css';
 
 interface SummaryCardsProps {
-  summary: OperationSummary;
+  summary: OperationSummary | undefined;
 }
 
 type SummaryItem = {
@@ -16,17 +16,21 @@ type SummaryItem = {
 };
 
 export const SummaryCards = ({ summary }: SummaryCardsProps) => {
-  const expenses = summary.expense + summary.daily;
+  const summaryData = useMemo(
+    () => summary ?? { income: 0, expense: 0, savings: 0, daily: 0 },
+    [summary],
+  );
+  const expenses = summaryData.expense + summaryData.daily;
 
   const items = useMemo<SummaryItem[]>(() => {
-    const balance = summary.income - expenses - summary.savings;
+    const balance = summaryData.income - expenses - summaryData.savings;
     const percentOfIncome = (value: number) =>
-      summary.income > 0 ? Math.round((value / summary.income) * 100) : null;
+      summaryData.income > 0 ? Math.round((value / summaryData.income) * 100) : null;
 
     return [
       {
         label: 'Доходы',
-        value: summary.income,
+        value: summaryData.income,
         percent: null,
         color: 'var(--color-success)',
       },
@@ -38,18 +42,18 @@ export const SummaryCards = ({ summary }: SummaryCardsProps) => {
       },
       {
         label: 'Накопления',
-        value: summary.savings,
-        percent: percentOfIncome(summary.savings),
+        value: summaryData.savings,
+        percent: percentOfIncome(summaryData.savings),
         color: 'var(--color-warning)',
       },
       {
         label: 'Остаток',
         value: balance,
-        percent: summary.income > 0 ? Math.max(0, Math.round((balance / summary.income) * 100)) : 0,
+        percent: summaryData.income > 0 ? Math.max(0, Math.round((balance / summaryData.income) * 100)) : 0,
         color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
       },
     ];
-  }, [summary, expenses]);
+  }, [summaryData, expenses]);
 
   return (
     <div className={styles.grid}>
