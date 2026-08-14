@@ -67,7 +67,7 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
           textAlign: 'center',
         }}
       >
-        Проверка: {showCapital ? formatAmount(capital) : HIDDEN_AMOUNT}
+        Капитал: {showCapital ? formatAmount(capital) : HIDDEN_AMOUNT}
       </div>
 
       <div
