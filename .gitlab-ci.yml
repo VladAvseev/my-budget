@@ -59,3 +59,19 @@ deploy:
     - aws --endpoint-url=https://storage.yandexcloud.net s3 sync dist/ s3://$BUCKET_NAME --delete
   only:
     - develop
+
+# ─────────────────────────────────────────────────────────────
+# Этап 3: Копирование репозитория в gitHub
+# ─────────────────────────────────────────────────────────────
+mirror-to-github:
+  stage: deploy
+  only:
+    - develop
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
+    - git remote add github git@github.com:VladAvseev/my-budget.git
+  script:
+    - git push --mirror github
