@@ -29,7 +29,7 @@ export default defineConfig({
   },
   html: {
     template: './public/index.html',
-    title: process.env.APP_TITLE || 'React rsbuild base',
+    title: 'Мой бюджет',
   },
   splitChunks: {
     preset: 'default',
