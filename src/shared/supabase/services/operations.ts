@@ -77,10 +77,6 @@ class OperationsService {
       .eq('user_id', userId);
   }
 
-  async getOperation(id: string) {
-    return supabase.from('operations').select('*').eq('id', id).maybeSingle();
-  }
-
   async createOperation(reportId: string, userId: string, input: OperationInput) {
     const insert: OperationInsert = {
       report_id: reportId,
@@ -133,14 +129,6 @@ class OperationsService {
       }
     }
     return summary;
-  }
-
-  async countByType(reportId: string, type: OperationType) {
-    return supabase
-      .from('operations')
-      .select('*', { count: 'exact', head: true })
-      .eq('report_id', reportId)
-      .eq('type', type);
   }
 
   async getSummary(reportId: string): Promise<OperationSummary> {

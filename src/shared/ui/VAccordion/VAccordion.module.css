@@ -59,18 +59,12 @@
 }
 
 .body {
-  display: grid;
-  grid-template-rows: minmax(0, 0fr);
-  transition: grid-template-rows 0.2s ease;
-}
-
-.bodyOpen {
-  grid-template-rows: minmax(0, 1fr);
+  height: 0;
+  overflow: hidden;
+  transition: height 0.2s ease;
 }
 
 .bodyInner {
-  overflow: hidden;
-  min-height: 0;
   padding: var(--space-s) var(--space-m) var(--space-m) var(--space-m);
   font-size: var(--font-size-m);
   color: var(--color-text-secondary);

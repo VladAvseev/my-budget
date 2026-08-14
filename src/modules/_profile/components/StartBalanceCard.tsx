@@ -1,4 +1,4 @@
-import { HIDDEN_AMOUNT, useAmountsVisibility, useCapital } from '@/shared/hooks';
+import { HIDDEN_AMOUNT, useAmountsVisibility, useCapital, useProfile } from '@/shared/hooks';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
@@ -8,7 +8,6 @@ import { VToggle } from '@/shared/ui/VToggle';
 import commonStyles from '@/shared/styles/common.module.css';
 import { formatAmount } from '@/shared/utils';
 import { useState } from 'react';
-import { useProfile } from '../api/useProfile';
 import { useUpdateStartBalance } from '../api/useUpdateStartBalance';
 
 export const StartBalanceCard = () => {

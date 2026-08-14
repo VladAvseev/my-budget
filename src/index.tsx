@@ -9,7 +9,16 @@ import '@fontsource/roboto/cyrillic-700.css';
 import '@/shared/theme/theme.css';
 import './App.css';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60_000,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: 1,
+    },
+  },
+});
 
 const container = document.getElementById('root');
 

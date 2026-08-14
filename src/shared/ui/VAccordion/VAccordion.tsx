@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { ChevronDownIcon } from '@/shared/icons';
 import styles from './VAccordion.module.css';
 
@@ -20,6 +20,14 @@ export const VAccordion = ({
   className,
 }: VAccordionProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen ?? false);
+  const [bodyHeight, setBodyHeight] = useState(0);
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (bodyRef.current) {
+      setBodyHeight(isOpen ? bodyRef.current.scrollHeight : 0);
+    }
+  }, [isOpen, children]);
 
   const handleToggle = () => {
     if (disabled) {
@@ -55,8 +63,15 @@ export const VAccordion = ({
           />
         </button>
       </div>
-      <div className={`${styles.body}${isOpen ? ` ${styles.bodyOpen}` : ''}`}>
-        <div className={styles.bodyInner}>{children}</div>
+      <div
+        className={styles.body}
+        style={{ height: bodyHeight }}
+        aria-hidden={!isOpen}
+        data-open={isOpen ? 'true' : undefined}
+      >
+        <div ref={bodyRef} className={styles.bodyInner}>
+          {children}
+        </div>
       </div>
     </div>
   );

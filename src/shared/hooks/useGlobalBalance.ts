@@ -1,7 +1,7 @@
 import { useAuth } from '@/shared/supabase/authProvider';
 import { operationsService, type OperationSummary } from '@/shared/supabase/services/operations';
-import { profilesService, type Profile } from '@/shared/supabase/services/profiles';
 import { useQuery } from '@tanstack/react-query';
+import { useProfile } from './useProfile';
 
 export const userSummaryQueryKey = (userId: string) => ['userSummary', userId] as const;
 
@@ -19,17 +19,7 @@ export const useUserSummary = (userId: string) =>
 export const useGlobalBalance = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
-  const profileQuery = useQuery<Profile | null>({
-    queryKey: ['profile', userId],
-    enabled: Boolean(userId),
-    queryFn: async () => {
-      const { data, error } = await profilesService.getOrCreateProfile(userId, {
-        email: user?.email,
-      });
-      if (error) throw error;
-      return data ?? null;
-    },
-  });
+  const profileQuery = useProfile();
   const summaryQuery = useUserSummary(userId);
 
   const startBalance = Number(profileQuery.data?.start_balance ?? 0) || 0;

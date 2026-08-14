@@ -29,7 +29,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const operationsQuery = useOperations(reportId, type);
-  const savingsQueries = useSavingsReportOperations(reportId);
+  const savingsQueries = useSavingsReportOperations(reportId, isSavingsType(type));
   const isSavings = isSavingsType(type);
   const categoriesQuery = useCategories(userId, categoryTypeForOperation(type));
   const limitsQuery = useCategoryLimits(type === 'expense' ? reportId : '');
@@ -66,9 +66,18 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
     const queryOperations = isSavings ? operations : (operationsQuery.data ?? []);
     const queryCategories = categoriesQuery.data ?? [];
     const result: { key: string; label: string; color?: string; operations: Operation[] }[] = [];
+
+    const byCategory = new Map<string, Operation[]>();
+    for (const operation of queryOperations) {
+      const key = operation.category_id ?? 'none';
+      const list = byCategory.get(key) ?? [];
+      list.push(operation);
+      byCategory.set(key, list);
+    }
+
     for (const category of queryCategories) {
-      const grouped = queryOperations.filter((operation) => operation.category_id === category.id);
-      if (grouped.length > 0) {
+      const grouped = byCategory.get(category.id);
+      if (grouped) {
         result.push({
           key: category.id,
           label: category.name,
@@ -77,8 +86,8 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
         });
       }
     }
-    const withoutCategory = queryOperations.filter((operation) => !operation.category_id);
-    if (withoutCategory.length > 0) {
+    const withoutCategory = byCategory.get('none');
+    if (withoutCategory) {
       result.push({ key: 'none', label: 'Без категории', operations: withoutCategory });
     }
     return result;

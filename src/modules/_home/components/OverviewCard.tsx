@@ -1,11 +1,9 @@
-import { useUserSummary } from '@/shared/hooks';
+import { useProfile, useUserSummary } from '@/shared/hooks';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { profilesService } from '@/shared/supabase/services/profiles';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
-import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import styles from '../homeCard.module.css';
 
@@ -13,17 +11,7 @@ export const OverviewCard = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const { data: summary, isFetched: summaryFetched } = useUserSummary(userId);
-  const profileQuery = useQuery({
-    queryKey: ['profile', userId],
-    enabled: Boolean(userId),
-    queryFn: async () => {
-      const { data, error } = await profilesService.getOrCreateProfile(userId, {
-        email: user?.email,
-      });
-      if (error) throw error;
-      return data ?? null;
-    },
-  });
+  const profileQuery = useProfile();
 
   if (!profileQuery.isFetched || !summaryFetched) {
     return (

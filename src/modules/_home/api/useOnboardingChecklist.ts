@@ -1,7 +1,7 @@
+import { useProfile } from '@/shared/hooks';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { categoriesService } from '@/shared/supabase/services/categories';
 import { operationsService } from '@/shared/supabase/services/operations';
-import { profilesService, type Profile } from '@/shared/supabase/services/profiles';
 import { reportsService } from '@/shared/supabase/services/reports';
 import { useQuery } from '@tanstack/react-query';
 
@@ -15,18 +15,7 @@ export const useOnboardingChecklist = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
 
-  const profileQuery = useQuery<Profile | null>({
-    queryKey: ['profile', userId],
-    enabled: Boolean(userId),
-    queryFn: async () => {
-      if (!user) return null;
-      const { data, error } = await profilesService.getOrCreateProfile(userId, {
-        email: user.email,
-      });
-      if (error) throw error;
-      return data ?? null;
-    },
-  });
+  const profileQuery = useProfile();
 
   const categoriesQuery = useQuery<number>({
     queryKey: ['categoriesCount', userId],
