@@ -1,0 +1,1 @@
+export { VCategoryDot } from './VCategoryDot';

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Градиент фона -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c6e4b4"/>
+      <stop offset="100%" stop-color="#96cc82"/>
+    </linearGradient>
+    <!-- Тень -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Скругленный квадратный фон -->
+  <rect x="0" y="0" width="512" height="512" rx="48" fill="url(#bgGrad)"/>
+
+  <!-- Группа с тенью -->
+  <g filter="url(#dropShadow)">
+    
+    <!-- ЗАДНЯЯ КУПЮРА (Повернута на 14 градусов, по центру X, опущена вниз по Y) -->
+    <g transform="translate(121, 162) rotate(-14)">
+      <!-- Контур банкноты (270x135) -->
+      <rect x="-25" y="65" width="270" height="135" rx="8" fill="transparent" stroke="#0d0d0d" stroke-width="2.5"/>
+    </g>
+
+    <!-- ПЕРЕДНЯЯ КУПЮРА (Без поворота, ровно по центру картинки) -->
+    <g transform="translate(106, 190)">
+      <!-- Контур банкноты (300x150) -->
+      <rect x="0" y="0" width="300" height="150" rx="10" fill="#aadd98" stroke="#0d0d0d" stroke-width="2.5"/>
+      
+      <!-- Центральный круг с символом рубля -->
+      <circle cx="150" cy="75" r="46" fill="transparent" stroke="#0d0d0d" stroke-width="2.5"/>
+      <text x="150" y="100" font-family="Arial, Helvetica, sans-serif" font-size="62" font-weight="400" fill="#0d0d0d" text-anchor="middle">₽</text>
+      
+      <!-- Блик (звездочка) -->
+      <path d="M 225 35 L 227 42 L 234 44 L 227 46 L 225 53 L 223 46 L 216 44 L 223 42 Z" fill="#ffffff" stroke="none"/>
+    </g>
+    
+  </g>
+</svg>

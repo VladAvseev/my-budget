@@ -1,0 +1,23 @@
+export const midnightStyles = {
+  colors: {
+    bgPrimary: '#0F1B2D',
+    bgSurface: '#16253B',
+    bgSurfaceHover: '#1D3049',
+    textPrimary: '#F2F6FB',
+    textSecondary: '#9FB0C4',
+    border: '#2A3B55',
+    accent: '#E8A33D',
+    accentHover: '#C98A2B',
+    accentLight: '#FBE3B0',
+    success: '#3ECF9E',
+    successBg: '#14302F',
+    successBorder: '#1F4A44',
+    warning: '#FFB84D',
+    warningBg: '#3A2E1E',
+    warningBorder: '#5A4529',
+    error: '#F0645C',
+    errorHover: '#D03F3F',
+    errorBg: '#3A2326',
+    errorBorder: '#5E3438',
+  },
+};
