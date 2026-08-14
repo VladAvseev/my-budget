@@ -51,10 +51,6 @@ deploy:
     # Проверка, что файл создан (для отладки; секреты не печатаем)
     - cat .env | sed 's/=.*/=***/'
   script:
-    # Проверка, что все обязательные переменные заданы (Settings → CI/CD → Variables)
-    - test -n "$AWS_ACCESS_KEY_ID" || { echo "Ошибка: AWS_ACCESS_KEY_ID не задана"; exit 1; }
-    - test -n "$AWS_SECRET_ACCESS_KEY" || { echo "Ошибка: AWS_SECRET_ACCESS_KEY не задана"; exit 1; }
-    - test -n "$BUCKET_NAME" || { echo "Ошибка: BUCKET_NAME не задана"; exit 1; }
     # Настройка AWS CLI на Yandex Object Storage
     - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
     - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
