@@ -22,7 +22,7 @@ build:
       - build/
     expire_in: 1 hour
   only:
-    - main
+    - develop
 
 # ─────────────────────────────────────────────────────────────
 # Этап 2: Деплой в Object Storage
@@ -48,4 +48,4 @@ deploy:
     - aws --endpoint-url=https://storage.yandexcloud.net \
         s3 sync build/ s3://$BUCKET_NAME --delete
   only:
-    - main
+    - develop
