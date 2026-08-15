@@ -48,7 +48,6 @@ export const CategoryLimitsSummary = ({
   return (
     <VCard>
       <div className={styles.content}>
-        <div className={styles.title}>Сводка</div>
         <div className={styles.list}>
           {limits.map((limit) => {
             const spent = spentByCategory.get(limit.category_id) ?? 0;

@@ -41,7 +41,6 @@ export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => 
 
   return (
     <VCard className={summaryStyles.card}>
-      <div className={summaryStyles.title}>Сводка</div>
       <div className={summaryStyles.grid}>
         {items.flatMap((item) => [
           <div key={`${item.label}-label`} className={summaryStyles.label}>

@@ -51,7 +51,6 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
       {hasBudget && (
         <VCard>
           <div className={styles.summaryContent}>
-            <div className={styles.summaryTitle}>Сводка</div>
             <div className={styles.summaryGrid}>
               <SummaryValue
                 label="Бюджет на период"
