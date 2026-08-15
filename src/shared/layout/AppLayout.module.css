@@ -14,7 +14,7 @@
 }
 
 .sidebar {
-  width: 240px;
+  width: 254px;
   flex-shrink: 0;
   align-self: stretch;
   padding: var(--space-l);
