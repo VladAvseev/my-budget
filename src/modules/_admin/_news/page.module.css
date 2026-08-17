@@ -1,0 +1,10 @@
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
+.newsHeaderActions {
+  display: flex;
+  gap: var(--space-s)
+}

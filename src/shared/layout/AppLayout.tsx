@@ -1,5 +1,6 @@
 import {
   HIDDEN_AMOUNT,
+  useAdminStatus,
   useAmountsVisibility,
   useBreakpoint,
   useCapital,
@@ -12,6 +13,7 @@ import {
   OverviewIcon,
   ReportsIcon,
   SavingsIcon,
+  SettingsIcon,
   UserIcon,
   type IconProps,
 } from '@/shared/icons';
@@ -49,6 +51,7 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
   const { balance } = useGlobalBalance();
   const { capital } = useCapital();
   const { showBalance, showCapital } = useAmountsVisibility();
+  const { isAdmin } = useAdminStatus();
 
   return (
     <>
@@ -78,6 +81,23 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
             </span>
           </NavLink>
         ))}
+
+        {isAdmin && (
+          <NavLink
+            to="/admin"
+            onClick={() => {
+              if (setIsMenuOpen) {
+                setIsMenuOpen(false);
+              }
+            }}
+            className={styles.navLink}
+          >
+            <span className={styles.navLinkContent}>
+              <SettingsIcon size={18} />
+              Админ-панель
+            </span>
+          </NavLink>
+        )}
       </nav>
     </>
   );

@@ -1,0 +1,49 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: var(--space-xs) var(--space-m);
+  align-items: baseline;
+}
+
+.statRowGroup {
+  display: contents;
+}
+
+.statHeaderCell {
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.statSubheader {
+  grid-column: 1 / -1;
+  margin-top: var(--space-s);
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.statLabel {
+  min-width: 0;
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+}
+
+.statValue {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  justify-self: end;
+}
+
+.statPercent {
+  font-size: var(--font-size-m);
+  color: var(--color-text-secondary);
+  justify-self: end;
+}
