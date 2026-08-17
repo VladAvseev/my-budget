@@ -11,7 +11,6 @@ const ADMIN_TABS: AdminTab[] = [
   { to: '/admin/dashboard', label: 'Дашборд' },
   { to: '/admin/users', label: 'Пользователи' },
   { to: '/admin/news', label: 'Что нового?' },
-  { label: 'ещё...', stub: true },
 ];
 
 export const AdminLayout: React.FC = () => {
