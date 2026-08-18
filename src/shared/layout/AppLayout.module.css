@@ -87,9 +87,22 @@
 }
 
 .menuBadge {
+  padding: var(--space-xs);
+  padding-top: 0;
+  padding-bottom: 0;
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: -4px;
+  left: -4px;
+  z-index: 1;
+}
+
+.menuAdminBadge {
+  padding: var(--space-xs);
+  padding-top: 0;
+  padding-bottom: 0;
+  position: absolute;
+  bottom: -4px;
+  left: -4px;
   z-index: 1;
 }
 

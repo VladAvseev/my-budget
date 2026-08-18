@@ -18,6 +18,7 @@ import {
   UserIcon,
   type IconProps,
 } from '@/shared/icons';
+import { useAdminSupportOpenCount } from '@/modules/_admin/_support/api/useAdminSupportOpenCount';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
@@ -60,6 +61,22 @@ const SupportUnreadBadge = ({ className }: { className?: string }) => {
   return (
     <VBadge variant="accent" className={className}>
       {unread}
+    </VBadge>
+  );
+};
+
+const AdminOpenBadge = ({ className }: { className?: string }) => {
+  const { isAdmin } = useAdminStatus();
+  const openQuery = useAdminSupportOpenCount(isAdmin);
+  const openCount = openQuery.data ?? 0;
+
+  if (!isAdmin || openCount <= 0) {
+    return null;
+  }
+
+  return (
+    <VBadge variant="warning" className={className}>
+      {openCount}
     </VBadge>
   );
 };
@@ -117,6 +134,7 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
             <span className={styles.navLinkContent}>
               <SettingsIcon size={18} />
               Админ-панель
+              <AdminOpenBadge className={styles.navBadge} />
             </span>
           </NavLink>
         )}
@@ -168,6 +186,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             <MenuIcon size={24} color="currentColor" />
           </VIconButton>
           <SupportUnreadBadge className={styles.menuBadge} />
+          <AdminOpenBadge className={styles.menuAdminBadge} />
         </span>
       </div>
 

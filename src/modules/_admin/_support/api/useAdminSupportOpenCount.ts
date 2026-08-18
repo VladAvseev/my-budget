@@ -3,9 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 
 export const adminSupportOpenCountQueryKey = ['admin', 'support', 'openCount'] as const;
 
-export const useAdminSupportOpenCount = () =>
+export const useAdminSupportOpenCount = (enabled = true) =>
   useQuery<number>({
     queryKey: adminSupportOpenCountQueryKey,
+    enabled,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('admin_get_support_open_count');
       if (error) throw error;
