@@ -47,6 +47,12 @@ export interface AdminUserRow {
   sawNews: boolean;
   reportsCount: number;
   operationsCount: number;
+  categoriesCount: number;
+  incomeCount: number;
+  dailyCount: number;
+  expenseCount: number;
+  savingsCount: number;
+  accumulationsCount: number;
 }
 
 export interface Database {

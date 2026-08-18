@@ -23,8 +23,14 @@ const COLUMNS: Column[] = [
   { key: 'last_active_at', label: 'Последняя активность', sortType: 'date' },
   { key: 'onboarded', label: 'Онбординг', sortType: 'boolean' },
   { key: 'sawNews', label: 'Просмотр новости', sortType: 'boolean' },
+  { key: 'categoriesCount', label: 'Категории', sortType: 'number' },
   { key: 'reportsCount', label: 'Отчёты', sortType: 'number' },
   { key: 'operationsCount', label: 'Операции', sortType: 'number' },
+  { key: 'incomeCount', label: 'Доходы', sortType: 'number' },
+  { key: 'dailyCount', label: 'Еж. расходы', sortType: 'number' },
+  { key: 'expenseCount', label: 'Расходы', sortType: 'number' },
+  { key: 'savingsCount', label: 'Накопления (отчёты)', sortType: 'number' },
+  { key: 'accumulationsCount', label: 'Накопления (ручные)', sortType: 'number' },
 ];
 
 const formatDate = (value: string | null): string =>
@@ -174,8 +180,14 @@ export const Page: React.FC = () => {
                   <td>{formatDate(row.last_active_at)}</td>
                   <td>{formatBool(row.onboarded)}</td>
                   <td>{formatBool(row.sawNews)}</td>
+                  <td className={styles.numCell}>{row.categoriesCount}</td>
                   <td className={styles.numCell}>{row.reportsCount}</td>
                   <td className={styles.numCell}>{row.operationsCount}</td>
+                  <td className={styles.numCell}>{row.incomeCount}</td>
+                  <td className={styles.numCell}>{row.dailyCount}</td>
+                  <td className={styles.numCell}>{row.expenseCount}</td>
+                  <td className={styles.numCell}>{row.savingsCount}</td>
+                  <td className={styles.numCell}>{row.accumulationsCount}</td>
                 </tr>
               ))
             )}
