@@ -104,6 +104,9 @@ export const ChatDetail = ({ userId, email, onBack }: ChatDetailProps) => {
                       message.author_role === 'user' ? styles.bubbleUser : styles.bubbleAdmin
                     }`}
                   >
+                    <span className={styles.messageAuthor}>
+                      {message.author_role === 'admin' ? 'Вы:' : 'Пользователь:'}
+                    </span>
                     <span className={styles.bubbleText}>{message.text}</span>
                     <span className={styles.messageTime}>{formatChatTime(message.created_at)}</span>
                   </div>

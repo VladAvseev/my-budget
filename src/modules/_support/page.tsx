@@ -101,6 +101,9 @@ export const Page: React.FC = () => {
                       message.author_role === 'user' ? styles.bubbleUser : styles.bubbleAdmin
                     }`}
                   >
+                    <span className={styles.messageAuthor}>
+                      {message.author_role === 'user' ? 'Вы:' : 'Администратор:'}
+                    </span>
                     <span className={styles.bubbleText}>{message.text}</span>
                     <span className={styles.messageTime}>{formatChatTime(message.created_at)}</span>
                   </div>

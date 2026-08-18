@@ -29,6 +29,14 @@
   word-break: break-word;
 }
 
+.messageAuthor {
+  align-self: flex-start;
+  font-size: var(--font-size-s);
+  line-height: var(--line-height-tight);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
 .messageTime {
   align-self: flex-end;
   font-size: var(--font-size-s);
