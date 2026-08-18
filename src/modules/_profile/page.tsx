@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { AccountCard } from './components/AccountCard';
 import { CategoryList } from './components/CategoryList';
 import { StartBalanceCard } from './components/StartBalanceCard';
+import { SupportCard } from './components/SupportCard';
 import { ThemeCard } from './components/ThemeCard';
 
 export const Page: React.FC = () => {
@@ -45,6 +46,7 @@ export const Page: React.FC = () => {
       <AccountCard />
       <ThemeCard />
       <StartBalanceCard />
+      <SupportCard />
       <CategoryList type="expense" title="Категории расходов" />
       <CategoryList type="income" title="Категории доходов" />
       <CategoryList type="savings" title="Категории накоплений" />

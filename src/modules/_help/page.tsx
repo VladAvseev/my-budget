@@ -1,3 +1,4 @@
+import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import commonStyles from '@/shared/styles/common.module.css';
@@ -121,6 +122,16 @@ export const Page: React.FC = () => {
           </div>
         </VCard>
       ))}
+
+      <VCard className={styles.supportCard}>
+        <div className={commonStyles.titleL}>Не нашли ответ?</div>
+        <div className={styles.supportText}>
+          Задайте вопрос или сообщите об ошибке — администратор ответит вам в разделе «Поддержка».
+        </div>
+        <div>
+          <VButton onClick={() => navigate('/support')}>Написать в поддержку</VButton>
+        </div>
+      </VCard>
     </div>
   );
 };

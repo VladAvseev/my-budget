@@ -77,6 +77,22 @@
   gap: var(--space-s);
 }
 
+.navBadge {
+  margin-left: auto;
+}
+
+.menuButtonWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.menuBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 1;
+}
+
 .mobileRoot {
   display: flex;
   flex-direction: column;

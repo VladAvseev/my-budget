@@ -10,6 +10,7 @@ import {
   HelpIcon,
   HomeIcon,
   MenuIcon,
+  MessageIcon,
   OverviewIcon,
   ReportsIcon,
   SavingsIcon,
@@ -17,11 +18,14 @@ import {
   UserIcon,
   type IconProps,
 } from '@/shared/icons';
+import { useAuth } from '@/shared/supabase/authProvider';
+import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { formatAmount } from '@/shared/utils';
 import { useState, type ComponentType, type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useSupportUnread } from '@/modules/_support/api/useSupportUnread';
 import styles from './AppLayout.module.css';
 
 interface AppLayoutProps {
@@ -41,7 +45,24 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/accumulations', label: 'Накопления', icon: SavingsIcon },
   { to: '/overview', label: 'Обзор', icon: OverviewIcon },
   { to: '/help', label: 'Помощь', icon: HelpIcon },
+  { to: '/support', label: 'Поддержка', icon: MessageIcon },
 ];
+
+const SupportUnreadBadge = ({ className }: { className?: string }) => {
+  const { user } = useAuth();
+  const unreadQuery = useSupportUnread(user?.id ?? '');
+  const unread = unreadQuery.data ?? 0;
+
+  if (unread <= 0) {
+    return null;
+  }
+
+  return (
+    <VBadge variant="accent" className={className}>
+      {unread}
+    </VBadge>
+  );
+};
 
 interface SidebarContentProps {
   setIsMenuOpen?: any;
@@ -78,6 +99,7 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
             <span className={styles.navLinkContent}>
               <item.icon size={18} />
               {item.label}
+              {item.to === '/support' && <SupportUnreadBadge className={styles.navBadge} />}
             </span>
           </NavLink>
         ))}
@@ -137,13 +159,16 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             Баланс: {showBalance ? formatAmount(balance) : HIDDEN_AMOUNT}
           </div>
         </div>
-        <VIconButton
-          ariaLabel="Открыть меню"
-          onClick={() => setIsMenuOpen(true)}
-          color="var(--color-text-primary)"
-        >
-          <MenuIcon size={24} color="currentColor" />
-        </VIconButton>
+        <span className={styles.menuButtonWrapper}>
+          <VIconButton
+            ariaLabel="Открыть меню"
+            onClick={() => setIsMenuOpen(true)}
+            color="var(--color-text-primary)"
+          >
+            <MenuIcon size={24} color="currentColor" />
+          </VIconButton>
+          <SupportUnreadBadge className={styles.menuBadge} />
+        </span>
       </div>
 
       {isMenuOpen && (

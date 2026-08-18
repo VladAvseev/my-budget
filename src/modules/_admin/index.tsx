@@ -3,6 +3,7 @@ import { RoleRoute } from '@/shared/supabase/components/RoleRoute';
 import { Navigate, Route } from 'react-router-dom';
 import { dashboard } from './_dashboard';
 import { news } from './_news';
+import { support } from './_support';
 import { users } from './_users';
 import { AdminLayout } from './AdminLayout';
 
@@ -22,6 +23,7 @@ export function admin() {
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
         {dashboard()}
         {users()}
+        {support()}
         {news()}
       </Route>
     </Route>

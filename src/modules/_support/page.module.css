@@ -1,0 +1,68 @@
+.chatCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  max-height: 420px;
+  overflow-y: auto;
+  padding: var(--space-s);
+}
+
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-width: 80%;
+  padding: var(--space-s) var(--space-m);
+  border-radius: var(--radius-m);
+  font-size: var(--font-size-m);
+  line-height: var(--line-height-normal);
+}
+
+.bubbleText {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.messageTime {
+  align-self: flex-end;
+  font-size: var(--font-size-s);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-secondary);
+}
+
+.dateSeparator {
+  align-self: center;
+  padding: var(--space-xs) var(--space-s);
+  border-radius: var(--radius-m);
+  background-color: var(--color-bg-surface-hover);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-s);
+  line-height: var(--line-height-tight);
+}
+
+.bubbleUser {
+  align-self: flex-start;
+  color: var(--color-accent);
+  background-color: var(--color-accent-light);
+  border-top-right-radius: var(--radius-s);
+}
+
+.bubbleAdmin {
+  align-self: flex-start;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-surface-hover);
+  border-top-left-radius: var(--radius-s);
+}
+
+.empty {
+  padding: var(--space-xl) var(--space-m);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-m);
+}

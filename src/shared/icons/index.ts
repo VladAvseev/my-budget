@@ -12,6 +12,7 @@ export { ImportIcon } from './ImportIcon';
 export { LoaderIcon } from './LoaderIcon';
 export { LogoutIcon } from './LogoutIcon';
 export { MenuIcon } from './MenuIcon';
+export { MessageIcon } from './MessageIcon';
 export { OverviewIcon } from './OverviewIcon';
 export { PencilIcon } from './PencilIcon';
 export { PlusIcon } from './PlusIcon';

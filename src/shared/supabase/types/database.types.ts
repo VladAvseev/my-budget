@@ -55,6 +55,32 @@ export interface AdminUserRow {
   accumulationsCount: number;
 }
 
+export interface SupportChat {
+  user_id: string;
+  is_open: boolean;
+  user_read_at: string | null;
+  admin_read_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SupportMessage {
+  id: string;
+  user_id: string;
+  author_role: 'user' | 'admin';
+  text: string;
+  created_at: string;
+}
+
+export interface AdminSupportChat {
+  user_id: string;
+  email: string;
+  isOpen: boolean;
+  unreadCount: number;
+  lastText: string | null;
+  lastAt: string | null;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -274,6 +300,57 @@ export interface Database {
         };
         Relationships: [];
       };
+      support_chats: {
+        Row: {
+          user_id: string;
+          is_open: boolean;
+          user_read_at: string | null;
+          admin_read_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          is_open?: boolean;
+          user_read_at?: string | null;
+          admin_read_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          is_open?: boolean;
+          user_read_at?: string | null;
+          admin_read_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      support_messages: {
+        Row: {
+          id: string;
+          user_id: string;
+          author_role: string;
+          text: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          author_role: string;
+          text: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          author_role?: string;
+          text?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -300,6 +377,43 @@ export interface Database {
           p_show: boolean;
         };
         Returns: undefined;
+      };
+      admin_get_support_chats: {
+        Args: Record<string, never>;
+        Returns: AdminSupportChat[];
+      };
+      admin_get_support_chat: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: {
+          messages: SupportMessage[];
+          isOpen: boolean;
+        } | null;
+      };
+      admin_send_support_message: {
+        Args: {
+          p_user_id: string;
+          p_text: string;
+        };
+        Returns: SupportMessage;
+      };
+      admin_set_support_open: {
+        Args: {
+          p_user_id: string;
+          p_open: boolean;
+        };
+        Returns: undefined;
+      };
+      admin_clear_support_chat: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: undefined;
+      };
+      admin_get_support_open_count: {
+        Args: Record<string, never>;
+        Returns: number;
       };
     };
   };

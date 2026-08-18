@@ -1,5 +1,5 @@
--- 1. Функция аналитики дашборда.
---    SECURITY DEFINER — обходит RLS, поэтому доступ явно проверяется через is_admin().
+-- Функция аналитики дашборда.
+-- SECURITY DEFINER — обходит RLS, поэтому доступ явно проверяется через is_admin().
 create or replace function public.admin_get_dashboard_stats()
 returns jsonb
 language plpgsql

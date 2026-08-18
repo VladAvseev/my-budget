@@ -15,3 +15,15 @@
   line-height: var(--line-height-normal);
   color: var(--color-text-secondary);
 }
+
+.supportCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.supportText {
+  font-size: var(--font-size-m);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-secondary);
+}

@@ -40,6 +40,12 @@
   cursor: default;
 }
 
+.tabLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-s);
+}
+
 .content {
   display: flex;
   flex-direction: column;

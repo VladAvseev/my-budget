@@ -1,0 +1,41 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+}
+
+.email {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lastText {
+  font-size: var(--font-size-m);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lastAt {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}

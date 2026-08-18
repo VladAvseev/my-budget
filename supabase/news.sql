@@ -1,5 +1,5 @@
--- 1. Получение новости для админ-панели.
---    SECURITY DEFINER — обходит RLS, поэтому доступ явно проверяется через is_admin().
+-- Получение новости для админ-панели.
+-- SECURITY DEFINER — обходит RLS, поэтому доступ явно проверяется через is_admin().
 create or replace function public.admin_get_news()
 returns jsonb
 language plpgsql
@@ -23,7 +23,7 @@ begin
 end;
 $$;
 
--- 2. Обновление текста новости. Если записи ещё нет — создаёт её.
+-- Обновление текста новости. Если записи ещё нет — создаёт её.
 create or replace function public.admin_update_news(p_text text)
 returns void
 language plpgsql
@@ -42,7 +42,7 @@ begin
 end;
 $$;
 
--- 3. Показ/скрытие новости для всех пользователей.
+-- Показ/скрытие новости для всех пользователей.
 create or replace function public.admin_set_show_news(p_show boolean)
 returns void
 language plpgsql
