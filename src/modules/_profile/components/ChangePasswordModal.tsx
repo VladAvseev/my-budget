@@ -2,6 +2,7 @@ import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VPasswordInput } from '@/shared/ui/VPasswordInput';
 import commonStyles from '@/shared/styles/common.module.css';
+import { getErrorMessage } from '@/shared/utils';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { useChangePassword } from '../api/useChangePassword';
@@ -55,12 +56,12 @@ export const ChangePasswordModal = ({ visible, onClose }: ChangePasswordModalPro
     changePassword.mutate(newPassword, {
       onSuccess: (result) => {
         if (result.error) {
-          setSubmitError(result.error.message);
+          setSubmitError(getErrorMessage(result.error.message));
           return;
         }
         handleClose();
       },
-      onError: (error: Error) => setSubmitError(error.message),
+      onError: (error: Error) => setSubmitError(getErrorMessage(error)),
     });
   };
 

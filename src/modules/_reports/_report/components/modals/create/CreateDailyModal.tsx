@@ -1,5 +1,6 @@
 import type { Report } from '@/shared/supabase/services/reports';
 import modalStyles from '@/shared/styles/modal.module.css';
+import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
@@ -46,7 +47,7 @@ export const CreateDailyModal = ({ report, onClose }: CreateDailyModalProps) => 
       },
       {
         onSuccess: onClose,
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

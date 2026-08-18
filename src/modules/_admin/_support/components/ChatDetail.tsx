@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import commonStyles from '@/shared/styles/common.module.css';
-import { formatChatDate, formatChatTime } from '@/shared/utils';
+import { formatChatDate, formatChatTime, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
@@ -57,7 +57,7 @@ export const ChatDetail = ({ userId, email, onBack }: ChatDetailProps) => {
     }
     sendMessage.mutate(trimmed, {
       onSuccess: () => setReply(''),
-      onError: (error: Error) => setReplyError(error.message),
+      onError: (error: Error) => setReplyError(getErrorMessage(error)),
     });
   };
 
@@ -68,7 +68,7 @@ export const ChatDetail = ({ userId, email, onBack }: ChatDetailProps) => {
         setConfirmClear(false);
         onBack();
       },
-      onError: (error: Error) => setClearError(error.message),
+      onError: (error: Error) => setClearError(getErrorMessage(error)),
     });
   };
 

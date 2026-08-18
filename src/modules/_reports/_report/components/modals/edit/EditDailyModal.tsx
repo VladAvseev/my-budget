@@ -2,6 +2,7 @@ import { TrashIcon } from '@/shared/icons';
 import type { Operation } from '@/shared/supabase/services/operations';
 import type { Report } from '@/shared/supabase/services/reports';
 import modalStyles from '@/shared/styles/modal.module.css';
+import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
@@ -39,7 +40,7 @@ export const EditDailyModal = ({ operation, report, onClose }: EditDailyModalPro
     setSubmitError(undefined);
     removeOperation.mutate(operation.id, {
       onSuccess: onClose,
-      onError: (error: Error) => setSubmitError(error.message),
+      onError: (error: Error) => setSubmitError(getErrorMessage(error)),
     });
   };
 
@@ -62,7 +63,7 @@ export const EditDailyModal = ({ operation, report, onClose }: EditDailyModalPro
       },
       {
         onSuccess: onClose,
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

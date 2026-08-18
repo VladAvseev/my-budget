@@ -3,6 +3,7 @@ import { TrashIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Accumulation } from '@/shared/supabase/services/accumulations';
 import modalStyles from '@/shared/styles/modal.module.css';
+import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VIconButton } from '@/shared/ui/VIconButton';
@@ -57,7 +58,7 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
     setSubmitError(undefined);
     removeAccumulation.mutate(accumulation.id, {
       onSuccess: onClose,
-      onError: (error: Error) => setSubmitError(error.message),
+      onError: (error: Error) => setSubmitError(getErrorMessage(error)),
     });
   };
 
@@ -89,7 +90,7 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
       },
       {
         onSuccess: onClose,
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

@@ -2,7 +2,7 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/shared/supabase/authProvider';
 import commonStyles from '@/shared/styles/common.module.css';
-import { formatChatDate, formatChatTime } from '@/shared/utils';
+import { formatChatDate, formatChatTime, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -55,7 +55,7 @@ export const Page: React.FC = () => {
     }
     sendMessage.mutate(trimmed, {
       onSuccess: () => setText(''),
-      onError: (error: Error) => setTextError(error.message),
+      onError: (error: Error) => setTextError(getErrorMessage(error)),
     });
   };
 
@@ -81,7 +81,7 @@ export const Page: React.FC = () => {
         ) : !hasChat ? (
           <div className={styles.empty}>
             Здесь вы можете задать вопрос или сообщить об ошибке. Мы ответим в ближайшее время.
-          </div>
+          </div>  
         ) : (
           <div className={styles.messages}>
             {messages.map((message, index) => {

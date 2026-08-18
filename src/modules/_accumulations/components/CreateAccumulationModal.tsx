@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/shared/supabase/authProvider';
 import modalStyles from '@/shared/styles/modal.module.css';
+import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VModal } from '@/shared/ui/VModal';
@@ -70,7 +71,7 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
       },
       {
         onSuccess: onClose,
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

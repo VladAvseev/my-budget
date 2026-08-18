@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 import modalStyles from '@/shared/styles/modal.module.css';
+import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VModal } from '@/shared/ui/VModal';
@@ -132,7 +133,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
       },
       {
         onSuccess: handleClose,
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

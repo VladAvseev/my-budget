@@ -6,7 +6,7 @@ import { VButton } from '@/shared/ui/VButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VModal } from '@/shared/ui/VModal';
 import { VSelect } from '@/shared/ui/VSelect';
-import { formatAmount } from '@/shared/utils';
+import { formatAmount, getErrorMessage } from '@/shared/utils';
 import { useMemo, useState } from 'react';
 import { useReports } from '../../../api/useReports';
 import { useCategoryLimits } from '../../api/useCategoryLimits';
@@ -70,7 +70,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
       })),
       {
         onSuccess: onClose,
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

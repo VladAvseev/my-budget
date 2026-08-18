@@ -4,6 +4,7 @@ import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import commonStyles from '@/shared/styles/common.module.css';
+import { getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
 import type { CategoryType } from '@/shared/supabase/services/categories';
 import { useCategories } from '../api/useCategories';
@@ -58,7 +59,7 @@ export const EditCategoryModal = ({ category, visible, onClose }: EditCategoryMo
       { id: category?.id ?? '', input: { name: trimmedName, color: color || null } },
       {
         onSuccess: onClose,
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

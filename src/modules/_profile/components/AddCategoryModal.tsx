@@ -4,6 +4,7 @@ import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import commonStyles from '@/shared/styles/common.module.css';
+import { getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
 import { useCategories } from '../api/useCategories';
 import { useCreateCategory } from '../api/useCreateCategory';
@@ -57,7 +58,7 @@ export const AddCategoryModal = ({ type, visible, onClose }: AddCategoryModalPro
       { type, name: trimmedName, color: color || null },
       {
         onSuccess: handleClose,
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

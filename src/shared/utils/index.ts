@@ -9,4 +9,5 @@ export {
   toISODate,
 } from './date';
 export { formatAmount } from './format';
+export { getErrorMessage } from './errorMessage';
 export { trimStrings } from './trim';

@@ -2,6 +2,7 @@ import { ImportIcon, TrashIcon } from '@/shared/icons';
 import { createOptimisticId } from '@/shared/optimistic';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Report } from '@/shared/supabase/services/reports';
+import { getErrorMessage } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
@@ -148,7 +149,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
       })),
       {
         onSuccess: () => setIsSaved(true),
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

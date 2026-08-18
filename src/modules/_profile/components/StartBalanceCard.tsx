@@ -6,7 +6,7 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { VToggle } from '@/shared/ui/VToggle';
 import commonStyles from '@/shared/styles/common.module.css';
-import { formatAmount } from '@/shared/utils';
+import { formatAmount, getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
 import { useUpdateStartBalance } from '../api/useUpdateStartBalance';
 
@@ -91,7 +91,7 @@ const StartBalanceForm = ({ userId, initialBalance }: StartBalanceFormProps) => 
     setIsSaved(false);
     updateStartBalance.mutate(number, {
       onSuccess: () => setIsSaved(true),
-      onError: (error: Error) => setSubmitError(error.message),
+      onError: (error: Error) => setSubmitError(getErrorMessage(error)),
     });
   };
 

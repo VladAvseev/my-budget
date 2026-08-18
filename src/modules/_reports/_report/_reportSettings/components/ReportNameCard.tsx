@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Report } from '@/shared/supabase/services/reports';
+import { getErrorMessage } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
@@ -32,7 +33,7 @@ export const ReportNameCard = ({ report }: ReportNameCardProps) => {
       { name: name.trim() },
       {
         onSuccess: () => setIsSaved(true),
-        onError: (error: Error) => setSubmitError(error.message),
+        onError: (error: Error) => setSubmitError(getErrorMessage(error)),
       },
     );
   };

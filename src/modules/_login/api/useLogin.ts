@@ -1,5 +1,6 @@
 import type { LoginCredentials } from '@/shared/supabase/types/auth.types';
 import { authService } from '@/shared/supabase/services/auth';
+import { getErrorMessage } from '@/shared/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
@@ -14,13 +15,13 @@ export const useLogin = () => {
       authService.signIn(credentials.email, credentials.password),
     onSuccess: (result) => {
       if (result.error) {
-        setError(result.error.message);
+        setError(getErrorMessage(result.error.message));
         return;
       }
       navigate('/');
     },
     onError: (error: Error) => {
-      setError(error.message);
+      setError(getErrorMessage(error));
     },
   });
 };

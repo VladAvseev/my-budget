@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Report } from '@/shared/supabase/services/reports';
+import { getErrorMessage } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
@@ -23,7 +24,7 @@ export const RemoveReportCard = ({ report }: RemoveReportCardProps) => {
     setSubmitError(undefined);
     removeReport.mutate(undefined, {
       onSuccess: () => navigate('/reports'),
-      onError: (error: Error) => setSubmitError(error.message),
+      onError: (error: Error) => setSubmitError(getErrorMessage(error)),
     });
   };
 
