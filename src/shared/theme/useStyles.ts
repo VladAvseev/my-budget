@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { commonStyles } from './common';
 
-export type ThemeName = 'light' | 'dark' | 'midnight' | 'cream';
+export type ThemeName = 'dark' | 'orange' | 'light' | 'cream';
 
 const themeColorVariables = {
   bgPrimary: 'var(--color-bg-primary)',

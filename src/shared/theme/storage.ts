@@ -2,7 +2,7 @@ import type { ThemeName } from './useStyles';
 
 const THEME_STORAGE_KEY = 'theme';
 
-const THEME_NAMES: ThemeName[] = ['light', 'dark', 'midnight', 'cream'];
+const THEME_NAMES: ThemeName[] = ['dark', 'orange', 'light', 'cream'];
 
 function isValidTheme(value: unknown): value is ThemeName {
   return THEME_NAMES.includes(value as ThemeName);

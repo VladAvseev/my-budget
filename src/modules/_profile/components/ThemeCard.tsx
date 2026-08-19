@@ -1,8 +1,8 @@
 import { useTheme, type ThemeName } from '@/shared/theme';
-import { darkStyles } from '@/shared/theme/packs/dark';
 import { creamStyles } from '@/shared/theme/packs/cream';
+import { darkStyles } from '@/shared/theme/packs/dark';
 import { lightStyles } from '@/shared/theme/packs/light';
-import { midnightStyles } from '@/shared/theme/packs/midnight';
+import { orangeStyles } from '@/shared/theme/packs/orange';
 import { VCard } from '@/shared/ui/VCard';
 import styles from './ThemeCard.module.css';
 
@@ -15,10 +15,10 @@ interface ThemeOption {
 }
 
 const THEME_OPTIONS: ThemeOption[] = [
-  { key: 'light', label: 'Светлая', colors: lightStyles.colors },
-  { key: 'dark', label: 'Тёмная', colors: darkStyles.colors },
-  { key: 'midnight', label: 'Полуночная', colors: midnightStyles.colors },
-  { key: 'cream', label: 'Кремовая', colors: creamStyles.colors },
+  { key: 'dark', label: 'Тёмно-синий', colors: darkStyles.colors },
+  { key: 'orange', label: 'Тёмно-оранжевый', colors: orangeStyles.colors },
+  { key: 'light', label: 'Светло-зелёный', colors: lightStyles.colors },
+  { key: 'cream', label: 'Светло-кремовый', colors: creamStyles.colors },
 ];
 
 export const ThemeCard = () => {
