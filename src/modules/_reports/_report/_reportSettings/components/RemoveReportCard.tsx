@@ -29,7 +29,7 @@ export const RemoveReportCard = ({ report }: RemoveReportCardProps) => {
   };
 
   return (
-    <VCard>
+    <VCard className={styles.dangerZone}>
       <div className={styles.content}>
         <div className={styles.title}>Удаление отчёта</div>
         <div className={styles.text}>

@@ -9,6 +9,7 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VToggle } from '@/shared/ui/VToggle';
 import { formatAmount } from '@/shared/utils';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { groupedByTypeAtom, operationModalAtom } from '../atoms/report';
 import { categoryTypeForOperation } from '../api/categoryTypeForOperation';
@@ -120,26 +121,34 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
 
       {!operationsLoading && operations.length === 0 && (
         <VCard>
-          <div className={styles.empty}>Операции не найдены</div>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyTitle}>Операции не найдены</div>
+            <div className={styles.emptyHint}>Нажмите «+», чтобы добавить первую операцию.</div>
+          </div>
         </VCard>
       )}
 
       {!operationsLoading && operations.length > 0 && !isGrouped && (
         <div className={styles.list}>
-          {operations.map((operation) => (
-            <OperationCard
+          {operations.map((operation, index) => (
+            <div
               key={operation.id}
-              operation={operation}
-              pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
-              category={operation.category_id ? categoriesById.get(operation.category_id) : null}
-            />
+              className={commonStyles.animateCard}
+              style={{ animationDelay: `${index * 0.03}s` }}
+            >
+              <OperationCard
+                operation={operation}
+                pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
+                category={operation.category_id ? categoriesById.get(operation.category_id) : null}
+              />
+            </div>
           ))}
         </div>
       )}
 
       {!operationsLoading && isGrouped && (
         <div className={styles.list}>
-          {groups.map((group) => {
+          {groups.map((group, groupIndex) => {
             const limit = limitsByCategory.get(group.key);
             const groupTotal = group.operations.reduce(
               (sum, op) =>
@@ -155,34 +164,39 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
               : 'var(--color-text-primary)';
 
             return (
-              <VAccordion
+              <div
                 key={group.key}
-                header={
-                  <span className={styles.accordionHeader}>
-                    <span
-                      className={styles.accordionDot}
-                      style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
-                    />
-                    <span className={styles.accordionLabel}>{group.label}</span>
-                    <span className={styles.accordionTotal} style={{ color: headerColor }}>
-                      {headerValue}
-                    </span>
-                  </span>
-                }
+                className={commonStyles.animateCard}
+                style={{ animationDelay: `${groupIndex * 0.03}s` }}
               >
-                <div className={styles.list}>
-                  {group.operations.map((operation) => (
-                    <OperationCard
-                      key={operation.id}
-                      operation={operation}
-                      pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
-                      category={
-                        operation.category_id ? categoriesById.get(operation.category_id) : null
-                      }
-                    />
-                  ))}
-                </div>
-              </VAccordion>
+                <VAccordion
+                  header={
+                    <span className={styles.accordionHeader}>
+                      <span
+                        className={styles.accordionDot}
+                        style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
+                      />
+                      <span className={styles.accordionLabel}>{group.label}</span>
+                      <span className={styles.accordionTotal} style={{ color: headerColor }}>
+                        {headerValue}
+                      </span>
+                    </span>
+                  }
+                >
+                  <div className={styles.list}>
+                    {group.operations.map((operation) => (
+                      <OperationCard
+                        key={operation.id}
+                        operation={operation}
+                        pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
+                        category={
+                          operation.category_id ? categoriesById.get(operation.category_id) : null
+                        }
+                      />
+                    ))}
+                  </div>
+                </VAccordion>
+              </div>
             );
           })}
         </div>

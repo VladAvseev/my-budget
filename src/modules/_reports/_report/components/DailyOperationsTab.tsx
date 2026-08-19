@@ -5,6 +5,7 @@ import { VCard } from '@/shared/ui/VCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount, parseISO } from '@/shared/utils';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useSetAtom } from 'jotai';
 import { useMemo } from 'react';
 import { useOperations } from '../api/useOperations';
@@ -91,18 +92,26 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
 
       {!operationsQuery.isLoading && operations.length === 0 && (
         <VCard>
-          <div className={styles.empty}>Операции не найдены</div>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyTitle}>Операции не найдены</div>
+            <div className={styles.emptyHint}>Нажмите «+», чтобы добавить первую операцию.</div>
+          </div>
         </VCard>
       )}
 
       <div className={styles.list}>
-        {operations.map((operation) => (
-          <DailyOperationCard
+        {operations.map((operation, index) => (
+          <div
             key={operation.id}
-            operation={operation}
-            dailyBudget={hasBudget ? dailyBudget : null}
-            pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
-          />
+            className={commonStyles.animateCard}
+            style={{ animationDelay: `${index * 0.03}s` }}
+          >
+            <DailyOperationCard
+              operation={operation}
+              dailyBudget={hasBudget ? dailyBudget : null}
+              pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
+            />
+          </div>
         ))}
       </div>
     </div>

@@ -54,8 +54,12 @@ export const Page: React.FC = () => {
 
       {!isLoading && !error && report && (
         <>
-          <SummaryCards summary={summary} />
-          <OperationsTabs report={report} />
+          <div className={commonStyles.animateCard}>
+            <SummaryCards summary={summary} />
+          </div>
+          <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
+            <OperationsTabs report={report} />
+          </div>
           {operationModal?.operation ? (
             <EditOperationModal
               key={operationModal.operation.id}

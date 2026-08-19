@@ -36,10 +36,18 @@ export const Page: React.FC = () => {
 
       {!isLoading && !error && report && (
         <>
-          <ReportNameCard report={report} />
-          <DailyExpensesCard report={report} />
-          <CategoryLimitsCard report={report} />
-          <RemoveReportCard report={report} />
+          <div className={commonStyles.animateCard}>
+            <ReportNameCard report={report} />
+          </div>
+          <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
+            <DailyExpensesCard report={report} />
+          </div>
+          <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
+            <CategoryLimitsCard report={report} />
+          </div>
+          <div className={commonStyles.animateCard} style={{ animationDelay: '0.18s' }}>
+            <RemoveReportCard report={report} />
+          </div>
         </>
       )}
     </div>

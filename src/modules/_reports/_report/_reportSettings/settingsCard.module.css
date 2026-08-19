@@ -82,6 +82,11 @@
   padding: var(--space-xl);
 }
 
+.dangerZone {
+  border: 1px solid var(--color-error);
+  background-color: var(--color-error-bg);
+}
+
 .importBox {
   display: flex;
   flex-direction: column;

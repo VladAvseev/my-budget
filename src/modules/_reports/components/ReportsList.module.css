@@ -10,7 +10,20 @@
   padding: var(--space-xl);
 }
 
-.empty {
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.emptyTitle {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.emptyHint {
+  font-size: var(--font-size-s);
   color: var(--color-text-secondary);
 }
 
@@ -26,10 +39,20 @@
   justify-content: space-between;
 }
 
+.titleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
 .title {
   font-size: var(--font-size-l);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .period {
@@ -40,4 +63,13 @@
 .link {
   text-decoration: none;
   display: block;
+  position: relative;
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--space-m);
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
 }
