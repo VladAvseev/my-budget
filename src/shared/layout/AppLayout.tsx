@@ -7,6 +7,7 @@ import {
   useGlobalBalance,
 } from '@/shared/hooks';
 import {
+  BanknotesIcon,
   HelpIcon,
   HomeIcon,
   MenuIcon,
@@ -24,7 +25,13 @@ import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { formatAmount } from '@/shared/utils';
-import { useState, type ComponentType, type ReactNode } from 'react';
+import {
+  useState,
+  type ComponentType,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+} from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSupportUnread } from '@/modules/_support/api/useSupportUnread';
 import styles from './AppLayout.module.css';
@@ -82,7 +89,7 @@ const AdminOpenBadge = ({ className }: { className?: string }) => {
 };
 
 interface SidebarContentProps {
-  setIsMenuOpen?: any;
+  setIsMenuOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
@@ -93,12 +100,24 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
 
   return (
     <>
-      <div className={styles.stat}>
-        Капитал: {showCapital ? formatAmount(capital) : HIDDEN_AMOUNT}
+      <div className={styles.brand}>
+        <BanknotesIcon size={24} />
+        <span className={styles.brandTitle}>Мой бюджет</span>
       </div>
 
-      <div className={styles.stat}>
-        Баланс: {showBalance ? formatAmount(balance) : HIDDEN_AMOUNT}
+      <div className={styles.stats}>
+        <div className={styles.statRow}>
+          <span className={styles.statLabel}>Капитал</span>
+          <span className={styles.statValue}>
+            {showCapital ? formatAmount(capital) : HIDDEN_AMOUNT}
+          </span>
+        </div>
+        <div className={styles.statRow}>
+          <span className={styles.statLabel}>Баланс</span>
+          <span className={styles.statValue}>
+            {showBalance ? formatAmount(balance) : HIDDEN_AMOUNT}
+          </span>
+        </div>
       </div>
 
       <nav className={styles.nav}>
@@ -122,6 +141,8 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
         ))}
 
         {isAdmin && (
+          <>
+          <div className={styles.adminBorder}/>
           <NavLink
             to="/admin"
             onClick={() => {
@@ -130,13 +151,14 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
               }
             }}
             className={styles.navLink}
-          >
+            >
             <span className={styles.navLinkContent}>
               <SettingsIcon size={18} />
               Админ-панель
               <AdminOpenBadge className={styles.navBadge} />
             </span>
           </NavLink>
+            </>
         )}
       </nav>
     </>
@@ -169,12 +191,18 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   return (
     <div className={styles.mobileRoot}>
       <div className={styles.mobileHeader}>
-        <div className={styles.balanceInfo}>
-          <div className={styles.balanceLabel}>
-            Капитал: {showCapital ? formatAmount(capital) : HIDDEN_AMOUNT}
+        <div className={styles.mobileStats}>
+          <div className={styles.mobileStat}>
+            <span className={styles.mobileStatLabel}>Капитал</span>
+            <span className={styles.mobileStatValue}>
+              {showCapital ? formatAmount(capital) : HIDDEN_AMOUNT}
+            </span>
           </div>
-          <div className={styles.balanceLabel}>
-            Баланс: {showBalance ? formatAmount(balance) : HIDDEN_AMOUNT}
+          <div className={styles.mobileStat}>
+            <span className={styles.mobileStatLabel}>Баланс</span>
+            <span className={styles.mobileStatValue}>
+              {showBalance ? formatAmount(balance) : HIDDEN_AMOUNT}
+            </span>
           </div>
         </div>
         <span className={styles.menuButtonWrapper}>

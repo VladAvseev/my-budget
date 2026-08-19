@@ -1,3 +1,4 @@
+export { BanknotesIcon } from './BanknotesIcon';
 export { CalendarIcon } from './CalendarIcon';
 export { CheckIcon } from './CheckIcon';
 export { ChevronDownIcon } from './ChevronDownIcon';
