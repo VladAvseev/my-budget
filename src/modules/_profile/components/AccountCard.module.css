@@ -1,0 +1,21 @@
+.accountHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+}
+
+.accountInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.accountEmail {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -36,7 +36,10 @@ export const CategoryList = ({ type, title }: CategoryListProps) => {
     <VCard>
       <div className={styles.cardBody}>
         <div className={styles.header}>
-          <div className={commonStyles.titleXl}>{title}</div>
+          <div className={commonStyles.titleXl}>
+            {title}
+            {!categoriesQuery.isLoading && !categoriesQuery.error && ` (${categories.length})`}
+          </div>
           <VIconButton
             ariaLabel={`Добавить категорию в разделе «${title}»`}
             onClick={() => setIsAddOpen(true)}
@@ -57,7 +60,10 @@ export const CategoryList = ({ type, title }: CategoryListProps) => {
         )}
 
         {!categoriesQuery.isLoading && !categoriesQuery.error && categories.length === 0 && (
-          <div className={commonStyles.textSecondary}>Нет категорий</div>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyStateTitle}>Категорий пока нет</div>
+            <div className={styles.emptyStateHint}>Нажмите «+», чтобы добавить первую категорию.</div>
+          </div>
         )}
 
         {!categoriesQuery.isLoading &&

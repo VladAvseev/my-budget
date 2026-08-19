@@ -9,7 +9,7 @@ export const SupportCard = () => {
 
   return (
     <VCard className={styles.body}>
-      <div className={commonStyles.titleL}>Поддержка</div>
+      <div className={commonStyles.titleXl}>Поддержка</div>
       <div className={styles.text}>
         Возникла проблема или есть вопрос? Свяжитесь с администратором.
       </div>
