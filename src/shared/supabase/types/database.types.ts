@@ -55,6 +55,17 @@ export interface AdminUserRow {
   accumulationsCount: number;
 }
 
+export interface DatabaseSize {
+  sizeBytes: number;
+  sizePretty: string;
+}
+
+export interface AdminSupportStatus {
+  open: number;
+  unanswered: number;
+  avgResponseHours: number | null;
+}
+
 export interface SupportChat {
   user_id: string;
   is_open: boolean;
@@ -414,6 +425,14 @@ export interface Database {
       admin_get_support_open_count: {
         Args: Record<string, never>;
         Returns: number;
+      };
+      admin_get_database_size: {
+        Args: Record<string, never>;
+        Returns: DatabaseSize;
+      };
+      admin_get_support_status: {
+        Args: Record<string, never>;
+        Returns: AdminSupportStatus;
       };
     };
   };

@@ -47,3 +47,39 @@
   color: var(--color-text-secondary);
   justify-self: end;
 }
+
+.progressTrack {
+  height: var(--space-m);
+  border-radius: var(--radius-m);
+  background-color: var(--color-bg-surface-hover);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: var(--radius-m);
+  transition: width 0.3s ease;
+}
+
+.fillSuccess {
+  background-color: var(--color-success);
+}
+
+.fillWarning {
+  background-color: var(--color-warning);
+}
+
+.fillError {
+  background-color: var(--color-error);
+}
+
+.valueWarning {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-warning);
+}
+
+.valuePrimary {
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+}

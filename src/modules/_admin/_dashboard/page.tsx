@@ -3,7 +3,9 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { ActivityCard } from './components/ActivityCard';
 import { ChurnCard } from './components/ChurnCard';
+import { DatabaseSizeCard } from './components/DatabaseSizeCard';
 import { ReportsOperationsCard } from './components/ReportsOperationsCard';
+import { SupportStatusCard } from './components/SupportStatusCard';
 import { UsersCard } from './components/UsersCard';
 import { useAdminStats } from './api/useAdminStats';
 import styles from './page.module.css';
@@ -35,10 +37,12 @@ export const Page: React.FC = () => {
     <div className={commonStyles.page}>
       <VPageHeader title="Дашборд" />
       <div className={styles.grid}>
+        <DatabaseSizeCard />
         <UsersCard stats={users} />
-        <ReportsOperationsCard reports={reports} operations={operations} />
         <ActivityCard stats={activity} total={usersTotal} />
         <ChurnCard stats={churn} total={usersTotal} />
+        <ReportsOperationsCard reports={reports} operations={operations} />
+        <SupportStatusCard />
       </div>
     </div>
   );
