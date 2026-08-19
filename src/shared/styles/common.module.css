@@ -70,6 +70,17 @@
   color: var(--color-text-secondary);
 }
 
+.emptyTitle {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.emptyHint {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
 .titleXl {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);

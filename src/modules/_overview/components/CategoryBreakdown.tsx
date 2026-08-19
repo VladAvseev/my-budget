@@ -4,6 +4,7 @@ import { VAccordion } from '@/shared/ui/VAccordion';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
+import commonStyles from '@/shared/styles/common.module.css';
 import { Link } from 'react-router-dom';
 import { useOverviewCategories } from '../api/useOverviewCategories';
 import { buildCategoryGroups, buildReportGroups, type ReportAmount } from '../utils/overview';
@@ -96,28 +97,33 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
     }
     return (
       <div className={styles.accordionList}>
-        {groups.map((group) => (
-          <VAccordion
+        {groups.map((group, groupIndex) => (
+          <div
             key={group.key}
-            header={
-              <span className={styles.accordionHeader}>
-                <span
-                  className={styles.accordionDot}
-                  style={{
-                    backgroundColor: group.color ?? 'var(--color-border)',
-                  }}
-                />
-                <span className={styles.accordionGrow}>{group.label}</span>
-                <AccordionSummary total={group.total} reportCount={reports.length} />
-              </span>
-            }
+            className={commonStyles.animateCard}
+            style={{ animationDelay: `${groupIndex * 0.03}s` }}
           >
-            <div className={styles.accordionRow}>
-              {group.byReport.map((item) => (
-                <ReportLinkRow key={item.report.id} report={item.report} amount={item.amount} />
-              ))}
-            </div>
-          </VAccordion>
+            <VAccordion
+              header={
+                <span className={styles.accordionHeader}>
+                  <span
+                    className={styles.accordionDot}
+                    style={{
+                      backgroundColor: group.color ?? 'var(--color-border)',
+                    }}
+                  />
+                  <span className={styles.accordionGrow}>{group.label}</span>
+                  <AccordionSummary total={group.total} reportCount={reports.length} />
+                </span>
+              }
+            >
+              <div className={styles.accordionRow}>
+                {group.byReport.map((item) => (
+                  <ReportLinkRow key={item.report.id} report={item.report} amount={item.amount} />
+                ))}
+              </div>
+            </VAccordion>
+          </div>
         ))}
       </div>
     );
@@ -141,6 +147,10 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
             <VAccordion
               header={
                 <span className={styles.accordionHeader}>
+                  <span
+                    className={styles.accordionDot}
+                    style={{ backgroundColor: 'var(--color-accent)' }}
+                  />
                   <span className={styles.accordionGrow}>Ежедневные расходы</span>
                   <AccordionSummary total={totalDaily} reportCount={reports.length} />
                 </span>

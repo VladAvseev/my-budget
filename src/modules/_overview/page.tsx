@@ -55,7 +55,9 @@ export const Page: React.FC = () => {
         backAriaLabel="Назад на главную"
       />
 
-      <OverviewTabs reports={reports} />
+      <div className={commonStyles.animateCard}>
+        <OverviewTabs reports={reports} />
+      </div>
 
       {reportsQuery.isLoading && (
         <div className={commonStyles.loaderContainer}>
@@ -67,8 +69,9 @@ export const Page: React.FC = () => {
 
       {!reportsQuery.isLoading && !reportsQuery.error && reports.length === 0 && (
         <VCard>
-          <div className={commonStyles.textSecondary}>
-            Нет созданных отчётов. Создайте отчёт в разделе «Отчёты».
+          <div className={commonStyles.emptyTitle}>Нет созданных отчётов</div>
+          <div className={commonStyles.emptyHint}>
+            Создайте отчёт в разделе «Отчёты», чтобы увидеть обзор.
           </div>
         </VCard>
       )}
@@ -77,9 +80,8 @@ export const Page: React.FC = () => {
         <>
           {selectedReports.length === 0 && (
             <VCard>
-              <div className={commonStyles.textSecondary}>
-                Не выбран ни один отчёт. Выберите отчёты в списке выше.
-              </div>
+              <div className={commonStyles.emptyTitle}>Не выбран ни один отчёт</div>
+              <div className={commonStyles.emptyHint}>Выберите отчёты в списке выше.</div>
             </VCard>
           )}
 
@@ -95,15 +97,22 @@ export const Page: React.FC = () => {
                 </div>
               ) : (
                 <>
-                  <SummaryCard
-                    income={totals.income}
-                    expenses={totals.expense + totals.daily}
-                    savings={totals.savings}
-                  />
-                  <CategoryBreakdown
-                    reports={selectedReports}
-                    operationsByReport={operationsByReport}
-                  />
+                  <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
+                    <SummaryCard
+                      income={totals.income}
+                      expenses={totals.expense + totals.daily}
+                      savings={totals.savings}
+                    />
+                  </div>
+                  <div
+                    className={commonStyles.animateCard}
+                    style={{ animationDelay: '0.12s' }}
+                  >
+                    <CategoryBreakdown
+                      reports={selectedReports}
+                      operationsByReport={operationsByReport}
+                    />
+                  </div>
                 </>
               )}
             </>
