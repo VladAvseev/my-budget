@@ -4,6 +4,28 @@
   gap: var(--space-s);
 }
 
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+}
+
+.titleIcon {
+  display: inline-flex;
+  color: var(--color-accent);
+}
+
+.link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.strong {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
 .items {
   display: flex;
   flex-direction: column;
