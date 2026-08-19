@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 import { AccountCard } from './components/AccountCard';
 import { CategoryList } from './components/CategoryList';
 import { StartBalanceCard } from './components/StartBalanceCard';
-import { SupportCard } from './components/SupportCard';
 import { ThemeCard } from './components/ThemeCard';
 
 const AnimatedItem = ({ delay, children }: { delay: string; children: ReactNode }) => (
@@ -62,18 +61,13 @@ export const Page: React.FC = () => {
       <AnimatedItem delay="0.12s">
         <ThemeCard />
       </AnimatedItem>
-
       <AnimatedItem delay="0.18s">
-        <SupportCard />
-      </AnimatedItem>
-
-      <AnimatedItem delay="0.24s">
         <CategoryList type="expense" title="Категории расходов" />
       </AnimatedItem>
-      <AnimatedItem delay="0.3s">
+      <AnimatedItem delay="0.24s">
         <CategoryList type="income" title="Категории доходов" />
       </AnimatedItem>
-      <AnimatedItem delay="0.36s">
+      <AnimatedItem delay="0.3s">
         <CategoryList type="savings" title="Категории накоплений" />
       </AnimatedItem>
 
