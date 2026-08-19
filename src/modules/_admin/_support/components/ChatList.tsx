@@ -35,23 +35,28 @@ export const ChatList = ({ chats, isLoading, isError, onSelect }: ChatListProps)
 
   return (
     <div className={styles.list}>
-      {chats.map((chat) => (
-        <VCard
+      {chats.map((chat, index) => (
+        <div
           key={chat.user_id}
-          interactive
-          className={styles.card}
-          onClick={() => onSelect(chat.user_id)}
+          className={commonStyles.animateCard}
+          style={{ animationDelay: `${index * 0.03}s` }}
         >
-          <div className={styles.cardHeader}>
-            <span className={styles.email}>{chat.email}</span>
-            <VBadge variant={chat.isOpen ? 'warning' : 'neutral'}>
-              {chat.isOpen ? 'Открыта' : 'Закрыта'}
-            </VBadge>
-            {chat.unreadCount > 0 && <VBadge variant="danger">{chat.unreadCount}</VBadge>}
-          </div>
-          <div className={styles.lastText}>{chat.lastText ?? 'Нет сообщений'}</div>
-          <div className={styles.lastAt}>{formatDate(chat.lastAt)}</div>
-        </VCard>
+          <VCard
+            interactive
+            className={styles.card}
+            onClick={() => onSelect(chat.user_id)}
+          >
+            <div className={styles.cardHeader}>
+              <span className={styles.email}>{chat.email}</span>
+              <VBadge variant={chat.isOpen ? 'warning' : 'neutral'}>
+                {chat.isOpen ? 'Открыта' : 'Закрыта'}
+              </VBadge>
+              {chat.unreadCount > 0 && <VBadge variant="danger">{chat.unreadCount}</VBadge>}
+            </div>
+            <div className={styles.lastText}>{chat.lastText ?? 'Нет сообщений'}</div>
+            <div className={styles.lastAt}>{formatDate(chat.lastAt)}</div>
+          </VCard>
+        </div>
       ))}
     </div>
   );

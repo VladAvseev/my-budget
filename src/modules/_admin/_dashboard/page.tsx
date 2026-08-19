@@ -37,12 +37,24 @@ export const Page: React.FC = () => {
     <div className={commonStyles.page}>
       <VPageHeader title="Дашборд" />
       <div className={styles.grid}>
-        <DatabaseSizeCard />
-        <UsersCard stats={users} />
-        <ActivityCard stats={activity} total={usersTotal} />
-        <ChurnCard stats={churn} total={usersTotal} />
-        <ReportsOperationsCard reports={reports} operations={operations} />
-        <SupportStatusCard />
+        <div className={commonStyles.animateCard}>
+          <DatabaseSizeCard />
+        </div>
+        <div className={commonStyles.animateCard} style={{ animationDelay: '0.03s' }}>
+          <UsersCard stats={users} />
+        </div>
+        <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
+          <ActivityCard stats={activity} total={usersTotal} />
+        </div>
+        <div className={commonStyles.animateCard} style={{ animationDelay: '0.09s' }}>
+          <ChurnCard stats={churn} total={usersTotal} />
+        </div>
+        <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
+          <ReportsOperationsCard reports={reports} operations={operations} />
+        </div>
+        <div className={commonStyles.animateCard} style={{ animationDelay: '0.15s' }}>
+          <SupportStatusCard />
+        </div>
       </div>
     </div>
   );

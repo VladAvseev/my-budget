@@ -95,14 +95,18 @@ export const ChatDetail = ({ userId, email, onBack }: ChatDetailProps) => {
               return (
                 <Fragment key={message.id}>
                   {showDateSeparator && (
-                    <div className={styles.dateSeparator}>
+                    <div
+                      className={`${styles.dateSeparator} ${commonStyles.animateCard}`}
+                      style={{ animationDelay: `${index * 0.03}s` }}
+                    >
                       {formatChatDate(message.created_at)}
                     </div>
                   )}
                   <div
                     className={`${styles.bubble} ${
                       message.author_role === 'user' ? styles.bubbleUser : styles.bubbleAdmin
-                    }`}
+                    } ${commonStyles.animateCard}`}
+                    style={{ animationDelay: `${index * 0.03}s` }}
                   >
                     <span className={styles.messageAuthor}>
                       {message.author_role === 'admin' ? 'Вы:' : 'Пользователь:'}
