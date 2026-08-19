@@ -55,7 +55,7 @@
 }
 
 .bubbleUser {
-  align-self: flex-start;
+  align-self: flex-end;
   color: var(--color-accent);
   background-color: var(--color-accent-light);
   border-top-right-radius: var(--radius-s);
@@ -68,9 +68,17 @@
   border-top-left-radius: var(--radius-s);
 }
 
-.empty {
-  padding: var(--space-xl) var(--space-m);
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-l) 0;
   text-align: center;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-m);
+}
+
+.emptyIcon {
+  display: inline-flex;
+  color: var(--color-accent);
 }

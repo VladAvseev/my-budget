@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/shared/supabase/authProvider';
 import commonStyles from '@/shared/styles/common.module.css';
 import { formatChatDate, formatChatTime, getErrorMessage } from '@/shared/utils';
+import { MessageIcon } from '@/shared/icons';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -79,9 +80,15 @@ export const Page: React.FC = () => {
         ) : chatQuery.isError ? (
           <div className={commonStyles.textSecondary}>Не удалось загрузить чат</div>
         ) : !hasChat ? (
-          <div className={styles.empty}>
-            Здесь вы можете задать вопрос или сообщить об ошибке. Мы ответим в ближайшее время.
-          </div>  
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon}>
+              <MessageIcon size={28} />
+            </span>
+            <div className={commonStyles.emptyTitle}>Нет сообщений</div>
+            <div className={commonStyles.emptyHint}>
+              Здесь вы можете задать вопрос или сообщить об ошибке. Мы ответим в ближайшее время.
+            </div>
+          </div>
         ) : (
           <div className={styles.messages}>
             {messages.map((message, index) => {
@@ -92,14 +99,18 @@ export const Page: React.FC = () => {
               return (
                 <Fragment key={message.id}>
                   {showDateSeparator && (
-                    <div className={styles.dateSeparator}>
+                    <div
+                      className={`${styles.dateSeparator} ${commonStyles.animateCard}`}
+                      style={{ animationDelay: `${index * 0.03}s` }}
+                    >
                       {formatChatDate(message.created_at)}
                     </div>
                   )}
                   <div
                     className={`${styles.bubble} ${
                       message.author_role === 'user' ? styles.bubbleUser : styles.bubbleAdmin
-                    }`}
+                    } ${commonStyles.animateCard}`}
+                    style={{ animationDelay: `${index * 0.03}s` }}
                   >
                     <span className={styles.messageAuthor}>
                       {message.author_role === 'user' ? 'Вы:' : 'Администратор:'}
