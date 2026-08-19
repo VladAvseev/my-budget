@@ -1,4 +1,5 @@
 import { useProfile, useUserSummary } from '@/shared/hooks';
+import { ChevronRightIcon, OverviewIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
@@ -16,7 +17,7 @@ export const OverviewCard = () => {
 
   if (!profileQuery.isFetched || !summaryFetched) {
     return (
-      <VCard className={styles.loadingCard}>
+      <VCard className={`${styles.loadingCard} ${styles.animateCard}`} style={{ animationDelay: '0.12s' }}>
         <VLoader size={28} />
       </VCard>
     );
@@ -56,9 +57,14 @@ export const OverviewCard = () => {
   ];
 
   return (
-    <Link to="/overview" className={styles.link}>
+    <Link to="/overview" className={`${styles.link} ${styles.animateCard}`} style={{ animationDelay: '0.12s' }}>
       <VCard interactive className={styles.card}>
-        <div className={summaryStyles.title}>Обзор</div>
+        <div className={styles.titleRow}>
+          <span className={styles.titleIcon}>
+            <OverviewIcon size={18} />
+          </span>
+          <div className={summaryStyles.title}>Обзор</div>
+        </div>
         <div className={summaryStyles.subtitle}>Последний отчёт</div>
         <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
@@ -82,6 +88,9 @@ export const OverviewCard = () => {
           ])}
         </div>
       </VCard>
+      <span className={styles.chevron}>
+        <ChevronRightIcon size={18} />
+      </span>
     </Link>
   );
 };

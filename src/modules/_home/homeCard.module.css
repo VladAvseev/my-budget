@@ -3,6 +3,40 @@
   display: block;
   flex: 1 1 300px;
   min-width: 300px;
+  position: relative;
+}
+
+.chevron {
+  position: absolute;
+  top: var(--space-m);
+  right: var(--space-m);
+  color: var(--color-text-secondary);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+}
+
+.titleIcon {
+  display: inline-flex;
+  color: var(--color-accent);
+}
+
+.animateCard {
+  animation: fadeUp 0.35s ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .loadingCard {

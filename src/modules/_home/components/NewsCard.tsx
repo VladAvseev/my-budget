@@ -23,7 +23,7 @@ export const NewsCard = () => {
   }
 
   return (
-    <VCard className={styles.newsCard}>
+    <VCard className={`${styles.newsCard} ${styles.animateCard}`}>
       <div className={styles.title}>Что нового?</div>
       <div className={styles.subtitle}>{news.text}</div>
       <div className={styles.closeButton}>

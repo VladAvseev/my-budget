@@ -1,5 +1,6 @@
 import { useReports } from '../api/useReports';
 import { useSummary } from '../api/useSummary';
+import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -16,7 +17,7 @@ export const LastReportCard = () => {
 
   if (reportsQuery.isLoading) {
     return (
-      <VCard className={styles.loadingCard}>
+      <VCard className={`${styles.loadingCard} ${styles.animateCard}`} style={{ animationDelay: '0.18s' }}>
         <VLoader size={28} />
       </VCard>
     );
@@ -24,21 +25,29 @@ export const LastReportCard = () => {
 
   if (reportsQuery.error || !lastReport) {
     return (
-      <Link to="/reports" className={styles.link}>
+      <Link to="/reports" className={`${styles.link} ${styles.animateCard}`} style={{ animationDelay: '0.18s' }}>
         <VCard interactive className={styles.card}>
-          <div className={styles.title}>Последний отчёт</div>
+          <div className={styles.titleRow}>
+            <span className={styles.titleIcon}>
+              <ReportsIcon size={18} />
+            </span>
+            <div className={styles.title}>Последний отчёт</div>
+          </div>
           <div className={styles.emptyMessage}>Отчёты не найдены</div>
           <div className={styles.subtitle}>
             Перейдите в раздел «Отчёты» и создайте отчёт.
           </div>
         </VCard>
+        <span className={styles.chevron}>
+          <ChevronRightIcon size={18} />
+        </span>
       </Link>
     );
   }
 
   if (!summaryFetched) {
     return (
-      <VCard className={styles.loadingCard}>
+      <VCard className={`${styles.loadingCard} ${styles.animateCard}`} style={{ animationDelay: '0.18s' }}>
         <VLoader size={28} />
       </VCard>
     );
@@ -77,9 +86,14 @@ export const LastReportCard = () => {
   ];
 
   return (
-    <Link to={`/reports/${lastReport.id}`} className={styles.link}>
+    <Link to={`/reports/${lastReport.id}`} className={`${styles.link} ${styles.animateCard}`} style={{ animationDelay: '0.18s' }}>
       <VCard interactive className={styles.card}>
-        <div className={styles.title}>Последний отчёт</div>
+        <div className={styles.titleRow}>
+          <span className={styles.titleIcon}>
+            <ReportsIcon size={18} />
+          </span>
+          <div className={styles.title}>Последний отчёт</div>
+        </div>
         <div className={styles.subtitle}>{lastReport.name}</div>
         <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
@@ -103,6 +117,9 @@ export const LastReportCard = () => {
           ])}
         </div>
       </VCard>
+      <span className={styles.chevron}>
+        <ChevronRightIcon size={18} />
+      </span>
     </Link>
   );
 };

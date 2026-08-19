@@ -15,10 +15,10 @@ interface ThemeOption {
 }
 
 const THEME_OPTIONS: ThemeOption[] = [
-  { key: 'dark', label: 'Тёмно-синий', colors: darkStyles.colors },
-  { key: 'orange', label: 'Тёмно-оранжевый', colors: orangeStyles.colors },
-  { key: 'light', label: 'Светло-зелёный', colors: lightStyles.colors },
-  { key: 'cream', label: 'Светло-кремовый', colors: creamStyles.colors },
+  { key: 'dark', label: 'Тёмно-синяя', colors: darkStyles.colors },
+  { key: 'orange', label: 'Тёмно-оранжевая', colors: orangeStyles.colors },
+  { key: 'light', label: 'Светло-зелёная', colors: lightStyles.colors },
+  { key: 'cream', label: 'Светло-кремовая', colors: creamStyles.colors },
 ];
 
 export const ThemeCard = () => {

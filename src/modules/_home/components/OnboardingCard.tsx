@@ -14,7 +14,7 @@ export const OnboardingCard = () => {
   }
 
   return (
-    <VCard className={styles.cardGrow}>
+    <VCard className={`${styles.cardGrow} ${styles.animateCard}`} style={{ animationDelay: '0.06s' }}>
       <div className={styles.title}>С чего начать?</div>
 
       <div className={styles.checklist}>

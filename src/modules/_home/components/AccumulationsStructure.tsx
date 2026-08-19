@@ -2,6 +2,7 @@ import type { Category } from '@/shared/supabase/services/categories';
 import { HIDDEN_AMOUNT } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
+import type { ReactNode } from 'react';
 import styles from './AccumulationsStructure.module.css';
 
 export interface AccumulationsStructureItem {
@@ -14,6 +15,7 @@ interface AccumulationsStructureProps {
   categories: Category[];
   hideRing?: boolean;
   title?: string;
+  titleIcon?: ReactNode;
   maskAmounts?: boolean;
   interactive?: boolean;
 }
@@ -33,6 +35,7 @@ export const AccumulationsStructure = ({
   categories,
   hideRing = false,
   title = 'Структура накоплений',
+  titleIcon,
   maskAmounts = false,
   interactive = false,
 }: AccumulationsStructureProps) => {
@@ -84,7 +87,10 @@ export const AccumulationsStructure = ({
       style={{ height: interactive ? '100%' : undefined }}
     >
       <div className={styles.content}>
-        <div className={styles.title}>{title}</div>
+        <div className={styles.titleRow}>
+          {titleIcon && <span className={styles.titleIcon}>{titleIcon}</span>}
+          <div className={styles.title}>{title}</div>
+        </div>
 
         {segments.length === 0 && <div className={styles.message}>Накоплений нет</div>}
 

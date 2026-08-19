@@ -10,6 +10,17 @@
   color: var(--color-text-primary);
 }
 
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+}
+
+.titleIcon {
+  display: inline-flex;
+  color: var(--color-accent);
+}
+
 .message {
   color: var(--color-text-secondary);
 }

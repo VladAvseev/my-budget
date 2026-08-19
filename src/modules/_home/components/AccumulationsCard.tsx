@@ -1,4 +1,5 @@
 import { useAccumulationsTotal, useAmountsVisibility } from '@/shared/hooks';
+import { ChevronRightIcon, SavingsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/services/operations';
 import { VCard } from '@/shared/ui/VCard';
@@ -40,7 +41,7 @@ export const AccumulationsCard = () => {
 
   if (isLoading) {
     return (
-      <VCard className={styles.loadingCard}>
+      <VCard className={`${styles.loadingCard} ${styles.animateCard}`} style={{ animationDelay: '0.24s' }}>
         <VLoader size={28} />
       </VCard>
     );
@@ -51,15 +52,19 @@ export const AccumulationsCard = () => {
   }
 
   return (
-    <Link to="/accumulations" className={styles.link}>
+    <Link to="/accumulations" className={`${styles.link} ${styles.animateCard}`} style={{ animationDelay: '0.24s' }}>
       <AccumulationsStructure
         items={structureItems}
         categories={categories}
         hideRing
         title="Накопления"
+        titleIcon={<SavingsIcon size={18} />}
         maskAmounts={!showCapital}
         interactive
       />
+      <span className={styles.chevron}>
+        <ChevronRightIcon size={18} />
+      </span>
     </Link>
   );
 };
