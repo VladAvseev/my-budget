@@ -38,7 +38,6 @@ export const CategoryList = ({ type, title }: CategoryListProps) => {
         <div className={styles.header}>
           <div className={commonStyles.titleXl}>
             {title}
-            {!categoriesQuery.isLoading && !categoriesQuery.error && ` (${categories.length})`}
           </div>
           <VIconButton
             ariaLabel={`Добавить категорию в разделе «${title}»`}
