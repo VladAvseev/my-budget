@@ -5,6 +5,7 @@ import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useCategories } from '../api/useCategories';
 import { groupItemsByCategory } from '../utils/groupByCategory';
 import { AccumulationCard } from './AccumulationCard';
@@ -41,49 +42,57 @@ export const AccumulationsList = () => {
         !accumulationsQuery.error &&
         accumulations.length === 0 && (
           <VCard>
-            <div className={styles.empty}>Нет накоплений</div>
+            <div className={styles.emptyState}>
+              <div className={styles.emptyTitle}>Нет накоплений</div>
+              <div className={styles.emptyHint}>Нажмите «+», чтобы создать первое накопление.</div>
+            </div>
           </VCard>
         )}
 
       {!accumulationsQuery.isLoading && accumulations.length > 0 && (
         <div className={styles.list}>
-          {groups.map((group) => (
-            <VAccordion
+          {groups.map((group, groupIndex) => (
+            <div
               key={group.key}
-              header={
-                <span className={styles.accordionHeader}>
-                  <span
-                    className={styles.accordionDot}
-                    style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
-                  />
-                  <span className={styles.accordionLabel}>{group.label}</span>
-                  <span className={styles.accordionTotal}>
-                    {formatAmount(
-                      group.items.reduce(
-                        (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
-                        0,
-                      ),
-                    )}
-                  </span>
-                </span>
-              }
+              className={commonStyles.animateCard}
+              style={{ animationDelay: `${groupIndex * 0.03}s` }}
             >
-              <div className={styles.items}>
-                {group.items.map((accumulation) => (
-                  <AccumulationCard
-                    key={accumulation.id}
-                    accumulation={accumulation}
-                    pending={Boolean((accumulation as { _optimistic?: boolean })._optimistic)}
-                    category={
-                      accumulation.category_id
-                        ? categories.find((category) => category.id === accumulation.category_id) ??
-                          null
-                        : null
-                    }
-                  />
-                ))}
-              </div>
-            </VAccordion>
+              <VAccordion
+                header={
+                  <span className={styles.accordionHeader}>
+                    <span
+                      className={styles.accordionDot}
+                      style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
+                    />
+                    <span className={styles.accordionLabel}>{group.label}</span>
+                    <span className={styles.accordionTotal}>
+                      {formatAmount(
+                        group.items.reduce(
+                          (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
+                          0,
+                        ),
+                      )}
+                    </span>
+                  </span>
+                }
+              >
+                <div className={styles.items}>
+                  {group.items.map((accumulation) => (
+                    <AccumulationCard
+                      key={accumulation.id}
+                      accumulation={accumulation}
+                      pending={Boolean((accumulation as { _optimistic?: boolean })._optimistic)}
+                      category={
+                        accumulation.category_id
+                          ? categories.find((category) => category.id === accumulation.category_id) ??
+                            null
+                          : null
+                      }
+                    />
+                  ))}
+                </div>
+              </VAccordion>
+            </div>
           ))}
         </div>
       )}

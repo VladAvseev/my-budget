@@ -2,6 +2,7 @@ import type { Category } from '@/shared/supabase/services/categories';
 import { HIDDEN_AMOUNT } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
+import commonStyles from '@/shared/styles/common.module.css';
 import styles from './AccumulationsStructure.module.css';
 
 export interface AccumulationsStructureItem {
@@ -79,60 +80,62 @@ export const AccumulationsStructure = ({
     .join(', ');
 
   return (
-    <VCard
-      interactive={interactive}
-      style={{ height: interactive ? '100%' : undefined }}
-    >
-      <div className={styles.content}>
-        <div className={styles.title}>{title}</div>
+    <div className={commonStyles.animateCard}>
+      <VCard
+        interactive={interactive}
+        style={{ height: interactive ? '100%' : undefined }}
+      >
+        <div className={styles.content}>
+          <div className={styles.title}>{title}</div>
 
-        {segments.length === 0 && <div className={styles.message}>Накоплений нет</div>}
+          {segments.length === 0 && <div className={styles.message}>Накоплений нет</div>}
 
-        {segments.length > 0 && total <= 0 && (
-          <div className={styles.message}>Доли накоплений невозможно отобразить</div>
-        )}
+          {segments.length > 0 && total <= 0 && (
+            <div className={styles.message}>Доли накоплений невозможно отобразить</div>
+          )}
 
-        {segments.length > 0 && (
-          <div className={styles.body}>
-            {!hideRing && total > 0 && (
+          {segments.length > 0 && (
+            <div className={styles.body}>
+              {!hideRing && total > 0 && (
+                <div
+                  className={styles.ring}
+                  style={{ ['--ring-gradient' as string]: `conic-gradient(${gradient})` }}
+                >
+                  <div className={styles.ringHole} />
+                </div>
+              )}
+
               <div
-                className={styles.ring}
-                style={{ ['--ring-gradient' as string]: `conic-gradient(${gradient})` }}
+                className={`${styles.legend}${hideRing ? ` ${styles.legendFull}` : ''}`}
               >
-                <div className={styles.ringHole} />
+                <span className={`${styles.dot} ${styles.dotAccent}`} />
+                <span className={styles.textBold}>Всего</span>
+                <span className={`${styles.textMedium} ${styles.justifyEnd}`}>100%</span>
+                <span className={`${styles.textBold} ${styles.justifyEnd}`}>
+                  {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total)}
+                </span>
+
+                {segments.flatMap((segment) => [
+                  <span
+                    key={`${segment.key}-dot`}
+                    className={`${styles.dot} ${styles.dotSegment}`}
+                    style={{ ['--segment-color' as string]: segment.color }}
+                  />,
+                  <span key={`${segment.key}-label`} className={styles.ellipsis}>
+                    {segment.label}
+                  </span>,
+                  <span key={`${segment.key}-percent`} className={`${styles.textMedium} ${styles.justifyEnd}`}>
+                    {segment.percent.toFixed(1)}%
+                  </span>,
+                  <span key={`${segment.key}-amount`} className={`${styles.textBold} ${styles.justifyEnd}`}>
+                    {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total)}
+                  </span>,
+                ])}
               </div>
-            )}
-
-            <div
-              className={`${styles.legend}${hideRing ? ` ${styles.legendFull}` : ''}`}
-            >
-              <span className={`${styles.dot} ${styles.dotAccent}`} />
-              <span className={styles.textBold}>Всего</span>
-              <span className={`${styles.textMedium} ${styles.justifyEnd}`}>100%</span>
-              <span className={`${styles.textBold} ${styles.justifyEnd}`}>
-                {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total)}
-              </span>
-
-              {segments.flatMap((segment) => [
-                <span
-                  key={`${segment.key}-dot`}
-                  className={`${styles.dot} ${styles.dotSegment}`}
-                  style={{ ['--segment-color' as string]: segment.color }}
-                />,
-                <span key={`${segment.key}-label`} className={styles.ellipsis}>
-                  {segment.label}
-                </span>,
-                <span key={`${segment.key}-percent`} className={`${styles.textMedium} ${styles.justifyEnd}`}>
-                  {segment.percent.toFixed(1)}%
-                </span>,
-                <span key={`${segment.key}-amount`} className={`${styles.textBold} ${styles.justifyEnd}`}>
-                  {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total)}
-                </span>,
-              ])}
             </div>
-          </div>
-        )}
-      </div>
-    </VCard>
+          )}
+        </div>
+      </VCard>
+    </div>
   );
 };

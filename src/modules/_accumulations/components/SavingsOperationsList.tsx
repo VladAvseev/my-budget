@@ -5,6 +5,7 @@ import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
+import commonStyles from '@/shared/styles/common.module.css';
 import { useCategories } from '../api/useCategories';
 import { useSavingsOperations } from '../api/useSavingsOperations';
 import { groupItemsByCategory } from '../utils/groupByCategory';
@@ -50,44 +51,52 @@ export const SavingsOperationsList = () => {
         !operationsQuery.error &&
         operations.length === 0 && (
           <VCard>
-            <div className={styles.empty}>
-              Нет накоплений из отчётов
+            <div className={styles.emptyState}>
+              <div className={styles.emptyTitle}>Нет накоплений из отчётов</div>
+              <div className={styles.emptyHint}>
+                Накопления появятся при создании операций в отчётах.
+              </div>
             </div>
           </VCard>
         )}
 
       {!operationsQuery.isLoading && operations.length > 0 && (
         <div className={styles.list}>
-          {groups.map((group) => (
-            <VAccordion
+          {groups.map((group, groupIndex) => (
+            <div
               key={group.key}
-              header={
-                <span className={styles.accordionHeader}>
-                  <span
-                    className={styles.accordionDot}
-                    style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
-                  />
-                  <span className={styles.accordionLabel}>{group.label}</span>
-                  <span className={styles.accordionTotal}>
-                    {formatAmount(
-                      group.items.reduce(
-                        (sum, operation) =>
-                          sum +
-                          signedOperationAmount(
-                            operation.type as OperationType,
-                            Number(operation.amount) || 0,
-                          ),
-                        0,
-                      ),
-                    )}
-                  </span>
-                </span>
-              }
+              className={commonStyles.animateCard}
+              style={{ animationDelay: `${groupIndex * 0.03}s` }}
             >
-              <div className={styles.items}>
-                {group.items.map(renderCard)}
-              </div>
-            </VAccordion>
+              <VAccordion
+                header={
+                  <span className={styles.accordionHeader}>
+                    <span
+                      className={styles.accordionDot}
+                      style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
+                    />
+                    <span className={styles.accordionLabel}>{group.label}</span>
+                    <span className={styles.accordionTotal}>
+                      {formatAmount(
+                        group.items.reduce(
+                          (sum, operation) =>
+                            sum +
+                            signedOperationAmount(
+                              operation.type as OperationType,
+                              Number(operation.amount) || 0,
+                            ),
+                          0,
+                        ),
+                      )}
+                    </span>
+                  </span>
+                }
+              >
+                <div className={styles.items}>
+                  {group.items.map(renderCard)}
+                </div>
+              </VAccordion>
+            </div>
           ))}
         </div>
       )}
