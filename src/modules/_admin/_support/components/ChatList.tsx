@@ -1,5 +1,5 @@
 import commonStyles from '@/shared/styles/common.module.css';
-import type { AdminSupportChat } from '@/shared/supabase/types/database.types';
+import type { AdminSupportChat } from '@/shared/supabase/types/domain';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';

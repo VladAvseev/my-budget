@@ -1,4 +1,4 @@
-import type { Operation, OperationType } from '@/shared/supabase/services/operations';
+import type { Operation, OperationType } from '@/shared/supabase/types/domain';
 import { atom } from 'jotai';
 
 export interface OperationModalState {

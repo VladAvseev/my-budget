@@ -1,5 +1,5 @@
-import type { CategoryType } from '@/shared/supabase/services/categories';
-import type { Category } from '@/shared/supabase/services/categories';
+import type { CategoryType } from '@/shared/supabase/types/domain';
+import type { Category } from '@/shared/supabase/types/domain';
 import { PencilIcon, PlusIcon, TrashIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { VBanner } from '@/shared/ui/VBanner';

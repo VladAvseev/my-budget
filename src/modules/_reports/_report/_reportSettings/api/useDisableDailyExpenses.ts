@@ -1,5 +1,4 @@
-import { reportsService } from '@/shared/supabase/services/reports';
-import { operationsService } from '@/shared/supabase/services/operations';
+import { supabase } from '@/shared/supabase/supabase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useDisableDailyExpenses = (id: string) => {
@@ -7,8 +6,7 @@ export const useDisableDailyExpenses = (id: string) => {
 
   return useMutation({
     mutationFn: async () => {
-      await operationsService.removeDailyExpenses(id);
-      const { error } = await reportsService.updateReport(id, { hasDailyExpenses: false });
+      const { error } = await supabase.rpc('disable_daily_expenses', { p_report_id: id });
       if (error) throw error;
     },
     onSuccess: () => {

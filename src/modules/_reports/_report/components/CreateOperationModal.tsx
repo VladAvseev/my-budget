@@ -1,6 +1,6 @@
-import type { OperationType } from '@/shared/supabase/services/operations';
-import type { Report } from '@/shared/supabase/services/reports';
-import { isSavingsType } from '@/shared/supabase/services/operations';
+import type { OperationType } from '@/shared/supabase/types/domain';
+import type { Report } from '@/shared/supabase/types/domain';
+import { isSavingsType } from '@/shared/supabase/types/domain';
 import { CreateDailyModal } from './modals/create/CreateDailyModal';
 import { CreateSavingsModal } from './modals/create/CreateSavingsModal';
 import { CreateStandardModal } from './modals/create/CreateStandardModal';

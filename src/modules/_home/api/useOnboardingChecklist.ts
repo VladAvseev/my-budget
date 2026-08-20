@@ -1,8 +1,6 @@
 import { useProfile } from '@/shared/hooks';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { categoriesService } from '@/shared/supabase/services/categories';
-import { operationsService } from '@/shared/supabase/services/operations';
-import { reportsService } from '@/shared/supabase/services/reports';
+import { supabase } from '@/shared/supabase/supabase';
 import { useQuery } from '@tanstack/react-query';
 
 export interface OnboardingItem {
@@ -11,43 +9,32 @@ export interface OnboardingItem {
   done: boolean;
 }
 
+export interface OnboardingState {
+  categories: number;
+  reports: number;
+  operations: number;
+}
+
 export const useOnboardingChecklist = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
 
   const profileQuery = useProfile();
 
-  const categoriesQuery = useQuery<number>({
-    queryKey: ['categoriesCount', userId],
+  const countsQuery = useQuery<OnboardingState>({
+    queryKey: ['onboardingCounts', userId],
     enabled: Boolean(userId),
     queryFn: async () => {
-      const { count, error } = await categoriesService.countCategories(userId);
+      const { data, error } = await supabase.rpc('get_onboarding_state', {
+        p_user_id: userId,
+      });
       if (error) throw error;
-      return count ?? 0;
-    },
-  });
-
-  const reportsQuery = useQuery<number>({
-    queryKey: ['reportsCount', userId],
-    enabled: Boolean(userId),
-    queryFn: async () => {
-      const { count, error } = await reportsService.countReports(userId);
-      if (error) throw error;
-      return count ?? 0;
-    },
-  });
-
-  const operationsQuery = useQuery<number>({
-    queryKey: ['operationsCount', userId],
-    enabled: Boolean(userId),
-    queryFn: async () => {
-      const { count, error } = await operationsService.countOperations(userId);
-      if (error) throw error;
-      return count ?? 0;
+      return (data as OnboardingState) ?? { categories: 0, reports: 0, operations: 0 };
     },
   });
 
   const profile = profileQuery.data ?? null;
+  const counts = countsQuery.data ?? { categories: 0, reports: 0, operations: 0 };
 
   const items: OnboardingItem[] = [
     {
@@ -58,17 +45,17 @@ export const useOnboardingChecklist = () => {
     {
       id: 'categories',
       label: 'Добавьте категории расходов в разделе "Профиль"',
-      done: (categoriesQuery.data ?? 0) > 0,
+      done: counts.categories > 0,
     },
     {
       id: 'report',
       label: 'Создайте первый отчёт в разделе "Отчёты"',
-      done: (reportsQuery.data ?? 0) > 0,
+      done: counts.reports > 0,
     },
     {
       id: 'operations',
       label: 'Откройте новый отчёт и запишите первую операцию',
-      done: (operationsQuery.data ?? 0) > 0,
+      done: counts.operations > 0,
     },
   ];
 
@@ -76,12 +63,7 @@ export const useOnboardingChecklist = () => {
     items,
     allDone: items.every((item) => item.done),
     onboarded: profile?.onboarded ?? false,
-    isLoading:
-      profileQuery.isLoading ||
-      categoriesQuery.isLoading ||
-      reportsQuery.isLoading ||
-      operationsQuery.isLoading,
-    error:
-      profileQuery.error ?? categoriesQuery.error ?? reportsQuery.error ?? operationsQuery.error,
+    isLoading: profileQuery.isLoading || countsQuery.isLoading,
+    error: profileQuery.error ?? countsQuery.error,
   };
 };

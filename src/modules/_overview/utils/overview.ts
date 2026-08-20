@@ -1,6 +1,6 @@
-import type { Category } from '@/shared/supabase/services/categories';
-import { signedOperationAmount, type Operation, type OperationType } from '@/shared/supabase/services/operations';
-import type { Report } from '@/shared/supabase/services/reports';
+import type { Category } from '@/shared/supabase/types/domain';
+import { signedOperationAmount, type Operation, type OperationType } from '@/shared/supabase/types/domain';
+import type { Report } from '@/shared/supabase/types/domain';
 
 export interface OperationAmounts {
   income: number;

@@ -9,6 +9,7 @@
     "preview": "rsbuild preview",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "sql:collect": "node scripts/sql-collect.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

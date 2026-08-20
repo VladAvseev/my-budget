@@ -1,7 +1,7 @@
 import { useAccumulationsTotal, useAmountsVisibility } from '@/shared/hooks';
 import { ChevronRightIcon, SavingsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { signedOperationAmount, type OperationType } from '@/shared/supabase/services/operations';
+import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { useMemo } from 'react';

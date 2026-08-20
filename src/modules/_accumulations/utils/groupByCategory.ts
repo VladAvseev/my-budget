@@ -1,4 +1,4 @@
-import type { Category } from '@/shared/supabase/services/categories';
+import type { Category } from '@/shared/supabase/types/domain';
 
 export interface CategorizedGroup<T> {
   key: string;

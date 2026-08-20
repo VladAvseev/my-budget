@@ -1,4 +1,5 @@
-import { categoriesService, type Category } from '@/shared/supabase/services/categories';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Category } from '@/shared/supabase/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const removeCategoryMutationKey = ['removeCategory'] as const;
@@ -8,7 +9,10 @@ export const useRemoveCategory = (userId: string) => {
 
   return useMutation({
     mutationKey: removeCategoryMutationKey,
-    mutationFn: (id: string) => categoriesService.removeCategory(id),
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.rpc('delete_category', { p_id: id });
+      if (error) throw error;
+    },
     onMutate: async (id) => {
       const key = ['categories', userId];
       const previous = queryClient.getQueriesData<Category[]>({ queryKey: key });

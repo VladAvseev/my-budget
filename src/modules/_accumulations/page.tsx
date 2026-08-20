@@ -1,7 +1,7 @@
 import { PlusIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { useAccumulations } from '@/shared/hooks';
-import { signedOperationAmount, type OperationType } from '@/shared/supabase/services/operations';
+import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import commonStyles from '@/shared/styles/common.module.css';

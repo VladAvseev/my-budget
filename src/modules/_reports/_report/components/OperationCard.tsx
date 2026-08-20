@@ -1,6 +1,6 @@
-import type { Category } from '@/shared/supabase/services/categories';
-import type { Operation, OperationType } from '@/shared/supabase/services/operations';
-import { isSavingsType } from '@/shared/supabase/services/operations';
+import type { Category } from '@/shared/supabase/types/domain';
+import type { Operation, OperationType } from '@/shared/supabase/types/domain';
+import { isSavingsType } from '@/shared/supabase/types/domain';
 import { SavingsOperationCard } from './cards/SavingsOperationCard';
 import { StandardOperationCard } from './cards/StandardOperationCard';
 

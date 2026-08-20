@@ -1,4 +1,4 @@
-import type { OperationType } from '@/shared/supabase/services/operations';
+import type { OperationType } from '@/shared/supabase/types/domain';
 import tabsStyles from './tabs.module.css';
 
 interface SavingsTypeTabsProps {

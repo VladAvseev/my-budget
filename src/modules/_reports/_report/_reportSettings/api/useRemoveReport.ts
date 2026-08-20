@@ -1,4 +1,5 @@
-import { reportsService, type Report } from '@/shared/supabase/services/reports';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Report } from '@/shared/supabase/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const removeReportMutationKey = ['removeReport'] as const;
@@ -8,7 +9,10 @@ export const useRemoveReport = (id: string) => {
 
   return useMutation({
     mutationKey: removeReportMutationKey,
-    mutationFn: () => reportsService.removeReport(id),
+    mutationFn: async () => {
+      const { error } = await supabase.rpc('delete_report', { p_id: id });
+      if (error) throw error;
+    },
     onMutate: async () => {
       const key = ['reports'];
       const previous = queryClient.getQueryData<Report[]>(key) ?? [];

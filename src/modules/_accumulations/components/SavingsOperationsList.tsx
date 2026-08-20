@@ -1,5 +1,5 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import { signedOperationAmount, type OperationType } from '@/shared/supabase/services/operations';
+import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';

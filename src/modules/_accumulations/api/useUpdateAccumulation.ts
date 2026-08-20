@@ -1,9 +1,7 @@
-import {
-  accumulationsService,
-  type Accumulation,
-  type AccumulationUpdateInput,
-} from '@/shared/supabase/services/accumulations';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Accumulation, AccumulationUpdateInput } from '@/shared/supabase/types/domain';
 import { type OptimisticItem } from '@/shared/optimistic';
+import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const updateAccumulationMutationKey = ['updateAccumulation'] as const;
@@ -14,8 +12,15 @@ export const useUpdateAccumulation = (userId: string) => {
 
   return useMutation({
     mutationKey: updateAccumulationMutationKey,
-    mutationFn: ({ id, input }: { id: string; input: AccumulationUpdateInput }) =>
-      accumulationsService.updateAccumulation(id, input),
+    mutationFn: async ({ id, input }: { id: string; input: AccumulationUpdateInput }) => {
+      const { error } = await supabase.rpc('update_accumulation', {
+        p_id: id,
+        p_amount: input.amount ?? null,
+        p_description: input.description !== undefined ? trimStrings(input.description) : null,
+        p_category_id: input.categoryId ?? null,
+      });
+      if (error) throw error;
+    },
     onMutate: async ({ id, input }) => {
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];
 
@@ -25,7 +30,9 @@ export const useUpdateAccumulation = (userId: string) => {
             ? ({
                 ...item,
                 ...(input.amount !== undefined ? { amount: String(input.amount) } : {}),
-                ...(input.description !== undefined ? { description: input.description } : {}),
+                ...(input.description !== undefined
+                  ? { description: trimStrings(input.description) }
+                  : {}),
                 ...(input.categoryId !== undefined ? { category_id: input.categoryId } : {}),
                 _optimistic: true,
               } as Accumulation & OptimisticItem)

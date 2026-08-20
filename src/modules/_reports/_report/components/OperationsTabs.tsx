@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { Report } from '@/shared/supabase/services/reports';
-import type { OperationType } from '@/shared/supabase/services/operations';
+import type { Report } from '@/shared/supabase/types/domain';
+import type { OperationType } from '@/shared/supabase/types/domain';
 import { OperationList } from './OperationList';
 import { DailyOperationsTab } from './DailyOperationsTab';
 import tabsStyles from './tabs.module.css';

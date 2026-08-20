@@ -1,5 +1,5 @@
 import { supabase } from '@/shared/supabase/supabase';
-import type { NewsRow } from '@/shared/supabase/types/database.types';
+import type { NewsRow } from '@/shared/supabase/types/domain';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useAdminNews = () =>

@@ -1,6 +1,6 @@
-import type { Category } from '@/shared/supabase/services/categories';
-import type { Operation, OperationType } from '@/shared/supabase/services/operations';
-import { signedOperationAmount } from '@/shared/supabase/services/operations';
+import type { Category } from '@/shared/supabase/types/domain';
+import type { Operation, OperationType } from '@/shared/supabase/types/domain';
+import { signedOperationAmount } from '@/shared/supabase/types/domain';
 import { useSetAtom } from 'jotai';
 import { operationModalAtom } from '../../atoms/report';
 import { OperationCardBase } from './OperationCardBase';

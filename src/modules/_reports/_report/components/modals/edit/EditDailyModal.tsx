@@ -1,6 +1,6 @@
 import { TrashIcon } from '@/shared/icons';
-import type { Operation } from '@/shared/supabase/services/operations';
-import type { Report } from '@/shared/supabase/services/reports';
+import type { Operation } from '@/shared/supabase/types/domain';
+import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';

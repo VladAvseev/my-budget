@@ -1,4 +1,4 @@
-import type { CategoryType } from '@/shared/supabase/services/categories';
+import type { CategoryType } from '@/shared/supabase/types/domain';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';

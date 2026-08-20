@@ -1,5 +1,5 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import type { Report } from '@/shared/supabase/services/reports';
+import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';

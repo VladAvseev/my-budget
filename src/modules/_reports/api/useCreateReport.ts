@@ -1,8 +1,5 @@
-import {
-  reportsService,
-  type Report,
-  type ReportInput,
-} from '@/shared/supabase/services/reports';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Report, ReportInput } from '@/shared/supabase/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -13,7 +10,16 @@ export const useCreateReport = () => {
 
   return useMutation({
     mutationKey: createReportMutationKey,
-    mutationFn: (input: ReportInput) => reportsService.createReport(input),
+    mutationFn: async (input: ReportInput) => {
+      const { error } = await supabase.rpc('create_report', {
+        p_name: input.name.trim(),
+        p_has_daily_expenses: input.hasDailyExpenses ?? false,
+        p_daily_budget: input.dailyBudget ?? null,
+        p_period_start: input.periodStart ?? null,
+        p_period_end: input.periodEnd ?? null,
+      });
+      if (error) throw error;
+    },
     onMutate: async (input) => {
       const key = ['reports'];
       const previous = queryClient.getQueryData<Report[]>(key) ?? [];

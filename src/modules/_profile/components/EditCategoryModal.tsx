@@ -1,4 +1,4 @@
-import type { Category } from '@/shared/supabase/services/categories';
+import type { Category } from '@/shared/supabase/types/domain';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
@@ -6,7 +6,7 @@ import { VTextInput } from '@/shared/ui/VTextInput';
 import commonStyles from '@/shared/styles/common.module.css';
 import { getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
-import type { CategoryType } from '@/shared/supabase/services/categories';
+import type { CategoryType } from '@/shared/supabase/types/domain';
 import { useCategories } from '../api/useCategories';
 import { useUpdateCategory } from '../api/useUpdateCategory';
 import { CategoryColorPalette } from './CategoryColorPalette';

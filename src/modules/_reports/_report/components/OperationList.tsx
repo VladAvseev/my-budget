@@ -1,7 +1,7 @@
 import { PlusIcon } from '@/shared/icons';
 import { useMemo } from 'react';
 import { useAuth } from '@/shared/supabase/authProvider';
-import type { Operation, OperationType } from '@/shared/supabase/services/operations';
+import type { Operation, OperationType } from '@/shared/supabase/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -18,7 +18,7 @@ import { useCategories } from '../api/useCategories';
 import { useOperations, useSavingsReportOperations } from '../api/useOperations';
 import { OperationCard } from './OperationCard';
 import { CategoryLimitsSummary, formatLimitValue, getLimitColor } from './CategoryLimitsSummary';
-import { isSavingsType, signedOperationAmount } from '@/shared/supabase/services/operations';
+import { isSavingsType, signedOperationAmount } from '@/shared/supabase/types/domain';
 import styles from './operationList.module.css';
 
 interface OperationListProps {

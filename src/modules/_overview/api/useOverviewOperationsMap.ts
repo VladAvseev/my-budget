@@ -1,4 +1,5 @@
-import { operationsService, type Operation } from '@/shared/supabase/services/operations';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Operation } from '@/shared/supabase/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 const overviewOperationsQueryKey = (reportIds: string[]) =>
@@ -9,7 +10,11 @@ export const useOverviewOperationsMap = (reportIds: string[]) =>
     queryKey: overviewOperationsQueryKey(reportIds),
     enabled: reportIds.length > 0,
     queryFn: async () => {
-      const operations = await operationsService.listOperationsByReports(reportIds);
+      const { data, error } = await supabase.rpc('get_operations_by_reports', {
+        p_report_ids: reportIds,
+      });
+      if (error) throw error;
+      const operations = (data as Operation[]) ?? [];
       const map = new Map<string, Operation[]>();
       for (const operation of operations) {
         const list = map.get(operation.report_id) ?? [];

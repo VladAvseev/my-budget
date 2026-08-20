@@ -1,5 +1,5 @@
 import { PlusIcon } from '@/shared/icons';
-import type { Report } from '@/shared/supabase/services/reports';
+import type { Report } from '@/shared/supabase/types/domain';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
 import { VIconButton } from '@/shared/ui/VIconButton';

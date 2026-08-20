@@ -1,12 +1,13 @@
-import { reportsService, type Report } from '@/shared/supabase/services/reports';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Report } from '@/shared/supabase/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 export const useReports = () =>
   useQuery<Report[]>({
     queryKey: ['reports'],
     queryFn: async () => {
-      const { data, error } = await reportsService.listReports();
+      const { data, error } = await supabase.rpc('get_reports');
       if (error) throw error;
-      return data ?? [];
+      return (data as Report[]) ?? [];
     },
   });

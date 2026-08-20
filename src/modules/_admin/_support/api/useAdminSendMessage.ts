@@ -1,5 +1,5 @@
 import { supabase } from '@/shared/supabase/supabase';
-import type { SupportMessage } from '@/shared/supabase/services/support';
+import type { SupportMessage } from '@/shared/supabase/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminSupportChatQueryKey } from './useAdminSupportChat';
 import { adminSupportChatsQueryKey } from './useAdminSupportChats';

@@ -1,9 +1,7 @@
-import {
-  accumulationsService,
-  type Accumulation,
-  type AccumulationInput,
-} from '@/shared/supabase/services/accumulations';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Accumulation, AccumulationInput } from '@/shared/supabase/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
+import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const createAccumulationMutationKey = ['createAccumulation'] as const;
@@ -13,7 +11,14 @@ export const useCreateAccumulation = (userId: string) => {
 
   return useMutation({
     mutationKey: createAccumulationMutationKey,
-    mutationFn: (input: AccumulationInput) => accumulationsService.createAccumulation(userId, input),
+    mutationFn: async (input: AccumulationInput) => {
+      const { error } = await supabase.rpc('create_accumulation', {
+        p_amount: input.amount,
+        p_description: trimStrings(input.description),
+        p_category_id: input.categoryId ?? null,
+      });
+      if (error) throw error;
+    },
     onMutate: async (input) => {
       const key = ['accumulations', userId];
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];

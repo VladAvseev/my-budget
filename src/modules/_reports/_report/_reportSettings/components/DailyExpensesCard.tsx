@@ -1,4 +1,4 @@
-import type { Report } from '@/shared/supabase/services/reports';
+import type { Report } from '@/shared/supabase/types/domain';
 import { getErrorMessage } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';

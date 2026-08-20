@@ -1,4 +1,4 @@
-import type { Category } from '@/shared/supabase/services/categories';
+import type { Category } from '@/shared/supabase/types/domain';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';

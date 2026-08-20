@@ -1,5 +1,5 @@
-import type { Category } from '@/shared/supabase/services/categories';
-import type { Accumulation } from '@/shared/supabase/services/accumulations';
+import type { Category } from '@/shared/supabase/types/domain';
+import type { Accumulation } from '@/shared/supabase/types/domain';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';

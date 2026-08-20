@@ -1,5 +1,5 @@
 import { supabase } from '@/shared/supabase/supabase';
-import type { AdminSupportChat } from '@/shared/supabase/types/database.types';
+import type { AdminSupportChat } from '@/shared/supabase/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 export const adminSupportChatsQueryKey = ['admin', 'support', 'chats'] as const;

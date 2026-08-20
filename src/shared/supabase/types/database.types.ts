@@ -1,96 +1,20 @@
-export interface NewsRow {
-  id: number;
-  text: string;
-}
-
-export interface AdminDashboardStats {
-  users: {
-    total: number;
-    withoutReports: number;
-    onboarded: number;
-    sawNews: number;
-  };
-  activity: {
-    dau: number;
-    wau: number;
-    mau: number;
-    qau: number;
-    sau: number;
-    yau: number;
-  };
-  churn: {
-    inactive1d: number;
-    inactive7d: number;
-    inactive30d: number;
-    inactive90d: number;
-    inactive180d: number;
-    inactive365d: number;
-  };
-  reports: {
-    total: number;
-    withDailyExpenses: number;
-  };
-  operations: {
-    total: number;
-    income: number;
-    expense: number;
-    daily: number;
-    savings: number;
-  };
-}
-
-export interface AdminUserRow {
-  user_id: string;
-  email: string;
-  last_active_at: string | null;
-  onboarded: boolean;
-  sawNews: boolean;
-  reportsCount: number;
-  operationsCount: number;
-  categoriesCount: number;
-  incomeCount: number;
-  dailyCount: number;
-  expenseCount: number;
-  savingsCount: number;
-  accumulationsCount: number;
-}
-
-export interface DatabaseSize {
-  sizeBytes: number;
-  sizePretty: string;
-}
-
-export interface AdminSupportStatus {
-  open: number;
-  unanswered: number;
-  avgResponseHours: number | null;
-}
-
-export interface SupportChat {
-  user_id: string;
-  is_open: boolean;
-  user_read_at: string | null;
-  admin_read_at: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface SupportMessage {
-  id: string;
-  user_id: string;
-  author_role: 'user' | 'admin';
-  text: string;
-  created_at: string;
-}
-
-export interface AdminSupportChat {
-  user_id: string;
-  email: string;
-  isOpen: boolean;
-  unreadCount: number;
-  lastText: string | null;
-  lastAt: string | null;
-}
+import type {
+  Accumulation,
+  AdminDashboardStats,
+  AdminSupportChat,
+  AdminSupportStatus,
+  AdminUserRow,
+  Category,
+  CategoryLimit,
+  DatabaseSize,
+  NewsRow,
+  Operation,
+  OperationSummary,
+  Profile,
+  Report,
+  SupportChatData,
+  SupportMessage,
+} from './domain';
 
 export interface Database {
   public: {
@@ -365,6 +289,245 @@ export interface Database {
     };
     Views: Record<string, never>;
     Functions: {
+      get_or_create_profile: {
+        Args: {
+          p_email: string;
+        };
+        Returns: Profile;
+      };
+      get_user_summary: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: OperationSummary;
+      };
+      get_accumulations: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: Accumulation[];
+      };
+      get_report_summary: {
+        Args: {
+          p_report_id: string;
+        };
+        Returns: OperationSummary;
+      };
+      get_reports: {
+        Args: Record<string, never>;
+        Returns: Report[];
+      };
+      get_latest_news: {
+        Args: Record<string, never>;
+        Returns: NewsRow | null;
+      };
+      hide_news: {
+        Args: Record<string, never>;
+        Returns: undefined;
+      };
+      get_savings_operations: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: Array<Operation & { reportName: string; reportCreatedAt: string }>;
+      };
+      get_onboarding_state: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: {
+          categories: number;
+          reports: number;
+          operations: number;
+        };
+      };
+      complete_onboarding: {
+        Args: Record<string, never>;
+        Returns: undefined;
+      };
+      get_categories: {
+        Args: {
+          p_user_id: string;
+          p_type: string | null;
+        };
+        Returns: Category[];
+      };
+      create_report: {
+        Args: {
+          p_name: string;
+          p_has_daily_expenses: boolean;
+          p_daily_budget: number | null;
+          p_period_start: string | null;
+          p_period_end: string | null;
+        };
+        Returns: Report;
+      };
+      get_report: {
+        Args: {
+          p_report_id: string;
+        };
+        Returns: Report | null;
+      };
+      get_operations_by_report: {
+        Args: {
+          p_report_id: string;
+          p_type: string;
+        };
+        Returns: Operation[];
+      };
+      get_category_limits: {
+        Args: {
+          p_report_id: string;
+        };
+        Returns: CategoryLimit[];
+      };
+      create_operation: {
+        Args: {
+          p_report_id: string;
+          p_type: string;
+          p_amount: number;
+          p_category_id: string | null;
+          p_description: string | null;
+          p_date: string | null;
+        };
+        Returns: Operation;
+      };
+      update_operation: {
+        Args: {
+          p_id: string;
+          p_amount: number | null;
+          p_category_id: string | null;
+          p_description: string | null;
+          p_type: string | null;
+          p_date: string | null;
+        };
+        Returns: Operation;
+      };
+      delete_operation: {
+        Args: {
+          p_id: string;
+        };
+        Returns: undefined;
+      };
+      create_daily_expense: {
+        Args: {
+          p_report_id: string;
+          p_amount: number;
+          p_description: string | null;
+          p_period_start: string;
+          p_period_end: string;
+        };
+        Returns: Operation;
+      };
+      update_report: {
+        Args: {
+          p_id: string;
+          p_name: string | null;
+          p_has_daily_expenses: boolean | null;
+          p_daily_budget: number | null;
+          p_period_start: string | null;
+          p_period_end: string | null;
+        };
+        Returns: Report;
+      };
+      set_category_limits: {
+        Args: {
+          p_report_id: string;
+          p_limits: unknown;
+        };
+        Returns: CategoryLimit[];
+      };
+      delete_report: {
+        Args: {
+          p_id: string;
+        };
+        Returns: undefined;
+      };
+      disable_daily_expenses: {
+        Args: {
+          p_report_id: string;
+        };
+        Returns: undefined;
+      };
+      get_operations_by_reports: {
+        Args: {
+          p_report_ids: string[];
+        };
+        Returns: Operation[];
+      };
+      create_accumulation: {
+        Args: {
+          p_amount: number;
+          p_description: string;
+          p_category_id: string | null;
+        };
+        Returns: Accumulation;
+      };
+      update_accumulation: {
+        Args: {
+          p_id: string;
+          p_amount: number | null;
+          p_description: string | null;
+          p_category_id: string | null;
+        };
+        Returns: Accumulation;
+      };
+      delete_accumulation: {
+        Args: {
+          p_id: string;
+        };
+        Returns: undefined;
+      };
+      create_category: {
+        Args: {
+          p_type: string;
+          p_name: string;
+          p_color: string | null;
+        };
+        Returns: Category;
+      };
+      update_category: {
+        Args: {
+          p_id: string;
+          p_name: string | null;
+          p_color: string | null;
+        };
+        Returns: Category;
+      };
+      delete_category: {
+        Args: {
+          p_id: string;
+        };
+        Returns: undefined;
+      };
+      update_start_balance: {
+        Args: {
+          p_amount: number;
+        };
+        Returns: undefined;
+      };
+      get_support_chat: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: SupportChatData;
+      };
+      get_support_unread_count: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: number;
+      };
+      send_support_message: {
+        Args: {
+          p_text: string;
+        };
+        Returns: SupportMessage;
+      };
+      mark_support_read: {
+        Args: Record<string, never>;
+        Returns: undefined;
+      };
       admin_get_dashboard_stats: {
         Args: Record<string, never>;
         Returns: AdminDashboardStats;

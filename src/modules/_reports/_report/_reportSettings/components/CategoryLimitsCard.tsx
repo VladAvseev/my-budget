@@ -1,7 +1,7 @@
 import { ImportIcon, TrashIcon } from '@/shared/icons';
 import { createOptimisticId } from '@/shared/optimistic';
 import { useAuth } from '@/shared/supabase/authProvider';
-import type { Report } from '@/shared/supabase/services/reports';
+import type { Report } from '@/shared/supabase/types/domain';
 import { getErrorMessage } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
@@ -12,7 +12,7 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { useMemo, useState } from 'react';
-import type { CategoryLimit } from '@/shared/supabase/services/limits';
+import type { CategoryLimit } from '@/shared/supabase/types/domain';
 import { useCategories } from '../../api/useCategories';
 import { useCategoryLimits } from '../../api/useCategoryLimits';
 import { useSetCategoryLimits } from '../api/useSetCategoryLimits';
@@ -48,7 +48,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
 
   const limitsQuery = useCategoryLimits(report.id);
   const categoriesQuery = useCategories(userId, 'expense');
-  const setLimits = useSetCategoryLimits(report.id, userId);
+  const setLimits = useSetCategoryLimits(report.id);
 
   const [draftLimits, setDraftLimits] = useState<LimitDraft[]>(() =>
     mapLimitsToDraft(limitsQuery.data ?? []),

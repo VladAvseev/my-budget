@@ -1,9 +1,7 @@
-import {
-  categoriesService,
-  type Category,
-  type CategoryCreateInput,
-} from '@/shared/supabase/services/categories';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Category, CategoryCreateInput } from '@/shared/supabase/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
+import { trimStrings } from '@/shared/utils';
 import { categoriesQueryKey } from './keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -14,8 +12,14 @@ export const useCreateCategory = (userId: string) => {
 
   return useMutation({
     mutationKey: createCategoryMutationKey,
-    mutationFn: (input: CategoryCreateInput) =>
-      categoriesService.createCategory(userId, input),
+    mutationFn: async (input: CategoryCreateInput) => {
+      const { error } = await supabase.rpc('create_category', {
+        p_type: input.type,
+        p_name: trimStrings(input.name),
+        p_color: input.color ?? null,
+      });
+      if (error) throw error;
+    },
     onMutate: async (input) => {
       const allKey = categoriesQueryKey(userId);
       const typeKey = categoriesQueryKey(userId, input.type);

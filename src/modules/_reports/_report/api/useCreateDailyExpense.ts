@@ -1,10 +1,9 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import {
-  operationsService,
-  type Operation,
-} from '@/shared/supabase/services/operations';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Operation } from '@/shared/supabase/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { parseISO, toISODate } from '@/shared/utils/date';
+import { trimStrings } from '@/shared/utils';
 import { operationsQueryKey } from './keys';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -36,7 +35,7 @@ export const useCreateDailyExpense = (reportId: string) => {
 
   return useMutation({
     mutationKey: createDailyExpenseMutationKey,
-    mutationFn: ({
+    mutationFn: async ({
       input,
       periodStart,
       periodEnd,
@@ -44,14 +43,16 @@ export const useCreateDailyExpense = (reportId: string) => {
       input: { amount: number; description?: string | null };
       periodStart: string;
       periodEnd: string;
-    }) =>
-      operationsService.createDailyExpense(
-        reportId,
-        user?.id ?? '',
-        input,
-        periodStart,
-        periodEnd,
-      ),
+    }) => {
+      const { error } = await supabase.rpc('create_daily_expense', {
+        p_report_id: reportId,
+        p_amount: input.amount,
+        p_description: input.description ?? null,
+        p_period_start: periodStart,
+        p_period_end: periodEnd,
+      });
+      if (error) throw error;
+    },
     onMutate: async ({ input, periodStart, periodEnd }) => {
       const key = operationsQueryKey(reportId, 'daily');
       const previous = queryClient.getQueryData<Operation[]>(key) ?? [];
@@ -67,7 +68,7 @@ export const useCreateDailyExpense = (reportId: string) => {
         type: 'daily',
         amount: String(input.amount),
         category_id: null,
-        description: input.description ?? null,
+        description: trimStrings(input.description ?? null),
         date,
         created_at: now,
         updated_at: now,

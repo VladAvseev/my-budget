@@ -1,6 +1,6 @@
-import type { Category } from '@/shared/supabase/services/categories';
-import type { CategoryLimit } from '@/shared/supabase/services/limits';
-import type { Operation } from '@/shared/supabase/services/operations';
+import type { Category } from '@/shared/supabase/types/domain';
+import type { CategoryLimit } from '@/shared/supabase/types/domain';
+import type { Operation } from '@/shared/supabase/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import { useMemo } from 'react';

@@ -1,4 +1,5 @@
-import { operationsService, type Operation } from '@/shared/supabase/services/operations';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Operation } from '@/shared/supabase/types/domain';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -9,7 +10,10 @@ export const useRemoveOperation = (reportId: string) => {
 
   return useMutation({
     mutationKey: removeOperationMutationKey,
-    mutationFn: (id: string) => operationsService.removeOperation(id),
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.rpc('delete_operation', { p_id: id });
+      if (error) throw error;
+    },
     onMutate: async (id) => {
       const prefix = ['reports', reportId, 'operations'];
       const previous = queryClient.getQueriesData<Operation[]>({ queryKey: prefix });

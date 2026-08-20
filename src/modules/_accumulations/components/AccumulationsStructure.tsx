@@ -1,4 +1,4 @@
-import type { Category } from '@/shared/supabase/services/categories';
+import type { Category } from '@/shared/supabase/types/domain';
 import { HIDDEN_AMOUNT } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';

@@ -1,4 +1,5 @@
-import { accumulationsService, type Accumulation } from '@/shared/supabase/services/accumulations';
+import { supabase } from '@/shared/supabase/supabase';
+import type { Accumulation } from '@/shared/supabase/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 export const accumulationsQueryKey = (userId: string) => ['accumulations', userId] as const;
@@ -8,9 +9,9 @@ export const useAccumulations = (userId: string) =>
     queryKey: accumulationsQueryKey(userId),
     enabled: Boolean(userId),
     queryFn: async () => {
-      const { data, error } = await accumulationsService.listAccumulations(userId);
+      const { data, error } = await supabase.rpc('get_accumulations', { p_user_id: userId });
       if (error) throw error;
-      return data ?? [];
+      return (data as Accumulation[]) ?? [];
     },
   });
 

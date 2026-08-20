@@ -1,4 +1,4 @@
-import type { Accumulation } from '@/shared/supabase/services/accumulations';
+import type { Accumulation } from '@/shared/supabase/types/domain';
 import { atom } from 'jotai';
 
 export interface AccumulationModalState {

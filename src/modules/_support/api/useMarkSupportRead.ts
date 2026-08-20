@@ -1,4 +1,4 @@
-import { supportService } from '@/shared/supabase/services/support';
+import { supabase } from '@/shared/supabase/supabase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supportChatQueryKey } from './useSupportChat';
 import { supportUnreadQueryKey } from './useSupportUnread';
@@ -8,7 +8,10 @@ export const useMarkSupportRead = (userId: string) => {
 
   return useMutation({
     mutationKey: ['supportMarkRead', userId],
-    mutationFn: () => supportService.markRead(userId),
+    mutationFn: async () => {
+      const { error } = await supabase.rpc('mark_support_read');
+      if (error) throw error;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: supportChatQueryKey(userId) });
       queryClient.invalidateQueries({ queryKey: supportUnreadQueryKey(userId) });

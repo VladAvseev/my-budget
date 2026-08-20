@@ -40,7 +40,7 @@ export const StartBalanceCard = () => {
         )}
 
         {!isLoading && profile && (
-          <StartBalanceForm userId={profile.user_id} initialBalance={profile.start_balance ?? ''} />
+          <StartBalanceForm initialBalance={profile.start_balance ?? ''} />
         )}
       </div>
     </VCard>
@@ -67,12 +67,11 @@ const AmountRow = ({ label, value, visible, onToggle }: AmountRowProps) => {
 };
 
 interface StartBalanceFormProps {
-  userId: string;
   initialBalance: string;
 }
 
-const StartBalanceForm = ({ userId, initialBalance }: StartBalanceFormProps) => {
-  const updateStartBalance = useUpdateStartBalance(userId);
+const StartBalanceForm = ({ initialBalance }: StartBalanceFormProps) => {
+  const updateStartBalance = useUpdateStartBalance();
 
   const [value, setValue] = useState(initialBalance);
   const [balanceError, setBalanceError] = useState<string>();

@@ -1,5 +1,6 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import { operationsService, type OperationSummary } from '@/shared/supabase/services/operations';
+import { supabase } from '@/shared/supabase/supabase';
+import type { OperationSummary } from '@/shared/supabase/types/domain';
 import { useQuery } from '@tanstack/react-query';
 import { useProfile } from './useProfile';
 
@@ -10,8 +11,9 @@ export const useUserSummary = (userId: string) =>
     queryKey: userSummaryQueryKey(userId),
     enabled: Boolean(userId),
     queryFn: async () => {
-      const summary = await operationsService.getUserSummary(userId);
-      return summary;
+      const { data, error } = await supabase.rpc('get_user_summary', { p_user_id: userId });
+      if (error) throw error;
+      return (data as OperationSummary) ?? { income: 0, expense: 0, savings: 0, daily: 0 };
     },
     placeholderData: { income: 0, expense: 0, savings: 0, daily: 0 },
   });

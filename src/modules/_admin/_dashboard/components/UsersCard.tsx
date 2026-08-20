@@ -1,5 +1,5 @@
 import commonStyles from '@/shared/styles/common.module.css';
-import type { AdminDashboardStats } from '@/shared/supabase/types/database.types';
+import type { AdminDashboardStats } from '@/shared/supabase/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import styles from './cards.module.css';
 

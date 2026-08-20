@@ -1,5 +1,5 @@
 import { EyeIcon, EyeOffIcon } from '@/shared/icons';
-import type { Report } from '@/shared/supabase/services/reports';
+import type { Report } from '@/shared/supabase/types/domain';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { useAtom } from 'jotai';
 import { excludedReportIdsAtom, tabsExpandedAtom } from '../atoms/overview';
