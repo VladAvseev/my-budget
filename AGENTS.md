@@ -41,8 +41,6 @@
 | `SUPABASE_URL`    | URL проекта Supabase                              | —                |
 | `SUPABASE_ANON_KEY` | Публичный anon-key Supabase                     | —                |
 
-Примечание: `API_BASE_URL` по-прежнему инжектится в бандл через `rsbuild.config.ts` и `.gitlab-ci.yml`, но в коде не используется (наследие от axios-версии).
-
 ## Команды
 
 | Команда           | Описание                                            |

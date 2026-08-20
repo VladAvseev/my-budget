@@ -4,7 +4,7 @@ import { pluginReact } from '@rsbuild/plugin-react';
 
 const { parsed: env } = loadEnv();
 
-const runtimeEnvKeys = ['API_BASE_URL', 'SUPABASE_URL', 'SUPABASE_ANON_KEY'];
+const runtimeEnvKeys = ['SUPABASE_URL', 'SUPABASE_ANON_KEY'];
 
 const define = Object.fromEntries(
   runtimeEnvKeys.filter((key) => env[key] != null).flatMap((key) => [

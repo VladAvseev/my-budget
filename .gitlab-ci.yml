@@ -21,7 +21,6 @@ build:
     # Ключи НЕ лежат в репозитории — они заданы в Settings → CI/CD → Variables.
     - echo "SUPABASE_URL=$SUPABASE_URL" > .env
     - echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
-    - echo "API_BASE_URL=$API_BASE_URL" >> .env
     # Проверка, что файл создан (для отладки; секреты не печатаем)
     - cat .env | sed 's/=.*/=***/'
   script:
