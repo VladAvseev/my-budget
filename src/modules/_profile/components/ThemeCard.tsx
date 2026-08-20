@@ -1,12 +1,13 @@
 import { useTheme, type ThemeName } from '@/shared/theme';
-import { creamStyles } from '@/shared/theme/packs/cream';
-import { darkStyles } from '@/shared/theme/packs/dark';
-import { lightStyles } from '@/shared/theme/packs/light';
-import { orangeStyles } from '@/shared/theme/packs/orange';
 import { VCard } from '@/shared/ui/VCard';
 import styles from './ThemeCard.module.css';
 
-type ThemeColors = (typeof lightStyles)['colors'];
+interface ThemeColors {
+  bgSurface: string;
+  accent: string;
+  accentLight: string;
+  border: string;
+}
 
 interface ThemeOption {
   key: ThemeName;
@@ -15,10 +16,46 @@ interface ThemeOption {
 }
 
 const THEME_OPTIONS: ThemeOption[] = [
-  { key: 'dark', label: 'Тёмно-синяя', colors: darkStyles.colors },
-  { key: 'orange', label: 'Тёмно-оранжевая', colors: orangeStyles.colors },
-  { key: 'light', label: 'Светло-зелёная', colors: lightStyles.colors },
-  { key: 'cream', label: 'Светло-кремовая', colors: creamStyles.colors },
+  {
+    key: 'dark',
+    label: 'Тёмно-синяя',
+    colors: {
+      bgSurface: '#34343f',
+      accent: '#0099dc',
+      accentLight: '#8fd8f8',
+      border: '#41414e',
+    },
+  },
+  {
+    key: 'orange',
+    label: 'Тёмно-оранжевая',
+    colors: {
+      bgSurface: '#3b4148',
+      accent: '#fd7a22',
+      accentLight: '#fbd3bc',
+      border: '#4c535b',
+    },
+  },
+  {
+    key: 'light',
+    label: 'Светло-зелёная',
+    colors: {
+      bgSurface: '#f7f9f7',
+      accent: '#21a038',
+      accentLight: '#dff3e2',
+      border: '#cfd6d0',
+    },
+  },
+  {
+    key: 'cream',
+    label: 'Светло-кремовая',
+    colors: {
+      bgSurface: '#fbf7ef',
+      accent: '#c2693f',
+      accentLight: '#f3dcc7',
+      border: '#ded4c2',
+    },
+  },
 ];
 
 export const ThemeCard = () => {

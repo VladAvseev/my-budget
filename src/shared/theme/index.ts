@@ -1,4 +1,3 @@
 export { getStoredTheme, setStoredTheme } from './storage';
-export { ThemeProvider, useTheme, useThemeStyles } from './ThemeContext';
-export { useStyles } from './useStyles';
-export type { ThemeName } from './useStyles';
+export { ThemeProvider, useTheme } from './ThemeContext';
+export type { ThemeName } from './types';

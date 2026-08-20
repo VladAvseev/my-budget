@@ -1,4 +1,4 @@
-import type { ThemeName } from './useStyles';
+import type { ThemeName } from './types';
 
 const THEME_STORAGE_KEY = 'theme';
 

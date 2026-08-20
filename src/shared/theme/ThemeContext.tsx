@@ -1,4 +1,3 @@
-import { useStyles, type ThemeName } from './useStyles';
 import {
   createContext,
   useCallback,
@@ -9,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { getStoredTheme, setStoredTheme } from './storage';
+import type { ThemeName } from './types';
 
 interface ThemeContextValue {
   theme: ThemeName;
@@ -42,8 +42,4 @@ export function useTheme(): ThemeContextValue {
     throw new Error('useTheme должен использоваться внутри ThemeProvider');
   }
   return ctx;
-}
-
-export function useThemeStyles() {
-  return useStyles();
 }

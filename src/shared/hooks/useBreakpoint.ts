@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import { breakpoints } from '@/shared/theme/tokens';
+import { breakpoints } from './breakpoints';
 
 export interface BreakpointState {
   isMobile: boolean;

@@ -52,7 +52,7 @@ Dev-сервер запустится на порту из переменной 
 ## Конвенции
 
 - Импорты только через алиас `@/*` → `src/*`.
-- Стилизация через `useThemeStyles()` из `@/shared/theme` и CSS-modules.
+- Стилизация: CSS-modules + CSS-переменные из `theme.css`; дизайн-токены в TS не дублируются.
 - Работа с данными только через сервисы `@/shared/supabase/services` и хуки TanStack Query.
 - Страницы подключаются лениво через `AsyncPage` из `@/shared/ui/AsyncPage`.
 - Подробнее — в `AGENTS.md`.
