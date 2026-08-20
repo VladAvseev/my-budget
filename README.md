@@ -4,12 +4,14 @@
 
 ## Стек
 
-- **Runtime:** React 19
+- **Runtime:** React 19 + React DOM
+- **Роутер:** React Router v7 (`react-router-dom`)
 - **Сборщик:** Rsbuild (на основе Rspack)
 - **Язык:** TypeScript (strict mode)
 - **Линтер:** ESLint 9 (flat config)
 - **Форматтер:** Prettier
-- **HTTP-клиент:** Axios
+- **Данные:** Supabase (`@supabase/supabase-js`) + TanStack Query (`@tanstack/react-query`)
+- **Стейт-менеджмент:** Jotai (`jotai`)
 
 ## Быстрый старт
 
@@ -33,14 +35,26 @@ Dev-сервер запустится на порту из переменной 
 
 ## Переменные окружения
 
-| Переменная     | Описание                                | По умолчанию     |
-| -------------- | --------------------------------------- | ---------------- |
-| `DEV_PORT`     | Порт dev-сервера                        | `3001`           |
-| `API_BASE_URL` | Базовый URL API (baseURL axios-клиента) | `localhost:5001` |
+| Переменная        | Описание                                      | По умолчанию |
+| ----------------- | --------------------------------------------- | ------------ |
+| `DEV_PORT`        | Порт dev-сервера                              | `3001`       |
+| `SUPABASE_URL`    | URL проекта Supabase                          | —            |
+| `SUPABASE_ANON_KEY` | Публичный anon-key Supabase                 | —            |
+
+Примечание: `API_BASE_URL` инжектится в бандл через `rsbuild.config.ts` и `.gitlab-ci.yml`, но в коде не используется (наследие от axios-версии).
+
+## Разделы
+
+- Логин и регистрация (`/login`, `/registration`)
+- Главная (`/`), профиль (`/profile`)
+- Обзор (`/overview`), отчёты (`/reports`), накопления (`/accumulations`)
+- Помощь (`/help`), поддержка (`/support`)
+- Админ-панель (`/admin`: dashboard, users, support, news)
 
 ## Конвенции
 
 - Импорты только через алиас `@/*` → `src/*`.
-- Стилизация через `useThemeStyles()` из `@/shared/theme` и дизайн-токены.
-- Работа с API только через `apiGet`/`apiPost` из `@/shared/api`.
+- Стилизация через `useThemeStyles()` из `@/shared/theme` и CSS-modules.
+- Работа с данными только через сервисы `@/shared/supabase/services` и хуки TanStack Query.
+- Страницы подключаются лениво через `AsyncPage` из `@/shared/ui/AsyncPage`.
 - Подробнее — в `AGENTS.md`.
