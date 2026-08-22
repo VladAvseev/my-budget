@@ -1,6 +1,4 @@
-import type { Category } from '@/shared/supabase/types/domain';
-import type { CategoryLimit } from '@/shared/supabase/types/domain';
-import type { Operation } from '@/shared/supabase/types/domain';
+import type { Category, CategoryLimit, Operation } from '@/shared/supabase/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import { useMemo } from 'react';
@@ -54,8 +52,7 @@ export const CategoryLimitsSummary = ({
             const limitAmount = Number(limit.amount) || 0;
             const color = getLimitColor(spent, limitAmount);
             const category = categoriesById.get(limit.category_id);
-            const percentage =
-              limitAmount > 0 ? Math.min(100, Math.round((spent / limitAmount) * 100)) : 0;
+            const percentage = limitAmount > 0 ? Math.round((spent / limitAmount) * 100) : 0;
             const barColor =
               spent > limitAmount
                 ? 'var(--color-error)'
@@ -65,23 +62,23 @@ export const CategoryLimitsSummary = ({
             return (
               <div key={limit.id} className={styles.rowItem}>
                 <div className={styles.row}>
-                  <span
-                    className={styles.dot}
-                    style={{ backgroundColor: category?.color ?? 'var(--color-border)' }}
-                  />
-                  <span className={styles.name}>{category?.name ?? 'Категория'}</span>
-                  <div className={styles.value} style={{ color }}>
-                    {formatLimitValue(spent, limitAmount)}
-                  </div>
-                </div>
-                <div className={styles.barRow}>
-                  <div className={styles.bar}>
-                    <div
-                      className={styles.barFill}
-                      style={{ width: `${percentage}%`, backgroundColor: barColor }}
+                  <div className={styles.rowLabel}>
+                    <span
+                      className={styles.dot}
+                      style={{ backgroundColor: category?.color ?? 'var(--color-border)' }}
                     />
+                    <span className={styles.name}>{category?.name ?? 'Категория'}</span>
+                    <div className={styles.value} style={{ color }}>
+                      {formatLimitValue(spent, limitAmount)}
+                    </div>
                   </div>
                   <span className={styles.percent}>{percentage}%</span>
+                </div>
+                <div className={styles.bar}>
+                  <div
+                    className={styles.barFill}
+                    style={{ width: `${percentage}%`, backgroundColor: barColor }}
+                  />
                 </div>
               </div>
             );

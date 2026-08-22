@@ -26,22 +26,14 @@
 .row {
   display: flex;
   align-items: center;
-  gap: var(--space-s);
+  justify-content: space-between;
   min-width: 0;
 }
 
-.barRow {
+.rowLabel {
   display: flex;
   align-items: center;
   gap: var(--space-s);
-}
-
-.bar {
-  flex: 1;
-  height: 4px;
-  border-radius: var(--radius-s);
-  background-color: var(--color-bg-surface-hover);
-  overflow: hidden;
 }
 
 .percent {
@@ -51,6 +43,13 @@
   font-size: var(--font-size-s);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
+}
+
+.bar {
+  height: 4px;
+  border-radius: var(--radius-s);
+  background-color: var(--color-bg-surface-hover);
+  overflow: hidden;
 }
 
 .barFill {

@@ -5,9 +5,9 @@ import type { Goal } from '@/shared/supabase/types/domain';
 import { buildGoalsProgress, formatAmount } from '@/shared/utils';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VBanner } from '@/shared/ui/VBanner';
-import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
+import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useSetAtom } from 'jotai';
@@ -45,17 +45,15 @@ export const GoalsSection = () => {
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        <div className={commonStyles.titleXl}>Цели накоплений</div>
-        <VButton
-          variant="secondary"
+        <div className={commonStyles.titleXl}>Цели</div>
+        <VIconButton
+          ariaLabel="Установить цель"
           onClick={() => setGoalModal({ goal: null })}
           isDisabled={isLoading}
+          color="var(--color-accent)"
         >
-          <span className={styles.buttonContent}>
-            <PlusIcon size={16} color="currentColor" />
-            Установить цель
-          </span>
-        </VButton>
+          <PlusIcon size={24} color="currentColor" />
+        </VIconButton>
       </div>
 
       {goalsQuery.error && (
@@ -75,7 +73,7 @@ export const GoalsSection = () => {
             <div className={styles.emptyState}>
               <div className={styles.emptyTitle}>Нет целей</div>
               <div className={styles.emptyHint}>
-                Нажмите «Установить цель», чтобы задать желаемую сумму накоплений по категории.
+                Нажмите «+», чтобы задать желаемую сумму накоплений по категории.
               </div>
             </div>
           </VCard>

@@ -11,12 +11,6 @@
   gap: var(--space-m);
 }
 
-.buttonContent {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-}
-
 .loaderWrap {
   display: flex;
   justify-content: center;
