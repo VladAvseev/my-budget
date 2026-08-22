@@ -74,11 +74,14 @@ export const CategoryLimitsSummary = ({
                     {formatLimitValue(spent, limitAmount)}
                   </div>
                 </div>
-                <div className={styles.bar}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: `${percentage}%`, backgroundColor: barColor }}
-                  />
+                <div className={styles.barRow}>
+                  <div className={styles.bar}>
+                    <div
+                      className={styles.barFill}
+                      style={{ width: `${percentage}%`, backgroundColor: barColor }}
+                    />
+                  </div>
+                  <span className={styles.percent}>{percentage}%</span>
                 </div>
               </div>
             );

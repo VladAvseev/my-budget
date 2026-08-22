@@ -10,16 +10,6 @@ export interface AccumulationsStructureItem {
   amount: number;
 }
 
-interface AccumulationsStructureProps {
-  items: AccumulationsStructureItem[];
-  categories: Category[];
-  hideRing?: boolean;
-  title?: string;
-  titleIcon?: ReactNode;
-  maskAmounts?: boolean;
-  interactive?: boolean;
-}
-
 interface CategorySegment {
   key: string;
   label: string;
@@ -30,15 +20,27 @@ interface CategorySegment {
   end: number;
 }
 
-export const AccumulationsStructure = ({
-  items,
-  categories,
-  hideRing = false,
-  title = 'Структура накоплений',
-  titleIcon,
-  maskAmounts = false,
-  interactive = false,
-}: AccumulationsStructureProps) => {
+interface AccumulationsStructureProps {
+  items: AccumulationsStructureItem[];
+  categories: Category[];
+  hideRing?: boolean;
+  title?: string;
+  titleIcon?: ReactNode;
+  maskAmounts?: boolean;
+  interactive?: boolean;
+}
+
+interface AccumulationsLegendProps {
+  items: AccumulationsStructureItem[];
+  categories: Category[];
+  maskAmounts?: boolean;
+  fullWidth?: boolean;
+}
+
+const buildSegments = (
+  items: AccumulationsStructureItem[],
+  categories: Category[],
+): { segments: CategorySegment[]; total: number } => {
   const categoriesById = new Map(categories.map((category) => [category.id, category]));
 
   const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
@@ -77,6 +79,57 @@ export const AccumulationsStructure = ({
     cursor += percent;
   }
 
+  return { segments, total };
+};
+
+export const AccumulationsLegend = ({
+  items,
+  categories,
+  maskAmounts = false,
+  fullWidth = false,
+}: AccumulationsLegendProps) => {
+  const { segments, total } = buildSegments(items, categories);
+
+  return (
+    <div className={`${styles.legend}${fullWidth ? ` ${styles.legendFull}` : ''}`}>
+      <span className={`${styles.dot} ${styles.dotAccent}`} />
+      <span className={styles.textBold}>Всего</span>
+      <span className={`${styles.textMedium} ${styles.justifyEnd}`}>100%</span>
+      <span className={`${styles.textBold} ${styles.justifyEnd}`}>
+        {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total)}
+      </span>
+
+      {segments.flatMap((segment) => [
+        <span
+          key={`${segment.key}-dot`}
+          className={`${styles.dot} ${styles.dotSegment}`}
+          style={{ ['--segment-color' as string]: segment.color }}
+        />,
+        <span key={`${segment.key}-label`} className={styles.ellipsis}>
+          {segment.label}
+        </span>,
+        <span key={`${segment.key}-percent`} className={`${styles.textMedium} ${styles.justifyEnd}`}>
+          {segment.percent.toFixed(1)}%
+        </span>,
+        <span key={`${segment.key}-amount`} className={`${styles.textBold} ${styles.justifyEnd}`}>
+          {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total)}
+        </span>,
+      ])}
+    </div>
+  );
+};
+
+export const AccumulationsStructure = ({
+  items,
+  categories,
+  hideRing = false,
+  title = 'Структура накоплений',
+  titleIcon,
+  maskAmounts = false,
+  interactive = false,
+}: AccumulationsStructureProps) => {
+  const { segments, total } = buildSegments(items, categories);
+
   const gradient = segments
     .map((segment) => `${segment.color} ${segment.start}% ${segment.end}%`)
     .join(', ');
@@ -109,33 +162,12 @@ export const AccumulationsStructure = ({
               </div>
             )}
 
-            <div
-              className={`${styles.legend}${hideRing ? ` ${styles.legendFull}` : ''}`}
-            >
-              <span className={`${styles.dot} ${styles.dotAccent}`} />
-              <span className={styles.textBold}>Всего</span>
-              <span className={`${styles.textMedium} ${styles.justifyEnd}`}>100%</span>
-              <span className={`${styles.textBold} ${styles.justifyEnd}`}>
-                {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total)}
-              </span>
-
-              {segments.flatMap((segment) => [
-                <span
-                  key={`${segment.key}-dot`}
-                  className={`${styles.dot} ${styles.dotSegment}`}
-                  style={{ ['--segment-color' as string]: segment.color }}
-                />,
-                <span key={`${segment.key}-label`} className={styles.ellipsis}>
-                  {segment.label}
-                </span>,
-                <span key={`${segment.key}-percent`} className={`${styles.textMedium} ${styles.justifyEnd}`}>
-                  {segment.percent.toFixed(1)}%
-                </span>,
-                <span key={`${segment.key}-amount`} className={`${styles.textBold} ${styles.justifyEnd}`}>
-                  {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total)}
-                </span>,
-              ])}
-            </div>
+            <AccumulationsLegend
+              items={items}
+              categories={categories}
+              maskAmounts={maskAmounts}
+              fullWidth={hideRing}
+            />
           </div>
         )}
       </div>

@@ -1,0 +1,28 @@
+.categoryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.categoryLabel {
+  font-size: var(--font-size-m);
+  color: var(--color-text-secondary);
+}
+
+.categoryValue {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+  min-width: 0;
+}
+
+.categoryDot {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  border-radius: var(--radius-round);
+  background-color: var(--color-border);
+}

@@ -7,6 +7,7 @@ import type {
   Category,
   CategoryLimit,
   DatabaseSize,
+  Goal,
   NewsRow,
   Operation,
   OperationSummary,
@@ -184,6 +185,33 @@ export interface Database {
           user_id?: string;
           category_id?: string | null;
           description?: string;
+          amount?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      goals: {
+        Row: {
+          id: string;
+          user_id: string;
+          category_id: string;
+          amount: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string;
+          category_id: string;
+          amount?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          category_id?: string;
           amount?: string;
           created_at?: string;
           updated_at?: string;
@@ -473,6 +501,32 @@ export interface Database {
         Returns: Accumulation;
       };
       delete_accumulation: {
+        Args: {
+          p_id: string;
+        };
+        Returns: undefined;
+      };
+      get_goals: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: Goal[];
+      };
+      create_goal: {
+        Args: {
+          p_category_id: string;
+          p_amount: number;
+        };
+        Returns: Goal;
+      };
+      update_goal: {
+        Args: {
+          p_id: string;
+          p_amount: number;
+        };
+        Returns: Goal;
+      };
+      delete_goal: {
         Args: {
           p_id: string;
         };

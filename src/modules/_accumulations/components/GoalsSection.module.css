@@ -1,0 +1,119 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.buttonContent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.emptyTitle {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.emptyHint {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  flex: 1 1 280px;
+  min-width: 280px;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+  min-width: 0;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  border-radius: var(--radius-round);
+  background-color: var(--color-border);
+}
+
+.cardTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track {
+  height: var(--space-s);
+  border-radius: var(--radius-s);
+  background-color: var(--color-accent-alpha);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: var(--radius-s);
+  background-color: var(--color-accent);
+  transition: width 0.3s ease;
+}
+
+.cardBottom {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+}
+
+.savedAmount {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.targetAmount {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
+.percent {
+  margin-left: auto;
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}

@@ -4,6 +4,7 @@ export type Operation = Database['public']['Tables']['operations']['Row'];
 export type Report = Database['public']['Tables']['reports']['Row'];
 export type Category = Database['public']['Tables']['categories']['Row'];
 export type Accumulation = Database['public']['Tables']['accumulations']['Row'];
+export type Goal = Database['public']['Tables']['goals']['Row'];
 export type CategoryLimit = Database['public']['Tables']['category_limits']['Row'];
 export type NewsRow = Database['public']['Tables']['news']['Row'];
 export type SupportChat = Database['public']['Tables']['support_chats']['Row'];
@@ -72,6 +73,15 @@ export interface AccumulationInput {
 }
 
 export type AccumulationUpdateInput = Partial<AccumulationInput>;
+
+export interface GoalInput {
+  categoryId: string;
+  amount: number;
+}
+
+export interface GoalUpdateInput {
+  amount: number;
+}
 
 export interface CategoryLimitInput {
   reportId: string;

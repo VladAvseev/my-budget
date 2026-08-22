@@ -5,5 +5,6 @@ export { useGlobalBalance } from './useGlobalBalance';
 export { useProfile } from './useProfile';
 export { useAdminStatus } from './useAdminStatus';
 export { accumulationsQueryKey, useAccumulations, useAccumulationsTotal } from './useAccumulations';
+export { goalsQueryKey, useGoals } from './useGoals';
 export { useCapital } from './useCapital';
 export { HIDDEN_AMOUNT, useAmountsVisibility } from './useAmountsVisibility';

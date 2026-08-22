@@ -114,6 +114,45 @@ end;
 $$;
 
 -- ────────────────────────────────────────────────────────────────────────────
+-- Источник: src/modules/_accumulations/api/useCreateGoal.sql
+-- Создание цели накопления для своей savings-категории текущим пользователем.
+create or replace function public.create_goal(
+  p_category_id uuid,
+  p_amount numeric
+)
+returns jsonb
+language plpgsql
+security invoker
+set search_path = public
+as $$
+declare
+  result jsonb;
+begin
+  if not exists (
+    select 1 from public.categories
+    where id = p_category_id
+      and user_id = auth.uid()
+      and type = 'savings'
+  ) then
+    raise exception 'Категория не найдена среди категорий накоплений';
+  end if;
+
+  insert into public.goals (user_id, category_id, amount)
+  values (auth.uid(), p_category_id, p_amount)
+  returning jsonb_build_object(
+    'id', id,
+    'user_id', user_id,
+    'category_id', category_id,
+    'amount', amount,
+    'created_at', created_at,
+    'updated_at', updated_at
+  ) into result;
+
+  return result;
+end;
+$$;
+
+-- ────────────────────────────────────────────────────────────────────────────
 -- Источник: src/modules/_accumulations/api/useRemoveAccumulation.sql
 -- Удаление накопления.
 create or replace function public.delete_accumulation(p_id uuid)
@@ -123,6 +162,18 @@ security invoker
 set search_path = public
 as $$
   delete from public.accumulations where id = p_id;
+$$;
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- Источник: src/modules/_accumulations/api/useRemoveGoal.sql
+-- Удаление цели накопления.
+create or replace function public.delete_goal(p_id uuid)
+returns void
+language sql
+security invoker
+set search_path = public
+as $$
+  delete from public.goals where id = p_id;
 $$;
 
 -- ────────────────────────────────────────────────────────────────────────────
@@ -192,6 +243,38 @@ begin
     'user_id', user_id,
     'category_id', category_id,
     'description', description,
+    'amount', amount,
+    'created_at', created_at,
+    'updated_at', updated_at
+  ) into result;
+
+  return result;
+end;
+$$;
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- Источник: src/modules/_accumulations/api/useUpdateGoal.sql
+-- Обновление суммы цели накопления.
+create or replace function public.update_goal(
+  p_id uuid,
+  p_amount numeric
+)
+returns jsonb
+language plpgsql
+security invoker
+set search_path = public
+as $$
+declare
+  result jsonb;
+begin
+  update public.goals
+  set amount = p_amount,
+      updated_at = now()
+  where id = p_id
+  returning jsonb_build_object(
+    'id', id,
+    'user_id', user_id,
+    'category_id', category_id,
     'amount', amount,
     'created_at', created_at,
     'updated_at', updated_at
@@ -1748,6 +1831,34 @@ as $$
   )
   from public.operations
   where user_id = p_user_id;
+$$;
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- Источник: src/shared/hooks/useGoals.sql
+-- Цели накоплений пользователя.
+create or replace function public.get_goals(p_user_id uuid)
+returns jsonb
+language plpgsql
+security invoker
+set search_path = public
+as $$
+declare
+  result jsonb;
+begin
+  select coalesce(jsonb_agg(jsonb_build_object(
+    'id', id,
+    'user_id', user_id,
+    'category_id', category_id,
+    'amount', amount,
+    'created_at', created_at,
+    'updated_at', updated_at
+  ) order by created_at desc), '[]'::jsonb)
+  into result
+  from public.goals
+  where user_id = p_user_id;
+
+  return result;
+end;
 $$;
 
 -- ────────────────────────────────────────────────────────────────────────────

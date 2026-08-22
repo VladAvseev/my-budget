@@ -7,13 +7,16 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
-import { accumulationModalAtom } from './atoms/accumulations';
+import { accumulationModalAtom, goalModalAtom } from './atoms/accumulations';
 import { useCategories } from './api/useCategories';
 import { useSavingsOperations } from './api/useSavingsOperations';
 import { AccumulationsList } from './components/AccumulationsList';
 import { AccumulationsStructure } from './components/AccumulationsStructure';
 import { CreateAccumulationModal } from './components/CreateAccumulationModal';
+import { CreateGoalModal } from './components/CreateGoalModal';
 import { EditAccumulationModal } from './components/EditAccumulationModal';
+import { EditGoalModal } from './components/EditGoalModal';
+import { GoalsSection } from './components/GoalsSection';
 import { SavingsOperationsList } from './components/SavingsOperationsList';
 
 export const Page: React.FC = () => {
@@ -24,6 +27,7 @@ export const Page: React.FC = () => {
   const savingsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
   const [accumulationModal, setAccumulationModal] = useAtom(accumulationModalAtom);
+  const [goalModal, setGoalModal] = useAtom(goalModalAtom);
 
   const accumulations = accumulationsQuery.data ?? [];
   const savings = savingsQuery.data ?? [];
@@ -60,6 +64,12 @@ export const Page: React.FC = () => {
 
       <AccumulationsStructure items={structureItems} categories={categories} />
 
+      <GoalsSection />
+
+      <div className={commonStyles.row}>
+        <div className={commonStyles.titleXl}>Накопления</div>
+      </div>
+
       <AccumulationsList />
 
       <div className={commonStyles.row}>
@@ -75,7 +85,19 @@ export const Page: React.FC = () => {
           onClose={() => setAccumulationModal(null)}
         />
       ) : (
-        accumulationModal && <CreateAccumulationModal onClose={() => setAccumulationModal(null)} />
+        accumulationModal && (
+          <CreateAccumulationModal onClose={() => setAccumulationModal(null)} />
+        )
+      )}
+
+      {goalModal?.goal ? (
+        <EditGoalModal
+          key={goalModal.goal.id}
+          goal={goalModal.goal}
+          onClose={() => setGoalModal(null)}
+        />
+      ) : (
+        goalModal && <CreateGoalModal onClose={() => setGoalModal(null)} />
       )}
     </div>
   );

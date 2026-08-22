@@ -11,3 +11,9 @@ export {
 export { formatAmount } from './format';
 export { getErrorMessage } from './errorMessage';
 export { trimStrings } from './trim';
+export {
+  buildGoalsProgress,
+  getCategorySavedTotal,
+  type GoalProgress,
+  type GoalProgressSource,
+} from './goals';
