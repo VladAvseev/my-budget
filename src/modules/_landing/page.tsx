@@ -1,9 +1,4 @@
-import {
-  BanknotesIcon,
-  MenuIcon,
-  OverviewIcon,
-  SavingsIcon,
-} from '@/shared/icons';
+import { BanknotesIcon, MenuIcon, OverviewIcon, SavingsIcon } from '@/shared/icons';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import React from 'react';
@@ -75,9 +70,7 @@ export const Page: React.FC = () => {
         <section className={styles.hero}>
           <div className={`${styles.container} ${styles.heroInner}`}>
             <div className={styles.heroContent}>
-              <span className={`${styles.heroBadge} ${styles.animate}`}>
-                Личный бюджет онлайн
-              </span>
+              <span className={`${styles.heroBadge} ${styles.animate}`}>Личный бюджет онлайн</span>
               <h1
                 className={`${styles.heroTitle} ${styles.animate}`}
                 style={{ animationDelay: '0.08s' }}
@@ -89,8 +82,8 @@ export const Page: React.FC = () => {
                 className={`${styles.heroText} ${styles.animate}`}
                 style={{ animationDelay: '0.16s' }}
               >
-                «Мой бюджет» помогает фиксировать доходы и расходы, копить на
-                цели и понимать, куда уходит каждая трата.
+                «Мой бюджет» помогает фиксировать доходы и расходы, копить на цели и понимать, куда
+                уходит каждая трата.
               </p>
               <div
                 className={`${styles.heroButtons} ${styles.animate}`}
@@ -116,32 +109,22 @@ export const Page: React.FC = () => {
               style={{ animationDelay: '0.2s' }}
             >
               <div className={styles.demoRow}>
-                <span className={styles.demoLabel}>Общий баланс</span>
+                <span className={styles.demoLabel}>Баланс</span>
                 <span className={styles.demoValue}>84 250 ₽</span>
               </div>
               <div className={styles.demoRow}>
                 <span className={styles.demoLabel}>Доходы за месяц</span>
-                <span
-                  className={`${styles.demoValue} ${styles.demoValueIncome}`}
-                >
-                  +96 400 ₽
-                </span>
+                <span className={`${styles.demoValue} ${styles.demoValueIncome}`}>+96 400 ₽</span>
               </div>
               <div className={styles.demoRow}>
                 <span className={styles.demoLabel}>Расходы за месяц</span>
-                <span
-                  className={`${styles.demoValue} ${styles.demoValueExpense}`}
-                >
-                  −61 300 ₽
-                </span>
+                <span className={`${styles.demoValue} ${styles.demoValueExpense}`}>−61 300 ₽</span>
               </div>
               <div className={styles.demoProgress}>
                 <div className={styles.demoProgressTrack}>
                   <div className={styles.demoProgressFill} />
                 </div>
-                <span className={styles.demoCaption}>
-                  Накопления на отпуск · 68% от цели
-                </span>
+                <span className={styles.demoCaption}>Накопления на отпуск · 68% от цели</span>
               </div>
             </VCard>
           </div>
@@ -181,8 +164,7 @@ export const Page: React.FC = () => {
             <div className={styles.sectionHead}>
               <h2 className={styles.sectionTitle}>Почему «Мой бюджет»?</h2>
               <p className={styles.sectionText}>
-                Приложение создано для тех, кто хочет простого и надёжного
-                учёта денег.
+                Приложение создано для тех, кто хочет простого и гибкого учёта финансов.
               </p>
             </div>
             <div className={styles.advantagesGrid}>
@@ -192,9 +174,7 @@ export const Page: React.FC = () => {
                   className={`${styles.advantageItem} ${styles.animate}`}
                   style={{ animationDelay: `${0.08 * index}s` }}
                 >
-                  <span className={styles.advantageNumber}>
-                    {advantage.number}
-                  </span>
+                  <span className={styles.advantageNumber}>{advantage.number}</span>
                   <h3 className={styles.advantageTitle}>{advantage.title}</h3>
                   <p className={styles.advantageText}>{advantage.text}</p>
                 </div>
@@ -206,12 +186,9 @@ export const Page: React.FC = () => {
         <section className={styles.section}>
           <div className={styles.container}>
             <div className={`${styles.ctaPanel} ${styles.animate}`}>
-              <h2 className={styles.sectionTitle}>
-                Готовы навести порядок в финансах?
-              </h2>
+              <h2 className={styles.sectionTitle}>Готовы навести порядок в финансах?</h2>
               <p className={styles.sectionText}>
-                Создайте аккаунт и начните вести бюджет уже сегодня — это
-                займёт меньше минуты.
+                Создайте аккаунт и начните вести бюджет уже сегодня — это займёт меньше минуты.
               </p>
               <div className={styles.ctaButtons}>
                 <Link to="/registration">
@@ -228,17 +205,7 @@ export const Page: React.FC = () => {
 
       <footer className={styles.footer}>
         <div className={`${styles.container} ${styles.footerInner}`}>
-          <span className={styles.footerCopy}>
-            © {new Date().getFullYear()} «Мой бюджет»
-          </span>
-          <nav className={styles.footerNav}>
-            <Link to="/help" className={styles.footerLink}>
-              Помощь
-            </Link>
-            <Link to="/support" className={styles.footerLink}>
-              Поддержка
-            </Link>
-          </nav>
+          <span className={styles.footerCopy}>© {new Date().getFullYear()} «Мой бюджет»</span>
         </div>
       </footer>
     </div>

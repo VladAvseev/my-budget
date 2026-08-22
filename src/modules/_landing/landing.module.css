@@ -220,7 +220,7 @@
 
 .sectionText {
   margin: 0;
-  max-width: 560px;
+  max-width: 580px;
   font-size: var(--font-size-l);
   line-height: var(--line-height-normal);
   color: var(--color-text-secondary);

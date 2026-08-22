@@ -11,7 +11,7 @@ export function profile() {
       <Route
         path="/profile"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute redirectTo="/">
             <AppLayout>
               <Page />
             </AppLayout>

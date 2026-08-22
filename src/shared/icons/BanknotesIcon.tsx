@@ -12,8 +12,8 @@ export const BanknotesIcon = ({ size = 16, color = 'currentColor', style }: Icon
     strokeLinejoin="round"
     style={style}
   >
-    <rect x="6" y="10.5" width="16" height="9" rx="1.5" transform="rotate(-16 8.5 9.5)" />
-    <rect x="7" y="9" width="16" height="9" rx="1.5" />
-    <circle cx="15" cy="13.5" r="2" />
+    <rect x="2.7" y="9.2" width="16" height="9" rx="1.5" transform="rotate(-16 5.2 8.2)" />
+    <rect x="3.7" y="7.7" width="16" height="9" rx="1.5" />
+    <circle cx="11.7" cy="12.2" r="2" />
   </svg>
 );
