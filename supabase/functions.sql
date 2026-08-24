@@ -1382,7 +1382,7 @@ begin
     from public.operations o
     where o.report_id = p_report_id
       and o.type = 'daily'
-      and o.date = d.date::date
+      and o.date::date = d.date::date
   )
   order by d.date
   limit 1
@@ -1564,7 +1564,7 @@ begin
       category_id = p_category_id,
       description = p_description,
       type = coalesce(p_type, o.type),
-      date = coalesce(p_date, o.date),
+      date = coalesce(p_date::text, o.date),
       updated_at = now()
   where o.id = p_id
   returning jsonb_build_object(

@@ -20,7 +20,7 @@ begin
       category_id = p_category_id,
       description = p_description,
       type = coalesce(p_type, o.type),
-      date = coalesce(p_date, o.date),
+      date = coalesce(p_date::text, o.date),
       updated_at = now()
   where o.id = p_id
   returning jsonb_build_object(

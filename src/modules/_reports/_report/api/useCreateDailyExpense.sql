@@ -22,7 +22,7 @@ begin
     from public.operations o
     where o.report_id = p_report_id
       and o.type = 'daily'
-      and o.date = d.date::date
+      and o.date::date = d.date::date
   )
   order by d.date
   limit 1
