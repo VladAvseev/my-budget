@@ -23,6 +23,7 @@ export const SavingsOperationCard = ({ operation, category, pending = false }: S
       amountColor={isWithdrawal ? 'var(--color-error)' : 'var(--color-text-primary)'}
       description={operation.description}
       category={category}
+      date={operation.date}
       pending={pending}
       onOpen={() => setModal({ type: operation.type as OperationType, operation })}
     />

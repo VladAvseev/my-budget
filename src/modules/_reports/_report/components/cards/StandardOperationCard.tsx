@@ -22,6 +22,7 @@ export const StandardOperationCard = ({ operation, category, pending = false }: 
       amountColor="var(--color-text-primary)"
       description={operation.description}
       category={category}
+      date={operation.date}
       pending={pending}
       onOpen={() => setModal({ type: operation.type as OperationType, operation })}
     />

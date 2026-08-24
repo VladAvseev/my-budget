@@ -5,6 +5,7 @@ import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
+import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
@@ -30,6 +31,7 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
   const [amount, setAmount] = useState(operation.amount ?? '');
   const [categoryId, setCategoryId] = useState(operation.category_id ?? '');
   const [description, setDescription] = useState(operation.description ?? '');
+  const [date, setDate] = useState(operation.date ?? '');
   const [operationType, setOperationType] = useState<SavingsType>(initialType);
   const [amountError, setAmountError] = useState<string>();
   const [descriptionError, setDescriptionError] = useState<string>();
@@ -72,10 +74,12 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
       type?: SavingsType;
       categoryId?: string | null;
       description?: string | null;
+      date?: string | null;
     } = {
       amount: Number(amount),
       categoryId: categoryId || null,
       description: description || null,
+      date: date || null,
     };
     if (operationType !== operation.type) {
       input.type = operationType;
@@ -157,6 +161,12 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
           value={categoryId}
           disabled={isPending}
           onChange={setCategoryId}
+        />
+        <VDatePicker
+          label="Дата"
+          value={date}
+          disabled={isPending}
+          onChange={setDate}
         />
       </div>
     </VModal>

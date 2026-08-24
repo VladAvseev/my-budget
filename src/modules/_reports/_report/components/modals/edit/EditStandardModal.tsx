@@ -6,6 +6,7 @@ import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
+import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
@@ -29,6 +30,7 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
   const [amount, setAmount] = useState(operation.amount ?? '');
   const [categoryId, setCategoryId] = useState(operation.category_id ?? '');
   const [description, setDescription] = useState(operation.description ?? '');
+  const [date, setDate] = useState(operation.date ?? '');
   const [amountError, setAmountError] = useState<string>();
   const [descriptionError, setDescriptionError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
@@ -72,6 +74,7 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
           amount: Number(amount),
           categoryId: categoryId || null,
           description: description || null,
+          date: date || null,
         },
       },
       {
@@ -143,6 +146,12 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
           value={categoryId}
           disabled={isPending}
           onChange={setCategoryId}
+        />
+        <VDatePicker
+          label="Дата"
+          value={date}
+          disabled={isPending}
+          onChange={setDate}
         />
       </div>
     </VModal>

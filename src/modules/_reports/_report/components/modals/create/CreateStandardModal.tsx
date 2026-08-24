@@ -3,6 +3,7 @@ import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
+import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { useState } from 'react';
@@ -23,6 +24,7 @@ export const CreateStandardModal = ({ type, report, onClose }: CreateStandardMod
   const [amount, setAmount] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
   const [amountError, setAmountError] = useState<string>();
   const [descriptionError, setDescriptionError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
@@ -57,6 +59,7 @@ export const CreateStandardModal = ({ type, report, onClose }: CreateStandardMod
         amount: Number(amount),
         categoryId: categoryId || null,
         description: description || null,
+        date: date || null,
       },
       {
         onSuccess: onClose,
@@ -112,6 +115,12 @@ export const CreateStandardModal = ({ type, report, onClose }: CreateStandardMod
           value={categoryId}
           disabled={isPending}
           onChange={setCategoryId}
+        />
+        <VDatePicker
+          label="Дата"
+          value={date}
+          disabled={isPending}
+          onChange={setDate}
         />
       </div>
     </VModal>

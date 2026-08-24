@@ -2,7 +2,7 @@ import type { Category } from '@/shared/supabase/types/domain';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
-import { formatAmount } from '@/shared/utils';
+import { formatAmount, formatDisplay } from '@/shared/utils';
 import styles from './operationCard.module.css';
 
 interface OperationCardBaseProps {
@@ -10,6 +10,7 @@ interface OperationCardBaseProps {
   amountColor: string;
   description?: string | null;
   category?: Category | null;
+  date?: string | null;
   pending?: boolean;
   onOpen: () => void;
 }
@@ -19,6 +20,7 @@ export const OperationCardBase = ({
   amountColor,
   description,
   category,
+  date,
   pending = false,
   onOpen,
 }: OperationCardBaseProps) => {
@@ -48,13 +50,16 @@ export const OperationCardBase = ({
         </div>
         {description && <div className={styles.subtitle}>{description}</div>}
       </div>
-      {pending ? (
-        <VLoader size={16} />
-      ) : category?.name ? (
-        <VBadge color={category?.color ?? undefined} className={styles.badge}>
-          {category?.name}
-        </VBadge>
-      ) : null}
+      <div className={styles.right}>
+        {pending ? (
+          <VLoader size={16} />
+        ) : category?.name ? (
+          <VBadge color={category?.color ?? undefined} className={styles.badge}>
+            {category?.name}
+          </VBadge>
+        ) : null}
+        {date && <div className={styles.date}>{formatDisplay(date)}</div>}
+      </div>
     </VCard>
   );
 };
