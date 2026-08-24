@@ -252,14 +252,17 @@ export interface Database {
         Row: {
           id: number;
           text: string;
+          created_at: string;
         };
         Insert: {
           id?: number;
           text: string;
+          created_at?: string;
         };
         Update: {
           id?: number;
           text?: string;
+          created_at?: string;
         };
         Relationships: [];
       };
@@ -347,7 +350,7 @@ export interface Database {
       };
       get_latest_news: {
         Args: Record<string, never>;
-        Returns: NewsRow | null;
+        Returns: NewsRow[];
       };
       hide_news: {
         Args: Record<string, never>;
@@ -590,13 +593,26 @@ export interface Database {
         Args: Record<string, never>;
         Returns: AdminUserRow[];
       };
-      admin_get_news: {
+      admin_get_news_list: {
         Args: Record<string, never>;
+        Returns: NewsRow[];
+      };
+      admin_create_news: {
+        Args: {
+          p_text: string;
+        };
         Returns: NewsRow;
       };
       admin_update_news: {
         Args: {
+          p_id: number;
           p_text: string;
+        };
+        Returns: undefined;
+      };
+      admin_delete_news: {
+        Args: {
+          p_id: number;
         };
         Returns: undefined;
       };

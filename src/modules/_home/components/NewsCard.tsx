@@ -8,24 +8,28 @@ import styles from '../homeCard.module.css';
 
 export const NewsCard = () => {
   const { showNews, isLoading: isShowNewsLoading, error: showNewsError } = useShowNews();
-  const { data: news, isLoading: isNewsLoading, error: newsError } = useNews();
+  const { data: newsList, isLoading: isNewsLoading, error: newsError } = useNews();
   const hideNews = useHideNews();
 
-  if (
-    isShowNewsLoading ||
-    isNewsLoading ||
-    showNewsError ||
-    newsError ||
-    !showNews ||
-    !news?.text
-  ) {
+  if (isShowNewsLoading || isNewsLoading || showNewsError || newsError || !showNews) {
+    return null;
+  }
+
+  const news = newsList ?? [];
+  if (news.length === 0) {
     return null;
   }
 
   return (
     <VCard className={`${styles.newsCard} ${styles.animateCard}`}>
       <div className={styles.title}>Что нового?</div>
-      <div className={styles.subtitle}>{news.text}</div>
+      <div className={styles.newsList}>
+        {news.map((item) => (
+          <div key={item.id} className={styles.newsItem}>
+            <div className={styles.newsItemText}>{item.text}</div>
+          </div>
+        ))}
+      </div>
       <div className={styles.closeButton}>
         <VIconButton
           ariaLabel="Закрыть"

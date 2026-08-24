@@ -1,12 +1,13 @@
--- Текущая новость (одна последняя).
+-- Все новости (для главной страницы).
+drop function if exists public.get_latest_news();
+
 create or replace function public.get_latest_news()
-returns jsonb
+returns setof jsonb
 language sql
 security invoker
 set search_path = public
 as $$
-  select jsonb_build_object('id', id, 'text', text)
+  select jsonb_build_object('id', id, 'text', text, 'created_at', created_at)
   from public.news
-  order by id
-  limit 1;
+  order by created_at desc;
 $$;
