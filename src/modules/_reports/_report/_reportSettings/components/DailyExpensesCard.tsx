@@ -7,7 +7,7 @@ import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { VToggle } from '@/shared/ui/VToggle';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDisableDailyExpenses } from '../api/useDisableDailyExpenses';
 import { useUpdateReport } from '../api/useUpdateReport';
 import styles from '../settingsCard.module.css';
@@ -34,6 +34,18 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
   const [submitError, setSubmitError] = useState<string>();
   const [isSaved, setIsSaved] = useState(false);
   const [isDisableConfirmOpen, setIsDisableConfirmOpen] = useState(false);
+
+  const isDirty = useMemo(() => {
+    const hasBudgetChanged =
+      isBudgetEnabled !== (report.daily_budget != null) ||
+      (isBudgetEnabled && String(dailyBudget) !== String(report.daily_budget ?? ''));
+    return (
+      isPendingEnabled !== false ||
+      hasBudgetChanged ||
+      periodStart !== (report.period_start ?? '') ||
+      periodEnd !== (report.period_end ?? '')
+    );
+  }, [dailyBudget, isBudgetEnabled, periodStart, periodEnd, isPendingEnabled, report]);
 
   const handleSave = () => {
     setSubmitError(undefined);
@@ -181,7 +193,7 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
             <VButton
               onClick={handleSave}
               isLoading={updateReport.isPending}
-              isDisabled={!isEnabled}
+              isDisabled={!isEnabled || !isDirty}
             >
               Сохранить
             </VButton>

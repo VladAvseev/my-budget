@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Report } from '@/shared/supabase/types/domain';
 import { getErrorMessage } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
@@ -19,6 +19,8 @@ export const ReportNameCard = ({ report }: ReportNameCardProps) => {
   const [nameError, setNameError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
   const [isSaved, setIsSaved] = useState(false);
+
+  const isDirty = useMemo(() => name.trim() !== report.name, [name, report.name]);
 
   const handleSubmit = () => {
     if (!name.trim()) {
@@ -61,7 +63,7 @@ export const ReportNameCard = ({ report }: ReportNameCardProps) => {
               }}
             />
           </div>
-          <VButton onClick={handleSubmit} isLoading={updateReport.isPending}>
+          <VButton onClick={handleSubmit} isLoading={updateReport.isPending} isDisabled={!isDirty}>
             Сохранить
           </VButton>
         </div>
