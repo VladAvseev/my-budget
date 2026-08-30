@@ -9,6 +9,7 @@ as $$
     'id', id,
     'user_id', user_id,
     'name', name,
+    'code', code,
     'has_daily_expenses', has_daily_expenses,
     'daily_budget', daily_budget,
     'period_start', period_start,

@@ -15,6 +15,7 @@ export interface VSelectProps {
   placeholder?: string;
   error?: string;
   disabled?: boolean;
+  required?: boolean;
   onChange?: (value: string) => void;
   style?: CSSProperties;
   className?: string;
@@ -27,6 +28,7 @@ export const VSelect = ({
   placeholder,
   error,
   disabled,
+  required,
   onChange,
   style,
   className,
@@ -79,7 +81,7 @@ export const VSelect = ({
           <span className={styles.triggerTextValue}>{displayText}</span>
         </span>
         <span className={styles.triggerActions}>
-          {hasValue && !disabled && (
+          {hasValue && !disabled && !required && (
             <button
               type="button"
               aria-label="Очистить"

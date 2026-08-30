@@ -1,75 +1,106 @@
 import { useAtom } from 'jotai';
-import { useState } from 'react';
+import React, { useMemo } from 'react';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { getErrorMessage } from '@/shared/utils';
+import {
+  buildCode,
+  buildName,
+  buildPeriodDates,
+  MONTHS_RU,
+  MIN_YEAR,
+  MAX_YEAR,
+} from '@/shared/utils/monthMapping';
+import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
-import { VDatePicker } from '@/shared/ui/VDatePicker';
+import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
+import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { VToggle } from '@/shared/ui/VToggle';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/shared/icons';
 import { useCreateReport } from '../api/useCreateReport';
 import { useReports } from '../api/useReports';
 import {
   dailyBudgetAtom,
   hasDailyBudgetAtom,
   hasDailyExpensesAtom,
-  periodEndAtom,
-  periodStartAtom,
-  reportNameAtom,
+  selectedMonthAtom,
+  selectedYearAtom,
 } from '../atoms/reports';
+import styles from './CreateReportModal.module.css';
 
 interface CreateReportModalProps {
   visible: boolean;
   onClose: () => void;
 }
 
-const RU_MONTHS = [
-  'январь',
-  'февраль',
-  'март',
-  'апрель',
-  'май',
-  'июнь',
-  'июль',
-  'август',
-  'сентябрь',
-  'октябрь',
-  'ноябрь',
-  'декабрь',
-];
+const MONTH_OPTIONS: VSelectOption[] = MONTHS_RU.map((name, index) => ({
+  value: String(index),
+  label: name,
+}));
+
+const YEAR_OPTIONS: VSelectOption[] = Array.from(
+  { length: MAX_YEAR - MIN_YEAR + 1 },
+  (_, i) => {
+    const year = MIN_YEAR + i;
+    return { value: String(year), label: String(year) };
+  },
+);
 
 export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) => {
-  const [name, setName] = useAtom(reportNameAtom);
+  const [selectedMonth, setSelectedMonth] = useAtom(selectedMonthAtom);
+  const [selectedYear, setSelectedYear] = useAtom(selectedYearAtom);
   const [hasDailyExpenses, setHasDailyExpenses] = useAtom(hasDailyExpensesAtom);
   const [hasDailyBudget, setHasDailyBudget] = useAtom(hasDailyBudgetAtom);
   const [dailyBudget, setDailyBudget] = useAtom(dailyBudgetAtom);
-  const [periodStart, setPeriodStart] = useAtom(periodStartAtom);
-  const [periodEnd, setPeriodEnd] = useAtom(periodEndAtom);
 
-  const [nameError, setNameError] = useState<string>();
-  const [budgetError, setBudgetError] = useState<string>();
-  const [startError, setStartError] = useState<string>();
-  const [endError, setEndError] = useState<string>();
-  const [submitError, setSubmitError] = useState<string>();
+  const [budgetError, setBudgetError] = React.useState<string>();
+  const [submitError, setSubmitError] = React.useState<string>();
 
   const create = useCreateReport();
   const reportsQuery = useReports();
 
-  const currentDate = new Date();
-  const currentMonth = RU_MONTHS[currentDate.getMonth()];
-  const namePlaceholder = `Например, ${currentMonth[0].toUpperCase()}${currentMonth.slice(1)} ${currentDate.getFullYear()}`;
+  const code = useMemo(() => buildCode(selectedMonth, selectedYear), [selectedMonth, selectedYear]);
+  const name = useMemo(() => buildName(selectedMonth, selectedYear), [selectedMonth, selectedYear]);
+  const { periodStart, periodEnd } = useMemo(
+    () => buildPeriodDates(selectedMonth, selectedYear),
+    [selectedMonth, selectedYear],
+  );
+
+  const codeExists = useMemo(
+    () => (reportsQuery.data ?? []).some((report) => (report.code ?? '') === code),
+    [reportsQuery.data, code],
+  );
+
+  const isPrevDisabled = create.isPending || (selectedMonth === 0 && selectedYear === MIN_YEAR);
+  const isNextDisabled = create.isPending || (selectedMonth === 11 && selectedYear === MAX_YEAR);
+
+  const goToPrevMonth = () => {
+    if (selectedMonth === 0) {
+      setSelectedMonth(11);
+      setSelectedYear((prev) => prev - 1);
+    } else {
+      setSelectedMonth((prev) => prev - 1);
+    }
+  };
+
+  const goToNextMonth = () => {
+    if (selectedMonth === 11) {
+      setSelectedMonth(0);
+      setSelectedYear((prev) => prev + 1);
+    } else {
+      setSelectedMonth((prev) => prev + 1);
+    }
+  };
 
   const handleClose = () => {
-    setName('');
+    const now = new Date();
+    setSelectedMonth(now.getMonth());
+    setSelectedYear(now.getFullYear());
     setHasDailyExpenses(false);
     setHasDailyBudget(false);
     setDailyBudget('');
-    setPeriodStart('');
-    setPeriodEnd('');
-    setNameError(undefined);
     setBudgetError(undefined);
-    setStartError(undefined);
-    setEndError(undefined);
     setSubmitError(undefined);
     onClose();
   };
@@ -78,18 +109,9 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
     setSubmitError(undefined);
     let isValid = true;
 
-    if (!name.trim()) {
-      setNameError('Укажите название отчёта');
-      isValid = false;
-    } else if (
-      (reportsQuery.data ?? []).some(
-        (report) => report.name.trim().toLowerCase() === name.trim().toLowerCase(),
-      )
-    ) {
-      setNameError('Отчёт с таким названием уже существует');
-      isValid = false;
-    } else {
-      setNameError(undefined);
+    if (codeExists) {
+      setSubmitError('Отчёт с таким кодом уже существует');
+      return;
     }
 
     const budgetValue = Number(dailyBudget);
@@ -100,23 +122,6 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
       } else {
         setBudgetError(undefined);
       }
-
-      if (!periodStart) {
-        setStartError('Укажите начало отчётного периода');
-        isValid = false;
-      } else {
-        setStartError(undefined);
-      }
-
-      if (!periodEnd) {
-        setEndError('Укажите конец отчётного периода');
-        isValid = false;
-      } else if (periodStart && periodEnd && periodStart > periodEnd) {
-        setEndError('Конец периода не может быть раньше начала');
-        isValid = false;
-      } else {
-        setEndError(undefined);
-      }
     }
 
     if (!isValid) {
@@ -125,7 +130,8 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
 
     create.mutate(
       {
-        name: name.trim(),
+        name,
+        code,
         hasDailyExpenses,
         dailyBudget: hasDailyExpenses && hasDailyBudget ? budgetValue : null,
         periodStart: hasDailyExpenses ? periodStart : null,
@@ -141,7 +147,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
   return (
     <VModal
       visible={visible}
-      title="Новый отчёт"
+      title={`Новый отчёт ${name}`}
       onClose={handleClose}
       error={submitError}
       footer={
@@ -149,24 +155,64 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
           <VButton variant="secondary" onClick={handleClose}>
             Отмена
           </VButton>
-          <VButton onClick={handleSubmit} isLoading={create.isPending}>
+          <VButton
+            onClick={handleSubmit}
+            isLoading={create.isPending}
+            isDisabled={codeExists}
+          >
             Сохранить
           </VButton>
         </>
       }
     >
       <div className={modalStyles.content}>
-        <VTextInput
-          label="Название отчёта"
-          placeholder={namePlaceholder}
-          value={name}
-          error={nameError}
-          disabled={create.isPending}
-          onChange={(value) => {
-            setName(value);
-            setNameError(undefined);
-          }}
-        />
+        <div className={styles.sectionTitle}>Отчётный период</div>
+        <div className={styles.periodSelector}>
+          <VIconButton
+            ariaLabel="Предыдущий месяц"
+            onClick={goToPrevMonth}
+            isDisabled={isPrevDisabled}
+            color="var(--color-text-primary)"
+          >
+            <ChevronLeftIcon size={20} color="currentColor" />
+          </VIconButton>
+          <div className={styles.selectsRow}>
+            <div className={styles.selectGrow}>
+              <VSelect
+                options={MONTH_OPTIONS}
+                value={String(selectedMonth)}
+                disabled={create.isPending}
+                required
+                onChange={(value) => setSelectedMonth(Number(value))}
+              />
+            </div>
+            <div className={styles.selectFixed}>
+              <VSelect
+                options={YEAR_OPTIONS}
+                value={String(selectedYear)}
+                disabled={create.isPending}
+                required
+                onChange={(value) => setSelectedYear(Number(value))}
+              />
+            </div>
+          </div>
+          <VIconButton
+            ariaLabel="Следующий месяц"
+            onClick={goToNextMonth}
+            isDisabled={isNextDisabled}
+            color="var(--color-text-primary)"
+          >
+            <ChevronRightIcon size={20} color="currentColor" />
+          </VIconButton>
+        </div>
+
+        {codeExists && (
+          <VBanner
+            type="error"
+            visible
+            message="Отчёт с таким кодом уже существует"
+          />
+        )}
 
         <VToggle
           label="Ежедневные расходы"
@@ -196,26 +242,6 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
               onChange={(value) => {
                 setDailyBudget(value);
                 setBudgetError(undefined);
-              }}
-            />
-            <VDatePicker
-              label="Начало отчётного периода"
-              value={periodStart}
-              error={startError}
-              disabled={create.isPending}
-              onChange={(value) => {
-                setPeriodStart(value);
-                setStartError(undefined);
-              }}
-            />
-            <VDatePicker
-              label="Конец отчётного периода"
-              value={periodEnd}
-              error={endError}
-              disabled={create.isPending}
-              onChange={(value) => {
-                setPeriodEnd(value);
-                setEndError(undefined);
               }}
             />
           </>

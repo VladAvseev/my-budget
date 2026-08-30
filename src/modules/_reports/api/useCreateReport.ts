@@ -13,6 +13,7 @@ export const useCreateReport = () => {
     mutationFn: async (input: ReportInput) => {
       const { error } = await supabase.rpc('create_report', {
         p_name: input.name.trim(),
+        p_code: input.code ?? '',
         p_has_daily_expenses: input.hasDailyExpenses ?? false,
         p_daily_budget: input.dailyBudget ?? null,
         p_period_start: input.periodStart ?? null,
@@ -30,6 +31,7 @@ export const useCreateReport = () => {
         id: createOptimisticId(),
         user_id: '',
         name: input.name,
+        code: input.code ?? '',
         has_daily_expenses: hasDailyExpenses,
         daily_budget:
           hasDailyExpenses && input.dailyBudget != null ? String(input.dailyBudget) : null,

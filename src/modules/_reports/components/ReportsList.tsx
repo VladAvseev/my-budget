@@ -17,14 +17,16 @@ export const ReportsList = () => {
 
   const reports = data ?? [];
   const filtered = searchQuery.trim()
-    ? reports.filter((report) =>
-        report.name.toLowerCase().includes(searchQuery.trim().toLowerCase()),
+    ? reports.filter(
+        (report) =>
+          report.code.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
+          report.name.toLowerCase().includes(searchQuery.trim().toLowerCase()),
       )
     : reports;
 
   const renderContent = (report: (typeof reports)[number]) => (
     <div className={styles.titleInfo}>
-      <div className={styles.title}>{report.name}</div>
+      <div className={styles.title}>{report.code || report.name}</div>
       {report.has_daily_expenses && (
         <div className={styles.period}>
           {report.period_start && report.period_end

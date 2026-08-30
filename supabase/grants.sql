@@ -13,13 +13,13 @@ revoke all on function public.admin_get_dashboard_stats() from public;
 revoke all on function public.admin_get_dashboard_stats() from anon;
 grant execute on function public.admin_get_dashboard_stats() to authenticated;
 
-revoke all on function public.admin_get_news() from public;
-revoke all on function public.admin_get_news() from anon;
-grant execute on function public.admin_get_news() to authenticated;
+revoke all on function public.admin_get_news_list() from public;
+revoke all on function public.admin_get_news_list() from anon;
+grant execute on function public.admin_get_news_list() to authenticated;
 
-revoke all on function public.admin_update_news(text) from public;
-revoke all on function public.admin_update_news(text) from anon;
-grant execute on function public.admin_update_news(text) to authenticated;
+revoke all on function public.admin_update_news(bigint, text) from public;
+revoke all on function public.admin_update_news(bigint, text) from anon;
+grant execute on function public.admin_update_news(bigint, text) to authenticated;
 
 revoke all on function public.admin_set_show_news(boolean) from public;
 revoke all on function public.admin_set_show_news(boolean) from anon;
@@ -109,9 +109,9 @@ revoke all on function public.get_categories(uuid, text) from public;
 revoke all on function public.get_categories(uuid, text) from anon;
 grant execute on function public.get_categories(uuid, text) to authenticated;
 
-revoke all on function public.create_report(text, boolean, numeric, date, date) from public;
-revoke all on function public.create_report(text, boolean, numeric, date, date) from anon;
-grant execute on function public.create_report(text, boolean, numeric, date, date) to authenticated;
+revoke all on function public.create_report(text, text, boolean, numeric, date, date) from public;
+revoke all on function public.create_report(text, text, boolean, numeric, date, date) from anon;
+grant execute on function public.create_report(text, text, boolean, numeric, date, date) to authenticated;
 
 revoke all on function public.get_report(uuid) from public;
 revoke all on function public.get_report(uuid) from anon;

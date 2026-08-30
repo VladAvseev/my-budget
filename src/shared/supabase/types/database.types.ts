@@ -60,6 +60,7 @@ export interface Database {
           id: string;
           user_id: string;
           name: string;
+          code: string;
           has_daily_expenses: boolean;
           daily_budget: string | null;
           period_start: string | null;
@@ -71,6 +72,7 @@ export interface Database {
           id?: string;
           user_id?: string;
           name: string;
+          code?: string;
           has_daily_expenses?: boolean;
           daily_budget?: string | null;
           period_start?: string | null;
@@ -82,6 +84,7 @@ export interface Database {
           id?: string;
           user_id?: string;
           name?: string;
+          code?: string;
           has_daily_expenses?: boolean;
           daily_budget?: string | null;
           period_start?: string | null;
@@ -385,6 +388,7 @@ export interface Database {
       create_report: {
         Args: {
           p_name: string;
+          p_code: string;
           p_has_daily_expenses: boolean;
           p_daily_budget: number | null;
           p_period_start: string | null;

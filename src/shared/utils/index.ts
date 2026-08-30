@@ -17,3 +17,15 @@ export {
   type GoalProgress,
   type GoalProgressSource,
 } from './goals';
+export {
+  buildCode,
+  buildName,
+  buildPeriodDates,
+  buildMonthOptions,
+  formatPeriodDisplay,
+  MONTHS_RU,
+  MONTHS_EN,
+  MIN_YEAR,
+  MAX_YEAR,
+  type MonthOption,
+} from './monthMapping';

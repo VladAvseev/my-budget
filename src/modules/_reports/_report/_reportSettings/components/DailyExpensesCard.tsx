@@ -1,10 +1,10 @@
 import type { Report } from '@/shared/supabase/types/domain';
+import { formatPeriodDisplay } from '@/shared/utils/monthMapping';
 import { getErrorMessage } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
-import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { VToggle } from '@/shared/ui/VToggle';
 import { useMemo, useState } from 'react';
@@ -25,12 +25,8 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
 
   const [dailyBudget, setDailyBudget] = useState(report.daily_budget ?? '');
   const [isBudgetEnabled, setIsBudgetEnabled] = useState(report.daily_budget != null);
-  const [periodStart, setPeriodStart] = useState(report.period_start ?? '');
-  const [periodEnd, setPeriodEnd] = useState(report.period_end ?? '');
 
   const [budgetError, setBudgetError] = useState<string>();
-  const [startError, setStartError] = useState<string>();
-  const [endError, setEndError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
   const [isSaved, setIsSaved] = useState(false);
   const [isDisableConfirmOpen, setIsDisableConfirmOpen] = useState(false);
@@ -39,13 +35,8 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
     const hasBudgetChanged =
       isBudgetEnabled !== (report.daily_budget != null) ||
       (isBudgetEnabled && String(dailyBudget) !== String(report.daily_budget ?? ''));
-    return (
-      isPendingEnabled !== false ||
-      hasBudgetChanged ||
-      periodStart !== (report.period_start ?? '') ||
-      periodEnd !== (report.period_end ?? '')
-    );
-  }, [dailyBudget, isBudgetEnabled, periodStart, periodEnd, isPendingEnabled, report]);
+    return isPendingEnabled !== false || hasBudgetChanged;
+  }, [dailyBudget, isBudgetEnabled, isPendingEnabled, report]);
 
   const handleSave = () => {
     setSubmitError(undefined);
@@ -60,23 +51,6 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
       setBudgetError(undefined);
     }
 
-    if (!periodStart) {
-      setStartError('Укажите начало отчётного периода');
-      isValid = false;
-    } else {
-      setStartError(undefined);
-    }
-
-    if (!periodEnd) {
-      setEndError('Укажите конец отчётного периода');
-      isValid = false;
-    } else if (periodStart && periodEnd && periodStart > periodEnd) {
-      setEndError('Конец периода не может быть раньше начала');
-      isValid = false;
-    } else {
-      setEndError(undefined);
-    }
-
     if (!isValid) {
       return;
     }
@@ -85,8 +59,8 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
       {
         hasDailyExpenses: true,
         dailyBudget: isBudgetEnabled ? budgetValue : null,
-        periodStart,
-        periodEnd,
+        periodStart: report.period_start,
+        periodEnd: report.period_end,
       },
       {
         onSuccess: () => setIsSaved(true),
@@ -114,15 +88,13 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
         setIsPendingEnabled(false);
         setDailyBudget('');
         setIsBudgetEnabled(false);
-        setPeriodStart('');
-        setPeriodEnd('');
         setBudgetError(undefined);
-        setStartError(undefined);
-        setEndError(undefined);
       },
       onError: (error: Error) => setSubmitError(getErrorMessage(error)),
     });
   };
+
+  const hasPeriod = Boolean(report.period_start && report.period_end);
 
   return (
     <VCard>
@@ -142,6 +114,15 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
         {submitError && <VBanner type="error" visible message={submitError} />}
 
         <div className={styles.content}>
+          {hasPeriod && (
+            <div className={styles.readOnlyField}>
+              <div className={styles.readOnlyLabel}>Отчётный период</div>
+              <div className={styles.readOnlyValue}>
+                {formatPeriodDisplay(report.period_start!, report.period_end!)}
+              </div>
+            </div>
+          )}
+
           <div className={styles.row}>
             <div className={styles.label}>Ежедневный бюджет</div>
             <VToggle
@@ -164,28 +145,6 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
             onChange={(value) => {
               setDailyBudget(value);
               setBudgetError(undefined);
-              setIsSaved(false);
-            }}
-          />
-          <VDatePicker
-            label="Начало отчётного периода"
-            value={periodStart}
-            error={startError}
-            disabled={!isEnabled || updateReport.isPending}
-            onChange={(value) => {
-              setPeriodStart(value);
-              setStartError(undefined);
-              setIsSaved(false);
-            }}
-          />
-          <VDatePicker
-            label="Конец отчётного периода"
-            value={periodEnd}
-            error={endError}
-            disabled={!isEnabled || updateReport.isPending}
-            onChange={(value) => {
-              setPeriodEnd(value);
-              setEndError(undefined);
               setIsSaved(false);
             }}
           />

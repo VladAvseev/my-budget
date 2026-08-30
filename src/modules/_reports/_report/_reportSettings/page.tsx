@@ -7,7 +7,6 @@ import { useReport } from '../api/useReport';
 import { CategoryLimitsCard } from './components/CategoryLimitsCard';
 import { DailyExpensesCard } from './components/DailyExpensesCard';
 import { RemoveReportCard } from './components/RemoveReportCard';
-import { ReportNameCard } from './components/ReportNameCard';
 
 export const Page: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ export const Page: React.FC = () => {
   return (
     <div className={commonStyles.page}>
       <VPageHeader
-        title={report ? `Настройки отчёта «${report.name}»` : 'Настройки отчёта'}
+        title={report ? `Настройки отчёта «${report.code || report.name}»` : 'Настройки отчёта'}
         onBack={() => navigate(`/reports/${id ?? ''}`)}
         backAriaLabel="Назад к отчёту"
       />
@@ -37,15 +36,12 @@ export const Page: React.FC = () => {
       {!isLoading && !error && report && (
         <>
           <div className={commonStyles.animateCard}>
-            <ReportNameCard report={report} />
-          </div>
-          <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
             <DailyExpensesCard report={report} />
           </div>
-          <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
+          <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
             <CategoryLimitsCard report={report} />
           </div>
-          <div className={commonStyles.animateCard} style={{ animationDelay: '0.18s' }}>
+          <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
             <RemoveReportCard report={report} />
           </div>
         </>

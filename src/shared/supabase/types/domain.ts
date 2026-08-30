@@ -47,6 +47,7 @@ export interface OperationSummary {
 
 export interface ReportInput {
   name: string;
+  code?: string;
   hasDailyExpenses?: boolean;
   dailyBudget?: number | null;
   periodStart?: string | null;
