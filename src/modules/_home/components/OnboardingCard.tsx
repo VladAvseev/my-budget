@@ -33,11 +33,11 @@ export const OnboardingCard = () => {
         ))}
       </div>
 
-      {allDone && (
+      
         <VButton onClick={() => completeOnboarding.mutate()} isLoading={completeOnboarding.isPending}>
-          Отлично!
+          {allDone ? 'Отлично!' : 'Пропустить'}
         </VButton>
-      )}
+      
     </VCard>
   );
 };
