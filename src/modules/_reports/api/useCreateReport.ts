@@ -35,8 +35,8 @@ export const useCreateReport = () => {
         has_daily_expenses: hasDailyExpenses,
         daily_budget:
           hasDailyExpenses && input.dailyBudget != null ? String(input.dailyBudget) : null,
-        period_start: hasDailyExpenses ? (input.periodStart ?? null) : null,
-        period_end: hasDailyExpenses ? (input.periodEnd ?? null) : null,
+        period_start: input.periodStart ?? null,
+        period_end: input.periodEnd ?? null,
         created_at: now,
         updated_at: now,
         _optimistic: true,

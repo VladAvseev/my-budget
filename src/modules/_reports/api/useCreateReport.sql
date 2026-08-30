@@ -26,11 +26,11 @@ begin
   values (
     auth.uid(),
     p_name,
-    p_code,
+    coalesce(p_code, ''),
     coalesce(p_has_daily_expenses, false),
     case when coalesce(p_has_daily_expenses, false) then p_daily_budget else null end,
-    case when coalesce(p_has_daily_expenses, false) then p_period_start else null end,
-    case when coalesce(p_has_daily_expenses, false) then p_period_end else null end
+    p_period_start,
+    p_period_end
   )
   returning jsonb_build_object(
     'id', id,

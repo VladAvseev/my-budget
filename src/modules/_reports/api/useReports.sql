@@ -19,7 +19,7 @@ begin
     'period_end', period_end,
     'created_at', created_at,
     'updated_at', updated_at
-  ) order by created_at desc), '[]'::jsonb)
+  ) order by period_start desc), '[]'::jsonb)
   into result
   from public.reports
   where user_id = auth.uid();

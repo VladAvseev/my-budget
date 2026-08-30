@@ -37,6 +37,13 @@ export const buildCode = (month: number, year: number): string =>
 export const buildName = (month: number, year: number): string =>
   `${MONTHS_RU[month]} ${year}`;
 
+const toISODateLocal = (date: Date): string => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
 export const buildPeriodDates = (
   month: number,
   year: number,
@@ -44,8 +51,8 @@ export const buildPeriodDates = (
   const start = new Date(year, month, 1);
   const end = new Date(year, month + 1, 0);
   return {
-    periodStart: start.toISOString().slice(0, 10),
-    periodEnd: end.toISOString().slice(0, 10),
+    periodStart: toISODateLocal(start),
+    periodEnd: toISODateLocal(end),
   };
 };
 

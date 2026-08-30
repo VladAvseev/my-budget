@@ -188,7 +188,7 @@ as $$
 declare
   result jsonb;
 begin
-  select coalesce(jsonb_agg(row order by row->>'reportCreatedAt' desc, row->>'created_at' desc), '[]'::jsonb)
+  select coalesce(jsonb_agg(row order by row->>'reportPeriodStart' desc, row->>'created_at' desc), '[]'::jsonb)
   into result
   from (
     select jsonb_build_object(
@@ -203,7 +203,7 @@ begin
       'created_at', o.created_at,
       'updated_at', o.updated_at,
       'reportName', r.name,
-      'reportCreatedAt', r.created_at
+      'reportPeriodStart', r.period_start
     ) as row
     from public.operations o
     join public.reports r on r.id = o.report_id
@@ -858,13 +858,14 @@ begin
     'id', id,
     'user_id', user_id,
     'name', name,
+    'code', code,
     'has_daily_expenses', has_daily_expenses,
     'daily_budget', daily_budget,
     'period_start', period_start,
     'period_end', period_end,
     'created_at', created_at,
     'updated_at', updated_at
-  ) order by created_at desc), '[]'::jsonb)
+  ) order by period_start desc), '[]'::jsonb)
   into result
   from public.reports
   where user_id = auth.uid();
@@ -885,7 +886,7 @@ as $$
 declare
   result jsonb;
 begin
-  select coalesce(jsonb_agg(row order by row->>'reportCreatedAt' desc, row->>'created_at' desc), '[]'::jsonb)
+  select coalesce(jsonb_agg(row order by row->>'reportPeriodStart' desc, row->>'created_at' desc), '[]'::jsonb)
   into result
   from (
     select jsonb_build_object(
@@ -900,7 +901,7 @@ begin
       'created_at', o.created_at,
       'updated_at', o.updated_at,
       'reportName', r.name,
-      'reportCreatedAt', r.created_at
+      'reportPeriodStart', r.period_start
     ) as row
     from public.operations o
     join public.reports r on r.id = o.report_id
@@ -1010,7 +1011,7 @@ begin
     'period_end', period_end,
     'created_at', created_at,
     'updated_at', updated_at
-  ) order by created_at desc), '[]'::jsonb)
+  ) order by period_start desc), '[]'::jsonb)
   into result
   from public.reports
   where user_id = auth.uid();
@@ -1598,11 +1599,11 @@ begin
   values (
     auth.uid(),
     p_name,
-    p_code,
+    coalesce(p_code, ''),
     coalesce(p_has_daily_expenses, false),
     case when coalesce(p_has_daily_expenses, false) then p_daily_budget else null end,
-    case when coalesce(p_has_daily_expenses, false) then p_period_start else null end,
-    case when coalesce(p_has_daily_expenses, false) then p_period_end else null end
+    p_period_start,
+    p_period_end
   )
   returning jsonb_build_object(
     'id', id,
@@ -1644,7 +1645,7 @@ begin
     'period_end', period_end,
     'created_at', created_at,
     'updated_at', updated_at
-  ) order by created_at desc), '[]'::jsonb)
+  ) order by period_start desc), '[]'::jsonb)
   into result
   from public.reports
   where user_id = auth.uid();

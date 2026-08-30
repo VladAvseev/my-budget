@@ -8,7 +8,7 @@ as $$
 declare
   result jsonb;
 begin
-  select coalesce(jsonb_agg(row order by row->>'reportCreatedAt' desc, row->>'created_at' desc), '[]'::jsonb)
+  select coalesce(jsonb_agg(row order by row->>'reportPeriodStart' desc, row->>'created_at' desc), '[]'::jsonb)
   into result
   from (
     select jsonb_build_object(
@@ -23,7 +23,7 @@ begin
       'created_at', o.created_at,
       'updated_at', o.updated_at,
       'reportName', r.name,
-      'reportCreatedAt', r.created_at
+      'reportPeriodStart', r.period_start
     ) as row
     from public.operations o
     join public.reports r on r.id = o.report_id

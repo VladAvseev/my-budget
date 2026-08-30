@@ -2,7 +2,7 @@ import { supabase } from '@/shared/supabase/supabase';
 import type { Operation } from '@/shared/supabase/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
-export type SavingsOperation = Operation & { reportName: string; reportCreatedAt: string };
+export type SavingsOperation = Operation & { reportName: string; reportPeriodStart: string };
 
 export const useSavingsOperations = (userId: string) =>
   useQuery<SavingsOperation[]>({

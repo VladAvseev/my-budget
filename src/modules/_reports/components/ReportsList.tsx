@@ -1,12 +1,12 @@
-import { useAtom } from 'jotai';
-import { Link } from 'react-router-dom';
 import { ChevronRightIcon } from '@/shared/icons';
+import commonStyles from '@/shared/styles/common.module.css';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils';
-import commonStyles from '@/shared/styles/common.module.css';
+import { useAtom } from 'jotai';
+import { Link } from 'react-router-dom';
 import { useReports } from '../api/useReports';
 import { searchQueryAtom } from '../atoms/reports';
 import styles from './ReportsList.module.css';
@@ -27,13 +27,11 @@ export const ReportsList = () => {
   const renderContent = (report: (typeof reports)[number]) => (
     <div className={styles.titleInfo}>
       <div className={styles.title}>{report.name}</div>
-      {report.has_daily_expenses && (
-        <div className={styles.period}>
-          {report.period_start && report.period_end
-            ? ` ${formatDisplay(report.period_start)} – ${formatDisplay(report.period_end)}`
-            : ''}
-        </div>
-      )}
+      <div className={styles.period}>
+        {report.period_start && report.period_end
+          ? ` ${formatDisplay(report.period_start)} – ${formatDisplay(report.period_end)}`
+          : ''}
+      </div>
     </div>
   );
 
@@ -46,9 +44,7 @@ export const ReportsList = () => {
         onChange={setSearchQuery}
       />
 
-      {error && (
-        <VBanner type="error" visible message="Не удалось загрузить отчёты" />
-      )}
+      {error && <VBanner type="error" visible message="Не удалось загрузить отчёты" />}
 
       {isLoading && (
         <div className={styles.loaderWrap}>

@@ -68,7 +68,11 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
   );
 
   const codeExists = useMemo(
-    () => (reportsQuery.data ?? []).some((report) => (report.code ?? '') === code),
+    () =>
+      (reportsQuery.data ?? []).some(
+        (report) =>
+          !(report as { _optimistic?: boolean })._optimistic && (report.code ?? '') === code,
+      ),
     [reportsQuery.data, code],
   );
 
@@ -134,8 +138,8 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
         code,
         hasDailyExpenses,
         dailyBudget: hasDailyExpenses && hasDailyBudget ? budgetValue : null,
-        periodStart: hasDailyExpenses ? periodStart : null,
-        periodEnd: hasDailyExpenses ? periodEnd : null,
+        periodStart,
+        periodEnd,
       },
       {
         onSuccess: handleClose,
@@ -206,7 +210,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
           </VIconButton>
         </div>
 
-        {codeExists && (
+        {(codeExists && !create.isPending)  && (
           <VBanner
             type="error"
             visible

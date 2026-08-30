@@ -362,7 +362,7 @@ export interface Database {
         Args: {
           p_user_id: string;
         };
-        Returns: Array<Operation & { reportName: string; reportCreatedAt: string }>;
+        Returns: Array<Operation & { reportName: string; reportPeriodStart: string }>;
       };
       get_onboarding_state: {
         Args: {
