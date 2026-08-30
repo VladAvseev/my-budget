@@ -57,6 +57,7 @@
     var(--color-accent-alpha),
     transparent 65%
   );
+  background-size: 100% 100%;
 }
 
 .heroInner {
@@ -388,5 +389,11 @@
 @media (prefers-reduced-motion: reduce) {
   .animate {
     animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    background-size: 200% 100%;
   }
 }
