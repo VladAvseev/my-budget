@@ -212,7 +212,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
         )}
 
         {!isLoading && isEmpty && (
-          <div className={styles.text}>Лимиты по категориям не заданы.</div>
+          <div className={styles.text}>Лимиты по категориям не заданы. Намжите «Добавить лимит» или импортируйте лимиты из других отчётов</div>
         )}
 
         {!isLoading &&
@@ -252,7 +252,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
         {!isLoading && (
           <div>
             <VButton variant="secondary" onClick={addLimit} isDisabled={setLimits.isPending}>
-              + Добавить лимит
+              Добавить лимит
             </VButton>
           </div>
         )}
