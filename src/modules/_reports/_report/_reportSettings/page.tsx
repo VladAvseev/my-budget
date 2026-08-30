@@ -16,7 +16,7 @@ export const Page: React.FC = () => {
   return (
     <div className={commonStyles.page}>
       <VPageHeader
-        title={report ? `Настройки отчёта «${report.code || report.name}»` : 'Настройки отчёта'}
+        title={report ? `Настройки отчёта «${report.name}»` : 'Настройки отчёта'}
         onBack={() => navigate(`/reports/${id ?? ''}`)}
         backAriaLabel="Назад к отчёту"
       />
