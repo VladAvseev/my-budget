@@ -26,7 +26,7 @@ export const ReportsList = () => {
 
   const renderContent = (report: (typeof reports)[number]) => (
     <div className={styles.titleInfo}>
-      <div className={styles.title}>{report.code || report.name}</div>
+      <div className={styles.title}>{report.name}</div>
       {report.has_daily_expenses && (
         <div className={styles.period}>
           {report.period_start && report.period_end
