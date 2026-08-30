@@ -46,7 +46,7 @@ export const EditDailyModal = ({ operation, report, onClose }: EditDailyModalPro
 
   const handleSubmit = () => {
     setSubmitError(undefined);
-    const amountErrorValue = getAmountError(amount, 'edit');
+    const amountErrorValue = getAmountError(amount);
     if (amountErrorValue) {
       setAmountError(amountErrorValue);
       return;

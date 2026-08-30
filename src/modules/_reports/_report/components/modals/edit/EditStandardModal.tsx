@@ -54,7 +54,7 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
 
   const handleSubmit = () => {
     setSubmitError(undefined);
-    const amountErrorValue = getAmountError(amount, 'edit');
+    const amountErrorValue = getAmountError(amount);
     if (amountErrorValue) {
       setAmountError(amountErrorValue);
       return;

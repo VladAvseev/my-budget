@@ -59,8 +59,8 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
     }
     setCategoryIdError(undefined);
 
-    if (!amount || Number.isNaN(amountValue) || amountValue <= 0) {
-      setAmountError('Укажите сумму больше нуля');
+    if (!amount || Number.isNaN(amountValue) || amountValue < 0) {
+      setAmountError('Укажите неотрицательную сумму');
       return;
     }
     setAmountError(undefined);

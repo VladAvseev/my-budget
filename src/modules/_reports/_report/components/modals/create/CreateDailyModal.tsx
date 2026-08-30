@@ -32,7 +32,7 @@ export const CreateDailyModal = ({ report, onClose }: CreateDailyModalProps) => 
 
   const handleSubmit = () => {
     setSubmitError(undefined);
-    const amountErrorValue = getAmountError(amount, 'create');
+    const amountErrorValue = getAmountError(amount);
     if (amountErrorValue) {
       setAmountError(amountErrorValue);
       return;

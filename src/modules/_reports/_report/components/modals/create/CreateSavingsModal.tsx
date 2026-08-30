@@ -42,7 +42,7 @@ export const CreateSavingsModal = ({ type, report, onClose }: CreateSavingsModal
 
   const handleSubmit = () => {
     setSubmitError(undefined);
-    const amountErrorValue = getAmountError(amount, 'create');
+    const amountErrorValue = getAmountError(amount);
     if (amountErrorValue) {
       setAmountError(amountErrorValue);
       return;
