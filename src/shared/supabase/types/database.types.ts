@@ -2,7 +2,6 @@ import type {
   Accumulation,
   AdminDashboardStats,
   AdminSupportChat,
-  AdminSupportStatus,
   AdminUserRow,
   Category,
   CategoryLimit,
@@ -662,10 +661,6 @@ export interface Database {
       admin_get_database_size: {
         Args: Record<string, never>;
         Returns: DatabaseSize;
-      };
-      admin_get_support_status: {
-        Args: Record<string, never>;
-        Returns: AdminSupportStatus;
       };
     };
   };

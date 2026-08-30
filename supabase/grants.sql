@@ -53,10 +53,6 @@ revoke all on function public.admin_get_database_size() from public;
 revoke all on function public.admin_get_database_size() from anon;
 grant execute on function public.admin_get_database_size() to authenticated;
 
-revoke all on function public.admin_get_support_status() from public;
-revoke all on function public.admin_get_support_status() from anon;
-grant execute on function public.admin_get_support_status() to authenticated;
-
 -- ── is_admin: только authenticated ──────────────────────────────────────────
 revoke all on function public.is_admin() from public;
 revoke all on function public.is_admin() from anon;

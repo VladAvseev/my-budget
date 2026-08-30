@@ -161,12 +161,6 @@ export interface DatabaseSize {
   sizePretty: string;
 }
 
-export interface AdminSupportStatus {
-  open: number;
-  unanswered: number;
-  avgResponseHours: number | null;
-}
-
 export interface AdminSupportChat {
   user_id: string;
   email: string;

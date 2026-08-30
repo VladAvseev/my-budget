@@ -1,13 +1,12 @@
 import commonStyles from '@/shared/styles/common.module.css';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
+import { useAdminStats } from './api/useAdminStats';
 import { ActivityCard } from './components/ActivityCard';
 import { ChurnCard } from './components/ChurnCard';
 import { DatabaseSizeCard } from './components/DatabaseSizeCard';
 import { ReportsOperationsCard } from './components/ReportsOperationsCard';
-import { SupportStatusCard } from './components/SupportStatusCard';
 import { UsersCard } from './components/UsersCard';
-import { useAdminStats } from './api/useAdminStats';
 import styles from './page.module.css';
 
 export const Page: React.FC = () => {
@@ -51,9 +50,6 @@ export const Page: React.FC = () => {
         </div>
         <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
           <ReportsOperationsCard reports={reports} operations={operations} />
-        </div>
-        <div className={commonStyles.animateCard} style={{ animationDelay: '0.15s' }}>
-          <SupportStatusCard />
         </div>
       </div>
     </div>
