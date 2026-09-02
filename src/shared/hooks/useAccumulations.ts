@@ -8,6 +8,7 @@ export const useAccumulations = (userId: string) =>
   useQuery<Accumulation[]>({
     queryKey: accumulationsQueryKey(userId),
     enabled: Boolean(userId),
+    staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_accumulations', { p_user_id: userId });
       if (error) throw error;

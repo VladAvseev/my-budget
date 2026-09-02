@@ -24,6 +24,7 @@ export const useOnboardingChecklist = () => {
   const countsQuery = useQuery<OnboardingState>({
     queryKey: ['onboardingCounts', userId],
     enabled: Boolean(userId),
+    staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_onboarding_state', {
         p_user_id: userId,

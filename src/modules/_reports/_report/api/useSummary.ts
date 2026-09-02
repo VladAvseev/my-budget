@@ -7,6 +7,7 @@ export const useSummary = (reportId: string) =>
   useQuery<OperationSummary>({
     queryKey: summaryQueryKey(reportId),
     enabled: Boolean(reportId),
+    staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_report_summary', {
         p_report_id: reportId,

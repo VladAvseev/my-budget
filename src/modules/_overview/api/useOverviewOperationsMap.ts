@@ -9,6 +9,7 @@ export const useOverviewOperationsMap = (reportIds: string[]) =>
   useQuery<Map<string, Operation[]>>({
     queryKey: overviewOperationsQueryKey(reportIds),
     enabled: reportIds.length > 0,
+    staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_operations_by_reports', {
         p_report_ids: reportIds,

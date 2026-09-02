@@ -9,6 +9,7 @@ export const useProfile = () => {
   return useQuery<Profile | null>({
     queryKey: ['profile', user?.id],
     enabled: Boolean(user?.id),
+    staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       if (!user) return null;
       const { data, error } = await supabase.rpc('get_or_create_profile', {

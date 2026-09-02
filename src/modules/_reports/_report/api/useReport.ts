@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 export const useReport = (id: string) =>
   useQuery<Report | null>({
     queryKey: ['reports', id],
+    staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_report', { p_report_id: id });
       if (error) throw error;

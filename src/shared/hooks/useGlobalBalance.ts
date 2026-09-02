@@ -10,6 +10,7 @@ export const useUserSummary = (userId: string) =>
   useQuery<OperationSummary>({
     queryKey: userSummaryQueryKey(userId),
     enabled: Boolean(userId),
+    staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_user_summary', { p_user_id: userId });
       if (error) throw error;

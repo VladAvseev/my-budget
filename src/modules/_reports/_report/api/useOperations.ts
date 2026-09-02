@@ -16,6 +16,7 @@ export const useOperations = (reportId: string, type: OperationType) =>
   useQuery<Operation[]>({
     queryKey: operationsQueryKey(reportId, type),
     enabled: Boolean(reportId) && !isSavingsType(type),
+    staleTime: 5 * 60 * 1000,
     queryFn: () => fetchOperations(reportId, type),
   });
 
@@ -24,6 +25,7 @@ export const useSavingsReportOperations = (reportId: string, enabled: boolean) =
     queries: (['savings', 'savings_out'] as const).map((type) => ({
       queryKey: operationsQueryKey(reportId, type),
       enabled: Boolean(reportId) && enabled,
+      staleTime: 5 * 60 * 1000,
       queryFn: () => fetchOperations(reportId, type),
     })),
   });

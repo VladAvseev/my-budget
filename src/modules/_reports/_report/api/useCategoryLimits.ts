@@ -9,6 +9,7 @@ export const useCategoryLimits = (reportId: string) =>
   useQuery<CategoryLimit[]>({
     queryKey: categoryLimitsQueryKey(reportId),
     enabled: Boolean(reportId),
+    staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_category_limits', {
         p_report_id: reportId,
