@@ -11,6 +11,7 @@ import { useOverviewOperationsMap } from './api/useOverviewOperationsMap';
 import { useReports } from './api/useReports';
 import { excludedReportIdsAtom } from './atoms/overview';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
+import { CategoryDistributionChart } from './components/CategoryDistributionChart';
 import { OverviewTabs } from './components/OverviewTabs';
 import { SummaryCard } from './components/SummaryCard';
 import { emptyAmounts, sumOperations } from './utils/overview';
@@ -107,6 +108,14 @@ export const Page: React.FC = () => {
                   <div
                     className={commonStyles.animateCard}
                     style={{ animationDelay: '0.12s' }}
+                  >
+                    <CategoryDistributionChart
+                      operationsByReport={operationsByReport}
+                    />
+                  </div>
+                  <div
+                    className={commonStyles.animateCard}
+                    style={{ animationDelay: '0.18s' }}
                   >
                     <CategoryBreakdown
                       reports={selectedReports}

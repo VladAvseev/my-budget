@@ -105,9 +105,7 @@ export const AccumulationsStructure = ({
                 </div>
               )}
 
-              <div
-                className={`${styles.legend}${hideRing ? ` ${styles.legendFull}` : ''}`}
-              >
+              <div className={styles.legend}>
                 <span className={`${styles.dot} ${styles.dotAccent}`} />
                 <span className={styles.textBold}>Всего</span>
                 <span className={`${styles.textMedium} ${styles.justifyEnd}`}>100%</span>

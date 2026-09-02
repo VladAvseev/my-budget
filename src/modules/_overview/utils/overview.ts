@@ -2,6 +2,22 @@ import type { Category } from '@/shared/supabase/types/domain';
 import { signedOperationAmount, type Operation, type OperationType } from '@/shared/supabase/types/domain';
 import type { Report } from '@/shared/supabase/types/domain';
 
+export interface ChartSegment {
+  key: string;
+  label: string;
+  color: string;
+  total: number;
+  percent: number;
+  start: number;
+  end: number;
+}
+
+export interface ChartData {
+  segments: ChartSegment[];
+  total: number;
+  hasNegative: boolean;
+}
+
 export interface OperationAmounts {
   income: number;
   expense: number;
@@ -127,4 +143,85 @@ export const buildCategoryGroups = (
     });
   }
   return groups;
+};
+
+export const buildChartData = (
+  operationsByReport: Map<string, Operation[]>,
+  typeFilter: OperationType[],
+  categories: Category[],
+  includeDailyAsSeparate: boolean,
+): ChartData => {
+  const categoryById = new Map(categories.map((category) => [category.id, category]));
+
+  const totalsByKey = new Map<string, number>();
+
+  const add = (key: string, amount: number) => {
+    totalsByKey.set(key, (totalsByKey.get(key) ?? 0) + amount);
+  };
+
+  for (const operations of operationsByReport.values()) {
+    for (const operation of operations) {
+      if (!typeFilter.includes(operation.type as OperationType)) continue;
+      const amount = signedOperationAmount(
+        operation.type as OperationType,
+        Number(operation.amount) || 0,
+      );
+      add(operation.category_id ?? 'none', amount);
+    }
+  }
+
+  if (includeDailyAsSeparate) {
+    for (const operations of operationsByReport.values()) {
+      for (const operation of operations) {
+        if (operation.type !== 'daily') continue;
+        const amount = signedOperationAmount(
+          operation.type as OperationType,
+          Number(operation.amount) || 0,
+        );
+        add('daily', amount);
+      }
+    }
+  }
+
+  const hasNegative = [...totalsByKey.values()].some((total) => total < 0);
+  const total = [...totalsByKey.values()].reduce((sum, v) => sum + v, 0);
+
+  if (total <= 0 || hasNegative) {
+    return { segments: [], total, hasNegative: true };
+  }
+
+  const segments: ChartSegment[] = [];
+  let cursor = 0;
+  const sortedEntries = [...totalsByKey.entries()].sort((a, b) => b[1] - a[1]);
+
+  for (const [key, value] of sortedEntries) {
+    const percent = (value / total) * 100;
+    let label: string;
+    let color: string;
+
+    if (key === 'daily') {
+      label = 'Ежедневные расходы';
+      color = 'var(--color-accent)';
+    } else if (key === 'none') {
+      label = 'Без категории';
+      color = 'var(--color-border)';
+    } else {
+      const category = categoryById.get(key);
+      label = category?.name ?? 'Неизвестная';
+      color = category?.color ?? 'var(--color-border)';
+    }
+
+    segments.push({
+      key,
+      label,
+      color,
+      total: value,
+      percent,
+      start: cursor,
+      end: cursor + percent,
+    });
+    cursor += percent;
+  }
+
+  return { segments, total, hasNegative: false };
 };

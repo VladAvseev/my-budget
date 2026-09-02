@@ -10,15 +10,22 @@
   color: var(--color-text-primary);
 }
 
-.message {
-  color: var(--color-text-secondary);
-}
-
-.body {
+.chartWrapper {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--space-xl);
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) 56px 104px;
+  align-items: center;
+  column-gap: var(--space-m);
+  row-gap: var(--space-m);
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 300px;
 }
 
 .ring {
@@ -26,7 +33,7 @@
   width: 200px;
   height: 200px;
   border-radius: var(--radius-round);
-  background: var(--ring-gradient);
+  background: var(--chart-gradient);
   flex-shrink: 0;
 }
 
@@ -47,8 +54,8 @@
   align-items: center;
   column-gap: var(--space-m);
   row-gap: var(--space-m);
+  width: 100%;
   min-width: 0;
-  flex: 1 1 300px;
 }
 
 .dot {
@@ -89,4 +96,14 @@
 
 .justifyEnd {
   justify-self: end;
+}
+
+.message {
+  color: var(--color-text-secondary);
+}
+
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl);
 }
