@@ -1,12 +1,12 @@
+import commonStyles from '@/shared/styles/common.module.css';
 import type { Report } from '@/shared/supabase/types/domain';
-import { formatPeriodDisplay } from '@/shared/utils/monthMapping';
-import { getErrorMessage } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { VToggle } from '@/shared/ui/VToggle';
+import { getErrorMessage } from '@/shared/utils';
 import { useMemo, useState } from 'react';
 import { useDisableDailyExpenses } from '../api/useDisableDailyExpenses';
 import { useUpdateReport } from '../api/useUpdateReport';
@@ -93,9 +93,7 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
       onError: (error: Error) => setSubmitError(getErrorMessage(error)),
     });
   };
-
-  const hasPeriod = Boolean(report.period_start && report.period_end);
-
+  
   return (
     <VCard>
       <div className={styles.content}>
@@ -108,21 +106,19 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
           />
         </div>
 
+        <div className={commonStyles.emptyHint}>
+          Это отдельная категория расходов для учёта мелких ежедневных трат (кофе, проезд, перекусы
+          и т.п.). Вместо того чтобы записывать каждую покупку отдельно, можно один раз в день
+          вводить общую сумму таких расходов за день. Это упрощает учёт и позволяет видеть общую
+          картину трат на мелочи.
+        </div>
+
         {isSaved && !submitError && (
           <VBanner type="success" visible message="Настройки сохранены" />
         )}
         {submitError && <VBanner type="error" visible message={submitError} />}
 
         <div className={styles.content}>
-          {hasPeriod && (
-            <div className={styles.readOnlyField}>
-              <div className={styles.readOnlyLabel}>Отчётный период</div>
-              <div className={styles.readOnlyValue}>
-                {formatPeriodDisplay(report.period_start!, report.period_end!)}
-              </div>
-            </div>
-          )}
-
           <div className={styles.row}>
             <div className={styles.label}>Ежедневный бюджет</div>
             <VToggle
