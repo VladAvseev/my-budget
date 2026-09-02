@@ -40,7 +40,16 @@ export const StartBalanceCard = () => {
         )}
 
         {!isLoading && profile && (
-          <StartBalanceForm initialBalance={profile.start_balance ?? ''} />
+          <>
+            <StartBalanceForm initialBalance={profile.start_balance ?? ''} />
+            <div className={commonStyles.emptyHint}>
+              Начальный баланс нужен для правильного расчёта текущего баланса и капитала
+              с учётом всех операций в случае, если вы пользуетесь
+              только одной картой и хотите, чтобы сумма в приложении совпадала
+              с реальным балансом на карте. Укажите сумму, которой вы владели
+              перед началом учёта в приложении.
+            </div>
+          </>
         )}
       </div>
     </VCard>

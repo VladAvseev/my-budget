@@ -31,17 +31,12 @@ export const useOnboardingChecklist = () => {
       if (error) throw error;
       return (data as OnboardingState) ?? { categories: 0, reports: 0, operations: 0 };
     },
-  });
+  }); 
 
   const profile = profileQuery.data ?? null;
   const counts = countsQuery.data ?? { categories: 0, reports: 0, operations: 0 };
 
   const items: OnboardingItem[] = [
-    {
-      id: 'startBalance',
-      label: 'Укажите начальный баланс в разделе "Профиль"',
-      done: profile?.start_balance != null,
-    },
     {
       id: 'categories',
       label: 'Добавьте категории расходов в разделе "Профиль"',
