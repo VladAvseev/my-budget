@@ -1,10 +1,11 @@
 import { TrashIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
-import type { Operation } from '@/shared/supabase/types/domain';
+import type { Operation, OperationType } from '@/shared/supabase/types/domain';
 import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { formatDisplay, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
+import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
@@ -12,7 +13,6 @@ import { VTextInput } from '@/shared/ui/VTextInput';
 import { useState } from 'react';
 import { useRemoveOperation } from '../../../api/useRemoveOperation';
 import { useUpdateOperation } from '../../../api/useUpdateOperation';
-import { SavingsTypeTabs, savingsTypeOption, type SavingsType } from '../../SavingsTypeTabs';
 import { CategorySelect } from '../shared/CategorySelect';
 import { getAmountError } from '../shared/amountValidation';
 
@@ -27,17 +27,22 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
   const updateOperation = useUpdateOperation(report.id);
   const removeOperation = useRemoveOperation(report.id);
 
-  const initialType = operation.type as SavingsType;
+  const initialType = operation.type as OperationType;
   const [amount, setAmount] = useState(operation.amount ?? '');
   const [categoryId, setCategoryId] = useState(operation.category_id ?? '');
   const [description, setDescription] = useState(operation.description ?? '');
   const [date, setDate] = useState(operation.date ?? '');
-  const [operationType, setOperationType] = useState<SavingsType>(initialType);
+  const [operationType, setOperationType] = useState<OperationType>(initialType);
   const [amountError, setAmountError] = useState<string>();
   const [descriptionError, setDescriptionError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
 
   const isPending = updateOperation.isPending || removeOperation.isPending;
+
+  const typeOptions: VButtonGroupOption[] = [
+    { value: 'savings', label: 'Пополнение' },
+    { value: 'savings_out', label: 'Списание' },
+  ];
 
   const handleClose = () => {
     if (isPending) {
@@ -80,7 +85,7 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
 
     const input: {
       amount?: number;
-      type?: SavingsType;
+      type?: OperationType;
       categoryId?: string | null;
       description?: string | null;
       date?: string | null;
@@ -136,12 +141,14 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
       }
     >
       <div className={modalStyles.content}>
-        <SavingsTypeTabs
-          value={savingsTypeOption(operationType)}
-          disabled={isPending}
-          onChange={setOperationType}
-        />
-        <VTextInput
+          <VButtonGroup
+            options={typeOptions}
+            value={operationType}
+            onChange={setOperationType}
+            disabled={isPending}
+            fullWidth
+          />
+          <VTextInput
           label="Сумма"
           numeric
           placeholder="0.00"

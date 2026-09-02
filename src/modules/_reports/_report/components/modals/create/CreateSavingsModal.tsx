@@ -1,14 +1,14 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import type { Report } from '@/shared/supabase/types/domain';
+import type { OperationType, Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { formatDisplay, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
+import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { useState } from 'react';
 import { useCreateOperation } from '../../../api/useCreateOperation';
-import { SavingsTypeTabs, savingsTypeOption } from '../../SavingsTypeTabs';
 import { CategorySelect } from '../shared/CategorySelect';
 import { getAmountError } from '../shared/amountValidation';
 
@@ -26,12 +26,17 @@ export const CreateSavingsModal = ({ type, report, onClose }: CreateSavingsModal
   const [categoryId, setCategoryId] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
-  const [operationType, setOperationType] = useState<'savings' | 'savings_out'>(type);
+  const [operationType, setOperationType] = useState<OperationType>(type);
   const [amountError, setAmountError] = useState<string>();
   const [descriptionError, setDescriptionError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
 
   const isPending = createOperation.isPending;
+
+  const typeOptions: VButtonGroupOption[] = [
+    { value: 'savings', label: 'Пополнение' },
+    { value: 'savings_out', label: 'Списание' },
+  ];
 
   const handleClose = () => {
     if (isPending) {
@@ -97,12 +102,14 @@ export const CreateSavingsModal = ({ type, report, onClose }: CreateSavingsModal
       }
     >
       <div className={modalStyles.content}>
-        <SavingsTypeTabs
-          value={savingsTypeOption(operationType)}
-          disabled={isPending}
-          onChange={setOperationType}
-        />
-        <VTextInput
+          <VButtonGroup
+            options={typeOptions}
+            value={operationType}
+            onChange={setOperationType}
+            disabled={isPending}
+            fullWidth
+          />
+          <VTextInput
           label="Сумма"
           numeric
           placeholder="0.00"
