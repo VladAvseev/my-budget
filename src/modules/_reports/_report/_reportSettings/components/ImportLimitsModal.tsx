@@ -78,7 +78,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
   return (
     <VModal
       visible={visible}
-      title="Импорт лимитов"
+      title="Импорт бюджета"
       onClose={onClose}
       error={submitError}
       width="520px"
@@ -108,7 +108,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
 
         {!hasSelection && (
           <div className={settingsStyles.text}>
-            Выберите отчёт, чтобы посмотреть его лимиты. Они полностью заменят текущие лимиты отчёта
+            Выберите отчёт, чтобы посмотреть его бюджет. Он полностью заменит текущий бюджет отчёта
             «{report.name}».
           </div>
         )}
@@ -120,15 +120,15 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
         )}
 
         {hasSelection && sourceLimitsQuery.error && (
-          <VBanner type="error" visible message="Не удалось загрузить лимиты отчёта" />
+          <VBanner type="error" visible message="Не удалось загрузить бюджет отчёта" />
         )}
 
         {hasSelection && !sourceLimitsQuery.isLoading && !sourceLimitsQuery.error && (
           <div className={settingsStyles.importBox}>
-            <div className={settingsStyles.importLabel}>Лимиты выбранного отчёта</div>
+            <div className={settingsStyles.importLabel}>Бюджет выбранного отчёта</div>
             {sourceLimits.length === 0 && (
               <div className={settingsStyles.text}>
-                У выбранного отчёта нет лимитов.
+                У выбранного отчёта нет бюджета.
               </div>
             )}
             {sourceLimits.map((limit) => {

@@ -182,7 +182,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
     <VCard>
       <div className={styles.content}>
         <div className={styles.titleRow}>
-          <div className={styles.title}>Лимиты по категориям</div>
+          <div className={styles.title}>Бюджет</div>
           <VIconButton
             ariaLabel="Импортировать лимиты"
             onClick={() => setIsImportOpen(true)}
@@ -203,7 +203,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
           <VBanner type="error" visible message="Не удалось загрузить категории" />
         )}
         {submitError && <VBanner type="error" visible message={submitError} />}
-        {isSaved && !submitError && <VBanner type="success" visible message="Лимиты сохранены" />}
+        {isSaved && !submitError && <VBanner type="success" visible message="Бюджет сохранён" />}
 
         {isLoading && (
           <div className={styles.loaderWrap}>
@@ -212,7 +212,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
         )}
 
         {!isLoading && isEmpty && (
-          <div className={styles.text}>Лимиты по категориям не заданы. Намжите «Добавить лимит» или импортируйте лимиты из других отчётов</div>
+          <div className={styles.text}>Бюджет не задан. Нажмите «Добавить» или импортируйте из других отчётов</div>
         )}
 
         {!isLoading &&
@@ -252,7 +252,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
         {!isLoading && (
           <div>
             <VButton variant="secondary" onClick={addLimit} isDisabled={setLimits.isPending}>
-              Добавить лимит
+              Добавить
             </VButton>
           </div>
         )}
