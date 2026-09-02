@@ -11,14 +11,11 @@ export const NewReportCard = () => {
 
   if (isLoading) return null;
 
-  const reportsWithPeriodEnd = reports.filter((r) => r.period_end);
-  if (reportsWithPeriodEnd.length === 0) return null;
-
-  const latestReport = reportsWithPeriodEnd.reduce((max, report) =>
-    new Date(report.period_end!) > new Date(max.period_end!) ? report : max,
+  const latestReport = reports.reduce((max, report) =>
+    new Date(report.period_end) > new Date(max.period_end) ? report : max,
   );
 
-  const latestPeriodEnd = latestReport.period_end!;
+  const latestPeriodEnd = latestReport.period_end;
   const isPeriodEnded = new Date() > new Date(latestPeriodEnd);
 
   if (!isPeriodEnded) return null;

@@ -63,8 +63,8 @@ export interface Database {
           code: string;
           has_daily_expenses: boolean;
           daily_budget: string | null;
-          period_start: string | null;
-          period_end: string | null;
+          period_start: string;
+          period_end: string;
           created_at: string;
           updated_at: string;
         };
@@ -75,8 +75,8 @@ export interface Database {
           code?: string;
           has_daily_expenses?: boolean;
           daily_budget?: string | null;
-          period_start?: string | null;
-          period_end?: string | null;
+          period_start: string;
+          period_end: string;
           created_at?: string;
           updated_at?: string;
         };
@@ -87,8 +87,8 @@ export interface Database {
           code?: string;
           has_daily_expenses?: boolean;
           daily_budget?: string | null;
-          period_start?: string | null;
-          period_end?: string | null;
+          period_start?: string;
+          period_end?: string;
           created_at?: string;
           updated_at?: string;
         };

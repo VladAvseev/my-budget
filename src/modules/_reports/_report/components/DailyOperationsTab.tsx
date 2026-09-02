@@ -25,8 +25,8 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
   const operations = operationsQuery.data ?? [];
 
   const { dayCount, spentTotal, deviationsSum } = useMemo(() => {
-    const start = parseISO(report.period_start || undefined);
-    const end = parseISO(report.period_end || undefined);
+    const start = parseISO(report.period_start);
+    const end = parseISO(report.period_end);
     const days =
       start && end && end.getTime() >= start.getTime()
         ? Math.floor((end.getTime() - start.getTime()) / 86400000) + 1

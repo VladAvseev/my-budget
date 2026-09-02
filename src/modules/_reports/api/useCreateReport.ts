@@ -16,8 +16,8 @@ export const useCreateReport = () => {
         p_code: input.code ?? '',
         p_has_daily_expenses: input.hasDailyExpenses ?? false,
         p_daily_budget: input.dailyBudget ?? null,
-        p_period_start: input.periodStart ?? null,
-        p_period_end: input.periodEnd ?? null,
+        p_period_start: input.periodStart,
+        p_period_end: input.periodEnd,
       });
       if (error) throw error;
     },
@@ -35,8 +35,8 @@ export const useCreateReport = () => {
         has_daily_expenses: hasDailyExpenses,
         daily_budget:
           hasDailyExpenses && input.dailyBudget != null ? String(input.dailyBudget) : null,
-        period_start: input.periodStart ?? null,
-        period_end: input.periodEnd ?? null,
+        period_start: input.periodStart,
+        period_end: input.periodEnd,
         created_at: now,
         updated_at: now,
         _optimistic: true,

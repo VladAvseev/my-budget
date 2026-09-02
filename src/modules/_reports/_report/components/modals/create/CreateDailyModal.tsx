@@ -42,8 +42,8 @@ export const CreateDailyModal = ({ report, onClose }: CreateDailyModalProps) => 
     createDailyExpense.mutate(
       {
         input: { amount: Number(amount), description: description || null },
-        periodStart: report.period_start ?? '',
-        periodEnd: report.period_end ?? '',
+        periodStart: report.period_start,
+        periodEnd: report.period_end,
       },
       {
         onSuccess: onClose,

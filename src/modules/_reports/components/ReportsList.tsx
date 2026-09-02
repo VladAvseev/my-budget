@@ -28,9 +28,7 @@ export const ReportsList = () => {
     <div className={styles.titleInfo}>
       <div className={styles.title}>{report.name}</div>
       <div className={styles.period}>
-        {report.period_start && report.period_end
-          ? ` ${formatDisplay(report.period_start)} – ${formatDisplay(report.period_end)}`
-          : ''}
+        {' ' + formatDisplay(report.period_start) + ' – ' + formatDisplay(report.period_end)}
       </div>
     </div>
   );

@@ -69,11 +69,11 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
     }
     setDescriptionError(undefined);
 
-    if (date && report.period_start && date < report.period_start) {
+    if (date && date < report.period_start) {
       setSubmitError(`Дата не может быть раньше начала периода (${formatDisplay(report.period_start)})`);
       return;
     }
-    if (date && report.period_end && date > report.period_end) {
+    if (date && date > report.period_end) {
       setSubmitError(`Дата не может быть позже конца периода (${formatDisplay(report.period_end)})`);
       return;
     }
@@ -176,8 +176,8 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
           value={date}
           disabled={isPending}
           onChange={setDate}
-          minDate={report.period_start ?? undefined}
-          maxDate={report.period_end ?? undefined}
+          minDate={report.period_start}
+          maxDate={report.period_end}
         />
       </div>
     </VModal>

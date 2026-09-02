@@ -50,8 +50,8 @@ export interface ReportInput {
   code?: string;
   hasDailyExpenses?: boolean;
   dailyBudget?: number | null;
-  periodStart?: string | null;
-  periodEnd?: string | null;
+  periodStart: string;
+  periodEnd: string;
 }
 
 export type ReportUpdateInput = Partial<ReportInput>;
