@@ -19,6 +19,8 @@ export interface VDatePickerProps {
   onChange?: (value: string) => void;
   style?: CSSProperties;
   className?: string;
+  minDate?: string;
+  maxDate?: string;
 }
 
 const WEEKDAY_LABELS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
@@ -47,6 +49,8 @@ export const VDatePicker = ({
   onChange,
   style,
   className,
+  minDate,
+  maxDate,
 }: VDatePickerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -114,7 +118,7 @@ export const VDatePicker = ({
           </span>
         </span>
       </div>
-      {isOpen && !disabled && <CalendarDropdown value={value} onSelect={handleSelectDate} />}
+      {isOpen && !disabled && <CalendarDropdown value={value} onSelect={handleSelectDate} minDate={minDate} maxDate={maxDate} />}
       {hasError && <span className={styles.error}>{error}</span>}
     </div>
   );
@@ -123,9 +127,11 @@ export const VDatePicker = ({
 interface CalendarDropdownProps {
   value?: string;
   onSelect: (day: Date) => void;
+  minDate?: string;
+  maxDate?: string;
 }
 
-const CalendarDropdown = ({ value, onSelect }: CalendarDropdownProps) => {
+const CalendarDropdown = ({ value, onSelect, minDate, maxDate }: CalendarDropdownProps) => {
   const today = new Date();
   const selected = parseISO(value);
 
@@ -172,15 +178,22 @@ const CalendarDropdown = ({ value, onSelect }: CalendarDropdownProps) => {
           const inCurrentMonth = day.getMonth() === viewMonth;
           const isSelected = isSameDay(day, selected);
           const isToday = isSameDay(day, today);
+          const dayISO = toISODate(day);
+          const isDisabled = (minDate && dayISO < minDate) || (maxDate && dayISO > maxDate);
 
           return (
             <DayCell
-              key={toISODate(day)}
+              key={dayISO}
               day={day}
               inCurrentMonth={inCurrentMonth}
               isSelected={isSelected}
               isToday={isToday}
-              onClick={() => onSelect(day)}
+              disabled={isDisabled ? true : undefined}
+              onClick={() => {
+                if (!isDisabled) {
+                  onSelect(day);
+                }
+              }}
             />
           );
         })}
@@ -194,15 +207,17 @@ interface DayCellProps {
   inCurrentMonth: boolean;
   isSelected: boolean;
   isToday: boolean;
+  disabled?: boolean;
   onClick: () => void;
 }
 
-const DayCell = ({ day, inCurrentMonth, isSelected, isToday, onClick }: DayCellProps) => {
+const DayCell = ({ day, inCurrentMonth, isSelected, isToday, disabled, onClick }: DayCellProps) => {
   const className = [
     styles.day,
     isSelected ? styles.daySelected : '',
     isToday ? styles.dayToday : '',
     !inCurrentMonth ? styles.dayOutOfMonth : '',
+    disabled ? styles.dayDisabled : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -212,6 +227,8 @@ const DayCell = ({ day, inCurrentMonth, isSelected, isToday, onClick }: DayCellP
       type="button"
       aria-selected={isSelected}
       aria-current={isToday ? 'date' : undefined}
+      aria-disabled={disabled}
+      disabled={disabled}
       onClick={onClick}
       className={className}
     >

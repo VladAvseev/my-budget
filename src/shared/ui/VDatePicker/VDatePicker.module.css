@@ -187,3 +187,19 @@
 .dayOutOfMonth.dayToday {
   color: var(--color-accent);
 }
+
+.dayDisabled {
+  opacity: 0.3;
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+.dayDisabled:hover {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+}
+
+.dayDisabled.dayToday {
+  border-color: var(--color-border);
+}

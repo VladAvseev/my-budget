@@ -1,7 +1,7 @@
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { formatDisplay, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VModal } from '@/shared/ui/VModal';
@@ -52,6 +52,15 @@ export const CreateStandardModal = ({ type, report, onClose }: CreateStandardMod
       return;
     }
     setDescriptionError(undefined);
+
+    if (date && report.period_start && date < report.period_start) {
+      setSubmitError(`Дата не может быть раньше начала периода (${formatDisplay(report.period_start)})`);
+      return;
+    }
+    if (date && report.period_end && date > report.period_end) {
+      setSubmitError(`Дата не может быть позже конца периода (${formatDisplay(report.period_end)})`);
+      return;
+    }
 
     createOperation.mutate(
       {
@@ -121,6 +130,8 @@ export const CreateStandardModal = ({ type, report, onClose }: CreateStandardMod
           value={date}
           disabled={isPending}
           onChange={setDate}
+          minDate={report.period_start ?? undefined}
+          maxDate={report.period_end ?? undefined}
         />
       </div>
     </VModal>
