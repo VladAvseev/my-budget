@@ -1,76 +1,32 @@
-import { EyeIcon, EyeOffIcon } from '@/shared/icons';
 import type { Report } from '@/shared/supabase/types/domain';
-import { VIconButton } from '@/shared/ui/VIconButton';
+import { VMultiSelect } from '@/shared/ui/VMultiSelect';
 import { useAtom } from 'jotai';
-import { excludedReportIdsAtom, tabsExpandedAtom } from '../atoms/overview';
-import styles from './OverviewTabs.module.css';
+import { selectedReportIdsAtom } from '../atoms/overview';
 
 interface OverviewTabsProps {
   reports: Report[];
 }
 
 export const OverviewTabs = ({ reports }: OverviewTabsProps) => {
-  const [isExpanded, setIsExpanded] = useAtom(tabsExpandedAtom);
-  const [excludedIds, setExcludedIds] = useAtom(excludedReportIdsAtom);
+  const [selectedIds, setSelectedIds] = useAtom(selectedReportIdsAtom);
 
   if (reports.length === 0) {
     return null;
   }
 
-  const excluded = new Set(excludedIds);
-  const selectedCount = reports.length - excludedIds.length;
-
-  const toggleReport = (reportId: string) => {
-    setExcludedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(reportId)) {
-        next.delete(reportId);
-      } else {
-        next.add(reportId);
-      }
-      return [...next];
-    });
-  };
+  const options = reports.map((report) => ({
+    value: report.id,
+    label: report.name,
+  }));
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.title}>
-          Отчёты
-          <span className={styles.counter}>
-            выбрано {selectedCount} из {reports.length}
-          </span>
-        </div>
-        <VIconButton
-          ariaLabel={isExpanded ? 'Скрыть отчёты' : 'Показать отчёты'}
-          onClick={() => setIsExpanded((prev) => !prev)}
-          color="var(--color-text-primary)"
-        >
-          {isExpanded ? (
-            <EyeOffIcon size={24} color="currentColor" />
-          ) : (
-            <EyeIcon size={24} color="currentColor" />
-          )}
-        </VIconButton>
-      </div>
-
-      {isExpanded && (
-        <div className={styles.buttonsWrap}>
-          {reports.map((report) => {
-            const isSelected = !excluded.has(report.id);
-            return (
-              <button
-                key={report.id}
-                type="button"
-                onClick={() => toggleReport(report.id)}
-                className={`${styles.button}${isSelected ? ` ${styles.buttonActive}` : ''}`}
-              >
-                {report.name}
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
+    <VMultiSelect
+      label="Отчёты"
+      options={options}
+      value={selectedIds}
+      onChange={setSelectedIds}
+      selectAll
+      placeholder="Выберите отчёты"
+    />
   );
 };

@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOverviewOperationsMap } from './api/useOverviewOperationsMap';
 import { useReports } from './api/useReports';
-import { excludedReportIdsAtom } from './atoms/overview';
+import { selectedReportIdsAtom } from './atoms/overview';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
 import { CategoryDistributionChart } from './components/CategoryDistributionChart';
 import { OverviewTabs } from './components/OverviewTabs';
@@ -19,11 +19,10 @@ import { emptyAmounts, sumOperations } from './utils/overview';
 export const Page: React.FC = () => {
   const navigate = useNavigate();
   const reportsQuery = useReports();
-  const [excludedIds] = useAtom(excludedReportIdsAtom);
+  const [selectedIds] = useAtom(selectedReportIdsAtom);
 
   const reports = reportsQuery.data ?? [];
-  const excluded = new Set(excludedIds);
-  const selectedReports = reports.filter((report) => !excluded.has(report.id));
+  const selectedReports = reports.filter((report) => selectedIds.includes(report.id));
 
   const {
     data: operationsMap,
@@ -50,11 +49,7 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <VPageHeader
-        title="Обзор"
-        onBack={() => navigate('/')}
-        backAriaLabel="Назад на главную"
-      />
+      <VPageHeader title="Обзор" onBack={() => navigate('/')} backAriaLabel="Назад на главную" />
 
       <div className={commonStyles.animateCard}>
         <OverviewTabs reports={reports} />
@@ -105,18 +100,10 @@ export const Page: React.FC = () => {
                       savings={totals.savings}
                     />
                   </div>
-                  <div
-                    className={commonStyles.animateCard}
-                    style={{ animationDelay: '0.12s' }}
-                  >
-                    <CategoryDistributionChart
-                      operationsByReport={operationsByReport}
-                    />
+                  <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
+                    <CategoryDistributionChart operationsByReport={operationsByReport} />
                   </div>
-                  <div
-                    className={commonStyles.animateCard}
-                    style={{ animationDelay: '0.18s' }}
-                  >
+                  <div className={commonStyles.animateCard} style={{ animationDelay: '0.18s' }}>
                     <CategoryBreakdown
                       reports={selectedReports}
                       operationsByReport={operationsByReport}
