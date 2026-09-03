@@ -1,7 +1,7 @@
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
-import summaryStyles from '@/shared/styles/summary.module.css';
 import { percentOfIncome } from '../utils/overview';
+import styles from './SummaryCard.module.css';
 
 interface SummaryCardProps {
   income: number;
@@ -40,28 +40,16 @@ export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => 
   ];
 
   return (
-    <VCard className={summaryStyles.card}>
-      <div className={summaryStyles.grid}>
-        {items.flatMap((item) => [
-          <div key={`${item.label}-label`} className={summaryStyles.label}>
-            {item.label}
-          </div>,
-          <div
-            key={`${item.label}-value`}
-            className={summaryStyles.value}
-            style={{ color: item.color }}
-          >
+    <div className={styles.grid}>
+      {items.map((item) => (
+        <VCard key={item.label} className={styles.card}>
+          <div className={styles.label}>{item.label}</div>
+          <div className={styles.value} style={{ color: item.color }}>
             {formatAmount(item.value)}
-          </div>,
-          item.percent != null ? (
-            <div key={`${item.label}-percent`} className={summaryStyles.percent}>
-              {item.percent}% от доходов
-            </div>
-          ) : (
-            <span key={`${item.label}-percent`} />
-          ),
-        ])}
-      </div>
-    </VCard>
+          </div>
+          {item.percent != null && <div className={styles.percent}>{item.percent}% от доходов</div>}
+        </VCard>
+      ))}
+    </div>
   );
 };
