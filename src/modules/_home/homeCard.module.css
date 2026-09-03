@@ -143,6 +143,12 @@
   gap: var(--space-m);
 }
 
+.structureTotal {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
 .sectionTitle {
   font-size: var(--font-size-s);
   font-weight: var(--font-weight-medium);

@@ -8,7 +8,10 @@ import { buildChartData, type ChartData } from '../utils/overview';
 import styles from './CategoryDistributionChart.module.css';
 
 interface CategoryDistributionChartProps {
-  operationsByReport: Map<string, Array<{ type: string; amount: string; category_id: string | null }>>;
+  operationsByReport: Map<
+    string,
+    Array<{ type: string; amount: string; category_id: string | null }>
+  >;
 }
 
 const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: string }> = [
@@ -44,7 +47,12 @@ export const CategoryDistributionChart = ({
       case 'savings':
         return savingsCategories.isLoading;
     }
-  }, [selectedType, expenseCategories.isLoading, incomeCategories.isLoading, savingsCategories.isLoading]);
+  }, [
+    selectedType,
+    expenseCategories.isLoading,
+    incomeCategories.isLoading,
+    savingsCategories.isLoading,
+  ]);
 
   const chartData: ChartData = useMemo(() => {
     let typeFilter: Array<'expense' | 'income' | 'savings' | 'savings_out' | 'daily'>;
@@ -63,12 +71,7 @@ export const CategoryDistributionChart = ({
         break;
     }
 
-    return buildChartData(
-      operationsByReport as any,
-      typeFilter,
-      categories,
-      includeDaily,
-    );
+    return buildChartData(operationsByReport as any, typeFilter, categories, includeDaily);
   }, [selectedType, operationsByReport, categories]);
 
   if (loading) {
@@ -85,35 +88,28 @@ export const CategoryDistributionChart = ({
 
   return (
     <VCard className={styles.content}>
-      <VButtonGroup
-        options={typeOptions}
-        value={selectedType}
-        onChange={setSelectedType}
-      />
+      <VButtonGroup options={typeOptions} value={selectedType} onChange={setSelectedType} />
 
       {segments.length === 0 || hasNegative || total <= 0 ? (
         <div className={styles.message}>
-          {hasNegative
-            ? 'Доли категорий невозможно отобразить'
-            : 'Нет данных для отображения'}
+          {hasNegative ? 'Доли категорий невозможно отобразить' : 'Нет данных для отображения'}
         </div>
       ) : (
         <div className={styles.chartWrapper}>
           <div
             className={styles.ring}
-            style={{ ['--chart-gradient' as string]: `conic-gradient(${segments
-              .map((s) => `${s.color} ${s.start}% ${s.end}%`)
-              .join(', ')})` }}
+            style={{
+              ['--chart-gradient' as string]: `conic-gradient(${segments
+                .map((s) => `${s.color} ${s.start}% ${s.end}%`)
+                .join(', ')})`,
+            }}
           >
-            <div className={styles.ringHole} />
+            <div className={styles.ringHole}>
+              <span className={styles.ringTotal}>{formatAmount(total)}</span>
+            </div>
           </div>
 
           <div className={styles.legend}>
-            <span className={`${styles.dot} ${styles.dotAccent}`} />
-            <span className={styles.textBold}>Всего</span>
-            <span className={`${styles.textMedium} ${styles.justifyEnd}`}>100%</span>
-            <span className={`${styles.textBold} ${styles.justifyEnd}`}>{formatAmount(total)}</span>
-
             {segments.flatMap((segment) => [
               <span
                 key={`${segment.key}-dot`}
@@ -123,10 +119,16 @@ export const CategoryDistributionChart = ({
               <span key={`${segment.key}-label`} className={styles.ellipsis}>
                 {segment.label}
               </span>,
-              <span key={`${segment.key}-percent`} className={`${styles.textMedium} ${styles.justifyEnd}`}>
+              <span
+                key={`${segment.key}-percent`}
+                className={`${styles.textMedium} ${styles.justifyEnd}`}
+              >
                 {segment.percent.toFixed(1)}%
               </span>,
-              <span key={`${segment.key}-amount`} className={`${styles.textBold} ${styles.justifyEnd}`}>
+              <span
+                key={`${segment.key}-amount`}
+                className={`${styles.textBold} ${styles.justifyEnd}`}
+              >
                 {formatAmount(segment.total)}
               </span>,
             ])}

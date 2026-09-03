@@ -14,7 +14,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+  justify-content: flex-start;
   gap: var(--space-xl);
+}
+
+@media (max-width: 600px) {
+  .chartWrapper {
+    justify-content: center;
+  }
 }
 
 .legend {
@@ -30,8 +37,8 @@
 
 .ring {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 280px;
   border-radius: var(--radius-round);
   background: var(--chart-gradient);
   flex-shrink: 0;
@@ -41,11 +48,23 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
   transform: translate(-50%, -50%);
   border-radius: var(--radius-round);
   background-color: var(--color-bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ringTotal {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  word-break: break-word;
+  padding: var(--space-s);
 }
 
 .legend {

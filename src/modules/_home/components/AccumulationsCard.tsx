@@ -1,9 +1,10 @@
+import { buildGoalsProgress, formatAmount, type GoalProgress } from '@/shared/utils';
 import {
-  buildGoalsProgress,
-  formatAmount,
-  type GoalProgress,
-} from '@/shared/utils';
-import { useAccumulationsTotal, useAmountsVisibility, useGoals, HIDDEN_AMOUNT } from '@/shared/hooks';
+  useAccumulationsTotal,
+  useAmountsVisibility,
+  useGoals,
+  HIDDEN_AMOUNT,
+} from '@/shared/hooks';
 import { ChevronRightIcon, SavingsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
@@ -36,7 +37,10 @@ export const AccumulationsCard = () => {
       })),
       ...(savingsQuery.data ?? []).map((operation) => ({
         categoryId: operation.category_id,
-        amount: signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0),
+        amount: signedOperationAmount(
+          operation.type as OperationType,
+          Number(operation.amount) || 0,
+        ),
       })),
     ],
     [accumulations, savingsQuery.data],
@@ -55,7 +59,10 @@ export const AccumulationsCard = () => {
 
   if (isLoading) {
     return (
-      <VCard className={`${styles.loadingCard} ${styles.animateCard}`} style={{ animationDelay: '0.24s' }}>
+      <VCard
+        className={`${styles.loadingCard} ${styles.animateCard}`}
+        style={{ animationDelay: '0.24s' }}
+      >
         <VLoader size={28} />
       </VCard>
     );
@@ -76,7 +83,11 @@ export const AccumulationsCard = () => {
       : `${HIDDEN_AMOUNT} из ${HIDDEN_AMOUNT}`;
 
   return (
-    <Link to="/accumulations" className={`${styles.link} ${styles.animateCard}`} style={{ animationDelay: '0.24s' }}>
+    <Link
+      to="/accumulations"
+      className={`${styles.link} ${styles.animateCard}`}
+      style={{ animationDelay: '0.24s' }}
+    >
       <VCard interactive className={styles.card}>
         <div className={styles.titleRow}>
           <span className={styles.titleIcon}>
@@ -89,12 +100,17 @@ export const AccumulationsCard = () => {
           <div className={styles.section}>
             <div className={styles.sectionTitle}>Структура накоплений</div>
             {total > 0 ? (
-              <AccumulationsLegend
-                items={structureItems}
-                categories={categories}
-                maskAmounts={!showCapital}
-                fullWidth
-              />
+              <>
+                <div className={styles.structureTotal}>
+                  {showCapital ? formatAmount(total) : HIDDEN_AMOUNT}
+                </div>
+                <AccumulationsLegend
+                  items={structureItems}
+                  categories={categories}
+                  maskAmounts={!showCapital}
+                  fullWidth
+                />
+              </>
             ) : (
               <div className={styles.emptyMessage}>Доли накоплений невозможно отобразить</div>
             )}
@@ -118,13 +134,10 @@ export const AccumulationsCard = () => {
                       <span
                         className={styles.goalDot}
                         style={{
-                          backgroundColor:
-                            category?.color ?? 'var(--color-border)',
+                          backgroundColor: category?.color ?? 'var(--color-border)',
                         }}
                       />
-                      <span className={styles.goalName}>
-                        {category?.name ?? 'Без категории'}
-                      </span>
+                      <span className={styles.goalName}>{category?.name ?? 'Без категории'}</span>
                       <span className={styles.goalPercent}>{progress.percent}%</span>
                     </div>
                     <div className={styles.goalBar}>

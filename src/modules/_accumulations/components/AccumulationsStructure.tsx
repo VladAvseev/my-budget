@@ -81,10 +81,7 @@ export const AccumulationsStructure = ({
 
   return (
     <div className={commonStyles.animateCard}>
-      <VCard
-        interactive={interactive}
-        style={{ height: interactive ? '100%' : undefined }}
-      >
+      <VCard interactive={interactive} style={{ height: interactive ? '100%' : undefined }}>
         <div className={styles.content}>
           <div className={styles.title}>{title}</div>
 
@@ -101,18 +98,15 @@ export const AccumulationsStructure = ({
                   className={styles.ring}
                   style={{ ['--ring-gradient' as string]: `conic-gradient(${gradient})` }}
                 >
-                  <div className={styles.ringHole} />
+                  <div className={styles.ringHole}>
+                    <span className={styles.ringTotal}>
+                      {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total)}
+                    </span>
+                  </div>
                 </div>
               )}
 
               <div className={styles.legend}>
-                <span className={`${styles.dot} ${styles.dotAccent}`} />
-                <span className={styles.textBold}>Всего</span>
-                <span className={`${styles.textMedium} ${styles.justifyEnd}`}>100%</span>
-                <span className={`${styles.textBold} ${styles.justifyEnd}`}>
-                  {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total)}
-                </span>
-
                 {segments.flatMap((segment) => [
                   <span
                     key={`${segment.key}-dot`}
@@ -122,10 +116,16 @@ export const AccumulationsStructure = ({
                   <span key={`${segment.key}-label`} className={styles.ellipsis}>
                     {segment.label}
                   </span>,
-                  <span key={`${segment.key}-percent`} className={`${styles.textMedium} ${styles.justifyEnd}`}>
+                  <span
+                    key={`${segment.key}-percent`}
+                    className={`${styles.textMedium} ${styles.justifyEnd}`}
+                  >
                     {segment.percent.toFixed(1)}%
                   </span>,
-                  <span key={`${segment.key}-amount`} className={`${styles.textBold} ${styles.justifyEnd}`}>
+                  <span
+                    key={`${segment.key}-amount`}
+                    className={`${styles.textBold} ${styles.justifyEnd}`}
+                  >
                     {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total)}
                   </span>,
                 ])}
