@@ -1,0 +1,23 @@
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s) var(--space-l);
+  margin-bottom: var(--space-s);
+}
+
+.stat {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
+.statValue {
+  color: var(--color-text-primary);
+}
+
+.positive {
+  color: var(--color-success);
+}
+
+.negative {
+  color: var(--color-error);
+}

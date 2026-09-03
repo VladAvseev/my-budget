@@ -1,0 +1,100 @@
+.wrapper {
+  display: flex;
+}
+
+.yAxis {
+  position: relative;
+  flex-shrink: 0;
+  padding-right: 8px;
+}
+
+.yAxisSizer {
+  visibility: hidden;
+  display: block;
+  white-space: nowrap;
+  font-size: 15px;
+  font-family: var(--font-family);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.yAxisSizer span {
+  display: block;
+}
+
+.labelY {
+  position: absolute;
+  right: 8px;
+  color: var(--color-text-secondary);
+  font-size: 15px;
+  font-family: var(--font-family);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.container {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chart {
+  display: block;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-m);
+}
+
+.gridLine {
+  stroke: var(--color-border);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 6;
+}
+
+.axisLine {
+  stroke: var(--color-border);
+  stroke-width: 1.5;
+}
+
+.labelX {
+  fill: var(--color-text-secondary);
+  font-size: 15px;
+  font-family: var(--font-family);
+  text-anchor: end;
+}
+
+.dot {
+  stroke-width: 3;
+  cursor: pointer;
+  transition: r 0.15s ease;
+}
+
+.dot:hover {
+  r: 7.5;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  padding: var(--space-s) var(--space-m);
+  font-size: var(--font-size-l);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  box-shadow: var(--shadow-s);
+  z-index: 10;
+}
+
+.tooltipValue {
+  font-weight: var(--font-weight-bold);
+}

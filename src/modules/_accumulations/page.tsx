@@ -13,6 +13,7 @@ import { useSavingsOperations } from './api/useSavingsOperations';
 import { AccumulationsList } from './components/AccumulationsList';
 import { AccumulationsStructure } from './components/AccumulationsStructure';
 import { CreateAccumulationModal } from './components/CreateAccumulationModal';
+import { GrowthChartsSection } from './components/GrowthChartsSection';
 import { CreateGoalModal } from './components/CreateGoalModal';
 import { EditAccumulationModal } from './components/EditAccumulationModal';
 import { EditGoalModal } from './components/EditGoalModal';
@@ -62,8 +63,10 @@ export const Page: React.FC = () => {
         }
       />
 
-      <AccumulationsStructure items={structureItems} categories={categories} />
 
+      <GrowthChartsSection userId={userId} />
+
+      <AccumulationsStructure items={structureItems} categories={categories} />
       <GoalsSection />
 
       <div className={commonStyles.row}>
@@ -85,9 +88,7 @@ export const Page: React.FC = () => {
           onClose={() => setAccumulationModal(null)}
         />
       ) : (
-        accumulationModal && (
-          <CreateAccumulationModal onClose={() => setAccumulationModal(null)} />
-        )
+        accumulationModal && <CreateAccumulationModal onClose={() => setAccumulationModal(null)} />
       )}
 
       {goalModal?.goal ? (

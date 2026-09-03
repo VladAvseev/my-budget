@@ -27,7 +27,7 @@
 }
 
 .button {
-  padding: var(--space-s) var(--space-l);
+  padding: var(--space-s) var(--space-s);
   border: 1px solid var(--color-border);
   background-color: var(--color-bg-surface);
   color: var(--color-text-secondary);

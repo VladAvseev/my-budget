@@ -1,0 +1,7 @@
+.controls {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-s);
+  gap: var(--space-s)
+}
