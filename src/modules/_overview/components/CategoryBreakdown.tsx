@@ -4,6 +4,7 @@ import { VAccordion } from '@/shared/ui/VAccordion';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
+import { useCurrency } from '@/shared/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
 import { Link } from 'react-router-dom';
 import { useOverviewCategories } from '../api/useOverviewCategories';
@@ -15,14 +16,17 @@ interface CategoryBreakdownProps {
   operationsByReport: Map<string, Operation[]>;
 }
 
-const ReportLinkRow = ({ report, amount }: ReportAmount) => (
-  <Link to={`/reports/${report.id}`} className={styles.linkRow}>
-    <VCard interactive className={styles.linkRowCard}>
-      <span className={styles.linkRowName}>{report.name}</span>
-      <span className={styles.linkRowAmount}>{formatAmount(amount)}</span>
-    </VCard>
-  </Link>
-);
+const ReportLinkRow = ({ report, amount }: ReportAmount) => {
+  const currency = useCurrency();
+  return (
+    <Link to={`/reports/${report.id}`} className={styles.linkRow}>
+      <VCard interactive className={styles.linkRowCard}>
+        <span className={styles.linkRowName}>{report.name}</span>
+        <span className={styles.linkRowAmount}>{formatAmount(amount, currency?.symbol)}</span>
+      </VCard>
+    </Link>
+  );
+};
 
 const hasOperations = (operationsByReport: Map<string, Operation[]>, typeFilter: OperationType[]) =>
   [...operationsByReport.values()].some((operations) =>
@@ -30,21 +34,23 @@ const hasOperations = (operationsByReport: Map<string, Operation[]>, typeFilter:
   );
 
 const AccordionSummary = ({ total, reportCount }: { total: number; reportCount: number }) => {
+  const currency = useCurrency();
   const average = reportCount > 0 ? total / reportCount : 0;
 
   return (
     <span className={styles.accordionSummary}>
       <span className={styles.accordionSummaryLine}>
-        Всего: <span className={styles.strong}>{formatAmount(total)}</span>
+        Всего: <span className={styles.strong}>{formatAmount(total, currency?.symbol)}</span>
       </span>
       <span className={styles.accordionSummaryLine}>
-        В среднем: <span className={styles.strong}>{formatAmount(average)}</span>
+        В среднем: <span className={styles.strong}>{formatAmount(average, currency?.symbol)}</span>
       </span>
     </span>
   );
 };
 
 export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreakdownProps) => {
+  const currency = useCurrency();
   const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
 
   const expensesLoading = expenseCategories.isLoading;
@@ -75,7 +81,7 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
     <div className={styles.sectionHeader}>
       <div className={styles.sectionLabel}>{label}</div>
       <div className={styles.sectionAverage}>
-        В среднем: <span className={styles.strong}>{formatAmount(average)}</span>
+        В среднем: <span className={styles.strong}>{formatAmount(average, currency?.symbol)}</span>
       </div>
     </div>
   );

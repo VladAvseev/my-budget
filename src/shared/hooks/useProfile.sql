@@ -17,6 +17,7 @@ begin
     'user_id', user_id,
     'email', email,
     'start_balance', start_balance,
+    'currency', currency,
     'onboarded', onboarded,
     'show_news', show_news,
     'role', role,

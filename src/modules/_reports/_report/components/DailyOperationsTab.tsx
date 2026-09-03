@@ -5,6 +5,7 @@ import { VCard } from '@/shared/ui/VCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount, parseISO } from '@/shared/utils';
+import { useCurrency } from '@/shared/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useSetAtom } from 'jotai';
 import { useMemo } from 'react';
@@ -124,11 +125,14 @@ interface SummaryValueProps {
   color: string;
 }
 
-const SummaryValue = ({ label, value, color }: SummaryValueProps) => (
-  <div className={styles.summaryItem}>
-    <div className={styles.summaryItemLabel}>{label}</div>
-    <div className={styles.summaryItemValue} style={{ color }}>
-      {formatAmount(value)}
+const SummaryValue = ({ label, value, color }: SummaryValueProps) => {
+  const currency = useCurrency();
+  return (
+    <div className={styles.summaryItem}>
+      <div className={styles.summaryItemLabel}>{label}</div>
+      <div className={styles.summaryItemValue} style={{ color }}>
+        {formatAmount(value, currency?.symbol)}
+      </div>
     </div>
-  </div>
-);
+  );
+};

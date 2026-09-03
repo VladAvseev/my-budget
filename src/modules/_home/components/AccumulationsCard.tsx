@@ -2,6 +2,7 @@ import { buildGoalsProgress, formatAmount, type GoalProgress } from '@/shared/ut
 import {
   useAccumulationsTotal,
   useAmountsVisibility,
+  useCurrency,
   useGoals,
   HIDDEN_AMOUNT,
 } from '@/shared/hooks';
@@ -25,6 +26,7 @@ export const AccumulationsCard = () => {
   const categoriesQuery = useCategories(userId);
   const goalsQuery = useGoals(userId);
   const { showCapital } = useAmountsVisibility();
+  const currency = useCurrency();
 
   const accumulations = accumulationsQuery.accumulations;
   const categories = categoriesQuery.data ?? [];
@@ -79,7 +81,7 @@ export const AccumulationsCard = () => {
 
   const formatPair = (savedAmount: number, targetAmount: number) =>
     showCapital
-      ? `${formatAmount(savedAmount)} из ${formatAmount(targetAmount)}`
+      ? `${formatAmount(savedAmount, currency?.symbol)} из ${formatAmount(targetAmount, currency?.symbol)}`
       : `${HIDDEN_AMOUNT} из ${HIDDEN_AMOUNT}`;
 
   return (
@@ -102,7 +104,7 @@ export const AccumulationsCard = () => {
             {total > 0 ? (
               <>
                 <div className={styles.structureTotal}>
-                  {showCapital ? formatAmount(total) : HIDDEN_AMOUNT}
+                  {showCapital ? formatAmount(total, currency?.symbol) : HIDDEN_AMOUNT}
                 </div>
                 <AccumulationsLegend
                   items={structureItems}

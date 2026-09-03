@@ -1,5 +1,5 @@
 import { PlusIcon } from '@/shared/icons';
-import { useAccumulations, useGoals } from '@/shared/hooks';
+import { useAccumulations, useGoals, useCurrency } from '@/shared/hooks';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Goal } from '@/shared/supabase/types/domain';
 import { buildGoalsProgress, formatAmount } from '@/shared/utils';
@@ -24,6 +24,7 @@ export const GoalsSection = () => {
   const savingsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
   const setGoalModal = useSetAtom(goalModalAtom);
+  const currency = useCurrency();
 
   const goals = goalsQuery.data ?? [];
   const categories = categoriesQuery.data ?? [];
@@ -138,10 +139,10 @@ export const GoalsSection = () => {
 
                 <div className={styles.cardBottom}>
                   <span className={styles.savedAmount}>
-                    {formatAmount(progress.savedAmount)}
+                    {formatAmount(progress.savedAmount, currency?.symbol)}
                   </span>
                   <span className={styles.targetAmount}>
-                    из {formatAmount(targetAmount)}
+                    из {formatAmount(targetAmount, currency?.symbol)}
                   </span>
                   <span className={styles.percent}>{progress.percent}%</span>
                 </div>

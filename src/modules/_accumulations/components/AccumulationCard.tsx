@@ -1,5 +1,6 @@
 import type { Category } from '@/shared/supabase/types/domain';
 import type { Accumulation } from '@/shared/supabase/types/domain';
+import { useCurrency } from '@/shared/hooks';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -20,6 +21,7 @@ export const AccumulationCard = ({
   pending = false,
 }: AccumulationCardProps) => {
   const setModal = useSetAtom(accumulationModalAtom);
+  const currency = useCurrency();
 
   const handleOpen = () => {
     if (!pending) {
@@ -55,7 +57,7 @@ export const AccumulationCard = ({
       </div>
 
       <div className={styles.right}>
-        <div className={styles.amount}>{formatAmount(Number(accumulation.amount))}</div>
+        <div className={styles.amount}>{formatAmount(Number(accumulation.amount), currency?.symbol)}</div>
         {pending && <VLoader size={16} />}
       </div>
     </VCard>

@@ -1,4 +1,5 @@
 import { useAuth } from '@/shared/supabase/authProvider';
+import { useCurrency } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
@@ -14,6 +15,7 @@ import styles from './AccumulationsList.module.css';
 
 export const SavingsOperationsList = () => {
   const { user } = useAuth();
+  const currency = useCurrency();
   const userId = user?.id ?? '';
   const operationsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
@@ -87,6 +89,7 @@ export const SavingsOperationsList = () => {
                             ),
                           0,
                         ),
+                        currency?.symbol,
                       )}
                     </span>
                   </span>

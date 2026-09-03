@@ -1,4 +1,5 @@
 import type { Operation } from '@/shared/supabase/types/domain';
+import { useCurrency } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount, formatDisplay } from '@/shared/utils';
@@ -18,6 +19,7 @@ export const DailyOperationCard = ({
   pending = false,
 }: DailyOperationCardProps) => {
   const setModal = useSetAtom(operationModalAtom);
+  const currency = useCurrency();
 
   const amount = Number(operation.amount) || 0;
   const deviation = dailyBudget != null ? amount - dailyBudget : null;
@@ -49,7 +51,7 @@ export const DailyOperationCard = ({
       <div className={styles.row}>
         <div className={styles.left}>
           <div className={styles.amount}>
-            {formatAmount(amount)}
+            {formatAmount(amount, currency?.symbol)}
           </div>
           {operation.description && (
             <div className={styles.subtitle}>{operation.description}</div>
@@ -58,7 +60,7 @@ export const DailyOperationCard = ({
         <div className={styles.right}>
           {deviation != null && (
             <div className={styles.deviation} style={{ color: deviationColor }}>
-              {formatAmount(Math.abs(deviation))}
+              {formatAmount(Math.abs(deviation), currency?.symbol)}
             </div>
           )}
           <div className={styles.date}>{formatDisplay(operation.date ?? '')}</div>

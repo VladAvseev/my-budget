@@ -7,6 +7,7 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { VModal } from '@/shared/ui/VModal';
 import { VSelect } from '@/shared/ui/VSelect';
 import { formatAmount, getErrorMessage } from '@/shared/utils';
+import { useCurrency } from '@/shared/hooks';
 import { useMemo, useState } from 'react';
 import { useReports } from '../../../api/useReports';
 import { useCategoryLimits } from '../../api/useCategoryLimits';
@@ -23,6 +24,7 @@ interface ImportLimitsModalProps {
 export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModalProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
+  const currency = useCurrency();
 
   const reportsQuery = useReports();
   const categoriesQuery = useCategories(userId, 'expense');
@@ -145,7 +147,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
                     </span>
                   </span>
                   <span className={settingsStyles.importAmount}>
-                    {formatAmount(Number(limit.amount))}
+                    {formatAmount(Number(limit.amount), currency?.symbol)}
                   </span>
                 </div>
               );

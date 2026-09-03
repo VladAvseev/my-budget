@@ -1,5 +1,5 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useAccumulations } from '@/shared/hooks';
+import { useAccumulations, useCurrency } from '@/shared/hooks';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -16,6 +16,7 @@ export const AccumulationsList = () => {
   const userId = user?.id ?? '';
   const accumulationsQuery = useAccumulations(userId);
   const categoriesQuery = useCategories(userId);
+  const currency = useCurrency();
 
   const accumulations = accumulationsQuery.data ?? [];
   const categories = categoriesQuery.data ?? [];
@@ -71,6 +72,7 @@ export const AccumulationsList = () => {
                           (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
                           0,
                         ),
+                        currency?.symbol,
                       )}
                     </span>
                   </span>

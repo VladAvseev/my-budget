@@ -1,4 +1,5 @@
 import type { Category } from '@/shared/supabase/types/domain';
+import { useCurrency } from '@/shared/hooks';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -24,6 +25,7 @@ export const OperationCardBase = ({
   pending = false,
   onOpen,
 }: OperationCardBaseProps) => {
+  const currency = useCurrency();
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (!pending && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
@@ -46,7 +48,7 @@ export const OperationCardBase = ({
     >
       <div className={styles.left}>
         <div className={styles.amount} style={{ color: amountColor }}>
-          {formatAmount(amount)}
+          {formatAmount(amount, currency?.symbol)}
         </div>
         {description && <div className={styles.subtitle}>{description}</div>}
       </div>

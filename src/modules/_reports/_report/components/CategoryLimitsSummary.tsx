@@ -1,6 +1,7 @@
 import type { Category, CategoryLimit, Operation } from '@/shared/supabase/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
+import { useCurrency } from '@/shared/hooks';
 import { useMemo } from 'react';
 import styles from './CategoryLimitsSummary.module.css';
 
@@ -10,8 +11,8 @@ export const getLimitColor = (spent: number, limit: number): string => {
   return 'var(--color-text-primary)';
 };
 
-export const formatLimitValue = (spent: number, limit: number): string =>
-  `${formatAmount(spent)} / ${formatAmount(limit)}`;
+export const formatLimitValue = (spent: number, limit: number, currencySymbol?: string | null): string =>
+  `${formatAmount(spent, currencySymbol)} / ${formatAmount(limit, currencySymbol)}`;
 
 interface CategoryLimitsSummaryProps {
   operations: Operation[];
@@ -24,6 +25,7 @@ export const CategoryLimitsSummary = ({
   limits,
   categories,
 }: CategoryLimitsSummaryProps) => {
+  const currency = useCurrency();
   const spentByCategory = useMemo(() => {
     const result = new Map<string, number>();
     for (const operation of operations) {
@@ -69,7 +71,7 @@ export const CategoryLimitsSummary = ({
                     />
                     <span className={styles.name}>{category?.name ?? 'Категория'}</span>
                     <div className={styles.value} style={{ color }}>
-                      {formatLimitValue(spent, limitAmount)}
+                      {formatLimitValue(spent, limitAmount, currency?.symbol)}
                     </div>
                   </div>
                   <span className={styles.percent}>{percentage}%</span>

@@ -3,6 +3,7 @@ import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import { formatAmount } from '@/shared/utils';
+import { useCurrency } from '@/shared/hooks';
 import { useOverviewCategories } from '../api/useOverviewCategories';
 import { buildChartData, type ChartData } from '../utils/overview';
 import styles from './CategoryDistributionChart.module.css';
@@ -23,6 +24,7 @@ const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: strin
 export const CategoryDistributionChart = ({
   operationsByReport,
 }: CategoryDistributionChartProps) => {
+  const currency = useCurrency();
   const [selectedType, setSelectedType] = useState<'expense' | 'income' | 'savings'>('expense');
 
   const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
@@ -105,7 +107,7 @@ export const CategoryDistributionChart = ({
             }}
           >
             <div className={styles.ringHole}>
-              <span className={styles.ringTotal}>{formatAmount(total)}</span>
+              <span className={styles.ringTotal}>{formatAmount(total, currency?.symbol)}</span>
             </div>
           </div>
 
@@ -129,7 +131,7 @@ export const CategoryDistributionChart = ({
                 key={`${segment.key}-amount`}
                 className={`${styles.textBold} ${styles.justifyEnd}`}
               >
-                {formatAmount(segment.total)}
+                {formatAmount(segment.total, currency?.symbol)}
               </span>,
             ])}
           </div>

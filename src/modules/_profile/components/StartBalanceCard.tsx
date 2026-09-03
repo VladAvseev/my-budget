@@ -1,36 +1,55 @@
-import { HIDDEN_AMOUNT, useAmountsVisibility, useCapital, useProfile } from '@/shared/hooks';
+import { HIDDEN_AMOUNT, useAmountsVisibility, useCapital, useCurrency, useProfile } from '@/shared/hooks';
+import { CURRENCIES } from '@/shared/constants/currencies';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
+import { VSelect } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { VToggle } from '@/shared/ui/VToggle';
 import commonStyles from '@/shared/styles/common.module.css';
 import { formatAmount, getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
+import { useUpdateCurrency } from '../api/useUpdateCurrency';
 import { useUpdateStartBalance } from '../api/useUpdateStartBalance';
 
 export const StartBalanceCard = () => {
   const { data: profile, isLoading } = useProfile();
   const { balance, capital, isLoading: isAmountsLoading } = useCapital();
   const { showBalance, showCapital, setShowBalance, setShowCapital } = useAmountsVisibility();
+  const updateCurrency = useUpdateCurrency();
+  const currency = useCurrency();
+
+  const currencyOptions = CURRENCIES.map((c) => ({
+    value: c.code,
+    label: `${c.name} (${c.symbol})`,
+  }));
 
   return (
     <VCard>
       <div className={commonStyles.columnL}>
         <div className={commonStyles.titleXl}>Баланс</div>
 
+        <VSelect
+          label="Валюта"
+          options={currencyOptions}
+          value={profile?.currency ?? ''}
+          placeholder="Не выбрано"
+          disabled={updateCurrency.isPending}
+          onChange={(value) => updateCurrency.mutate(value || null)}
+        />
+
         <AmountRow
           label="Отображение Капитала"
           visible={showCapital}
           onToggle={setShowCapital}
-          value={isAmountsLoading ? '—' : formatAmount(capital)}
+          value={isAmountsLoading ? '—' : formatAmount(capital, currency?.symbol)}
         />
         <AmountRow
           label="Отображение Баланса"
           visible={showBalance}
           onToggle={setShowBalance}
-          value={isAmountsLoading ? '—' : formatAmount(balance)}
+          value={isAmountsLoading ? '—' : formatAmount(balance, currency?.symbol)}
         />
 
         {isLoading && (

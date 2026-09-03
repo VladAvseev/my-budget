@@ -1,6 +1,7 @@
 import { useReports } from '../api/useReports';
 import { useSummary } from '../api/useSummary';
 import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
+import { useCurrency } from '@/shared/hooks';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -14,6 +15,7 @@ export const LastReportCard = () => {
   const lastReport = reports[0];
   const { data: summaryData, isFetched: summaryFetched } = useSummary(lastReport?.id ?? '');
   const summary = summaryData ?? { income: 0, expense: 0, savings: 0, daily: 0 };
+  const currency = useCurrency();
 
   if (reportsQuery.isLoading) {
     return (
@@ -61,25 +63,25 @@ export const LastReportCard = () => {
   const items = [
     {
       label: 'Доходы',
-      value: formatAmount(summary.income),
+      value: formatAmount(summary.income, currency?.symbol),
       percent: null,
       color: 'var(--color-success)',
     },
     {
       label: 'Расходы',
-      value: formatAmount(expenses),
+      value: formatAmount(expenses, currency?.symbol),
       percent: percentOfIncome(expenses),
       color: 'var(--color-error)',
     },
     {
       label: 'Накопления',
-      value: formatAmount(summary.savings),
+      value: formatAmount(summary.savings, currency?.symbol),
       percent: percentOfIncome(summary.savings),
       color: 'var(--color-warning)',
     },
     {
       label: 'Остаток',
-      value: formatAmount(balance),
+      value: formatAmount(balance, currency?.symbol),
       percent: percentOfIncome(balance),
       color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
     },

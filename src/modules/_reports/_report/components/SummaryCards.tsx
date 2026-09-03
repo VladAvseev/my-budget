@@ -1,6 +1,7 @@
 import type { OperationSummary } from '@/shared/supabase/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
+import { useCurrency } from '@/shared/hooks';
 import { useMemo } from 'react';
 import styles from './SummaryCards.module.css';
 
@@ -16,6 +17,7 @@ type SummaryItem = {
 };
 
 export const SummaryCards = ({ summary }: SummaryCardsProps) => {
+  const currency = useCurrency();
   const summaryData = useMemo(
     () => summary ?? { income: 0, expense: 0, savings: 0, daily: 0 },
     [summary],
@@ -61,7 +63,7 @@ export const SummaryCards = ({ summary }: SummaryCardsProps) => {
         <VCard key={item.label} className={styles.card}>
           <div className={styles.label}>{item.label}</div>
           <div className={styles.value} style={{ color: item.color }}>
-            {formatAmount(item.value)}
+            {formatAmount(item.value, currency?.symbol)}
           </div>
           {item.percent != null && (
             <div className={styles.percent}>{item.percent}% от доходов</div>

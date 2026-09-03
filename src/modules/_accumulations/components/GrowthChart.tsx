@@ -1,6 +1,7 @@
 import { useMemo, useState, useCallback } from 'react';
 import type { ChartPoint } from '../utils/buildGrowthChartData';
 import { formatAmount } from '@/shared/utils/format';
+import { useCurrency } from '@/shared/hooks';
 import styles from './GrowthChart.module.css';
 
 interface GrowthChartProps {
@@ -21,6 +22,7 @@ interface TooltipState {
 
 export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
+  const currency = useCurrency();
 
   const { niceMin, niceMax, ticks } = useMemo(() => {
     if (data.length === 0) {
@@ -133,7 +135,7 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
       <div className={styles.yAxis} style={{ height: svgHeight }}>
         <span className={styles.yAxisSizer}>
           {[...ticks].reverse().map((tick) => (
-            <span key={tick}>{formatAmount(tick)}</span>
+            <span key={tick}>{formatAmount(tick, currency?.symbol)}</span>
           ))}
         </span>
         {ticks.map((tick) => (
@@ -142,7 +144,7 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
             className={styles.labelY}
             style={{ top: getY(tick), transform: 'translateY(-50%)' }}
           >
-            {formatAmount(tick)}
+            {formatAmount(tick, currency?.symbol)}
           </span>
         ))}
       </div>
@@ -231,8 +233,7 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
             transform: 'translate(-50%, -100%)',
           }}
         >
-          <span className={styles.tooltipValue}>{formatAmount(tooltip.point.value)}</span>
-          {' ₽'}
+          <span className={styles.tooltipValue}>{formatAmount(tooltip.point.value, currency?.symbol)}</span>
         </div>
       )}
     </div>

@@ -1,5 +1,5 @@
 import type { Category } from '@/shared/supabase/types/domain';
-import { HIDDEN_AMOUNT } from '@/shared/hooks';
+import { HIDDEN_AMOUNT, useCurrency } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
@@ -38,6 +38,7 @@ export const AccumulationsStructure = ({
   interactive = false,
 }: AccumulationsStructureProps) => {
   const categoriesById = new Map(categories.map((category) => [category.id, category]));
+  const currency = useCurrency();
 
   const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
@@ -100,7 +101,7 @@ export const AccumulationsStructure = ({
                 >
                   <div className={styles.ringHole}>
                     <span className={styles.ringTotal}>
-                      {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total)}
+                      {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total, currency?.symbol)}
                     </span>
                   </div>
                 </div>
@@ -126,7 +127,7 @@ export const AccumulationsStructure = ({
                     key={`${segment.key}-amount`}
                     className={`${styles.textBold} ${styles.justifyEnd}`}
                   >
-                    {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total)}
+                    {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total, currency?.symbol)}
                   </span>,
                 ])}
               </div>

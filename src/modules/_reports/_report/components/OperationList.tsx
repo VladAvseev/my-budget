@@ -9,6 +9,7 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VToggle } from '@/shared/ui/VToggle';
 import { formatAmount } from '@/shared/utils';
+import { useCurrency } from '@/shared/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { groupedByTypeAtom, operationModalAtom } from '../atoms/report';
@@ -36,6 +37,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const limitsQuery = useCategoryLimits(type === 'expense' ? reportId : '');
   const setModal = useSetAtom(operationModalAtom);
   const [groupedByType, setGroupedByType] = useAtom(groupedByTypeAtom);
+  const currency = useCurrency();
 
   const operations = useMemo(
     () =>
@@ -157,8 +159,8 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
             );
             const limitAmount = limit ? Number(limit.amount) || 0 : 0;
             const headerValue = limit
-              ? formatLimitValue(groupTotal, limitAmount)
-              : formatAmount(groupTotal);
+              ? formatLimitValue(groupTotal, limitAmount, currency?.symbol)
+              : formatAmount(groupTotal, currency?.symbol);
             const headerColor = limit
               ? getLimitColor(groupTotal, limitAmount)
               : 'var(--color-text-primary)';

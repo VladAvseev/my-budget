@@ -24,6 +24,7 @@ export interface Database {
           user_id: string;
           email: string;
           start_balance: string;
+          currency: string | null;
           onboarded: boolean;
           show_news: boolean;
           role: string;
@@ -35,6 +36,7 @@ export interface Database {
           user_id?: string;
           email?: string;
           start_balance?: string;
+          currency?: string | null;
           onboarded?: boolean;
           show_news?: boolean;
           role?: string;
@@ -46,6 +48,7 @@ export interface Database {
           user_id?: string;
           email?: string;
           start_balance?: string;
+          currency?: string | null;
           onboarded?: boolean;
           show_news?: boolean;
           role?: string;
@@ -563,6 +566,12 @@ export interface Database {
       update_start_balance: {
         Args: {
           p_amount: number;
+        };
+        Returns: undefined;
+      };
+      update_currency: {
+        Args: {
+          p_currency: string | null;
         };
         Returns: undefined;
       };

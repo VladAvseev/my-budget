@@ -1,5 +1,5 @@
 import type { Category } from '@/shared/supabase/types/domain';
-import { HIDDEN_AMOUNT } from '@/shared/hooks';
+import { HIDDEN_AMOUNT, useCurrency } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import type { ReactNode } from 'react';
@@ -89,6 +89,7 @@ export const AccumulationsLegend = ({
   fullWidth = false,
 }: AccumulationsLegendProps) => {
   const { segments } = buildSegments(items, categories);
+  const currency = useCurrency();
 
   return (
     <div className={`${styles.legend}${fullWidth ? ` ${styles.legendFull}` : ''}`}>
@@ -108,7 +109,7 @@ export const AccumulationsLegend = ({
           {segment.percent.toFixed(1)}%
         </span>,
         <span key={`${segment.key}-amount`} className={`${styles.textBold} ${styles.justifyEnd}`}>
-          {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total)}
+          {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total, currency?.symbol)}
         </span>,
       ])}
     </div>
@@ -125,6 +126,7 @@ export const AccumulationsStructure = ({
   interactive = false,
 }: AccumulationsStructureProps) => {
   const { segments, total } = buildSegments(items, categories);
+  const currency = useCurrency();
 
   const gradient = segments
     .map((segment) => `${segment.color} ${segment.start}% ${segment.end}%`)
@@ -153,7 +155,7 @@ export const AccumulationsStructure = ({
               >
                 <div className={styles.ringHole}>
                   <span className={styles.ringTotal}>
-                    {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total)}
+                    {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total, currency?.symbol)}
                   </span>
                 </div>
               </div>

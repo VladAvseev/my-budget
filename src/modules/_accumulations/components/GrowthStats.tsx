@@ -1,4 +1,5 @@
 import type { GrowthStats as GrowthStatsData } from '../utils/buildGrowthStats';
+import { useCurrency } from '@/shared/hooks';
 import { formatAmount } from '@/shared/utils/format';
 import styles from './GrowthStats.module.css';
 
@@ -9,11 +10,6 @@ interface GrowthStatsProps {
 const colorClass = (value: number): string =>
   value > 0 ? styles.positive : value < 0 ? styles.negative : '';
 
-const formatSigned = (value: number): string => {
-  const sign = value > 0 ? '+' : '';
-  return `${sign}${formatAmount(value)}`;
-};
-
 const formatPct = (value: number): string => {
   const sign = value > 0 ? '+' : '';
   return `${sign}${value.toFixed(1)}%`;
@@ -21,12 +17,19 @@ const formatPct = (value: number): string => {
 
 export const GrowthStats = ({ stats }: GrowthStatsProps) => {
   const { monthly, yearly } = stats;
+  const currency = useCurrency();
+  const symbol = currency?.symbol ?? '₽';
+
+  const formatSigned = (value: number): string => {
+    const sign = value > 0 ? '+' : '';
+    return `${sign}${formatAmount(value, symbol)}`;
+  };
 
   const monthlyLine =
     monthly !== null
       ? monthly.pct !== null
-        ? `${formatSigned(monthly.abs)} ₽ (${formatPct(monthly.pct)})`
-        : `${formatSigned(monthly.abs)} ₽`
+        ? `${formatSigned(monthly.abs)} (${formatPct(monthly.pct)})`
+        : `${formatSigned(monthly.abs)}`
       : null;
 
   const yearlyLabel = yearly !== null && yearly.months < 12 ? `За ${yearly.months} мес.` : 'За год';
@@ -34,8 +37,8 @@ export const GrowthStats = ({ stats }: GrowthStatsProps) => {
   const yearlyLine =
     yearly !== null
       ? yearly.pct !== null
-        ? `${formatSigned(yearly.abs)} ₽ (${formatPct(yearly.pct)})`
-        : `${formatSigned(yearly.abs)} ₽`
+        ? `${formatSigned(yearly.abs)} (${formatPct(yearly.pct)})`
+        : `${formatSigned(yearly.abs)}`
       : null;
 
   if (!monthlyLine && !yearlyLine) return null;

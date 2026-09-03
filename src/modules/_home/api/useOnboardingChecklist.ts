@@ -39,6 +39,11 @@ export const useOnboardingChecklist = () => {
 
   const items: OnboardingItem[] = [
     {
+      id: 'currency',
+      label: 'В разделе "Профиль" выберите подходящую валюту',
+      done: profile?.currency !== null && profile?.currency !== undefined,
+    },
+    {
       id: 'categories',
       label: 'Добавьте категории расходов в разделе "Профиль"',
       done: counts.categories > 0,

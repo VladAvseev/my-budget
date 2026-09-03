@@ -1,4 +1,4 @@
-import { useProfile, useUserSummary } from '@/shared/hooks';
+import { useCurrency, useProfile, useUserSummary } from '@/shared/hooks';
 import { ChevronRightIcon, OverviewIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import summaryStyles from '@/shared/styles/summary.module.css';
@@ -14,6 +14,7 @@ export const OverviewCard = () => {
   const { data: summaryData, isFetched: summaryFetched } = useUserSummary(userId);
   const summary = summaryData ?? { income: 0, expense: 0, savings: 0, daily: 0 };
   const profileQuery = useProfile();
+  const currency = useCurrency();
 
   if (!profileQuery.isFetched || !summaryFetched) {
     return (
@@ -32,25 +33,25 @@ export const OverviewCard = () => {
   const items = [
     {
       label: 'Доходы',
-      value: formatAmount(income),
+      value: formatAmount(income, currency?.symbol),
       percent: null,
       color: 'var(--color-success)',
     },
     {
       label: 'Расходы',
-      value: formatAmount(summary.expense + summary.daily),
+      value: formatAmount(summary.expense + summary.daily, currency?.symbol),
       percent: percentOfIncome(summary.expense + summary.daily),
       color: 'var(--color-error)',
     },
     {
       label: 'Накопления',
-      value: formatAmount(summary.savings),
+      value: formatAmount(summary.savings, currency?.symbol),
       percent: percentOfIncome(summary.savings),
       color: 'var(--color-warning)',
     },
     {
       label: 'Баланс',
-      value: formatAmount(balance),
+      value: formatAmount(balance, currency?.symbol),
       percent: percentOfIncome(balance),
       color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
     },

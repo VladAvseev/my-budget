@@ -1,4 +1,5 @@
 import type { Category } from '@/shared/supabase/types/domain';
+import { useCurrency } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
@@ -14,6 +15,7 @@ interface SavingsOperationCardProps {
 
 export const SavingsOperationCard = ({ operation, category }: SavingsOperationCardProps) => {
   const navigate = useNavigate();
+  const currency = useCurrency();
 
   const isWithdrawal = operation.type === 'savings_out';
   const amount = signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0);
@@ -33,7 +35,7 @@ export const SavingsOperationCard = ({ operation, category }: SavingsOperationCa
     >
       <div className={styles.left}>
         <div className={`${styles.amount}${isWithdrawal ? ` ${styles.amountWithdrawal}` : ''}`}>
-          {formatAmount(amount)}
+          {formatAmount(amount, currency?.symbol)}
         </div>
         {operation.description && (
           <div className={styles.subtitle}>{operation.description}</div>
