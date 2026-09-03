@@ -102,17 +102,14 @@ export const AccumulationsCard = () => {
           <div className={styles.section}>
             <div className={styles.sectionTitle}>Структура накоплений</div>
             {total > 0 ? (
-              <>
-                <div className={styles.structureTotal}>
-                  {showCapital ? formatAmount(total, currency?.symbol) : HIDDEN_AMOUNT}
-                </div>
+
                 <AccumulationsLegend
                   items={structureItems}
                   categories={categories}
                   maskAmounts={!showCapital}
                   fullWidth
                 />
-              </>
+
             ) : (
               <div className={styles.emptyMessage}>Доли накоплений невозможно отобразить</div>
             )}
