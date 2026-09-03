@@ -12,7 +12,7 @@ import { useReports } from './api/useReports';
 import { selectedReportIdsAtom } from './atoms/overview';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
 import { CategoryDistributionChart } from './components/CategoryDistributionChart';
-import { OverviewTabs } from './components/OverviewTabs';
+import { ReportsFilter } from './components/ReportsFilter';
 import { SummaryCard } from './components/SummaryCard';
 import { emptyAmounts, sumOperations } from './utils/overview';
 
@@ -52,7 +52,7 @@ export const Page: React.FC = () => {
       <VPageHeader title="Обзор" onBack={() => navigate('/')} backAriaLabel="Назад на главную" />
 
       <div className={commonStyles.animateCard}>
-        <OverviewTabs reports={reports} />
+        <ReportsFilter reports={reports} />
       </div>
 
       {reportsQuery.isLoading && (

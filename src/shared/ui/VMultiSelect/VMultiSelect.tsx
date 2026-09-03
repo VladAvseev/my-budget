@@ -174,11 +174,11 @@ const Option = ({ option, isSelected, onClick }: OptionProps) => {
       className={styles.option}
       data-selected={isSelected ? 'true' : undefined}
     >
+      {option.prefix}
+      <span className={styles.optionText}>{option.label}</span>
       <span className={styles.checkmark}>
         {isSelected && <CheckIcon size={14} color="currentColor" />}
       </span>
-      {option.prefix}
-      <span className={styles.optionText}>{option.label}</span>
     </div>
   );
 };
