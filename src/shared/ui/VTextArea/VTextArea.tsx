@@ -39,6 +39,7 @@ export const VTextArea = ({
           onChange={handleChange}
           onFocus={onFocus}
           onBlur={onBlur}
+          maxLength={255}
           className={`${styles.input}${trailingIcon ? ` ${styles.inputWithTrailing}` : ''}`}
           aria-invalid={hasError}
           aria-describedby={hasError ? errorId : undefined}
