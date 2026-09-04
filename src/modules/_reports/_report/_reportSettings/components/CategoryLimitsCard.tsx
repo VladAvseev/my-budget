@@ -212,7 +212,11 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
         )}
 
         {!isLoading && isEmpty && (
-          <div className={styles.text}>Бюджет не задан. Нажмите «Добавить» или импортируйте из других отчётов</div>
+          <div className={styles.text}>
+            Бюджет — это плановый лимит расходов на категорию в рамках отчёта.
+            <br />
+            Нажмите «Добавить» или импортируйте из других отчётов.
+          </div>
         )}
 
         {!isLoading &&

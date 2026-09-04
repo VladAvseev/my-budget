@@ -44,7 +44,9 @@ export const AccumulationsList = () => {
         accumulations.length === 0 && (
           <VCard>
             <div className={styles.emptyState}>
-              <div className={styles.emptyTitle}>Нет начальных накоплений</div>
+              <div className={styles.emptyTitle}>
+                Начальные накопления — это накопления, которые были до начала ведения учёта.
+              </div>
               <div className={styles.emptyHint}>Нажмите «+», чтобы создать первое начальное накопление.</div>
             </div>
           </VCard>

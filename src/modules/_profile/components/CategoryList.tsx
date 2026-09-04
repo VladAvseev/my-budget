@@ -60,7 +60,9 @@ export const CategoryList = ({ type, title }: CategoryListProps) => {
 
         {!categoriesQuery.isLoading && !categoriesQuery.error && categories.length === 0 && (
           <div className={styles.emptyState}>
-            <div className={styles.emptyStateTitle}>Категорий пока нет</div>
+            <div className={styles.emptyStateTitle}>
+              Категория помогает распределить операции по группам для наглядной статистики.
+            </div>
             <div className={styles.emptyStateHint}>Нажмите «+», чтобы добавить первую категорию.</div>
           </div>
         )}

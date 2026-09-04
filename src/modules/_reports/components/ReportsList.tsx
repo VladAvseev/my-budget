@@ -55,7 +55,9 @@ export const ReportsList = () => {
           <div className={styles.emptyState}>
             {reports.length === 0 ? (
               <>
-                <div className={styles.emptyTitle}>Нет созданных отчётов</div>
+                <div className={styles.emptyTitle}>
+                  Отчёт — это период, за который вы фиксируете доходы, расходы и накопления.
+                </div>
                 <div className={styles.emptyHint}>Нажмите «+», чтобы создать первый отчёт.</div>
               </>
             ) : (

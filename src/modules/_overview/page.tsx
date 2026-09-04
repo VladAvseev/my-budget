@@ -77,7 +77,11 @@ export const Page: React.FC = () => {
           {selectedReports.length === 0 && (
             <VCard>
               <div className={commonStyles.emptyTitle}>Не выбран ни один отчёт</div>
-              <div className={commonStyles.emptyHint}>Выберите отчёты в списке выше.</div>
+              <div className={commonStyles.emptyHint}>
+                Обзор сводит информацию о доходах, расходах и накоплениях за выбранные периоды в одном месте.
+                <br />
+                Выберите отчёты в списке выше.
+              </div>
             </VCard>
           )}
 

@@ -72,7 +72,9 @@ export const GoalsSection = () => {
         goals.length === 0 && (
           <VCard>
             <div className={styles.emptyState}>
-              <div className={styles.emptyTitle}>Нет целей</div>
+              <div className={styles.emptyTitle}>
+                Цель — это желаемая сумма накоплений для выбранной категории.
+              </div>
               <div className={styles.emptyHint}>
                 Нажмите «+», чтобы задать желаемую сумму накоплений по категории.
               </div>
