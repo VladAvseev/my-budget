@@ -52,6 +52,7 @@
   flex-direction: column;
   gap: var(--space-m);
   height: 100%;
+  padding-right: var(--space-xxl);
 }
 
 .cardGrow {
