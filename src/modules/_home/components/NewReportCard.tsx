@@ -9,7 +9,7 @@ import styles from '../homeCard.module.css';
 export const NewReportCard = () => {
   const { data: reports = [], isLoading } = useReports();
 
-  if (isLoading) return null;
+  if (isLoading || reports.length === 0) return null;
 
   const latestReport = reports.reduce((max, report) =>
     new Date(report.period_end) > new Date(max.period_end) ? report : max,
