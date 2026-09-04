@@ -71,7 +71,7 @@
 }
 
 .statValue {
-  font-size: var(--font-size-l);
+  font-size: var(--font-size-m);
   font-weight: var(--font-weight-bold);
   color: var(--color-accent);
 }
