@@ -59,11 +59,11 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
     else if (residual <= 7) step = 5 * magnitude;
     else step = 10 * magnitude;
 
-    const nMin = Math.floor(min / step) * step;
-    const nMax = Math.ceil(max / step) * step;
+    const nMin = Math.round(Math.floor(min / step) * step);
+    const nMax = Math.round(Math.ceil(max / step) * step);
     const t: number[] = [];
     for (let v = nMin; v <= nMax; v += step) {
-      t.push(Math.round(v * 100) / 100);
+      t.push(Math.round(Math.round(v * 100) / 100));
     }
 
     return { niceMin: nMin, niceMax: nMax, ticks: t };
