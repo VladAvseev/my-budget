@@ -52,7 +52,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/profile', label: 'Профиль', icon: UserIcon },
   { to: '/reports', label: 'Периоды', icon: ReportsIcon },
   { to: '/accumulations', label: 'Накопления', icon: SavingsIcon },
-  { to: '/overview', label: 'Обзор', icon: OverviewIcon },
+  { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
   { to: '/help', label: 'Помощь', icon: HelpIcon },
   { to: '/support', label: 'Поддержка', icon: MessageIcon },
 ];

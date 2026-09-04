@@ -31,8 +31,8 @@ export const Page: React.FC = () => {
         <NewsCard />
         <OnboardingCard />
         <NewReportCard />
-        <OverviewCard />
         <LastReportCard />
+        <OverviewCard />
         <AccumulationsCard />
       </div>
     </div>

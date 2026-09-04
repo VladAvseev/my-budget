@@ -64,7 +64,7 @@ export const OverviewCard = () => {
           <span className={styles.titleIcon}>
             <OverviewIcon size={18} />
           </span>
-          <div className={summaryStyles.title}>Обзор</div>
+          <div className={summaryStyles.title}>Аналитика</div>
         </div>
         <div className={summaryStyles.subtitle}>Последний период</div>
         <div className={summaryStyles.grid}>

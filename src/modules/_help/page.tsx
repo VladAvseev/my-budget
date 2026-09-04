@@ -265,13 +265,13 @@ const SECTIONS: Section[] = [
   },
   {
     icon: OverviewIcon,
-    title: 'Обзор',
+    title: 'Аналитика',
     items: [
       {
         type: 'paragraph',
         segments: [
           { text: 'Раздел ' },
-          { text: '«Обзор»', to: '/overview', bold: true },
+          { text: '«Аналитика»', to: '/overview', bold: true },
           {
             text: ' сводит доходы, расходы и накопления сразу за несколько периодов в одной карточке.',
           },
