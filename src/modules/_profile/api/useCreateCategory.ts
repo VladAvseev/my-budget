@@ -50,6 +50,7 @@ export const useCreateCategory = (userId: string) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
     },
   });
 };

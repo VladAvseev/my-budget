@@ -21,6 +21,9 @@ export const useUpdateReport = (id: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reports', id] });
       queryClient.invalidateQueries({ queryKey: ['reports'] });
+      queryClient.invalidateQueries({ queryKey: ['userSummary'] });
+      queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
+      queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
     },
   });
 };

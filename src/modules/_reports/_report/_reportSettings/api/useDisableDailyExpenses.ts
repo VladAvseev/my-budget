@@ -15,6 +15,8 @@ export const useDisableDailyExpenses = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ['reports', id, 'operations'] });
       queryClient.invalidateQueries({ queryKey: ['reports', id, 'summary'] });
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
+      queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
+      queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
     },
   });
 };

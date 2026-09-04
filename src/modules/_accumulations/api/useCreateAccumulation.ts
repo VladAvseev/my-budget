@@ -45,6 +45,7 @@ export const useCreateAccumulation = (userId: string) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['accumulations', userId] });
+      queryClient.invalidateQueries({ queryKey: ['userSummary', userId] });
     },
   });
 };

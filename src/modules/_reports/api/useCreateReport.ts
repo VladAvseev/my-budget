@@ -52,6 +52,7 @@ export const useCreateReport = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
+      queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
     },
   });
 };

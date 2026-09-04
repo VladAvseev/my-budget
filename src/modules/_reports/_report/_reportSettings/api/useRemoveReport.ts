@@ -30,6 +30,9 @@ export const useRemoveReport = (id: string) => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       queryClient.invalidateQueries({ queryKey: ['reports', id] });
+      queryClient.invalidateQueries({ queryKey: ['userSummary'] });
+      queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
+      queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
     },
   });
 };
