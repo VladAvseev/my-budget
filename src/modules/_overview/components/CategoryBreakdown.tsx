@@ -43,7 +43,7 @@ const AccordionSummary = ({ total, reportCount }: { total: number; reportCount: 
         Всего: <span className={styles.strong}>{formatAmount(total, currency?.symbol)}</span>
       </span>
       <span className={styles.accordionSummaryLine}>
-        В среднем: <span className={styles.strong}>{formatAmount(average, currency?.symbol)}</span>
+        В месяц: <span className={styles.strong}>{formatAmount(average, currency?.symbol)}</span>
       </span>
     </span>
   );
@@ -81,7 +81,7 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
     <div className={styles.sectionHeader}>
       <div className={styles.sectionLabel}>{label}</div>
       <div className={styles.sectionAverage}>
-        В среднем: <span className={styles.strong}>{formatAmount(average, currency?.symbol)}</span>
+        В месяц: <span className={styles.strong}>{formatAmount(average, currency?.symbol)}</span>
       </div>
     </div>
   );
