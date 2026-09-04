@@ -74,7 +74,7 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
     setAmountError(undefined);
 
     if (!trimmedDescription) {
-      setDescriptionError('Укажите описание накопления');
+      setDescriptionError('Укажите описание начального накопления');
       return;
     }
     setDescriptionError(undefined);
@@ -98,13 +98,13 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
   return (
     <VModal
       visible
-      title="Изменить накопление"
+      title="Изменить начальное накопление"
       onClose={handleClose}
       error={submitError}
       footer={
         <div className={modalStyles.footerSplit}>
           <VIconButton
-            ariaLabel="Удалить накопление"
+            ariaLabel="Удалить начальное накопление"
             onClick={handleDelete}
             isLoading={removeAccumulation.isPending}
             isDisabled={isPending}
@@ -142,7 +142,7 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
         />
         <VTextInput
           label="Описание"
-          placeholder="Описание накопления"
+          placeholder="Описание начального накопления"
           value={description}
           error={descriptionError}
           disabled={isPending}

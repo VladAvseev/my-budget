@@ -30,7 +30,7 @@ export const AccumulationsList = () => {
   return (
     <div className={styles.root}>
       {accumulationsQuery.error && (
-        <VBanner type="error" visible message="Не удалось загрузить накопления" />
+        <VBanner type="error" visible message="Не удалось загрузить начальные накопления" />
       )}
 
       {accumulationsQuery.isLoading && (
@@ -44,8 +44,8 @@ export const AccumulationsList = () => {
         accumulations.length === 0 && (
           <VCard>
             <div className={styles.emptyState}>
-              <div className={styles.emptyTitle}>Нет накоплений</div>
-              <div className={styles.emptyHint}>Нажмите «+», чтобы создать первое накопление.</div>
+              <div className={styles.emptyTitle}>Нет начальных накоплений</div>
+              <div className={styles.emptyHint}>Нажмите «+», чтобы создать первое начальное накопление.</div>
             </div>
           </VCard>
         )}

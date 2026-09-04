@@ -53,7 +53,7 @@ export const Page: React.FC = () => {
         backAriaLabel="Назад на главную"
         right={
           <VIconButton
-            ariaLabel="Добавить накопление"
+            ariaLabel="Добавить начальное накопление"
             onClick={() => setAccumulationModal({ accumulation: null })}
             isDisabled={accumulationsQuery.isLoading}
             color="var(--color-accent)"
@@ -70,16 +70,16 @@ export const Page: React.FC = () => {
       <GoalsSection />
 
       <div className={commonStyles.row}>
-        <div className={commonStyles.titleXl}>Накопления</div>
-      </div>
-
-      <AccumulationsList />
-
-      <div className={commonStyles.row}>
         <div className={commonStyles.titleXl}>Накопления из отчётов</div>
       </div>
 
       <SavingsOperationsList />
+      
+      <div className={commonStyles.row}>
+        <div className={commonStyles.titleXl}>Начальные накопления</div>
+      </div>
+
+      <AccumulationsList />
 
       {accumulationModal?.accumulation ? (
         <EditAccumulationModal

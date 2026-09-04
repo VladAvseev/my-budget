@@ -89,7 +89,7 @@ export const AccumulationsStructure = ({
           {segments.length === 0 && <div className={styles.message}>Накоплений нет</div>}
 
           {segments.length > 0 && total <= 0 && (
-            <div className={styles.message}>Доли накоплений невозможно отобразить</div>
+            <div className={styles.message}>Доли начальных накоплений невозможно отобразить</div>
           )}
 
           {segments.length > 0 && (

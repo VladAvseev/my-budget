@@ -58,7 +58,7 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
     setAmountError(undefined);
 
     if (!trimmedDescription) {
-      setDescriptionError('Укажите описание накопления');
+      setDescriptionError('Укажите описание начального накопления');
       return;
     }
     setDescriptionError(undefined);
@@ -79,7 +79,7 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
   return (
     <VModal
       visible
-      title="Новое накопление"
+      title="Новое начальное накопление"
       onClose={handleClose}
       error={submitError}
       footer={
@@ -108,7 +108,7 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
         />
         <VTextInput
           label="Описание"
-          placeholder="Описание накопления"
+          placeholder="Описание начального накопления"
           value={description}
           error={descriptionError}
           disabled={createAccumulation.isPending}
