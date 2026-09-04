@@ -131,6 +131,11 @@
   color: var(--color-text-secondary);
 }
 
+.buttonRow {
+  display: flex;
+  gap: var(--space-s);
+}
+
 .emptyMessage {
   font-size: var(--font-size-m);
   font-weight: var(--font-weight-medium);
