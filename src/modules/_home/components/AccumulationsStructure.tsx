@@ -1,8 +1,6 @@
 import type { Category } from '@/shared/supabase/types/domain';
 import { HIDDEN_AMOUNT, useCurrency } from '@/shared/hooks';
-import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
-import type { ReactNode } from 'react';
 import styles from './AccumulationsStructure.module.css';
 
 export interface AccumulationsStructureItem {
@@ -18,16 +16,6 @@ interface CategorySegment {
   percent: number;
   start: number;
   end: number;
-}
-
-interface AccumulationsStructureProps {
-  items: AccumulationsStructureItem[];
-  categories: Category[];
-  hideRing?: boolean;
-  title?: string;
-  titleIcon?: ReactNode;
-  maskAmounts?: boolean;
-  interactive?: boolean;
 }
 
 interface AccumulationsLegendProps {
@@ -113,63 +101,5 @@ export const AccumulationsLegend = ({
         </span>,
       ])}
     </div>
-  );
-};
-
-export const AccumulationsStructure = ({
-  items,
-  categories,
-  hideRing = false,
-  title = 'Структура накоплений',
-  titleIcon,
-  maskAmounts = false,
-  interactive = false,
-}: AccumulationsStructureProps) => {
-  const { segments, total } = buildSegments(items, categories);
-  const currency = useCurrency();
-
-  const gradient = segments
-    .map((segment) => `${segment.color} ${segment.start}% ${segment.end}%`)
-    .join(', ');
-
-  return (
-    <VCard interactive={interactive} style={{ height: interactive ? '100%' : undefined }}>
-      <div className={styles.content}>
-        <div className={styles.titleRow}>
-          {titleIcon && <span className={styles.titleIcon}>{titleIcon}</span>}
-          <div className={styles.title}>{title}</div>
-        </div>
-
-        {segments.length === 0 && <div className={styles.message}>Накоплений нет</div>}
-
-        {segments.length > 0 && total <= 0 && (
-          <div className={styles.message}>Доли накоплений невозможно отобразить</div>
-        )}
-
-        {segments.length > 0 && (
-          <div className={styles.body}>
-            {!hideRing && total > 0 && (
-              <div
-                className={styles.ring}
-                style={{ ['--ring-gradient' as string]: `conic-gradient(${gradient})` }}
-              >
-                <div className={styles.ringHole}>
-                  <span className={styles.ringTotal}>
-                    {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total, currency?.symbol)}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <AccumulationsLegend
-              items={items}
-              categories={categories}
-              maskAmounts={maskAmounts}
-              fullWidth={hideRing}
-            />
-          </div>
-        )}
-      </div>
-    </VCard>
   );
 };

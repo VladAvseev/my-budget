@@ -4,12 +4,6 @@
   gap: var(--space-l);
 }
 
-.title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-}
-
 .chartWrapper {
   display: flex;
   flex-wrap: wrap;
@@ -32,49 +26,7 @@
   row-gap: var(--space-m);
   width: 100%;
   min-width: 0;
-  flex: 1 1 300px;
-}
-
-.ring {
-  position: relative;
-  width: 280px;
-  height: 280px;
-  border-radius: var(--radius-round);
-  background: var(--chart-gradient);
-  flex-shrink: 0;
-}
-
-.ringHole {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 160px;
-  height: 160px;
-  transform: translate(-50%, -50%);
-  border-radius: var(--radius-round);
-  background-color: var(--color-bg-surface);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.ringTotal {
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  text-align: center;
-  word-break: break-word;
-  padding: var(--space-s);
-}
-
-.legend {
-  display: grid;
-  grid-template-columns: 16px minmax(0, 1fr) 56px 104px;
-  align-items: center;
-  column-gap: var(--space-m);
-  row-gap: var(--space-m);
-  width: 100%;
-  min-width: 0;
+  flex: 1 300px;
 }
 
 .dot {

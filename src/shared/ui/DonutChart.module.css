@@ -1,0 +1,70 @@
+.wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.chart {
+  display: block;
+}
+
+.segment {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.segment:hover {
+  opacity: 0.8;
+}
+
+.hole {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-round);
+  background-color: var(--color-bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.total {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  word-break: break-word;
+  padding: var(--space-s);
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  padding: var(--space-s) var(--space-m);
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  box-shadow: var(--shadow-s);
+  z-index: 10;
+}
+
+.tooltipLabel {
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 2px;
+}
+
+.tooltipRow {
+  display: flex;
+  gap: var(--space-m);
+}
+
+.tooltipValue {
+  font-weight: var(--font-weight-bold);
+}
+
+.tooltipPercent {
+  color: var(--color-text-secondary);
+}

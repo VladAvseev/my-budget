@@ -1,6 +1,7 @@
 import type { Category } from '@/shared/supabase/types/domain';
 import { HIDDEN_AMOUNT, useCurrency } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
+import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import styles from './AccumulationsStructure.module.css';
@@ -76,9 +77,7 @@ export const AccumulationsStructure = ({
     cursor += percent;
   }
 
-  const gradient = segments
-    .map((segment) => `${segment.color} ${segment.start}% ${segment.end}%`)
-    .join(', ');
+  const donutSegments: DonutSegment[] = segments;
 
   return (
     <div className={commonStyles.animateCard}>
@@ -95,16 +94,11 @@ export const AccumulationsStructure = ({
           {segments.length > 0 && (
             <div className={styles.body}>
               {!hideRing && total > 0 && (
-                <div
-                  className={styles.ring}
-                  style={{ ['--ring-gradient' as string]: `conic-gradient(${gradient})` }}
-                >
-                  <div className={styles.ringHole}>
-                    <span className={styles.ringTotal}>
-                      {maskAmounts ? HIDDEN_AMOUNT : formatAmount(total, currency?.symbol)}
-                    </span>
-                  </div>
-                </div>
+                <DonutChart
+                  segments={donutSegments}
+                  total={total}
+                  maskAmounts={maskAmounts}
+                />
               )}
 
               <div className={styles.legend}>

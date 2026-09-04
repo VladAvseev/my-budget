@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
+import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { formatAmount } from '@/shared/utils';
 import { useCurrency } from '@/shared/hooks';
 import { useOverviewCategories } from '../api/useOverviewCategories';
@@ -88,6 +89,8 @@ export const CategoryDistributionChart = ({
 
   const { segments, total, hasNegative } = chartData;
 
+  const donutSegments: DonutSegment[] = segments;
+
   return (
     <VCard className={styles.content}>
       <VButtonGroup options={typeOptions} value={selectedType} onChange={setSelectedType} />
@@ -98,18 +101,7 @@ export const CategoryDistributionChart = ({
         </div>
       ) : (
         <div className={styles.chartWrapper}>
-          <div
-            className={styles.ring}
-            style={{
-              ['--chart-gradient' as string]: `conic-gradient(${segments
-                .map((s) => `${s.color} ${s.start}% ${s.end}%`)
-                .join(', ')})`,
-            }}
-          >
-            <div className={styles.ringHole}>
-              <span className={styles.ringTotal}>{formatAmount(total, currency?.symbol)}</span>
-            </div>
-          </div>
+          <DonutChart segments={donutSegments} total={total} />
 
           <div className={styles.legend}>
             {segments.flatMap((segment) => [
