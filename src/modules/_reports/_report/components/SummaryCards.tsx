@@ -51,7 +51,7 @@ export const SummaryCards = ({ summary }: SummaryCardsProps) => {
       {
         label: 'Остаток',
         value: balance,
-        percent: summaryData.income > 0 ? Math.max(0, Math.round((balance / summaryData.income) * 100)) : 0,
+        percent: summaryData.income > 0 ? Math.max(0, Math.round((balance / summaryData.income) * 100)) : null,
         color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
       },
     ];
