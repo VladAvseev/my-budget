@@ -46,7 +46,7 @@ export const ReportsFilter = ({ reports }: ReportsFilterProps) => {
 
   return (
     <VTreeSelect
-      label="Отчёты"
+      label="Периоды"
       items={items}
       value={selectedIds}
       onChange={setSelectedIds}

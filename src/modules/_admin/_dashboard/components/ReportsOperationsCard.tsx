@@ -20,13 +20,13 @@ export const ReportsOperationsCard: React.FC<ReportsOperationsCardProps> = ({
 
   return (
     <VCard className={styles.card}>
-      <div className={commonStyles.cardTitle}>Отчёты и операции</div>
+      <div className={commonStyles.cardTitle}>Периоды и операции</div>
       <div className={styles.statGrid}>
         <span className={styles.statHeaderCell}>Показатель</span>
         <span className={styles.statHeaderCell}>Кол-во</span>
         <span className={styles.statHeaderCell}>%</span>
 
-        <span className={styles.statSubheader}>Отчёты</span>
+        <span className={styles.statSubheader}>Периоды</span>
         <span className={styles.statLabel}>Всего</span>
         <span className={styles.statValue}>{reportsTotal}</span>
         <span className={styles.statPercent}>{percent(reportsTotal, reportsTotal)}%</span>

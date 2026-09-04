@@ -50,12 +50,12 @@ export const useOnboardingChecklist = () => {
     },
     {
       id: 'report',
-      label: 'Создайте первый отчёт в разделе "Отчёты"',
+      label: 'Добавьте первый период в разделе «Периоды»',
       done: counts.reports > 0,
     },
     {
       id: 'operations',
-      label: 'Откройте новый отчёт и запишите первую операцию',
+      label: 'Откройте новый период и запишите первую операцию',
       done: counts.operations > 0,
     },
   ];

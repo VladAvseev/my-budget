@@ -3,6 +3,7 @@ import { useSummary } from '../api/useSummary';
 import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
 import { useCurrency } from '@/shared/hooks';
 import summaryStyles from '@/shared/styles/summary.module.css';
+import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
@@ -33,12 +34,13 @@ export const LastReportCard = () => {
             <span className={styles.titleIcon}>
               <ReportsIcon size={18} />
             </span>
-            <div className={styles.title}>Последний отчёт</div>
+            <div className={styles.title}>Последний период</div>
           </div>
-          <div className={styles.emptyMessage}>Отчёты не найдены</div>
+          <div className={styles.emptyMessage}>Периоды не найдены</div>
           <div className={styles.subtitle}>
-            Перейдите в раздел «Отчёты» и создайте отчёт.
+            Перейдите в раздел «Периоды» и добавьте период.
           </div>
+          <VButton className={styles.fullWidthButton}>Добавить операцию</VButton>
         </VCard>
         <span className={styles.chevron}>
           <ChevronRightIcon size={18} />
@@ -94,7 +96,7 @@ export const LastReportCard = () => {
           <span className={styles.titleIcon}>
             <ReportsIcon size={18} />
           </span>
-          <div className={styles.title}>Последний отчёт</div>
+          <div className={styles.title}>Последний период</div>
         </div>
         <div className={styles.subtitle}>{lastReport.name}</div>
         <div className={summaryStyles.grid}>
@@ -118,6 +120,7 @@ export const LastReportCard = () => {
             </div>,
           ])}
         </div>
+        <VButton className={styles.fullWidthButton}>Добавить операцию</VButton>
       </VCard>
       <span className={styles.chevron}>
         <ChevronRightIcon size={18} />

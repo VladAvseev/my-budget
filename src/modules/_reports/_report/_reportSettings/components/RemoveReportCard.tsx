@@ -31,22 +31,22 @@ export const RemoveReportCard = ({ report }: RemoveReportCardProps) => {
   return (
     <VCard className={styles.dangerZone}>
       <div className={styles.content}>
-        <div className={styles.title}>Удаление отчёта</div>
+        <div className={styles.title}>Удаление периода</div>
         <div className={styles.text}>
-          Отчёт «{report.name}» и все его операции будут безвозвратно удалены.
+          Период «{report.name}» и все его операции будут безвозвратно удалены.
         </div>
         {submitError && <VBanner type="error" visible message={submitError} />}
         <div>
           <VButton variant="danger" onClick={() => setIsConfirmOpen(true)}>
-            Удалить отчёт
+            Удалить период
           </VButton>
         </div>
       </div>
 
       <VConfirmModal
         visible={isConfirmOpen}
-        title="Удалить отчёт"
-        message={`Удалить отчёт «${report.name}»? Это действие нельзя отменить.`}
+        title="Удалить период"
+        message={`Удалить период «${report.name}»? Это действие нельзя отменить.`}
         confirmLabel="Удалить"
         isLoading={removeReport.isPending}
         onCancel={() => setIsConfirmOpen(false)}

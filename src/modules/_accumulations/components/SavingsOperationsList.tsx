@@ -40,7 +40,7 @@ export const SavingsOperationsList = () => {
   return (
     <div className={styles.root}>
       {operationsQuery.error && (
-        <VBanner type="error" visible message="Не удалось загрузить накопления из отчётов" />
+        <VBanner type="error" visible message="Не удалось загрузить накопления из периодов" />
       )}
 
       {operationsQuery.isLoading && (
@@ -54,9 +54,9 @@ export const SavingsOperationsList = () => {
         operations.length === 0 && (
           <VCard>
             <div className={styles.emptyState}>
-              <div className={styles.emptyTitle}>Нет накоплений из отчётов</div>
+              <div className={styles.emptyTitle}>Нет накоплений из периодов</div>
               <div className={styles.emptyHint}>
-                Накопления появятся при создании операций в отчётах.
+                Накопления появятся при добавлении операций в периодах.
               </div>
             </div>
           </VCard>

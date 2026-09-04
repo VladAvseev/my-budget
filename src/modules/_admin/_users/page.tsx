@@ -24,12 +24,12 @@ const COLUMNS: Column[] = [
   { key: 'onboarded', label: 'Онбординг', sortType: 'boolean' },
   { key: 'sawNews', label: 'Просмотр новости', sortType: 'boolean' },
   { key: 'categoriesCount', label: 'Категории', sortType: 'number' },
-  { key: 'reportsCount', label: 'Отчёты', sortType: 'number' },
+  { key: 'reportsCount', label: 'Периоды', sortType: 'number' },
   { key: 'operationsCount', label: 'Операции', sortType: 'number' },
   { key: 'incomeCount', label: 'Доходы', sortType: 'number' },
   { key: 'dailyCount', label: 'Еж. расходы', sortType: 'number' },
   { key: 'expenseCount', label: 'Расходы', sortType: 'number' },
-  { key: 'savingsCount', label: 'Накопления (отчёты)', sortType: 'number' },
+  { key: 'savingsCount', label: 'Накопления (периоды)', sortType: 'number' },
   { key: 'accumulationsCount', label: 'Накопления (ручные)', sortType: 'number' },
 ];
 

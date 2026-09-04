@@ -858,14 +858,13 @@ begin
     'id', id,
     'user_id', user_id,
     'name', name,
-    'code', code,
     'has_daily_expenses', has_daily_expenses,
     'daily_budget', daily_budget,
     'period_start', period_start,
     'period_end', period_end,
     'created_at', created_at,
     'updated_at', updated_at
-  ) order by period_start desc), '[]'::jsonb)
+  ) order by created_at desc), '[]'::jsonb)
   into result
   from public.reports
   where user_id = auth.uid();
@@ -1011,7 +1010,7 @@ begin
     'period_end', period_end,
     'created_at', created_at,
     'updated_at', updated_at
-  ) order by period_start desc), '[]'::jsonb)
+  ) order by created_at desc), '[]'::jsonb)
   into result
   from public.reports
   where user_id = auth.uid();
@@ -1119,6 +1118,21 @@ begin
 
   return result;
 end;
+$$;
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- Источник: src/modules/_profile/api/useUpdateCurrency.sql
+-- Обновление валюты профиля.
+-- SECURITY INVOKER + auth.uid(): работает в контексте пользователя (RLS-политики).
+create or replace function public.update_currency(p_currency text)
+returns void
+language sql
+security invoker
+set search_path = public
+as $$
+  update public.profiles
+  set currency = p_currency
+  where user_id = auth.uid();
 $$;
 
 -- ────────────────────────────────────────────────────────────────────────────
@@ -1373,7 +1387,7 @@ begin
   into free_date;
 
   if free_date is null then
-    raise exception 'Нет свободных дат в отчётном периоде';
+    raise exception 'Нет свободных дат в периоде';
   end if;
 
   insert into public.operations (report_id, user_id, type, amount, description, date)
@@ -1592,7 +1606,7 @@ begin
     select 1 from public.reports
     where user_id = auth.uid() and code = p_code
   ) then
-    raise exception 'Отчёт с таким кодом уже существует';
+    raise exception 'Такой период уже существует';
   end if;
 
   insert into public.reports (user_id, name, code, has_daily_expenses, daily_budget, period_start, period_end)
@@ -1878,6 +1892,7 @@ begin
     'user_id', user_id,
     'email', email,
     'start_balance', start_balance,
+    'currency', currency,
     'onboarded', onboarded,
     'show_news', show_news,
     'role', role,

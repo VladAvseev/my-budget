@@ -20,7 +20,7 @@ export const UsersCard: React.FC<UsersCardProps> = ({ stats }) => {
 
   const rows: UsersRow[] = [
     { label: 'Всего', value: total },
-    { label: 'Без отчётов', value: withoutReports },
+    { label: 'Без периодов', value: withoutReports },
     { label: 'Прошли онбординг', value: onboarded },
     { label: 'Увидели новости', value: sawNews },
   ];

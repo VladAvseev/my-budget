@@ -66,7 +66,7 @@ export const OverviewCard = () => {
           </span>
           <div className={summaryStyles.title}>Обзор</div>
         </div>
-        <div className={summaryStyles.subtitle}>Последний отчёт</div>
+        <div className={summaryStyles.subtitle}>Последний период</div>
         <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
             <div key={`${item.label}-label`} className={summaryStyles.label}>

@@ -1,9 +1,9 @@
-import { ReportsIcon } from '@/shared/icons';
-import { ChevronRightIcon } from '@/shared/icons';
+import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
 import { useReports } from '../api/useReports';
+import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
-import { Link } from 'react-router-dom';
 import { formatDisplay } from '@/shared/utils';
+import { Link } from 'react-router-dom';
 import styles from '../homeCard.module.css';
 
 export const NewReportCard = () => {
@@ -27,12 +27,13 @@ export const NewReportCard = () => {
           <span className={styles.titleIcon}>
             <ReportsIcon size={18} />
           </span>
-          <div className={styles.title}>Пришло время создать новый отчёт</div>
+          <div className={styles.title}>Пришло время добавить новый период</div>
         </div>
         <div className={styles.subtitle}>
-          Период последнего отчёта завершился {formatDisplay(latestPeriodEnd)}.
-          Создайте новый отчёт для продолжения учёта.
+          Период последнего периода завершился {formatDisplay(latestPeriodEnd)}.
+          Добавьте новый период для продолжения учёта.
         </div>
+        <VButton className={styles.fullWidthButton}>Добавить период</VButton>
       </VCard>
       <span className={styles.chevron}>
         <ChevronRightIcon size={18} />

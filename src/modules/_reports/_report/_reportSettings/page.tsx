@@ -16,9 +16,9 @@ export const Page: React.FC = () => {
   return (
     <div className={commonStyles.page}>
       <VPageHeader
-        title={report ? `Настройки отчёта «${report.name}»` : 'Настройки отчёта'}
+        title={report ? `Настройки периода «${report.name}»` : 'Настройки периода'}
         onBack={() => navigate(`/reports/${id ?? ''}`)}
-        backAriaLabel="Назад к отчёту"
+        backAriaLabel="Назад к периоду"
       />
 
       {isLoading && (
@@ -29,7 +29,7 @@ export const Page: React.FC = () => {
 
       {!isLoading && (error || !report) && (
         <VCard>
-          <div className={commonStyles.textSecondary}>Отчёт не найден</div>
+          <div className={commonStyles.textSecondary}>Период не найден</div>
         </VCard>
       )}
 

@@ -97,7 +97,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
     >
       <div className={modalStyles.content}>
         <VSelect
-          label="Отчёт"
+          label="Период"
           options={reportOptions}
           value={selectedReportId}
           disabled={setLimits.isPending}
@@ -109,7 +109,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
 
         {!hasSelection && (
           <div className={settingsStyles.text}>
-            Выберите отчёт, чтобы посмотреть его бюджет. Он полностью заменит текущий бюджет отчёта
+            Выберите период, чтобы посмотреть его бюджет. Он полностью заменит текущий бюджет периода
             «{report.name}».
           </div>
         )}
@@ -121,15 +121,15 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
         )}
 
         {hasSelection && sourceLimitsQuery.error && (
-          <VBanner type="error" visible message="Не удалось загрузить бюджет отчёта" />
+          <VBanner type="error" visible message="Не удалось загрузить бюджет периода" />
         )}
 
         {hasSelection && !sourceLimitsQuery.isLoading && !sourceLimitsQuery.error && (
           <div className={settingsStyles.importBox}>
-            <div className={settingsStyles.importLabel}>Бюджет выбранного отчёта</div>
+            <div className={settingsStyles.importLabel}>Бюджет выбранного периода</div>
             {sourceLimits.length === 0 && (
               <div className={settingsStyles.text}>
-                У выбранного отчёта нет бюджета.
+                У выбранного периода нет бюджета.
               </div>
             )}
             {sourceLimits.map((limit) => {

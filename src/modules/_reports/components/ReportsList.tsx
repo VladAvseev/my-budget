@@ -42,7 +42,7 @@ export const ReportsList = () => {
         onChange={setSearchQuery}
       />
 
-      {error && <VBanner type="error" visible message="Не удалось загрузить отчёты" />}
+      {error && <VBanner type="error" visible message="Не удалось загрузить периоды" />}
 
       {isLoading && (
         <div className={styles.loaderWrap}>
@@ -56,9 +56,9 @@ export const ReportsList = () => {
             {reports.length === 0 ? (
               <>
                 <div className={styles.emptyTitle}>
-                  Отчёт — это период, за который вы фиксируете доходы, расходы и накопления.
+                  Период — это временной контейнер, за который вы фиксируете доходы, расходы и накопления.
                 </div>
-                <div className={styles.emptyHint}>Нажмите «+», чтобы создать первый отчёт.</div>
+                <div className={styles.emptyHint}>Нажмите «+», чтобы добавить первый период.</div>
               </>
             ) : (
               <>

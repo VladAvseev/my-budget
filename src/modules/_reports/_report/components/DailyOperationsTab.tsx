@@ -95,7 +95,7 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
         <VCard>
           <div className={styles.emptyState}>
             <div className={styles.emptyTitle}>
-              Ежедневные расходы — это записи о сумме трат за день, которые вы не хотите выносить в отдельный расход или категорию расходов в рамках отчёта.
+              Ежедневные расходы — это записи о сумме трат за день, которые вы не хотите выносить в отдельный расход или категорию расходов в рамках периода.
             </div>
             <div className={styles.emptyHint}>Нажмите «+», чтобы добавить первую операцию.</div>
           </div>

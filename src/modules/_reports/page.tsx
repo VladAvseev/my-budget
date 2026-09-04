@@ -17,12 +17,12 @@ export const Page: React.FC = () => {
   return (
     <div className={commonStyles.page}>
       <VPageHeader
-        title="Отчёты"
+        title="Периоды"
         onBack={() => navigate('/')}
         backAriaLabel="Назад на главную"
         right={
           <VIconButton
-            ariaLabel="Создать отчёт"
+            ariaLabel="Добавить период"
             onClick={() => setIsModalOpen(true)}
             isDisabled={reportsQuery.isLoading}
             color="var(--color-accent)"

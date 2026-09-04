@@ -61,13 +61,13 @@ export const Page: React.FC = () => {
         </div>
       )}
 
-      {reportsQuery.error && <VBanner type="error" visible message="Не удалось загрузить отчёты" />}
+      {reportsQuery.error && <VBanner type="error" visible message="Не удалось загрузить периоды" />}
 
       {!reportsQuery.isLoading && !reportsQuery.error && reports.length === 0 && (
         <VCard>
-          <div className={commonStyles.emptyTitle}>Нет созданных отчётов</div>
+          <div className={commonStyles.emptyTitle}>Нет периодов</div>
           <div className={commonStyles.emptyHint}>
-            Создайте отчёт в разделе «Отчёты», чтобы увидеть обзор.
+            Добавьте период в разделе «Периоды», чтобы увидеть обзор.
           </div>
         </VCard>
       )}
@@ -76,11 +76,11 @@ export const Page: React.FC = () => {
         <>
           {selectedReports.length === 0 && (
             <VCard>
-              <div className={commonStyles.emptyTitle}>Не выбран ни один отчёт</div>
+              <div className={commonStyles.emptyTitle}>Не выбран ни один период</div>
               <div className={commonStyles.emptyHint}>
                 Обзор сводит информацию о доходах, расходах и накоплениях за выбранные периоды в одном месте.
                 <br />
-                Выберите отчёты в списке выше.
+                Выберите периоды в списке выше.
               </div>
             </VCard>
           )}

@@ -114,7 +114,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
     let isValid = true;
 
     if (codeExists) {
-      setSubmitError('Отчёт с таким кодом уже существует');
+      setSubmitError('Такой период уже существует');
       return;
     }
 
@@ -151,7 +151,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
   return (
     <VModal
       visible={visible}
-      title={`Новый отчёт ${name}`}
+      title={`Новый период ${name}`}
       onClose={handleClose}
       error={submitError}
       footer={
@@ -170,7 +170,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
       }
     >
       <div className={modalStyles.content}>
-        <div className={styles.sectionTitle}>Отчётный период</div>
+        <div className={styles.sectionTitle}>Период</div>
         <div className={styles.periodSelector}>
           <VIconButton
             ariaLabel="Предыдущий месяц"
@@ -214,7 +214,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
           <VBanner
             type="error"
             visible
-            message="Отчёт с таким кодом уже существует"
+            message="Такой период уже существует"
           />
         )}
 

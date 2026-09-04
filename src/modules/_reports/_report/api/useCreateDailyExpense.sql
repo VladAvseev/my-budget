@@ -29,7 +29,7 @@ begin
   into free_date;
 
   if free_date is null then
-    raise exception 'Нет свободных дат в отчётном периоде';
+    raise exception 'Нет свободных дат в периоде';
   end if;
 
   insert into public.operations (report_id, user_id, type, amount, description, date)

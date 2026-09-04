@@ -134,6 +134,12 @@
 .buttonRow {
   display: flex;
   gap: var(--space-s);
+  margin-top: auto;
+}
+
+.fullWidthButton {
+  width: 100%;
+  margin-top: auto;
 }
 
 .emptyMessage {

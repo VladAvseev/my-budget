@@ -19,7 +19,7 @@ begin
     select 1 from public.reports
     where user_id = auth.uid() and code = p_code
   ) then
-    raise exception 'Отчёт с таким кодом уже существует';
+    raise exception 'Такой период уже существует';
   end if;
 
   insert into public.reports (user_id, name, code, has_daily_expenses, daily_budget, period_start, period_end)
