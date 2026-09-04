@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import type { ChartPoint } from '../utils/buildGrowthChartData';
 import { formatAmount } from '@/shared/utils/format';
 import { useCurrency } from '@/shared/hooks';
@@ -10,9 +10,9 @@ interface GrowthChartProps {
   height?: number;
 }
 
-const PADDING = { top: 12, right: 12, bottom: 96, left: 8 };
+const PADDING = { top: 12, right: 6, bottom: 72, left: 4 };
 const GRID_LINES = 8;
-const POINT_SPACING = 32  ;
+const POINT_SPACING = 24  ;
 
 interface TooltipState {
   x: number;
@@ -22,7 +22,15 @@ interface TooltipState {
 
 export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const currency = useCurrency();
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (el && el.scrollWidth > el.clientWidth) {
+      el.scrollLeft = el.scrollWidth - el.clientWidth;
+    }
+  }, [data]);
 
   const { niceMin, niceMax, ticks } = useMemo(() => {
     if (data.length === 0) {
@@ -132,25 +140,9 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.yAxis} style={{ height: svgHeight }}>
-        <span className={styles.yAxisSizer}>
-          {[...ticks].reverse().map((tick) => (
-            <span key={tick}>{formatAmount(tick, currency?.symbol)}</span>
-          ))}
-        </span>
-        {ticks.map((tick) => (
-          <span
-            key={tick}
-            className={styles.labelY}
-            style={{ top: getY(tick), transform: 'translateY(-50%)' }}
-          >
-            {formatAmount(tick, currency?.symbol)}
-          </span>
-        ))}
-      </div>
-
-      <div className={styles.container}>
-        <svg
+      <div className={styles.container} ref={containerRef}>
+        <div className={styles.chartWrap}>
+          <svg
           className={styles.chart}
           width={svgWidth}
           height={svgHeight}
@@ -197,7 +189,7 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
                 className={styles.dot}
                 cx={x}
                 cy={y}
-                r={5.25}
+                r={4}
                 fill={color}
                 stroke="var(--color-bg-primary)"
                 onMouseEnter={(e) => handleDotEnter(e, point)}
@@ -222,6 +214,24 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
             );
           })}
         </svg>
+        </div>
+      </div>
+
+      <div className={styles.yAxis} style={{ height: svgHeight }}>
+        <span className={styles.yAxisSizer}>
+          {[...ticks].reverse().map((tick) => (
+            <span key={tick}>{formatAmount(tick, currency?.symbol)}</span>
+          ))}
+        </span>
+        {ticks.map((tick) => (
+          <span
+            key={tick}
+            className={styles.labelY}
+            style={{ top: getY(tick), transform: 'translateY(-50%)' }}
+          >
+            {formatAmount(tick, currency?.symbol)}
+          </span>
+        ))}
       </div>
 
       {tooltip && (

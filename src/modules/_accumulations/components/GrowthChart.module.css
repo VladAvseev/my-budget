@@ -5,7 +5,6 @@
 .yAxis {
   position: relative;
   flex-shrink: 0;
-  padding-right: 8px;
 }
 
 .yAxisSizer {
@@ -24,11 +23,10 @@
 
 .labelY {
   position: absolute;
-  right: 8px;
   color: var(--color-text-secondary);
   font-size: var(--font-size-s);
   font-family: var(--font-family);
-  text-align: right;
+  text-align: left;
   white-space: nowrap;
 }
 
@@ -38,6 +36,12 @@
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+}
+
+.chartWrap {
+  width: max-content;
+  min-width: 100%;
+  margin-left: auto;
 }
 
 .chart {
@@ -72,7 +76,7 @@
 }
 
 .dot {
-  stroke-width: 3;
+  stroke-width: 2;
   cursor: pointer;
   transition: r 0.15s ease;
 }
