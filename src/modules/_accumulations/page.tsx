@@ -4,6 +4,7 @@ import { useAccumulations } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VIconButton } from '@/shared/ui/VIconButton';
+import { VLoader } from '@/shared/ui/VLoader';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
@@ -33,6 +34,9 @@ export const Page: React.FC = () => {
   const accumulations = accumulationsQuery.data ?? [];
   const savings = savingsQuery.data ?? [];
   const categories = categoriesQuery.data ?? [];
+
+  const structureLoading =
+    accumulationsQuery.isLoading || savingsQuery.isLoading || categoriesQuery.isLoading;
 
   const structureItems = [
     ...accumulations.map((accumulation) => ({
@@ -66,7 +70,13 @@ export const Page: React.FC = () => {
 
       <GrowthChartsSection userId={userId} />
 
-      <AccumulationsStructure items={structureItems} categories={categories} />
+      {structureLoading ? (
+        <div className={commonStyles.loaderContainer}>
+          <VLoader />
+        </div>
+      ) : (
+        <AccumulationsStructure items={structureItems} categories={categories} />
+      )}
       <GoalsSection />
 
       <div className={commonStyles.row}>
