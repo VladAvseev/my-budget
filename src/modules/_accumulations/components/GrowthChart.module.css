@@ -7,22 +7,18 @@
   flex-shrink: 0;
 }
 
-.yAxisSizer {
-  visibility: hidden;
+.labelYGhost {
   display: block;
+  visibility: hidden;
   white-space: nowrap;
+  color: var(--color-text-secondary);
   font-size: var(--font-size-s);
   font-family: var(--font-family);
-  line-height: 1;
-  pointer-events: none;
-}
-
-.yAxisSizer span {
-  display: block;
 }
 
 .labelY {
   position: absolute;
+  left: 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-s);
   font-family: var(--font-family);
@@ -41,11 +37,11 @@
 .chartWrap {
   width: max-content;
   min-width: 100%;
-  margin-left: auto;
 }
 
 .chart {
   display: block;
+  margin-left: auto;
 }
 
 .empty {

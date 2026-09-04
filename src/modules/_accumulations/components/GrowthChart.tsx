@@ -45,7 +45,7 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
       return {
         niceMin: min - pad,
         niceMax: max + pad,
-        ticks: [min - pad, min, max, max + pad],
+        ticks: [min - pad, min, max + pad],
       };
     }
 
@@ -147,11 +147,11 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
           width={svgWidth}
           height={svgHeight}
         >
-          {ticks.map((tick) => {
+          {ticks.map((tick, i) => {
             const y = getY(tick);
             return (
               <line
-                key={tick}
+                key={`${tick}-${i}`}
                 className={styles.gridLine}
                 x1={PADDING.left}
                 y1={y}
@@ -218,14 +218,12 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
       </div>
 
       <div className={styles.yAxis} style={{ height: svgHeight }}>
-        <span className={styles.yAxisSizer}>
-          {[...ticks].reverse().map((tick) => (
-            <span key={tick}>{formatAmount(tick, currency?.symbol)}</span>
-          ))}
+        <span className={styles.labelYGhost}>
+          {formatAmount(ticks.length > 0 ? Math.max(...ticks.map(t => Math.abs(t))) : 0, currency?.symbol)}
         </span>
-        {ticks.map((tick) => (
+        {[...ticks].reverse().map((tick, i) => (
           <span
-            key={tick}
+            key={`${tick}-${i}`}
             className={styles.labelY}
             style={{ top: getY(tick), transform: 'translateY(-50%)' }}
           >
