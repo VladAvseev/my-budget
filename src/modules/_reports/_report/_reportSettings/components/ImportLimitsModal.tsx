@@ -100,7 +100,6 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
           label="Отчёт"
           options={reportOptions}
           value={selectedReportId}
-          placeholder="Выберите отчёт"
           disabled={setLimits.isPending}
           onChange={(value) => {
             setSelectedReportId(value);

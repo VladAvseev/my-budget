@@ -12,7 +12,7 @@ export interface VSelectProps {
   label?: string;
   options: VSelectOption[];
   value?: string;
-  placeholder?: string;
+  emptyText?: string;
   error?: string;
   disabled?: boolean;
   required?: boolean;
@@ -25,7 +25,7 @@ export const VSelect = ({
   label,
   options,
   value = '',
-  placeholder,
+  emptyText = 'Не выбрано',
   error,
   disabled,
   required,
@@ -50,7 +50,7 @@ export const VSelect = ({
   }, []);
 
   const selectedOption = options.find((option) => option.value === value);
-  const displayText = selectedOption ? selectedOption.label : placeholder ?? '';
+  const displayText = selectedOption ? selectedOption.label : emptyText;
 
   const handleSelect = (optionValue: string) => {
     setIsOpen(false);

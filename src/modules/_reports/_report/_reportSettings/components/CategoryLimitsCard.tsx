@@ -222,7 +222,6 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
                 <VSelect
                   options={optionsByRow[index]}
                   value={limit.categoryId}
-                  placeholder="Выберите категорию"
                   error={rowErrors[limit.id]}
                   disabled={setLimits.isPending}
                   onChange={(value) => updateLimit(limit.id, { categoryId: value })}

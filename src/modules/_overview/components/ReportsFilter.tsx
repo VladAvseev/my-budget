@@ -50,7 +50,6 @@ export const ReportsFilter = ({ reports }: ReportsFilterProps) => {
       items={items}
       value={selectedIds}
       onChange={setSelectedIds}
-      placeholder="Выберите отчёты"
       selectAll
     />
   );

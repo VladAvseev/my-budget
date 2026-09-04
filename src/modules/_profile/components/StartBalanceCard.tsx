@@ -34,7 +34,6 @@ export const StartBalanceCard = () => {
           label="Валюта"
           options={currencyOptions}
           value={profile?.currency ?? ''}
-          placeholder="Не выбрано"
           disabled={updateCurrency.isPending}
           onChange={(value) => updateCurrency.mutate(value || null)}
         />

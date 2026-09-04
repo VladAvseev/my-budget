@@ -21,7 +21,6 @@ export interface VTreeSelectProps {
   label?: string;
   items: VTreeSelectItem[];
   value: string[];
-  placeholder?: string;
   emptyText?: string;
   selectAll?: boolean;
   error?: string;
@@ -55,7 +54,6 @@ export const VTreeSelect = ({
   label,
   items,
   value = [],
-  placeholder = 'Выберите',
   emptyText = 'Не выбрано',
   selectAll = false,
   error,
@@ -86,7 +84,7 @@ export const VTreeSelect = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose]);
 
-  const displayText = hasValue ? `Выбрано: ${value.length}` : emptyText || placeholder;
+  const displayText = hasValue ? `Выбрано: ${value.length}` : emptyText;
 
   const toggleOpen = () => {
     if (disabled) return;
