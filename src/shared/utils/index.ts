@@ -29,3 +29,4 @@ export {
   MAX_YEAR,
   type MonthOption,
 } from './monthMapping';
+export { convertAmount } from './convertCurrency';

@@ -1,8 +1,12 @@
+
+import { useState } from 'react';
 import type { Category } from '@/shared/supabase/types/domain';
-import { HIDDEN_AMOUNT, useCurrency } from '@/shared/hooks';
+import { HIDDEN_AMOUNT, useCurrency, useExchangeRates } from '@/shared/hooks';
+import { QUICK_CURRENCIES, getCurrencyByCode } from '@/shared/constants/currencies';
 import { VCard } from '@/shared/ui/VCard';
+import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
-import { formatAmount } from '@/shared/utils';
+import { convertAmount, formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import styles from './AccumulationsStructure.module.css';
 
@@ -18,6 +22,7 @@ interface AccumulationsStructureProps {
   title?: string;
   maskAmounts?: boolean;
   interactive?: boolean;
+  profileCurrency?: string | null;
 }
 
 interface CategorySegment {
@@ -25,10 +30,20 @@ interface CategorySegment {
   label: string;
   color: string;
   total: number;
+  convertedTotal?: number;
   percent: number;
   start: number;
   end: number;
 }
+
+const CURRENCY_OPTIONS: VButtonGroupOption[] = [
+  { value: 'BYN', label: 'BYN' },
+  { value: 'RUB', label: 'RUB' },
+  { value: 'USD', label: 'USD' },
+];
+
+const isQuickCurrency = (code: string | null): code is string =>
+  code !== null && (QUICK_CURRENCIES as readonly string[]).includes(code);
 
 export const AccumulationsStructure = ({
   items,
@@ -37,9 +52,16 @@ export const AccumulationsStructure = ({
   title = 'Структура накоплений',
   maskAmounts = false,
   interactive = false,
+  profileCurrency = null,
 }: AccumulationsStructureProps) => {
   const categoriesById = new Map(categories.map((category) => [category.id, category]));
   const currency = useCurrency();
+
+  const defaultCurrency = isQuickCurrency(profileCurrency) ? profileCurrency : null;
+  const [selectedCurrency, setSelectedCurrency] = useState<string | null>(defaultCurrency);
+  const { data: rates } = useExchangeRates();
+
+  const isDisabled = !isQuickCurrency(profileCurrency);
 
   const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
@@ -60,6 +82,9 @@ export const AccumulationsStructure = ({
     }
   }
 
+  const displayCurrency = selectedCurrency && rates ? selectedCurrency : null;
+  const displaySymbol = displayCurrency ? getCurrencyByCode(displayCurrency)?.symbol : currency?.symbol;
+
   const segments: CategorySegment[] = [];
   let cursor = 0;
   const sortedGroups = [...groupedTotals.entries()].sort((a, b) => b[1].total - a[1].total);
@@ -70,6 +95,10 @@ export const AccumulationsStructure = ({
       label: group.label,
       color: group.color,
       total: group.total,
+      convertedTotal:
+        displayCurrency && rates && defaultCurrency
+          ? convertAmount(group.total, defaultCurrency, displayCurrency, rates)
+          : undefined,
       percent,
       start: cursor,
       end: cursor + percent,
@@ -78,12 +107,28 @@ export const AccumulationsStructure = ({
   }
 
   const donutSegments: DonutSegment[] = segments;
+  const convertedTotal = segments.reduce((sum, seg) => sum + (seg.convertedTotal ?? seg.total), 0);
+
+  const formatSegmentAmount = (segment: CategorySegment) => {
+    if (maskAmounts) return HIDDEN_AMOUNT;
+    return formatAmount(segment.convertedTotal ?? segment.total, displaySymbol ?? currency?.symbol);
+  };
 
   return (
     <div className={commonStyles.animateCard}>
-      <VCard interactive={interactive} style={{ height: interactive ? '100%' : undefined }}>
+      <VCard interactive={interactive} className={styles.mobileCompact} style={{ height: interactive ? '100%' : undefined }}>
         <div className={styles.content}>
-          <div className={styles.title}>{title}</div>
+          <div className={styles.header}>
+            <div className={styles.title}>{title}</div>
+            <div title={isDisabled ? 'Сначала выберите валюту в профиле' : undefined}>
+              <VButtonGroup
+                options={CURRENCY_OPTIONS}
+                value={selectedCurrency}
+                onChange={(value) => setSelectedCurrency(value as string)}
+                disabled={isDisabled}
+              />
+            </div>
+          </div>
 
           {segments.length === 0 && <div className={styles.message}>Накоплений нет</div>}
 
@@ -98,6 +143,8 @@ export const AccumulationsStructure = ({
                   segments={donutSegments}
                   total={total}
                   maskAmounts={maskAmounts}
+                  displayTotal={convertedTotal}
+                  displaySymbol={displaySymbol}
                 />
               )}
 
@@ -121,7 +168,7 @@ export const AccumulationsStructure = ({
                     key={`${segment.key}-amount`}
                     className={`${styles.textBold} ${styles.justifyEnd}`}
                   >
-                    {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total, currency?.symbol)}
+                    {formatSegmentAmount(segment)}
                   </span>,
                 ])}
               </div>

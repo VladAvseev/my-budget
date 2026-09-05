@@ -9,3 +9,4 @@ export { accumulationsQueryKey, useAccumulations, useAccumulationsTotal } from '
 export { goalsQueryKey, useGoals } from './useGoals';
 export { useCapital } from './useCapital';
 export { HIDDEN_AMOUNT, useAmountsVisibility } from './useAmountsVisibility';
+export { useExchangeRates } from './useExchangeRates';

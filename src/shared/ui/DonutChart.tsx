@@ -8,6 +8,7 @@ export interface DonutSegment {
   label: string;
   color: string;
   total: number;
+  convertedTotal?: number;
   percent: number;
   start: number;
   end: number;
@@ -19,6 +20,8 @@ interface DonutChartProps {
   size?: number;
   thickness?: number;
   maskAmounts?: boolean;
+  displayTotal?: number;
+  displaySymbol?: string;
 }
 
 const FULL_CIRCLE = 360;
@@ -66,9 +69,13 @@ export const DonutChart = ({
   size = 280,
   thickness = 60,
   maskAmounts = false,
+  displayTotal,
+  displaySymbol,
 }: DonutChartProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const currency = useCurrency();
+
+  const symbol = displaySymbol ?? currency?.symbol;
 
   const cx = size / 2;
   const cy = size / 2;
@@ -124,7 +131,7 @@ export const DonutChart = ({
 
       <div className={styles.hole} style={{ width: innerR * 2, height: innerR * 2 }}>
         <span className={styles.total}>
-          {maskAmounts ? '***' : formatAmount(total, currency?.symbol)}
+          {maskAmounts ? '***' : formatAmount(displayTotal ?? total, symbol)}
         </span>
       </div>
 
@@ -140,7 +147,7 @@ export const DonutChart = ({
           <div className={styles.tooltipLabel}>{tooltip.segment.label}</div>
           <div className={styles.tooltipRow}>
             <span className={styles.tooltipValue}>
-              {maskAmounts ? '***' : formatAmount(tooltip.segment.total, currency?.symbol)}
+              {maskAmounts ? '***' : formatAmount(tooltip.segment.convertedTotal ?? tooltip.segment.total, symbol)}
             </span>
             <span className={styles.tooltipPercent}>{tooltip.segment.percent.toFixed(1)}%</span>
           </div>

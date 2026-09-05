@@ -1,5 +1,5 @@
 import { HIDDEN_AMOUNT, useAmountsVisibility, useCapital, useCurrency, useProfile } from '@/shared/hooks';
-import { CURRENCIES } from '@/shared/constants/currencies';
+import { CURRENCIES, QUICK_CURRENCIES } from '@/shared/constants/currencies';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
@@ -20,10 +20,12 @@ export const StartBalanceCard = () => {
   const updateCurrency = useUpdateCurrency();
   const currency = useCurrency();
 
-  const currencyOptions = CURRENCIES.map((c) => ({
-    value: c.code,
-    label: `${c.name} (${c.symbol})`,
-  }));
+  const currencyOptions = CURRENCIES
+    .filter((c) => (QUICK_CURRENCIES as readonly string[]).includes(c.code))
+    .map((c) => ({
+      value: c.code,
+      label: `${c.name} (${c.symbol})`,
+    }));
 
   return (
     <VCard>

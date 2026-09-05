@@ -4,6 +4,14 @@
   gap: var(--space-l);
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);  
+  flex-wrap: wrap;
+}
+
 .title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
@@ -76,4 +84,16 @@
 
 .justifyEnd {
   justify-self: end;
+}
+
+.mobileCompact {
+  padding-left: var(--space-xs) !important;
+  padding-right: var(--space-xs) !important;
+}
+
+@media (min-width: 601px) {
+  .mobileCompact {
+    padding-left: var(--space-m) !important;
+    padding-right: var(--space-m) !important;
+  }
 }

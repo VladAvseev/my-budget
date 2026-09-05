@@ -1,6 +1,6 @@
 import { PlusIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useAccumulations } from '@/shared/hooks';
+import { useAccumulations, useProfile } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VIconButton } from '@/shared/ui/VIconButton';
@@ -30,6 +30,7 @@ export const Page: React.FC = () => {
   const categoriesQuery = useCategories(userId);
   const [accumulationModal, setAccumulationModal] = useAtom(accumulationModalAtom);
   const [goalModal, setGoalModal] = useAtom(goalModalAtom);
+  const { data: profile } = useProfile();
 
   const accumulations = accumulationsQuery.data ?? [];
   const savings = savingsQuery.data ?? [];
@@ -75,7 +76,7 @@ export const Page: React.FC = () => {
           <VLoader />
         </div>
       ) : (
-        <AccumulationsStructure items={structureItems} categories={categories} />
+        <AccumulationsStructure items={structureItems} categories={categories} profileCurrency={profile?.currency} />
       )}
       <GoalsSection />
 

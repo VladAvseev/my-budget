@@ -4,14 +4,12 @@ export interface Currency {
   symbol: string;
 }
 
+export const QUICK_CURRENCIES = ['BYN', 'RUB', 'USD'] as const;
+
 export const CURRENCIES: Currency[] = [
   { code: 'BYN', name: 'Белорусский рубль', symbol: 'Б' },
   { code: 'RUB', name: 'Российский рубль', symbol: '₽' },
-  { code: 'KZT', name: 'Тенге', symbol: '₸' },
-  { code: 'UAH', name: 'Гривна', symbol: '₴' },
   { code: 'USD', name: 'Доллар', symbol: '$' },
-  { code: 'EUR', name: 'Евро', symbol: '€' },
-  { code: 'CNY', name: 'Юань', symbol: '¥' },
 ];
 
 export const getCurrencyByCode = (code: string | null): Currency | undefined =>
