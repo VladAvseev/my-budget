@@ -80,7 +80,7 @@ export const Page: React.FC = () => {
       <GoalsSection />
 
       <div className={commonStyles.row}>
-        <div className={commonStyles.titleXl}>Накопления из периодов</div>
+        <div className={commonStyles.titleXl}>Накопления</div>
       </div>
 
       <SavingsOperationsList />
