@@ -243,3 +243,9 @@
   padding: var(--space-l);
   overflow-y: auto;
 }
+
+@media (max-width: 480px) {
+  .mainMobile {
+    padding: var(--space-s);
+  }
+}
