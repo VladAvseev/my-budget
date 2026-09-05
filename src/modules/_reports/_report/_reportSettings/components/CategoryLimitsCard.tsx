@@ -192,10 +192,6 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
           </VIconButton>
         </div>
 
-        <div className={styles.text}>
-          Установите максимальную сумму расходов по категориям на вкладке «Расходы».
-        </div>
-
         {limitsQuery.error && (
           <VBanner type="error" visible message="Не удалось загрузить лимиты" />
         )}
