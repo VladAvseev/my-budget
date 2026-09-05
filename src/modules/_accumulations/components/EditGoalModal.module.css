@@ -1,8 +1,7 @@
 .categoryRow {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-m);
+  flex-direction: column;
+  gap: var(--space-xs);
 }
 
 .categoryLabel {
