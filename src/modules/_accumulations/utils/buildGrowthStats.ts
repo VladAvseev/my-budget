@@ -1,4 +1,4 @@
-import type { ChartPoint } from './buildGrowthChartData';
+import type { ChartPoint, GrowthAggregation } from './buildGrowthChartData';
 
 export interface MonthlyStats {
   abs: number;
@@ -14,7 +14,15 @@ export interface YearlyStats {
 export interface GrowthStats {
   monthly: MonthlyStats | null;
   yearly: YearlyStats | null;
+  periodLabel: string;
 }
+
+const AGGREGATION_LABELS: Record<GrowthAggregation, string> = {
+  M: 'В месяц',
+  Q: 'В квартал',
+  HY: 'В полугодие',
+  Y: 'В год',
+};
 
 export const buildMonthlyStats = (data: ChartPoint[]): MonthlyStats | null => {
   if (data.length < 2) return null;
@@ -73,7 +81,9 @@ export const buildYearlyStats = (fullData: ChartPoint[]): YearlyStats | null => 
 export const buildGrowthStats = (
   filteredData: ChartPoint[],
   fullData: ChartPoint[],
+  aggregation: GrowthAggregation = 'M',
 ): GrowthStats => ({
   monthly: buildMonthlyStats(filteredData),
   yearly: buildYearlyStats(fullData),
+  periodLabel: AGGREGATION_LABELS[aggregation],
 });

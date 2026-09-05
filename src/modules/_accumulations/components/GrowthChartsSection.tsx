@@ -8,8 +8,9 @@ import { useReports } from '../api/useReports';
 import { useOverviewOperationsMap } from '../api/useOverviewOperationsMap';
 import {
   buildGrowthChartData,
+  aggregatePoints,
   type GrowthChartType,
-  type GrowthPeriod,
+  type GrowthAggregation,
 } from '../utils/buildGrowthChartData';
 import { buildGrowthStats } from '../utils/buildGrowthStats';
 import { GrowthChart } from './GrowthChart';
@@ -27,14 +28,16 @@ const chartTypeOptions: VButtonGroupOption[] = [
   { value: 'accumulations', label: 'Накопления' },
 ];
 
-const periodOptions: VButtonGroupOption[] = [
-  { value: 'all', label: 'Все время' },
-  { value: 'year', label: 'Год' },
+const aggregationOptions: VButtonGroupOption[] = [
+  { value: 'M', label: 'мес' },
+  { value: 'Q', label: 'кв' },
+  { value: 'HY', label: 'пг' },
+  { value: 'Y', label: 'год' },
 ];
 
 export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
   const [chartType, setChartType] = useState<GrowthChartType>('capital');
-  const [period, setPeriod] = useState<GrowthPeriod>('all');
+  const [aggregation, setAggregation] = useState<GrowthAggregation>('M');
 
   const reportsQuery = useReports();
   const accumulationsQuery = useAccumulations(userId);
@@ -60,17 +63,20 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
     [reports, operationsQuery.data, accumulationsQuery.data, profileQuery.data],
   );
 
-  const chartData = useMemo(
-    () => (isLoading ? [] : buildGrowthChartData({ ...chartArgs, period }, chartType)),
-    [chartArgs, period, chartType, isLoading],
-  );
-
-  const fullData = useMemo(
+  const rawChartData = useMemo(
     () => (isLoading ? [] : buildGrowthChartData({ ...chartArgs, period: 'all' }, chartType)),
     [chartArgs, chartType, isLoading],
   );
 
-  const stats = useMemo(() => buildGrowthStats(chartData, fullData), [chartData, fullData]);
+  const chartData = useMemo(
+    () => aggregatePoints(rawChartData, aggregation),
+    [rawChartData, aggregation],
+  );
+
+  const stats = useMemo(
+    () => buildGrowthStats(chartData, rawChartData, aggregation),
+    [chartData, rawChartData, aggregation],
+  );
 
   const color = chartType === 'accumulations' ? 'var(--color-accent)' : 'var(--color-success)';
 
@@ -79,7 +85,7 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
       <VCard className={styles.mobileCompact}>
         <div className={styles.controls}>
           <VButtonGroup options={chartTypeOptions} value={chartType} onChange={setChartType} />
-          <VButtonGroup options={periodOptions} value={period} onChange={setPeriod} />
+          <VButtonGroup options={aggregationOptions} value={aggregation} onChange={setAggregation} />
         </div>
 
         <GrowthStats stats={stats} />

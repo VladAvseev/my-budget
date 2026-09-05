@@ -9,6 +9,7 @@ export interface ChartPoint {
 
 export type GrowthChartType = 'accumulations' | 'capital';
 export type GrowthPeriod = 'all' | 'year';
+export type GrowthAggregation = 'M' | 'Q' | 'HY' | 'Y';
 
 const MONTH_LABELS = [
   'Янв',
@@ -120,4 +121,44 @@ export const buildGrowthChartData = (
 
   const cutoff = addMonths(now, -11);
   return points.filter((p) => p.month >= cutoff);
+};
+
+const AGGREGATION_SIZE: Record<GrowthAggregation, number> = { M: 1, Q: 3, HY: 6, Y: 12 };
+
+const QUARTER_LABELS = ['1 кв', '2 кв', '3 кв', '4 кв'];
+const HALF_LABELS = ['1 пол', '2 пол'];
+
+const periodLabel = (aggregation: GrowthAggregation, year: number, periodIndex: number): string => {
+  if (aggregation === 'Q') return `${QUARTER_LABELS[periodIndex]} ${year}`;
+  if (aggregation === 'HY') return `${HALF_LABELS[periodIndex]} ${year}`;
+  return `${year} год`;
+};
+
+export const aggregatePoints = (
+  points: ChartPoint[],
+  aggregation: GrowthAggregation,
+): ChartPoint[] => {
+  if (aggregation === 'M' || points.length === 0) return points;
+
+  const size = AGGREGATION_SIZE[aggregation];
+
+  const groups: { year: number; periodIndex: number; points: ChartPoint[] }[] = [];
+
+  for (const point of points) {
+    const year = point.month.getFullYear();
+    const periodIndex = Math.floor(point.month.getMonth() / size);
+
+    const lastGroup = groups[groups.length - 1];
+    if (lastGroup && lastGroup.year === year && lastGroup.periodIndex === periodIndex) {
+      lastGroup.points.push(point);
+    } else {
+      groups.push({ year, periodIndex, points: [point] });
+    }
+  }
+
+  return groups.map((group) => ({
+    month: group.points[0].month,
+    label: periodLabel(aggregation, group.year, group.periodIndex),
+    value: group.points[group.points.length - 1].value,
+  }));
 };

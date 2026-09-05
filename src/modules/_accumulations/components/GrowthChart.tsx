@@ -10,7 +10,7 @@ interface GrowthChartProps {
   height?: number;
 }
 
-const PADDING = { top: 12, right: 8, bottom: 72, left: 4 };
+const PADDING = { top: 12, right: 8, bottom: 74 , left: 6 };
 const GRID_LINES = 8;
 const POINT_SPACING = 24  ;
 
