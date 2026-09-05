@@ -18,7 +18,6 @@ export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => 
     {
       label: 'Доходы',
       value: income,
-      percent: percentOfIncome(income, income),
       color: 'var(--color-success)',
     },
     {
