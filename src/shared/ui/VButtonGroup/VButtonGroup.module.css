@@ -16,8 +16,10 @@
 }
 
 .buttonsFullWidth .button {
-  flex: 1 1 0;
+  flex: 1 1 auto;
   min-width: 0;
+  white-space: normal;
+  padding: var(--space-s) 0;
 }
 
 .label {
