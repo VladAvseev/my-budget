@@ -1,7 +1,7 @@
 .stats {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-s) var(--space-l);
+  justify-content: space-between;
   margin-bottom: var(--space-s);
 }
 
