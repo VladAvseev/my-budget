@@ -54,7 +54,7 @@
 .active {
   border: none;
   background-color: var(--color-accent);
-  color: var(--color-bg-primary);
+  color: var(--color-text-on-accent);
   font-weight: var(--font-weight-regular);
 }
 

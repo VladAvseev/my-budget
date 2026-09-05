@@ -1,4 +1,6 @@
 :root {
+  --color-text-on-accent: #ededed;
+
   --space-xs: 4px;
   --space-s: 8px;
   --space-m: 12px;

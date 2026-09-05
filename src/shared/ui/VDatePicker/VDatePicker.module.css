@@ -165,7 +165,7 @@
 }
 
 .daySelected {
-  color: var(--color-bg-primary);
+  color: var(--color-text-on-accent);
   background-color: var(--color-accent);
   font-weight: var(--font-weight-medium);
 }

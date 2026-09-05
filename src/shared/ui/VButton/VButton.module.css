@@ -22,7 +22,7 @@
 .primary {
   border: none;
   background-color: var(--color-accent);
-  color: var(--color-bg-primary);
+  color: var(--color-text-on-accent);
 }
 
 .primary:hover:not(:disabled) {
@@ -42,7 +42,7 @@
 .danger {
   border: none;
   background-color: var(--color-error);
-  color: var(--color-bg-primary);
+  color: var(--color-text-on-accent);
 }
 
 .danger:hover:not(:disabled) {

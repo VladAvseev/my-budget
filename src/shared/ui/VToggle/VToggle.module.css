@@ -50,7 +50,7 @@
 
 .handleChecked {
   left: 19px;
-  background-color: var(--color-bg-primary);
+  background-color: var(--color-text-on-accent);
 }
 
 .label {
