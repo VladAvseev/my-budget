@@ -133,6 +133,7 @@ export const buildCategoryGroups = (
       byReport: toReportAmounts(key),
     });
   }
+  groups.sort((a, b) => Math.abs(b.total) - Math.abs(a.total));
   if (totalsByKey.has('none')) {
     groups.push({
       key: 'none',

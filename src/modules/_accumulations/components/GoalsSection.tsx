@@ -34,6 +34,7 @@ export const GoalsSection = () => {
     accumulationsQuery.data ?? [],
     savingsQuery.data ?? [],
   );
+  progressList.sort((a, b) => Math.abs(b.savedAmount) - Math.abs(a.savedAmount));
 
   const isLoading =
     goalsQuery.isLoading ||

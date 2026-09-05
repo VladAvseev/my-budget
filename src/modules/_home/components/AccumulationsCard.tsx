@@ -48,10 +48,11 @@ export const AccumulationsCard = () => {
     [accumulations, savingsQuery.data],
   );
 
-  const progressList = useMemo<GoalProgress[]>(
-    () => buildGoalsProgress(goalsQuery.data ?? [], accumulations, savingsQuery.data ?? []),
-    [goalsQuery.data, accumulations, savingsQuery.data],
-  );
+  const progressList = useMemo<GoalProgress[]>(() => {
+    const list = buildGoalsProgress(goalsQuery.data ?? [], accumulations, savingsQuery.data ?? []);
+    list.sort((a, b) => Math.abs(b.savedAmount) - Math.abs(a.savedAmount));
+    return list;
+  }, [goalsQuery.data, accumulations, savingsQuery.data]);
 
   const isLoading =
     accumulationsQuery.isLoading ||

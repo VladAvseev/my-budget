@@ -24,6 +24,17 @@ export const SavingsOperationsList = () => {
   const categories = categoriesQuery.data ?? [];
 
   const groups = groupItemsByCategory(operations, categories, (operation) => operation.category_id);
+  groups.sort((a, b) => {
+    const totalA = a.items.reduce(
+      (_sum, op) => _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+      0,
+    );
+    const totalB = b.items.reduce(
+      (_sum, op) => _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+      0,
+    );
+    return totalB - totalA;
+  });
 
   const renderCard = (operation: (typeof operations)[number]) => (
     <SavingsOperationCard

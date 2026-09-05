@@ -26,6 +26,11 @@ export const AccumulationsList = () => {
     categories,
     (accumulation) => accumulation.category_id,
   );
+  groups.sort((a, b) => {
+    const totalA = a.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+    const totalB = b.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+    return totalB - totalA;
+  });
 
   return (
     <div className={styles.root}>

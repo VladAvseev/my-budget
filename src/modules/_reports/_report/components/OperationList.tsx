@@ -89,6 +89,17 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
         });
       }
     }
+    result.sort((a, b) => {
+      const totalA = a.operations.reduce(
+        (sum, op) => sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+        0,
+      );
+      const totalB = b.operations.reduce(
+        (sum, op) => sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+        0,
+      );
+      return totalB - totalA;
+    });
     const withoutCategory = byCategory.get('none');
     if (withoutCategory) {
       result.push({ key: 'none', label: 'Без категории', operations: withoutCategory });
