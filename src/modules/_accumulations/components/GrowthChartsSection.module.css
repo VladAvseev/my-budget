@@ -5,3 +5,15 @@
   margin-bottom: var(--space-s);
   gap: var(--space-s)
 }
+
+.mobileCompact {
+  padding-left: var(--space-xs) !important;
+  padding-right: var(--space-xs) !important;
+}
+
+@media (min-width: 601px) {
+  .mobileCompact {
+    padding-left: var(--space-m) !important;
+    padding-right: var(--space-m) !important;
+  }
+}

@@ -76,7 +76,7 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
 
   return (
     <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
-      <VCard>
+      <VCard className={styles.mobileCompact}>
         <div className={styles.controls}>
           <VButtonGroup options={chartTypeOptions} value={chartType} onChange={setChartType} />
           <VButtonGroup options={periodOptions} value={period} onChange={setPeriod} />
