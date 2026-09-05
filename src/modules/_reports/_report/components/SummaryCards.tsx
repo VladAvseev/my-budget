@@ -27,7 +27,7 @@ export const SummaryCards = ({ summary }: SummaryCardsProps) => {
   const items = useMemo<SummaryItem[]>(() => {
     const balance = summaryData.income - expenses - summaryData.savings;
     const percentOfIncome = (value: number) =>
-      summaryData.income > 0 ? Math.round((value / summaryData.income) * 100) : null;
+      summaryData.income > 0 ? Math.max(0, Math.round((value / summaryData.income) * 100)) : null;
 
     return [
       {
@@ -51,7 +51,7 @@ export const SummaryCards = ({ summary }: SummaryCardsProps) => {
       {
         label: 'Остаток',
         value: balance,
-        percent: summaryData.income > 0 ? Math.max(0, Math.round((balance / summaryData.income) * 100)) : null,
+        percent: percentOfIncome(balance),
         color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
       },
     ];

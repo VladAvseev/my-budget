@@ -42,7 +42,7 @@ export const sumOperations = (operations: Operation[]): OperationAmounts => {
 };
 
 export const percentOfIncome = (value: number, income: number) =>
-  income > 0 ? Math.round((value / income) * 100) : null;
+  income > 0 ? Math.max(0, Math.round((value / income) * 100)) : null;
 
 export interface ReportAmount {
   report: Report;

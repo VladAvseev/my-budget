@@ -60,7 +60,7 @@ export const LastReportCard = () => {
   const expenses = summary.expense + summary.daily;
   const balance = summary.income - expenses - summary.savings;
   const percentOfIncome = (value: number) =>
-    summary.income > 0 ? Math.round((value / summary.income) * 100) : null;
+    summary.income > 0 ? Math.max(0, Math.round((value / summary.income) * 100)) : null;
 
   const items = [
     {
