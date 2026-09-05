@@ -20,6 +20,7 @@
   grid-template-columns: minmax(0, 1fr) auto auto;
   column-gap: var(--space-m);
   row-gap: var(--space-s);
+  align-items: end;
 }
 
 .label {

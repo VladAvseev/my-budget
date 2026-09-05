@@ -36,6 +36,7 @@ export const OverviewCard = () => {
       value: formatAmount(income, currency?.symbol),
       percent: null,
       color: 'var(--color-success)',
+      note: 'с учётом нач. баланса',
     },
     {
       label: 'Расходы',
@@ -66,7 +67,7 @@ export const OverviewCard = () => {
           </span>
           <div className={summaryStyles.title}>Аналитика</div>
         </div>
-        <div className={summaryStyles.subtitle}>Последний период</div>
+        <div className={summaryStyles.subtitle}>Все периоды</div>
         <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
             <div key={`${item.label}-label`} className={summaryStyles.label}>
@@ -75,6 +76,10 @@ export const OverviewCard = () => {
             item.percent != null ? (
               <div key={`${item.label}-percent`} className={summaryStyles.percent}>
                 {item.percent}% от доходов
+              </div>
+            ) : 'note' in item && item.note ? (
+              <div key={`${item.label}-percent`} className={summaryStyles.percent}>
+                {item.note}
               </div>
             ) : (
               <span key={`${item.label}-percent`} />
