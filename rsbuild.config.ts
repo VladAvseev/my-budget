@@ -7,10 +7,12 @@ const { parsed: env } = loadEnv();
 const runtimeEnvKeys = ['SUPABASE_URL', 'SUPABASE_ANON_KEY'];
 
 const define = Object.fromEntries(
-  runtimeEnvKeys.filter((key) => env[key] != null).flatMap((key) => [
-    [`process.env.${key}`, JSON.stringify(env[key])],
-    [`import.meta.env.${key}`, JSON.stringify(env[key])],
-  ]),
+  runtimeEnvKeys
+    .filter((key) => env[key] != null)
+    .flatMap((key) => [
+      [`process.env.${key}`, JSON.stringify(env[key])],
+      [`import.meta.env.${key}`, JSON.stringify(env[key])],
+    ]),
 );
 
 export default defineConfig({

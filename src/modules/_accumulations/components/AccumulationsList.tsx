@@ -44,18 +44,18 @@ export const AccumulationsList = () => {
         </div>
       )}
 
-      {!accumulationsQuery.isLoading &&
-        !accumulationsQuery.error &&
-        accumulations.length === 0 && (
-          <VCard>
-            <div className={styles.emptyState}>
-              <div className={styles.emptyTitle}>
-                Начальные накопления — это накопления, которые были до начала ведения учёта.
-              </div>
-              <div className={styles.emptyHint}>Нажмите «+», чтобы создать первое начальное накопление.</div>
+      {!accumulationsQuery.isLoading && !accumulationsQuery.error && accumulations.length === 0 && (
+        <VCard>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyTitle}>
+              Начальные накопления — это накопления, которые были до начала ведения учёта.
             </div>
-          </VCard>
-        )}
+            <div className={styles.emptyHint}>
+              Нажмите «+», чтобы создать первое начальное накопление.
+            </div>
+          </div>
+        </VCard>
+      )}
 
       {!accumulationsQuery.isLoading && accumulations.length > 0 && (
         <div className={styles.list}>
@@ -93,8 +93,9 @@ export const AccumulationsList = () => {
                       pending={Boolean((accumulation as { _optimistic?: boolean })._optimistic)}
                       category={
                         accumulation.category_id
-                          ? categories.find((category) => category.id === accumulation.category_id) ??
-                            null
+                          ? (categories.find(
+                              (category) => category.id === accumulation.category_id,
+                            ) ?? null)
                           : null
                       }
                     />

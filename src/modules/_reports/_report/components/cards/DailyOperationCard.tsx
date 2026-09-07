@@ -52,12 +52,8 @@ export const DailyOperationCard = ({
     >
       <div className={styles.row}>
         <div className={styles.left}>
-          <div className={styles.amount}>
-            {formatAmount(amount, currency?.symbol)}
-          </div>
-          {operation.description && (
-            <div className={styles.subtitle}>{operation.description}</div>
-          )}
+          <div className={styles.amount}>{formatAmount(amount, currency?.symbol)}</div>
+          {operation.description && <div className={styles.subtitle}>{operation.description}</div>}
         </div>
         <div className={styles.right}>
           {deviation != null && (

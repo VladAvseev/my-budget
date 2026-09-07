@@ -8,7 +8,7 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AccountCard } from './components/AccountCard';
-import { CategoryList } from './components/CategoryList';
+import { CategorySection } from './components/CategorySection';
 import { StartBalanceCard } from './components/StartBalanceCard';
 import { ThemeCard } from './components/ThemeCard';
 
@@ -62,13 +62,7 @@ export const Page: React.FC = () => {
         <ThemeCard />
       </AnimatedItem>
       <AnimatedItem delay="0.18s">
-        <CategoryList type="expense" title="Категории расходов" />
-      </AnimatedItem>
-      <AnimatedItem delay="0.24s">
-        <CategoryList type="income" title="Категории доходов" />
-      </AnimatedItem>
-      <AnimatedItem delay="0.3s">
-        <CategoryList type="savings" title="Категории накоплений" />
+        <CategorySection />
       </AnimatedItem>
 
       <VConfirmModal

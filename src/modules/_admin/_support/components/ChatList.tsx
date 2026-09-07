@@ -41,11 +41,7 @@ export const ChatList = ({ chats, isLoading, isError, onSelect }: ChatListProps)
           className={commonStyles.animateCard}
           style={{ animationDelay: `${index * 0.03}s` }}
         >
-          <VCard
-            interactive
-            className={styles.card}
-            onClick={() => onSelect(chat.user_id)}
-          >
+          <VCard interactive className={styles.card} onClick={() => onSelect(chat.user_id)}>
             <div className={styles.cardHeader}>
               <span className={styles.email}>{chat.email}</span>
               <VBadge variant={chat.isOpen ? 'warning' : 'neutral'}>

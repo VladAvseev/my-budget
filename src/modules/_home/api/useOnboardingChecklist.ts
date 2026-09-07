@@ -32,7 +32,7 @@ export const useOnboardingChecklist = () => {
       if (error) throw error;
       return (data as OnboardingState) ?? { categories: 0, reports: 0, operations: 0 };
     },
-  }); 
+  });
 
   const profile = profileQuery.data ?? null;
   const counts = countsQuery.data ?? { categories: 0, reports: 0, operations: 0 };

@@ -10,13 +10,17 @@ export interface VPageHeaderProps {
   className?: string;
 }
 
-export const VPageHeader = ({ title, onBack, backAriaLabel, right, className }: VPageHeaderProps) => {
+export const VPageHeader = ({
+  title,
+  onBack,
+  backAriaLabel,
+  right,
+  className,
+}: VPageHeaderProps) => {
   return (
     <div className={`${styles.header}${className ? ` ${className}` : ''}`}>
       <div className={styles.left}>
-        {onBack && (
-          <BackButton ariaLabel={backAriaLabel ?? 'Назад'} onClick={onBack} />
-        )}
+        {onBack && <BackButton ariaLabel={backAriaLabel ?? 'Назад'} onClick={onBack} />}
         <div className={styles.title}>{title}</div>
       </div>
       {right}

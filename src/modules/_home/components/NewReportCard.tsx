@@ -30,8 +30,8 @@ export const NewReportCard = () => {
           <div className={styles.title}>Пришло время добавить новый период</div>
         </div>
         <div className={styles.subtitle}>
-          Последний периода завершился {formatDisplay(latestPeriodEnd)}.
-          Добавьте новый период для продолжения учёта.
+          Последний периода завершился {formatDisplay(latestPeriodEnd)}. Добавьте новый период для
+          продолжения учёта.
         </div>
         <VButton className={styles.fullWidthButton}>Добавить период</VButton>
       </VCard>

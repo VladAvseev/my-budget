@@ -16,7 +16,10 @@ export const OnboardingCard = () => {
   }
 
   return (
-    <VCard className={`${styles.cardGrow} ${styles.animateCard}`} style={{ animationDelay: '0.06s' }}>
+    <VCard
+      className={`${styles.cardGrow} ${styles.animateCard}`}
+      style={{ animationDelay: '0.06s' }}
+    >
       <div className={styles.title}>С чего начать?</div>
 
       <div className={styles.checklist}>
@@ -36,17 +39,22 @@ export const OnboardingCard = () => {
       </div>
 
       {allDone ? (
-        <VButton onClick={() => completeOnboarding.mutate()} isLoading={completeOnboarding.isPending}>
+        <VButton
+          onClick={() => completeOnboarding.mutate()}
+          isLoading={completeOnboarding.isPending}
+        >
           Завершить
         </VButton>
       ) : (
         <div className={styles.buttonRow}>
-          <VButton variant="secondary" onClick={() => completeOnboarding.mutate()} isLoading={completeOnboarding.isPending}>
+          <VButton
+            variant="secondary"
+            onClick={() => completeOnboarding.mutate()}
+            isLoading={completeOnboarding.isPending}
+          >
             Пропустить
           </VButton>
-          <VButton onClick={() => navigate('/help')}>
-            Помощь
-          </VButton>
+          <VButton onClick={() => navigate('/help')}>Помощь</VButton>
         </div>
       )}
     </VCard>

@@ -11,11 +11,18 @@ interface SavingsOperationCardProps {
   pending?: boolean;
 }
 
-export const SavingsOperationCard = ({ operation, category, pending = false }: SavingsOperationCardProps) => {
+export const SavingsOperationCard = ({
+  operation,
+  category,
+  pending = false,
+}: SavingsOperationCardProps) => {
   const setModal = useSetAtom(operationModalAtom);
 
   const isWithdrawal = operation.type === 'savings_out';
-  const amount = signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0);
+  const amount = signedOperationAmount(
+    operation.type as OperationType,
+    Number(operation.amount) || 0,
+  );
 
   return (
     <OperationCardBase

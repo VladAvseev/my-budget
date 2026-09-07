@@ -26,8 +26,7 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
   const removeGoal = useRemoveGoal(userId);
   const categoriesQuery = useCategories(userId);
 
-  const category =
-    categoriesQuery.data?.find((item) => item.id === goal.category_id) ?? null;
+  const category = categoriesQuery.data?.find((item) => item.id === goal.category_id) ?? null;
 
   const [amount, setAmount] = useState(String(Number(goal.amount)));
   const [amountError, setAmountError] = useState<string>();
@@ -93,11 +92,7 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
             <VButton variant="secondary" onClick={handleClose} isDisabled={isPending}>
               Отмена
             </VButton>
-            <VButton
-              onClick={handleSubmit}
-              isLoading={updateGoal.isPending}
-              isDisabled={isPending}
-            >
+            <VButton onClick={handleSubmit} isLoading={updateGoal.isPending} isDisabled={isPending}>
               Сохранить
             </VButton>
           </div>

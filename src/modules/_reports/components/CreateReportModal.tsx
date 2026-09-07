@@ -39,13 +39,10 @@ const MONTH_OPTIONS: VSelectOption[] = MONTHS_RU.map((name, index) => ({
   label: name,
 }));
 
-const YEAR_OPTIONS: VSelectOption[] = Array.from(
-  { length: MAX_YEAR - MIN_YEAR + 1 },
-  (_, i) => {
-    const year = MIN_YEAR + i;
-    return { value: String(year), label: String(year) };
-  },
-);
+const YEAR_OPTIONS: VSelectOption[] = Array.from({ length: MAX_YEAR - MIN_YEAR + 1 }, (_, i) => {
+  const year = MIN_YEAR + i;
+  return { value: String(year), label: String(year) };
+});
 
 export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) => {
   const [selectedMonth, setSelectedMonth] = useAtom(selectedMonthAtom);
@@ -159,11 +156,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
           <VButton variant="secondary" onClick={handleClose}>
             Отмена
           </VButton>
-          <VButton
-            onClick={handleSubmit}
-            isLoading={create.isPending}
-            isDisabled={codeExists}
-          >
+          <VButton onClick={handleSubmit} isLoading={create.isPending} isDisabled={codeExists}>
             Сохранить
           </VButton>
         </>
@@ -210,12 +203,8 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
           </VIconButton>
         </div>
 
-        {(codeExists && !create.isPending)  && (
-          <VBanner
-            type="error"
-            visible
-            message="Такой период уже существует"
-          />
+        {codeExists && !create.isPending && (
+          <VBanner type="error" visible message="Такой период уже существует" />
         )}
 
         <VToggle

@@ -38,7 +38,11 @@ export const useCreateDailyExpense = (reportId: string) => {
       const key = operationsQueryKey(reportId, 'daily');
       const previous = queryClient.getQueryData<Operation[]>(key) ?? [];
 
-      const date = getNextFreeDate(previous.map((op) => op.date ?? ''), periodStart, periodEnd);
+      const date = getNextFreeDate(
+        previous.map((op) => op.date ?? ''),
+        periodStart,
+        periodEnd,
+      );
       if (!date) return undefined;
 
       const now = new Date().toISOString();

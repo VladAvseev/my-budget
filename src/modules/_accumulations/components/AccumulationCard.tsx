@@ -57,7 +57,9 @@ export const AccumulationCard = ({
       </div>
 
       <div className={styles.right}>
-        <div className={styles.amount}>{formatAmount(Number(accumulation.amount), currency?.symbol)}</div>
+        <div className={styles.amount}>
+          {formatAmount(Number(accumulation.amount), currency?.symbol)}
+        </div>
         {pending && <VLoader size={16} />}
       </div>
     </VCard>

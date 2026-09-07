@@ -68,11 +68,15 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
     setAmountError(undefined);
 
     if (date && date < report.period_start) {
-      setSubmitError(`Дата не может быть раньше начала периода (${formatDisplay(report.period_start)})`);
+      setSubmitError(
+        `Дата не может быть раньше начала периода (${formatDisplay(report.period_start)})`,
+      );
       return;
     }
     if (date && date > report.period_end) {
-      setSubmitError(`Дата не может быть позже конца периода (${formatDisplay(report.period_end)})`);
+      setSubmitError(
+        `Дата не может быть позже конца периода (${formatDisplay(report.period_end)})`,
+      );
       return;
     }
 
@@ -134,14 +138,14 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
       }
     >
       <div className={modalStyles.content}>
-          <VButtonGroup
-            options={typeOptions}
-            value={operationType}
-            onChange={setOperationType}
-            disabled={isPending}
-            fullWidth
-          />
-          <VTextInput
+        <VButtonGroup
+          options={typeOptions}
+          value={operationType}
+          onChange={setOperationType}
+          disabled={isPending}
+          fullWidth
+        />
+        <VTextInput
           label="Сумма"
           numeric
           placeholder="0.00"

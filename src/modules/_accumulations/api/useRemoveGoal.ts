@@ -18,9 +18,7 @@ export const useRemoveGoal = (userId: string) => {
     onMutate: async (id) => {
       const previous = queryClient.getQueryData<Goal[]>(key) ?? [];
 
-      queryClient.setQueryData<Goal[]>(key, (items = []) =>
-        items.filter((item) => item.id !== id),
-      );
+      queryClient.setQueryData<Goal[]>(key, (items = []) => items.filter((item) => item.id !== id));
 
       return { previous };
     },

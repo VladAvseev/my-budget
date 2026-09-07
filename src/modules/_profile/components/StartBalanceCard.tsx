@@ -1,4 +1,10 @@
-import { HIDDEN_AMOUNT, useAmountsVisibility, useCapital, useCurrency, useProfile } from '@/shared/hooks';
+import {
+  HIDDEN_AMOUNT,
+  useAmountsVisibility,
+  useCapital,
+  useCurrency,
+  useProfile,
+} from '@/shared/hooks';
 import { CURRENCIES, QUICK_CURRENCIES } from '@/shared/constants/currencies';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
@@ -20,12 +26,12 @@ export const StartBalanceCard = () => {
   const updateCurrency = useUpdateCurrency();
   const currency = useCurrency();
 
-  const currencyOptions = CURRENCIES
-    .filter((c) => (QUICK_CURRENCIES as readonly string[]).includes(c.code))
-    .map((c) => ({
-      value: c.code,
-      label: `${c.name} (${c.symbol})`,
-    }));
+  const currencyOptions = CURRENCIES.filter((c) =>
+    (QUICK_CURRENCIES as readonly string[]).includes(c.code),
+  ).map((c) => ({
+    value: c.code,
+    label: `${c.name} (${c.symbol})`,
+  }));
 
   return (
     <VCard>
@@ -63,9 +69,8 @@ export const StartBalanceCard = () => {
           <>
             <StartBalanceForm initialBalance={profile.start_balance ?? ''} />
             <div className={commonStyles.emptyHint}>
-              Укажите сумму денежных средств, которой вы владели до начала учёта
-              в приложении. Это позволит балансу в приложении совпадать
-              с реальной суммой на ваших счетах.
+              Укажите сумму денежных средств, которой вы владели до начала учёта в приложении. Это
+              позволит балансу в приложении совпадать с реальной суммой на ваших счетах.
             </div>
           </>
         )}

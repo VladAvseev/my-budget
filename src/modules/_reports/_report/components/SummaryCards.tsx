@@ -65,9 +65,7 @@ export const SummaryCards = ({ summary }: SummaryCardsProps) => {
           <div className={styles.value} style={{ color: item.color }}>
             {formatAmount(item.value, currency?.symbol)}
           </div>
-          {item.percent != null && (
-            <div className={styles.percent}>{item.percent}% от доходов</div>
-          )}
+          {item.percent != null && <div className={styles.percent}>{item.percent}% от доходов</div>}
         </VCard>
       ))}
     </div>

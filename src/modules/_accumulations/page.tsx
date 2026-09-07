@@ -68,7 +68,6 @@ export const Page: React.FC = () => {
         }
       />
 
-
       <GrowthChartsSection userId={userId} />
 
       {structureLoading ? (
@@ -76,7 +75,11 @@ export const Page: React.FC = () => {
           <VLoader />
         </div>
       ) : (
-        <AccumulationsStructure items={structureItems} categories={categories} profileCurrency={profile?.currency} />
+        <AccumulationsStructure
+          items={structureItems}
+          categories={categories}
+          profileCurrency={profile?.currency}
+        />
       )}
       <GoalsSection />
 
@@ -85,7 +88,7 @@ export const Page: React.FC = () => {
       </div>
 
       <SavingsOperationsList />
-      
+
       <div className={commonStyles.row}>
         <div className={commonStyles.titleXl}>Начальные накопления</div>
       </div>

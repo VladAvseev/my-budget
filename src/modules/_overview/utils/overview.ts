@@ -1,5 +1,9 @@
 import type { Category } from '@/shared/supabase/types/domain';
-import { signedOperationAmount, type Operation, type OperationType } from '@/shared/supabase/types/domain';
+import {
+  signedOperationAmount,
+  type Operation,
+  type OperationType,
+} from '@/shared/supabase/types/domain';
 import type { Report } from '@/shared/supabase/types/domain';
 
 export interface ChartSegment {
@@ -70,7 +74,9 @@ export const buildReportGroups = (
     const operations = operationsByReport.get(report.id) ?? [];
     const amount = operations.reduce((sum, operation) => {
       if (!typeFilter.includes(operation.type as OperationType)) return sum;
-      return sum + signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0);
+      return (
+        sum + signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0)
+      );
     }, 0);
     if (amount !== 0) {
       result.push({ report, amount });

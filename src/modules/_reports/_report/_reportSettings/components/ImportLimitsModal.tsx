@@ -109,8 +109,8 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
 
         {!hasSelection && (
           <div className={settingsStyles.text}>
-            Выберите период, чтобы посмотреть его бюджет. Он полностью заменит текущий бюджет периода
-            «{report.name}».
+            Выберите период, чтобы посмотреть его бюджет. Он полностью заменит текущий бюджет
+            периода «{report.name}».
           </div>
         )}
 
@@ -128,9 +128,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
           <div className={settingsStyles.importBox}>
             <div className={settingsStyles.importLabel}>Бюджет выбранного периода</div>
             {sourceLimits.length === 0 && (
-              <div className={settingsStyles.text}>
-                У выбранного периода нет бюджета.
-              </div>
+              <div className={settingsStyles.text}>У выбранного периода нет бюджета.</div>
             )}
             {sourceLimits.map((limit) => {
               const category = categoriesById.get(limit.category_id);

@@ -20,7 +20,10 @@ export const LastReportCard = () => {
 
   if (reportsQuery.isLoading) {
     return (
-      <VCard className={`${styles.loadingCard} ${styles.animateCard}`} style={{ animationDelay: '0.18s' }}>
+      <VCard
+        className={`${styles.loadingCard} ${styles.animateCard}`}
+        style={{ animationDelay: '0.18s' }}
+      >
         <VLoader size={28} />
       </VCard>
     );
@@ -28,7 +31,11 @@ export const LastReportCard = () => {
 
   if (reportsQuery.error || !lastReport) {
     return (
-      <Link to="/reports" className={`${styles.link} ${styles.animateCard}`} style={{ animationDelay: '0.18s' }}>
+      <Link
+        to="/reports"
+        className={`${styles.link} ${styles.animateCard}`}
+        style={{ animationDelay: '0.18s' }}
+      >
         <VCard interactive className={styles.card}>
           <div className={styles.titleRow}>
             <span className={styles.titleIcon}>
@@ -37,9 +44,7 @@ export const LastReportCard = () => {
             <div className={styles.title}>Последний период</div>
           </div>
           <div className={styles.emptyMessage}>Периоды не найдены</div>
-          <div className={styles.subtitle}>
-            Перейдите в раздел «Периоды» и добавьте период.
-          </div>
+          <div className={styles.subtitle}>Перейдите в раздел «Периоды» и добавьте период.</div>
           <VButton className={styles.fullWidthButton}>Добавить операцию</VButton>
         </VCard>
         <span className={styles.chevron}>
@@ -51,7 +56,10 @@ export const LastReportCard = () => {
 
   if (!summaryFetched) {
     return (
-      <VCard className={`${styles.loadingCard} ${styles.animateCard}`} style={{ animationDelay: '0.18s' }}>
+      <VCard
+        className={`${styles.loadingCard} ${styles.animateCard}`}
+        style={{ animationDelay: '0.18s' }}
+      >
         <VLoader size={28} />
       </VCard>
     );
@@ -90,7 +98,11 @@ export const LastReportCard = () => {
   ];
 
   return (
-    <Link to={`/reports/${lastReport.id}`} className={`${styles.link} ${styles.animateCard}`} style={{ animationDelay: '0.18s' }}>
+    <Link
+      to={`/reports/${lastReport.id}`}
+      className={`${styles.link} ${styles.animateCard}`}
+      style={{ animationDelay: '0.18s' }}
+    >
       <VCard interactive className={styles.card}>
         <div className={styles.titleRow}>
           <span className={styles.titleIcon}>

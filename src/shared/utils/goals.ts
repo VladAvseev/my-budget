@@ -32,7 +32,9 @@ export const getCategorySavedTotal = (
     if (operation.category_id !== categoryId) {
       return sum;
     }
-    return sum + signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0);
+    return (
+      sum + signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0)
+    );
   }, 0);
 
 export const buildGoalsProgress = (

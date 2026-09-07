@@ -7,5 +7,5 @@ export const createOptimisticId = (): string =>
     ? `optimistic-${crypto.randomUUID()}`
     : `optimistic-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-export const isOptimisticItem = <T,>(item: T): boolean =>
+export const isOptimisticItem = <T>(item: T): boolean =>
   Boolean((item as OptimisticItem)._optimistic);

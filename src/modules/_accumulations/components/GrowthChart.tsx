@@ -12,9 +12,9 @@ interface GrowthChartProps {
   showChange?: boolean;
 }
 
-const PADDING = { top: 12, right: 8, bottom: 80 , left: 6 };
+const PADDING = { top: 12, right: 8, bottom: 80, left: 6 };
 const GRID_LINES = 8;
-const POINT_SPACING = 24  ;
+const POINT_SPACING = 24;
 
 interface TooltipState {
   x: number;
@@ -22,7 +22,13 @@ interface TooltipState {
   point: ChartPoint;
 }
 
-export const GrowthChart = ({ data, color, height = 280, formatValue, showChange }: GrowthChartProps) => {
+export const GrowthChart = ({
+  data,
+  color,
+  height = 280,
+  formatValue,
+  showChange,
+}: GrowthChartProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [clampedX, setClampedX] = useState<number | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -184,84 +190,80 @@ export const GrowthChart = ({ data, color, height = 280, formatValue, showChange
     <div className={styles.wrapper}>
       <div className={styles.container} ref={containerRef} onScroll={handleScroll}>
         <div className={styles.chartWrap}>
-          <svg
-          className={styles.chart}
-          width={svgWidth}
-          height={svgHeight}
-        >
-          {ticks.map((tick, i) => {
-            const y = getY(tick);
-            return (
-              <line
-                key={`${tick}-${i}`}
-                className={styles.gridLine}
-                x1={PADDING.left}
-                y1={y}
-                x2={PADDING.left + plotWidth}
-                y2={y}
-              />
-            );
-          })}
+          <svg className={styles.chart} width={svgWidth} height={svgHeight}>
+            {ticks.map((tick, i) => {
+              const y = getY(tick);
+              return (
+                <line
+                  key={`${tick}-${i}`}
+                  className={styles.gridLine}
+                  x1={PADDING.left}
+                  y1={y}
+                  x2={PADDING.left + plotWidth}
+                  y2={y}
+                />
+              );
+            })}
 
-          <line
-            className={styles.axisLine}
-            x1={PADDING.left}
-            y1={PADDING.top + plotHeight}
-            x2={PADDING.left + plotWidth}
-            y2={PADDING.top + plotHeight}
-          />
+            <line
+              className={styles.axisLine}
+              x1={PADDING.left}
+              y1={PADDING.top + plotHeight}
+              x2={PADDING.left + plotWidth}
+              y2={PADDING.top + plotHeight}
+            />
 
-          <path d={areaPath} fill={color} opacity={0.12} />
+            <path d={areaPath} fill={color} opacity={0.12} />
 
-          <path
-            d={linePath}
-            fill="none"
-            stroke={color}
-            strokeWidth={3}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+            <path
+              d={linePath}
+              fill="none"
+              stroke={color}
+              strokeWidth={3}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
 
-          {data.map((point, i) => {
-            const x = getX(i);
-            const y = getY(point.value);
-            return (
-              <circle
-                key={i}
-                className={styles.dot}
-                cx={x}
-                cy={y}
-                r={4}
-                fill={color}
-                stroke="var(--color-bg-primary)"
-                onMouseEnter={(e) => handleDotEnter(e, point)}
-                onMouseLeave={handleDotLeave}
-              />
-            );
-          })}
+            {data.map((point, i) => {
+              const x = getX(i);
+              const y = getY(point.value);
+              return (
+                <circle
+                  key={i}
+                  className={styles.dot}
+                  cx={x}
+                  cy={y}
+                  r={4}
+                  fill={color}
+                  stroke="var(--color-bg-primary)"
+                  onMouseEnter={(e) => handleDotEnter(e, point)}
+                  onMouseLeave={handleDotLeave}
+                />
+              );
+            })}
 
-          {data.map((point, i) => {
-            const x = getX(i) + 6;
-            const y = PADDING.top + plotHeight + 14;
-            return (
-              <text
-                key={i}
-                className={styles.labelX}
-                x={x}
-                y={y}
-                transform={`rotate(-90, ${x}, ${y})`}
-              >
-                {point.label}
-              </text>
-            );
-          })}
-        </svg>
+            {data.map((point, i) => {
+              const x = getX(i) + 6;
+              const y = PADDING.top + plotHeight + 14;
+              return (
+                <text
+                  key={i}
+                  className={styles.labelX}
+                  x={x}
+                  y={y}
+                  transform={`rotate(-90, ${x}, ${y})`}
+                >
+                  {point.label}
+                </text>
+              );
+            })}
+          </svg>
         </div>
       </div>
 
       <div className={styles.yAxis} style={{ height: svgHeight }}>
         <span className={styles.labelYGhost}>
-          {format(ticks.length > 0 ? Math.max(...ticks.map(t => Math.abs(t))) : 0)}
+          {format(ticks.length > 0 ? Math.max(...ticks.map((t) => Math.abs(t))) : 0)}
         </span>
         {[...ticks].reverse().map((tick, i) => (
           <span
@@ -285,18 +287,24 @@ export const GrowthChart = ({ data, color, height = 280, formatValue, showChange
           }}
         >
           <span className={styles.tooltipValue}>{format(tooltip.point.value)}</span>
-          {showChange && (() => {
-            const idx = data.indexOf(tooltip.point);
-            if (idx <= 0) return null;
-            const change = tooltip.point.value - data[idx - 1].value;
-            const changeColor =
-              change > 0 ? 'var(--color-success)' : change < 0 ? 'var(--color-error)' : 'var(--color-warning)';
-            return (
-              <div className={styles.tooltipChange} style={{ color: changeColor }}>
-                {change > 0 ? '+' : ''}{format(change)}
-              </div>
-            );
-          })()}
+          {showChange &&
+            (() => {
+              const idx = data.indexOf(tooltip.point);
+              if (idx <= 0) return null;
+              const change = tooltip.point.value - data[idx - 1].value;
+              const changeColor =
+                change > 0
+                  ? 'var(--color-success)'
+                  : change < 0
+                    ? 'var(--color-error)'
+                    : 'var(--color-warning)';
+              return (
+                <div className={styles.tooltipChange} style={{ color: changeColor }}>
+                  {change > 0 ? '+' : ''}
+                  {format(change)}
+                </div>
+              );
+            })()}
         </div>
       )}
     </div>

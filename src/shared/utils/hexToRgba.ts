@@ -1,11 +1,12 @@
 export function hexToRgba(hex: string, alpha: number): string {
   const normalized = hex.replace('#', '');
-  const full = normalized.length === 3
-    ? normalized
-        .split('')
-        .map((char) => char + char)
-        .join('')
-    : normalized;
+  const full =
+    normalized.length === 3
+      ? normalized
+          .split('')
+          .map((char) => char + char)
+          .join('')
+      : normalized;
 
   if (!/^[0-9a-fA-F]{6}$/.test(full)) {
     return hex;

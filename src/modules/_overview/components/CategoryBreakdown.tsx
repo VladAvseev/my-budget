@@ -181,7 +181,7 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
       )}
 
       {(savingsGroups.length > 0 ||
-          hasOperations(operationsByReport, ['savings', 'savings_out'])) && (
+        hasOperations(operationsByReport, ['savings', 'savings_out'])) && (
         <div className={styles.section}>
           {sectionTitle('Накопления', sectionAverage(totalOf(savingsGroups)))}
           {categoryAccordions(savingsGroups, savingsLoading, ['savings', 'savings_out'])}

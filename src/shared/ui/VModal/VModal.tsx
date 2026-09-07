@@ -59,9 +59,7 @@ export const VModal = ({
       if (!dialog) {
         return;
       }
-      const focusables = Array.from(
-        dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-      );
+      const focusables = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
       if (focusables.length === 0) {
         event.preventDefault();
         dialog.focus();
@@ -105,12 +103,7 @@ export const VModal = ({
       >
         <div className={styles.header}>
           <div className={styles.title}>{title}</div>
-          <button
-            type="button"
-            aria-label="Закрыть"
-            onClick={onClose}
-            className={styles.close}
-          >
+          <button type="button" aria-label="Закрыть" onClick={onClose} className={styles.close}>
             <ClearIcon size={18} color="currentColor" />
           </button>
         </div>

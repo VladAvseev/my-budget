@@ -33,12 +33,7 @@ export const VBanner = ({
     >
       <span>{message}</span>
       {onClose && (
-        <button
-          type="button"
-          aria-label="Закрыть"
-          onClick={onClose}
-          className={styles.close}
-        >
+        <button type="button" aria-label="Закрыть" onClick={onClose} className={styles.close}>
           <ClearIcon size={16} color="currentColor" />
         </button>
       )}

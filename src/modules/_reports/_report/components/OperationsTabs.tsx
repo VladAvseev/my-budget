@@ -13,7 +13,9 @@ interface OperationsTabsProps {
 export type OperationsTab = 'expense' | 'income' | 'savings' | 'daily';
 
 export const OperationsTabs = ({ report }: OperationsTabsProps) => {
-  const [activeTab, setActiveTab] = useState<OperationsTab>(report.has_daily_expenses ? 'daily' : 'expense');
+  const [activeTab, setActiveTab] = useState<OperationsTab>(
+    report.has_daily_expenses ? 'daily' : 'expense',
+  );
 
   const tabs: { value: OperationsTab; label: string }[] = [{ value: 'expense', label: 'Расходы' }];
   if (report.has_daily_expenses) {

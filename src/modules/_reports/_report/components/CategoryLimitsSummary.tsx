@@ -11,8 +11,11 @@ export const getLimitColor = (spent: number, limit: number): string => {
   return 'var(--color-text-primary)';
 };
 
-export const formatLimitValue = (spent: number, limit: number, currencySymbol?: string | null): string =>
-  `${formatAmount(spent, currencySymbol)} / ${formatAmount(limit, currencySymbol)}`;
+export const formatLimitValue = (
+  spent: number,
+  limit: number,
+  currencySymbol?: string | null,
+): string => `${formatAmount(spent, currencySymbol)} / ${formatAmount(limit, currencySymbol)}`;
 
 interface CategoryLimitsSummaryProps {
   operations: Operation[];

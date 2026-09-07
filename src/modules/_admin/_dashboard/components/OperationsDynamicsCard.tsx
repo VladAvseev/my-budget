@@ -70,7 +70,12 @@ export const OperationsDynamicsCard = () => {
           <VLoader />
         </div>
       ) : (
-        <GrowthChart data={chartData} color="var(--color-accent)" formatValue={formatCount} showChange={mode === 'cumulative'} />
+        <GrowthChart
+          data={chartData}
+          color="var(--color-accent)"
+          formatValue={formatCount}
+          showChange={mode === 'cumulative'}
+        />
       )}
     </VCard>
   );

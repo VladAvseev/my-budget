@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import type { Category } from '@/shared/supabase/types/domain';
 import { HIDDEN_AMOUNT, useCurrency, useExchangeRates } from '@/shared/hooks';
@@ -83,7 +82,9 @@ export const AccumulationsStructure = ({
   }
 
   const displayCurrency = selectedCurrency && rates ? selectedCurrency : null;
-  const displaySymbol = displayCurrency ? getCurrencyByCode(displayCurrency)?.symbol : currency?.symbol;
+  const displaySymbol = displayCurrency
+    ? getCurrencyByCode(displayCurrency)?.symbol
+    : currency?.symbol;
 
   const segments: CategorySegment[] = [];
   let cursor = 0;
@@ -116,7 +117,11 @@ export const AccumulationsStructure = ({
 
   return (
     <div className={commonStyles.animateCard}>
-      <VCard interactive={interactive} className={styles.mobileCompact} style={{ height: interactive ? '100%' : undefined }}>
+      <VCard
+        interactive={interactive}
+        className={styles.mobileCompact}
+        style={{ height: interactive ? '100%' : undefined }}
+      >
         <div className={styles.content}>
           <div className={styles.header}>
             <div className={styles.title}>{title}</div>

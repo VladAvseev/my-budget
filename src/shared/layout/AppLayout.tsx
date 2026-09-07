@@ -144,23 +144,23 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
 
         {isAdmin && (
           <>
-          <div className={styles.adminBorder}/>
-          <NavLink
-            to="/admin"
-            onClick={() => {
-              if (setIsMenuOpen) {
-                setIsMenuOpen(false);
-              }
-            }}
-            className={styles.navLink}
+            <div className={styles.adminBorder} />
+            <NavLink
+              to="/admin"
+              onClick={() => {
+                if (setIsMenuOpen) {
+                  setIsMenuOpen(false);
+                }
+              }}
+              className={styles.navLink}
             >
-            <span className={styles.navLinkContent}>
-              <SettingsIcon size={18} />
-              Админ-панель
-              <AdminOpenBadge className={styles.navBadge} />
-            </span>
-          </NavLink>
-            </>
+              <span className={styles.navLinkContent}>
+                <SettingsIcon size={18} />
+                Админ-панель
+                <AdminOpenBadge className={styles.navBadge} />
+              </span>
+            </NavLink>
+          </>
         )}
       </nav>
     </>

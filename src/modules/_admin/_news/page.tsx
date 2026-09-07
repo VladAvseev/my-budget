@@ -103,9 +103,7 @@ export const Page: React.FC = () => {
       )}
 
       {createOpen && <CreateNewsModal onClose={() => setCreateOpen(false)} />}
-      {editingNews && (
-        <EditNewsModal news={editingNews} onClose={() => setEditingNews(null)} />
-      )}
+      {editingNews && <EditNewsModal news={editingNews} onClose={() => setEditingNews(null)} />}
       {deletingNews && (
         <DeleteNewsModal news={deletingNews} onClose={() => setDeletingNews(null)} />
       )}

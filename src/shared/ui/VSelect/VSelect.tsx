@@ -58,7 +58,11 @@ export const VSelect = ({
   };
 
   return (
-    <div ref={containerRef} className={`${styles.root}${className ? ` ${className}` : ''}`} style={style}>
+    <div
+      ref={containerRef}
+      className={`${styles.root}${className ? ` ${className}` : ''}`}
+      style={style}
+    >
       {label && <label className={styles.label}>{label}</label>}
       <div
         role="combobox"

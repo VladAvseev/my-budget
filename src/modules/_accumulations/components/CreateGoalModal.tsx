@@ -30,9 +30,7 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
   const [submitError, setSubmitError] = useState<string>();
 
   const options = useMemo(() => {
-    const existingCategoryIds = new Set(
-      (goalsQuery.data ?? []).map((goal) => goal.category_id),
-    );
+    const existingCategoryIds = new Set((goalsQuery.data ?? []).map((goal) => goal.category_id));
     return (categoriesQuery.data ?? [])
       .filter((category) => !existingCategoryIds.has(category.id))
       .map((category) => ({
@@ -98,8 +96,8 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
       <div className={modalStyles.content}>
         {options.length === 0 ? (
           <div className={commonStyles.emptyHint}>
-            У всех категорий накоплений уже есть цель. Чтобы задать новую цель,
-            удалите существующую в карточке категории.
+            У всех категорий накоплений уже есть цель. Чтобы задать новую цель, удалите существующую
+            в карточке категории.
           </div>
         ) : (
           <>

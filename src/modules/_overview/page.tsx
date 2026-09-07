@@ -49,7 +49,11 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <VPageHeader title="Аналитика" onBack={() => navigate('/')} backAriaLabel="Назад на главную" />
+      <VPageHeader
+        title="Аналитика"
+        onBack={() => navigate('/')}
+        backAriaLabel="Назад на главную"
+      />
 
       <div className={commonStyles.animateCard}>
         <ReportsFilter reports={reports} />
@@ -61,7 +65,9 @@ export const Page: React.FC = () => {
         </div>
       )}
 
-      {reportsQuery.error && <VBanner type="error" visible message="Не удалось загрузить периоды" />}
+      {reportsQuery.error && (
+        <VBanner type="error" visible message="Не удалось загрузить периоды" />
+      )}
 
       {!reportsQuery.isLoading && !reportsQuery.error && reports.length === 0 && (
         <VCard>
@@ -78,7 +84,8 @@ export const Page: React.FC = () => {
             <VCard>
               <div className={commonStyles.emptyTitle}>Не выбран ни один период</div>
               <div className={commonStyles.emptyHint}>
-                Аналитика сводит информацию о доходах, расходах и накоплениях за выбранные периоды в одном месте.
+                Аналитика сводит информацию о доходах, расходах и накоплениях за выбранные периоды в
+                одном месте.
                 <br />
                 Выберите периоды в списке выше.
               </div>

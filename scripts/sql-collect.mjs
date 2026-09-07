@@ -23,14 +23,20 @@ const collect = (dir) => {
 const base = readFileSync(baseFile, 'utf8');
 const hookSql = collect(join(root, 'src'))
   .sort((a, b) => a.localeCompare(b))
-  .map((file) => `-- Источник: ${relative(root, file).split('\\').join('/')}\n${readFileSync(file, 'utf8').trim()}`);
+  .map(
+    (file) =>
+      `-- Источник: ${relative(root, file).split('\\').join('/')}\n${readFileSync(file, 'utf8').trim()}`,
+  );
 
 const header = `-- Собранный файл функций БД. Генерируется скриптом: npm run sql:collect.\n-- Не редактировать вручную — изменения вносятся в .sql рядом с хуками и в supabase/base.sql.\n`;
 
 const parts = [
   '-- ── Инфраструктура (supabase/base.sql) ────────────────────────────────────',
   base.trim(),
-  ...hookSql.map((sql) => `-- ────────────────────────────────────────────────────────────────────────────\n${sql}`),
+  ...hookSql.map(
+    (sql) =>
+      `-- ────────────────────────────────────────────────────────────────────────────\n${sql}`,
+  ),
 ];
 
 writeFileSync(outFile, `${header}\n${parts.join('\n\n')}\n`, 'utf8');

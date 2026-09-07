@@ -2,10 +2,18 @@ import type { CSSProperties, ReactNode } from 'react';
 import styles from './VHint.module.css';
 
 export type VHintPosition =
-  | 'top-start' | 'top-center' | 'top-end'
-  | 'right-start' | 'right-center' | 'right-end'
-  | 'bottom-start' | 'bottom-center' | 'bottom-end'
-  | 'left-start' | 'left-center' | 'left-end';
+  | 'top-start'
+  | 'top-center'
+  | 'top-end'
+  | 'right-start'
+  | 'right-center'
+  | 'right-end'
+  | 'bottom-start'
+  | 'bottom-center'
+  | 'bottom-end'
+  | 'left-start'
+  | 'left-center'
+  | 'left-end';
 
 export interface VHintProps {
   children: ReactNode;
@@ -35,16 +43,9 @@ export const VHint = ({
   };
 
   return (
-    <span
-      className={`${styles.wrapper}${className ? ` ${className}` : ''}`}
-      style={style}
-    >
+    <span className={`${styles.wrapper}${className ? ` ${className}` : ''}`} style={style}>
       {children}
-      <span
-        className={`${styles.tooltip} ${styles[position]}`}
-        role="tooltip"
-        style={tooltipStyle}
-      >
+      <span className={`${styles.tooltip} ${styles[position]}`} role="tooltip" style={tooltipStyle}>
         {hint}
       </span>
     </span>

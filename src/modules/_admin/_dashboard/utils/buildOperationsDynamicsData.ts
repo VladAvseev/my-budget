@@ -4,8 +4,18 @@ export type DynamicsChartMode = 'cumulative' | 'period';
 export type DynamicsAggregation = 'D' | 'M' | 'Y';
 
 const MONTH_LABELS = [
-  'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
-  'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек',
+  'Янв',
+  'Фев',
+  'Мар',
+  'Апр',
+  'Май',
+  'Июн',
+  'Июл',
+  'Авг',
+  'Сен',
+  'Окт',
+  'Ноя',
+  'Дек',
 ];
 
 const pad2 = (n: number): string => String(n).padStart(2, '0');
@@ -13,8 +23,7 @@ const pad2 = (n: number): string => String(n).padStart(2, '0');
 const dayKey = (date: Date): string =>
   `${date.getUTCFullYear()}-${pad2(date.getUTCMonth() + 1)}-${pad2(date.getUTCDate())}`;
 
-const monthKey = (date: Date): string =>
-  `${date.getUTCFullYear()}-${pad2(date.getUTCMonth() + 1)}`;
+const monthKey = (date: Date): string => `${date.getUTCFullYear()}-${pad2(date.getUTCMonth() + 1)}`;
 
 const yearKey = (date: Date): string => `${date.getUTCFullYear()}`;
 

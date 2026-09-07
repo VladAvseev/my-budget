@@ -20,7 +20,12 @@ interface EditDailyModalProps {
   isDeletable?: boolean;
 }
 
-export const EditDailyModal = ({ operation, report, onClose, isDeletable = true }: EditDailyModalProps) => {
+export const EditDailyModal = ({
+  operation,
+  report,
+  onClose,
+  isDeletable = true,
+}: EditDailyModalProps) => {
   const updateOperation = useUpdateOperation(report.id);
   const removeOperation = useRemoveOperation(report.id);
 
@@ -89,7 +94,10 @@ export const EditDailyModal = ({ operation, report, onClose, isDeletable = true 
               <TrashIcon size={24} color="currentColor" />
             </VIconButton>
           ) : (
-            <VHint hint="Сначала удалите последний созданный ежедневный расход" position='top-start'>
+            <VHint
+              hint="Сначала удалите последний созданный ежедневный расход"
+              position="top-start"
+            >
               <VIconButton
                 ariaLabel="Удалить операцию"
                 onClick={handleDelete}

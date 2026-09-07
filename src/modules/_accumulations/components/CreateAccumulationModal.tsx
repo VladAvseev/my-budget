@@ -77,7 +77,11 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
       error={submitError}
       footer={
         <>
-          <VButton variant="secondary" onClick={handleClose} isDisabled={createAccumulation.isPending}>
+          <VButton
+            variant="secondary"
+            onClick={handleClose}
+            isDisabled={createAccumulation.isPending}
+          >
             Отмена
           </VButton>
           <VButton onClick={handleSubmit} isLoading={createAccumulation.isPending}>

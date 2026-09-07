@@ -45,7 +45,11 @@ export const VPasswordInput = ({
           disabled={disabled}
           className={styles.toggle}
         >
-          {isVisible ? <EyeOffIcon size={18} color="currentColor" /> : <EyeIcon size={18} color="currentColor" />}
+          {isVisible ? (
+            <EyeOffIcon size={18} color="currentColor" />
+          ) : (
+            <EyeIcon size={18} color="currentColor" />
+          )}
         </button>
       }
     />

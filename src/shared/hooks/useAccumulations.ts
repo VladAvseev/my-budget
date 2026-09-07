@@ -19,6 +19,9 @@ export const useAccumulations = (userId: string) =>
 export const useAccumulationsTotal = (userId: string) => {
   const accumulationsQuery = useAccumulations(userId);
   const accumulations = accumulationsQuery.data ?? [];
-  const total = accumulations.reduce((sum, accumulation) => sum + (Number(accumulation.amount) || 0), 0);
+  const total = accumulations.reduce(
+    (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
+    0,
+  );
   return { total, accumulations, ...accumulationsQuery };
 };

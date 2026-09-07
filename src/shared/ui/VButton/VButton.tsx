@@ -37,9 +37,7 @@ export const VButton = ({
       style={style}
       {...restProps}
     >
-      <span className={isLoading ? styles.contentHidden : styles.content}>
-        {children}
-      </span>
+      <span className={isLoading ? styles.contentHidden : styles.content}>{children}</span>
       {isLoading && (
         <span className={styles.loader}>
           <VLoader color="currentColor" />

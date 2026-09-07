@@ -72,9 +72,9 @@ export function buildCalendarCells(year: number, month: number): Date[] {
 export function isSameDay(a: Date, b: Date | null): boolean {
   return Boolean(
     b &&
-      a.getFullYear() === b.getFullYear() &&
-      a.getMonth() === b.getMonth() &&
-      a.getDate() === b.getDate(),
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate(),
   );
 }
 

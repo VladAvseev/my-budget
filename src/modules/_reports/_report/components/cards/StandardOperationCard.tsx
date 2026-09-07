@@ -11,10 +11,17 @@ interface StandardOperationCardProps {
   pending?: boolean;
 }
 
-export const StandardOperationCard = ({ operation, category, pending = false }: StandardOperationCardProps) => {
+export const StandardOperationCard = ({
+  operation,
+  category,
+  pending = false,
+}: StandardOperationCardProps) => {
   const setModal = useSetAtom(operationModalAtom);
 
-  const amount = signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0);
+  const amount = signedOperationAmount(
+    operation.type as OperationType,
+    Number(operation.amount) || 0,
+  );
 
   return (
     <OperationCardBase

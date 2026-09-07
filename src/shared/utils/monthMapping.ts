@@ -31,11 +31,9 @@ export const MONTHS_EN = [
 export const MIN_YEAR = 2000;
 export const MAX_YEAR = 2099;
 
-export const buildCode = (month: number, year: number): string =>
-  `${MONTHS_EN[month]}_${year}`;
+export const buildCode = (month: number, year: number): string => `${MONTHS_EN[month]}_${year}`;
 
-export const buildName = (month: number, year: number): string =>
-  `${MONTHS_RU[month]} ${year}`;
+export const buildName = (month: number, year: number): string => `${MONTHS_RU[month]} ${year}`;
 
 const toISODateLocal = (date: Date): string => {
   const y = date.getFullYear();

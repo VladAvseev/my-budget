@@ -43,7 +43,10 @@ export const DatabaseSizeCard: React.FC = () => {
     <VCard className={styles.card}>
       <div className={commonStyles.cardTitle}>База данных</div>
       <div className={styles.progressTrack}>
-        <div className={`${styles.progressFill} ${percentClass(percent)}`} style={{ width: `${percent}%` }} />
+        <div
+          className={`${styles.progressFill} ${percentClass(percent)}`}
+          style={{ width: `${percent}%` }}
+        />
       </div>
       <div className={commonStyles.infoRow}>
         <span className={styles.valuePrimary}>Использовано</span>

@@ -105,12 +105,7 @@ export const DonutChart = ({
 
   return (
     <div className={styles.wrapper}>
-      <svg
-        className={styles.chart}
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
-      >
+      <svg className={styles.chart} width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         {segments.map((segment) => {
           const startAngle = (segment.start / 100) * FULL_CIRCLE;
           const endAngle = (segment.end / 100) * FULL_CIRCLE;
@@ -147,7 +142,9 @@ export const DonutChart = ({
           <div className={styles.tooltipLabel}>{tooltip.segment.label}</div>
           <div className={styles.tooltipRow}>
             <span className={styles.tooltipValue}>
-              {maskAmounts ? '***' : formatAmount(tooltip.segment.convertedTotal ?? tooltip.segment.total, symbol)}
+              {maskAmounts
+                ? '***'
+                : formatAmount(tooltip.segment.convertedTotal ?? tooltip.segment.total, symbol)}
             </span>
             <span className={styles.tooltipPercent}>{tooltip.segment.percent.toFixed(1)}%</span>
           </div>

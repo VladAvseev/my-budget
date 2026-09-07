@@ -35,16 +35,8 @@ function getServerSnapshot(): boolean {
 }
 
 export function useBreakpoint(): BreakpointState {
-  const isMobile = useSyncExternalStore(
-    subscribeMobile,
-    getSnapshotMobile,
-    getServerSnapshot,
-  );
-  const isDesktop = useSyncExternalStore(
-    subscribeDesktop,
-    getSnapshotDesktop,
-    getServerSnapshot,
-  );
+  const isMobile = useSyncExternalStore(subscribeMobile, getSnapshotMobile, getServerSnapshot);
+  const isDesktop = useSyncExternalStore(subscribeDesktop, getSnapshotDesktop, getServerSnapshot);
 
   return {
     isMobile,

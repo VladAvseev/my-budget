@@ -26,11 +26,13 @@ export const SavingsOperationsList = () => {
   const groups = groupItemsByCategory(operations, categories, (operation) => operation.category_id);
   groups.sort((a, b) => {
     const totalA = a.items.reduce(
-      (_sum, op) => _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+      (_sum, op) =>
+        _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
       0,
     );
     const totalB = b.items.reduce(
-      (_sum, op) => _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+      (_sum, op) =>
+        _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
       0,
     );
     return totalB - totalA;
@@ -42,7 +44,7 @@ export const SavingsOperationsList = () => {
       operation={operation}
       category={
         operation.category_id
-          ? categories.find((category) => category.id === operation.category_id) ?? null
+          ? (categories.find((category) => category.id === operation.category_id) ?? null)
           : null
       }
     />
@@ -60,18 +62,16 @@ export const SavingsOperationsList = () => {
         </div>
       )}
 
-      {!operationsQuery.isLoading &&
-        !operationsQuery.error &&
-        operations.length === 0 && (
-          <VCard>
-            <div className={styles.emptyState}>
-              <div className={styles.emptyTitle}>Нет накоплений</div>
-              <div className={styles.emptyHint}>
-                Накопления появятся при добавлении операций в периодах.
-              </div>
+      {!operationsQuery.isLoading && !operationsQuery.error && operations.length === 0 && (
+        <VCard>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyTitle}>Нет накоплений</div>
+            <div className={styles.emptyHint}>
+              Накопления появятся при добавлении операций в периодах.
             </div>
-          </VCard>
-        )}
+          </div>
+        </VCard>
+      )}
 
       {!operationsQuery.isLoading && operations.length > 0 && (
         <div className={styles.list}>
@@ -106,9 +106,7 @@ export const SavingsOperationsList = () => {
                   </span>
                 }
               >
-                <div className={styles.items}>
-                  {group.items.map(renderCard)}
-                </div>
+                <div className={styles.items}>{group.items.map(renderCard)}</div>
               </VAccordion>
             </div>
           ))}

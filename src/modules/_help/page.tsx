@@ -2,13 +2,7 @@ import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import commonStyles from '@/shared/styles/common.module.css';
-import {
-  BanknotesIcon,
-  HelpIcon,
-  OverviewIcon,
-  ReportsIcon,
-  SavingsIcon,
-} from '@/shared/icons';
+import { BanknotesIcon, HelpIcon, OverviewIcon, ReportsIcon, SavingsIcon } from '@/shared/icons';
 import type { IconProps } from '@/shared/icons/types';
 import type { ComponentType } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -132,17 +126,11 @@ const SECTIONS: Section[] = [
       },
       {
         type: 'paragraph',
-        segments: [
-          { text: '«Доходы»', bold: true },
-          { text: ' — увеличивают баланс и капитал.' },
-        ],
+        segments: [{ text: '«Доходы»', bold: true }, { text: ' — увеличивают баланс и капитал.' }],
       },
       {
         type: 'paragraph',
-        segments: [
-          { text: '«Расходы»', bold: true },
-          { text: ' — уменьшают баланс и капитал.' },
-        ],
+        segments: [{ text: '«Расходы»', bold: true }, { text: ' — уменьшают баланс и капитал.' }],
       },
       {
         type: 'paragraph',
@@ -225,7 +213,8 @@ const SECTIONS: Section[] = [
         segments: [
           { text: '«График капитала»', bold: true },
           {
-            text: ' показывает динамику вашего капитала (баланс + все накопления) по месяцам. ' },
+            text: ' показывает динамику вашего капитала (баланс + все накопления) по месяцам. ',
+          },
           { text: '«График накоплений»', bold: true },
           {
             text: ' — только суммы сбережений. Графики можно переключать и просматривать за всё время или за последний год.',
@@ -310,10 +299,7 @@ const SECTIONS: Section[] = [
       },
       {
         type: 'paragraph',
-        segments: [
-          { text: 'Капитал', bold: true },
-          { text: ' = баланс + сумма всех накоплений.' },
-        ],
+        segments: [{ text: 'Капитал', bold: true }, { text: ' = баланс + сумма всех накоплений.' }],
       },
     ],
   },

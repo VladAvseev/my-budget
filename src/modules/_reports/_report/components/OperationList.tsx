@@ -91,11 +91,13 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
     }
     result.sort((a, b) => {
       const totalA = a.operations.reduce(
-        (sum, op) => sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+        (sum, op) =>
+          sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
         0,
       );
       const totalB = b.operations.reduce(
-        (sum, op) => sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+        (sum, op) =>
+          sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
         0,
       );
       return totalB - totalA;
@@ -136,9 +138,12 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
         <VCard>
           <div className={styles.emptyState}>
             <div className={styles.emptyTitle}>
-              {type === 'expense' && 'Расход — это списание средств. Расход уменьшает баланс, капитал и остаток в рамках периода.'}
-              {type === 'income' && 'Доход — это поступление средств. Доход увеличивает баланс, капитал и остаток в рамках периода'}
-              {type === 'savings' && 'Накопление — это отложенная сумма средств, которая учитывается отдельно от расходов и доходов. Накопления влияют на баланс и общую сумму накоплений в разделе "Накопления".'}
+              {type === 'expense' &&
+                'Расход — это списание средств. Расход уменьшает баланс, капитал и остаток в рамках периода.'}
+              {type === 'income' &&
+                'Доход — это поступление средств. Доход увеличивает баланс, капитал и остаток в рамках периода'}
+              {type === 'savings' &&
+                'Накопление — это отложенная сумма средств, которая учитывается отдельно от расходов и доходов. Накопления влияют на баланс и общую сумму накоплений в разделе "Накопления".'}
             </div>
             <div className={styles.emptyHint}>Нажмите «+», чтобы добавить первую операцию.</div>
           </div>

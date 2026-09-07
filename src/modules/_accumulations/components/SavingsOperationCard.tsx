@@ -18,7 +18,10 @@ export const SavingsOperationCard = ({ operation, category }: SavingsOperationCa
   const currency = useCurrency();
 
   const isWithdrawal = operation.type === 'savings_out';
-  const amount = signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0);
+  const amount = signedOperationAmount(
+    operation.type as OperationType,
+    Number(operation.amount) || 0,
+  );
 
   return (
     <VCard
@@ -37,12 +40,8 @@ export const SavingsOperationCard = ({ operation, category }: SavingsOperationCa
         <div className={`${styles.amount}${isWithdrawal ? ` ${styles.amountWithdrawal}` : ''}`}>
           {formatAmount(amount, currency?.symbol)}
         </div>
-        {operation.description && (
-          <div className={styles.subtitle}>{operation.description}</div>
-        )}
-        {operation.reportName && (
-          <div className={styles.subtitle}>{operation.reportName}</div>
-        )}
+        {operation.description && <div className={styles.subtitle}>{operation.description}</div>}
+        {operation.reportName && <div className={styles.subtitle}>{operation.reportName}</div>}
       </div>
       {category?.name ? (
         <VBadge color={category?.color ?? undefined} className={styles.badge}>

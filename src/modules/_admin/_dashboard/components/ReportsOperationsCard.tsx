@@ -51,7 +51,10 @@ export const ReportsOperationsCard: React.FC<ReportsOperationsCardProps> = ({
       tab === 'periods'
         ? PERIOD_ITEMS.map((item) => ({
             ...item,
-            value: item.key === 'withDaily' ? reports.withDailyExpenses : reports.total - reports.withDailyExpenses,
+            value:
+              item.key === 'withDaily'
+                ? reports.withDailyExpenses
+                : reports.total - reports.withDailyExpenses,
           }))
         : OPERATION_ITEMS.map((item) => ({
             ...item,
@@ -86,7 +89,11 @@ export const ReportsOperationsCard: React.FC<ReportsOperationsCardProps> = ({
     <VCard className={styles.card}>
       <div className={styles.header}>
         <div className={commonStyles.cardTitle}>Структура периодов и операций</div>
-        <VButtonGroup options={TAB_OPTIONS} value={tab} onChange={(v) => setTab(v as StructureTab)} />
+        <VButtonGroup
+          options={TAB_OPTIONS}
+          value={tab}
+          onChange={(v) => setTab(v as StructureTab)}
+        />
       </div>
 
       {total === 0 ? (

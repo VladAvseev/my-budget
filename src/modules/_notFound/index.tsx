@@ -4,10 +4,5 @@ import { Route } from 'react-router-dom';
 const Page = AsyncPage(() => import('./page'));
 
 export function notFound() {
-  return (
-    <Route
-      path="*"
-      element={<Page />}
-    />
-  );
+  return <Route path="*" element={<Page />} />;
 }

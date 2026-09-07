@@ -62,7 +62,11 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <VPageHeader title="Поддержка" onBack={() => navigate('/')} backAriaLabel="Назад на главную" />
+      <VPageHeader
+        title="Поддержка"
+        onBack={() => navigate('/')}
+        backAriaLabel="Назад на главную"
+      />
 
       {hasChat && !isOpen && (
         <VBanner

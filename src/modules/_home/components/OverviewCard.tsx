@@ -18,7 +18,10 @@ export const OverviewCard = () => {
 
   if (!profileQuery.isFetched || !summaryFetched) {
     return (
-      <VCard className={`${styles.loadingCard} ${styles.animateCard}`} style={{ animationDelay: '0.12s' }}>
+      <VCard
+        className={`${styles.loadingCard} ${styles.animateCard}`}
+        style={{ animationDelay: '0.12s' }}
+      >
         <VLoader size={28} />
       </VCard>
     );
@@ -59,7 +62,11 @@ export const OverviewCard = () => {
   ];
 
   return (
-    <Link to="/overview" className={`${styles.link} ${styles.animateCard}`} style={{ animationDelay: '0.12s' }}>
+    <Link
+      to="/overview"
+      className={`${styles.link} ${styles.animateCard}`}
+      style={{ animationDelay: '0.12s' }}
+    >
       <VCard interactive className={styles.card}>
         <div className={styles.titleRow}>
           <span className={styles.titleIcon}>

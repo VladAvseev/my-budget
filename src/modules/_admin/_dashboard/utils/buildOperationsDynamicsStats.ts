@@ -24,7 +24,10 @@ const LAST_PERIOD_LABELS: Record<DynamicsAggregation, string> = {
   Y: 'За последний год',
 };
 
-const buildPeriodRate = (data: ChartPoint[], mode: DynamicsChartMode): DynamicsPeriodStats | null => {
+const buildPeriodRate = (
+  data: ChartPoint[],
+  mode: DynamicsChartMode,
+): DynamicsPeriodStats | null => {
   if (data.length === 0) return null;
 
   if (mode === 'period') {
@@ -38,7 +41,10 @@ const buildPeriodRate = (data: ChartPoint[], mode: DynamicsChartMode): DynamicsP
   return { abs: data[data.length - 1].value / data.length };
 };
 
-const buildLastPeriod = (data: ChartPoint[], mode: DynamicsChartMode): DynamicsPeriodStats | null => {
+const buildLastPeriod = (
+  data: ChartPoint[],
+  mode: DynamicsChartMode,
+): DynamicsPeriodStats | null => {
   if (data.length === 0) return null;
 
   if (mode === 'period') {

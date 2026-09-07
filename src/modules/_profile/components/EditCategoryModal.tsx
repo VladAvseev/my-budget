@@ -1,9 +1,12 @@
 import type { Category } from '@/shared/supabase/types/domain';
+import { TrashIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { VButton } from '@/shared/ui/VButton';
+import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import commonStyles from '@/shared/styles/common.module.css';
+import modalStyles from '@/shared/styles/modal.module.css';
 import { getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
 import type { CategoryType } from '@/shared/supabase/types/domain';
@@ -15,9 +18,15 @@ interface EditCategoryModalProps {
   category: Category | null;
   visible: boolean;
   onClose: () => void;
+  onRequestDelete: (category: Category) => void;
 }
 
-export const EditCategoryModal = ({ category, visible, onClose }: EditCategoryModalProps) => {
+export const EditCategoryModal = ({
+  category,
+  visible,
+  onClose,
+  onRequestDelete,
+}: EditCategoryModalProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const updateCategory = useUpdateCategory(userId);
@@ -46,8 +55,7 @@ export const EditCategoryModal = ({ category, visible, onClose }: EditCategoryMo
     if (
       (categoriesQuery.data ?? []).some(
         (item) =>
-          item.id !== category?.id &&
-          item.name.trim().toLowerCase() === trimmedName.toLowerCase(),
+          item.id !== category?.id && item.name.trim().toLowerCase() === trimmedName.toLowerCase(),
       )
     ) {
       setNameError('Категория с таким названием уже существует');
@@ -71,18 +79,28 @@ export const EditCategoryModal = ({ category, visible, onClose }: EditCategoryMo
       onClose={handleClose}
       error={submitError}
       footer={
-        <>
-          <VButton
-            variant="secondary"
-            onClick={handleClose}
+        <div className={modalStyles.footerSplit}>
+          <VIconButton
+            ariaLabel="Удалить категорию"
+            onClick={() => category && onRequestDelete(category)}
             isDisabled={updateCategory.isPending}
+            color="var(--color-error)"
           >
-            Отмена
-          </VButton>
-          <VButton onClick={handleSubmit} isLoading={updateCategory.isPending}>
-            Сохранить
-          </VButton>
-        </>
+            <TrashIcon size={24} color="currentColor" />
+          </VIconButton>
+          <div className={modalStyles.footerRight}>
+            <VButton
+              variant="secondary"
+              onClick={handleClose}
+              isDisabled={updateCategory.isPending}
+            >
+              Отмена
+            </VButton>
+            <VButton onClick={handleSubmit} isLoading={updateCategory.isPending}>
+              Сохранить
+            </VButton>
+          </div>
+        </div>
       }
     >
       <div className={commonStyles.columnL}>

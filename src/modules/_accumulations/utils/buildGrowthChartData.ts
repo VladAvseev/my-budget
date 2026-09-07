@@ -82,7 +82,8 @@ export const buildGrowthChartData = (
 
       if (summary) {
         if (!firstReportFound) {
-          cumulativeValue = startBalance + directTotal + summary.income - summary.expense - summary.daily;
+          cumulativeValue =
+            startBalance + directTotal + summary.income - summary.expense - summary.daily;
           firstReportFound = true;
         } else {
           cumulativeValue += summary.income - summary.expense - summary.daily;

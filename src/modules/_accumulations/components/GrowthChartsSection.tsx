@@ -85,7 +85,11 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
       <VCard className={styles.mobileCompact}>
         <div className={styles.controls}>
           <VButtonGroup options={chartTypeOptions} value={chartType} onChange={setChartType} />
-          <VButtonGroup options={aggregationOptions} value={aggregation} onChange={setAggregation} />
+          <VButtonGroup
+            options={aggregationOptions}
+            value={aggregation}
+            onChange={setAggregation}
+          />
         </div>
 
         <GrowthStats stats={stats} />

@@ -58,9 +58,7 @@ export const GoalsSection = () => {
         </VIconButton>
       </div>
 
-      {goalsQuery.error && (
-        <VBanner type="error" visible message="Не удалось загрузить цели" />
-      )}
+      {goalsQuery.error && <VBanner type="error" visible message="Не удалось загрузить цели" />}
 
       {isLoading && (
         <div className={styles.loaderWrap}>
@@ -68,30 +66,25 @@ export const GoalsSection = () => {
         </div>
       )}
 
-      {!isLoading &&
-        !goalsQuery.error &&
-        goals.length === 0 && (
-          <VCard>
-            <div className={styles.emptyState}>
-              <div className={styles.emptyTitle}>
-                Цель — это желаемая сумма накоплений для выбранной категории.
-              </div>
-              <div className={styles.emptyHint}>
-                Нажмите «+», чтобы задать желаемую сумму накоплений по категории.
-              </div>
+      {!isLoading && !goalsQuery.error && goals.length === 0 && (
+        <VCard>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyTitle}>
+              Цель — это желаемая сумма накоплений для выбранной категории.
             </div>
-          </VCard>
-        )}
+            <div className={styles.emptyHint}>
+              Нажмите «+», чтобы задать желаемую сумму накоплений по категории.
+            </div>
+          </div>
+        </VCard>
+      )}
 
       {!isLoading && progressList.length > 0 && (
         <div className={styles.list}>
           {progressList.map((progress, index) => {
             const goal: Goal = progress.goal;
-            const category =
-              categoryById.get(goal.category_id) ?? null;
-            const pending = Boolean(
-              (goal as { _optimistic?: boolean })._optimistic,
-            );
+            const category = categoryById.get(goal.category_id) ?? null;
+            const pending = Boolean((goal as { _optimistic?: boolean })._optimistic);
             const targetAmount = Number(goal.amount) || 0;
 
             return (
@@ -121,9 +114,7 @@ export const GoalsSection = () => {
                   ) : (
                     <span className={styles.dot} />
                   )}
-                  <span className={styles.cardTitle}>
-                    {category?.name ?? 'Без категории'}
-                  </span>
+                  <span className={styles.cardTitle}>{category?.name ?? 'Без категории'}</span>
                   {progress.reached && <VBadge variant="success">Цель достигнута</VBadge>}
                 </div>
 
@@ -134,10 +125,7 @@ export const GoalsSection = () => {
                   aria-valuemax={100}
                   aria-valuenow={progress.percent}
                 >
-                  <div
-                    className={styles.fill}
-                    style={{ width: `${progress.percent}%` }}
-                  />
+                  <div className={styles.fill} style={{ width: `${progress.percent}%` }} />
                 </div>
 
                 <div className={styles.cardBottom}>

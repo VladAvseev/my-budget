@@ -85,7 +85,11 @@ export const VDatePicker = ({
   };
 
   return (
-    <div ref={containerRef} className={`${styles.root}${className ? ` ${className}` : ''}`} style={style}>
+    <div
+      ref={containerRef}
+      className={`${styles.root}${className ? ` ${className}` : ''}`}
+      style={style}
+    >
       {label && <label className={styles.label}>{label}</label>}
       <div
         role="combobox"
@@ -118,7 +122,14 @@ export const VDatePicker = ({
           </span>
         </span>
       </div>
-      {isOpen && !disabled && <CalendarDropdown value={value} onSelect={handleSelectDate} minDate={minDate} maxDate={maxDate} />}
+      {isOpen && !disabled && (
+        <CalendarDropdown
+          value={value}
+          onSelect={handleSelectDate}
+          minDate={minDate}
+          maxDate={maxDate}
+        />
+      )}
       {hasError && <span className={styles.error}>{error}</span>}
     </div>
   );
@@ -245,12 +256,7 @@ interface CalendarNavButtonProps {
 
 const CalendarNavButton = ({ children, onClick, ariaLabel }: CalendarNavButtonProps) => {
   return (
-    <button
-      type="button"
-      aria-label={ariaLabel}
-      onClick={onClick}
-      className={styles.navButton}
-    >
+    <button type="button" aria-label={ariaLabel} onClick={onClick} className={styles.navButton}>
       {children}
     </button>
   );

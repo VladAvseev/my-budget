@@ -93,7 +93,7 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
       onError: (error: Error) => setSubmitError(getErrorMessage(error)),
     });
   };
-  
+
   return (
     <VCard>
       <div className={styles.content}>

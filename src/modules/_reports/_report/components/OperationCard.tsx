@@ -12,9 +12,7 @@ interface OperationCardProps {
 
 export const OperationCard = ({ operation, category, pending = false }: OperationCardProps) => {
   if (isSavingsType(operation.type as OperationType)) {
-    return (
-      <SavingsOperationCard operation={operation} category={category} pending={pending} />
-    );
+    return <SavingsOperationCard operation={operation} category={category} pending={pending} />;
   }
   return <StandardOperationCard operation={operation} category={category} pending={pending} />;
 };
