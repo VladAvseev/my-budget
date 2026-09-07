@@ -67,7 +67,15 @@ export const VTreeSelect = ({
   className,
 }: VTreeSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState<Set<number>>(new Set());
+  const getGroupIndices = (allItems: VTreeSelectItem[]): Set<number> => {
+    const indices = new Set<number>();
+    allItems.forEach((item, index) => {
+      if (item.type === 'group') indices.add(index);
+    });
+    return indices;
+  };
+
+  const [collapsed, setCollapsed] = useState<Set<number>>(() => getGroupIndices(items));
   const containerRef = useRef<HTMLDivElement>(null);
 
   const hasError = Boolean(error);
