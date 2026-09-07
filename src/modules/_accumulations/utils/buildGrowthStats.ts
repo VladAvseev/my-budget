@@ -6,15 +6,8 @@ export interface MonthlyStats {
   pct: number | null;
 }
 
-export interface YearlyStats {
-  abs: number;
-  pct: number | null;
-  months: number;
-}
-
 export interface GrowthStats {
   monthly: MonthlyStats | null;
-  yearly: YearlyStats | null;
   periodLabel: string;
 }
 
@@ -63,32 +56,14 @@ export const buildMonthlyStats = (data: ChartPoint[]): MonthlyStats | null => {
   return { abs, pct };
 };
 
-export const buildYearlyStats = (fullData: ChartPoint[]): YearlyStats | null => {
-  if (fullData.length < 2) return null;
-
-  const last = fullData[fullData.length - 1];
-  const monthsAvailable = Math.min(fullData.length, 12);
-  const first = fullData[fullData.length - monthsAvailable];
-
-  const abs = last.value - first.value;
-  const pct =
-    first.value !== 0 && last.value !== 0 && Math.sign(first.value) === Math.sign(last.value)
-      ? (last.value / first.value - 1) * 100
-      : null;
-
-  return { abs, pct, months: monthsAvailable };
-};
-
 export const buildGrowthStats = (
   filteredData: ChartPoint[],
-  fullData: ChartPoint[],
   aggregation: GrowthAggregation = 'M',
 ): GrowthStats => {
   const now = new Date();
 
   return {
     monthly: buildMonthlyStats(trimIncompletePeriod(filteredData, getPeriodEnd(aggregation), now)),
-    yearly: buildYearlyStats(trimIncompletePeriod(fullData, getPeriodEnd('M'), now)),
     periodLabel: AGGREGATION_LABELS[aggregation],
   };
 };

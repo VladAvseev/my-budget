@@ -86,8 +86,8 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
   );
 
   const stats = useMemo(
-    () => buildGrowthStats(chartData, convertedChartData, aggregation),
-    [chartData, convertedChartData, aggregation],
+    () => buildGrowthStats(chartData, aggregation),
+    [chartData, aggregation],
   );
 
   const color = chartType === 'accumulations' ? 'var(--color-accent)' : 'var(--color-success)';

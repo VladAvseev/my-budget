@@ -17,7 +17,7 @@ const formatPct = (value: number): string => {
 };
 
 export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
-  const { monthly, yearly, periodLabel } = stats;
+  const { monthly, periodLabel } = stats;
   const currency = useCurrency();
   const symbol = displaySymbol ?? currency?.symbol ?? '₽';
 
@@ -33,16 +33,7 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
         : `${formatSigned(monthly.abs)}`
       : null;
 
-  const yearlyLabel = yearly !== null && yearly.months < 12 ? `За ${yearly.months} мес.` : 'За год';
-
-  const yearlyLine =
-    yearly !== null
-      ? yearly.pct !== null
-        ? `${formatSigned(yearly.abs)} (${formatPct(yearly.pct)})`
-        : `${formatSigned(yearly.abs)}`
-      : null;
-
-  if (!monthlyLine && !yearlyLine) return null;
+  if (!monthlyLine) return null;
 
   return (
     <div className={styles.stats}>
@@ -50,12 +41,6 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
         <div className={styles.stat}>
           {periodLabel}:{' '}
           <span className={`${styles.statValue} ${colorClass(monthly.abs)}`}>{monthlyLine}</span>
-        </div>
-      )}
-      {yearly !== null && (
-        <div className={styles.stat}>
-          {yearlyLabel}:{' '}
-          <span className={`${styles.statValue} ${colorClass(yearly.abs)}`}>{yearlyLine}</span>
         </div>
       )}
     </div>
