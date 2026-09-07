@@ -2,7 +2,6 @@ import commonStyles from '@/shared/styles/common.module.css';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useAdminStats } from './api/useAdminStats';
-import { DatabaseSizeCard } from './components/DatabaseSizeCard';
 import { OperationsDynamicsCard } from './components/OperationsDynamicsCard';
 import { ReportsOperationsCard } from './components/ReportsOperationsCard';
 import { UsersActivityCard } from './components/UsersActivityCard';
@@ -42,9 +41,6 @@ export const Page: React.FC = () => {
         </div>
         <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
           <UsersActivityCard users={users} activity={activity} churn={churn} />
-        </div>
-        <div className={commonStyles.animateCard} style={{ animationDelay: '0.09s' }}>
-          <DatabaseSizeCard />
         </div>
       </div>
     </div>
