@@ -5,6 +5,7 @@ import { useAdminStats } from './api/useAdminStats';
 import { ActivityCard } from './components/ActivityCard';
 import { ChurnCard } from './components/ChurnCard';
 import { DatabaseSizeCard } from './components/DatabaseSizeCard';
+import { OperationsDynamicsCard } from './components/OperationsDynamicsCard';
 import { ReportsOperationsCard } from './components/ReportsOperationsCard';
 import { UsersCard } from './components/UsersCard';
 import styles from './page.module.css';
@@ -36,7 +37,10 @@ export const Page: React.FC = () => {
     <div className={commonStyles.page}>
       <VPageHeader title="Дашборд" />
       <div className={styles.grid}>
-        <div className={commonStyles.animateCard}>
+        <div className={`${commonStyles.animateCard} ${styles.fullWidth}`}>
+          <OperationsDynamicsCard />
+        </div>
+        <div className={commonStyles.animateCard} style={{ animationDelay: '0.03s' }}>
           <DatabaseSizeCard />
         </div>
         <div className={commonStyles.animateCard} style={{ animationDelay: '0.03s' }}>

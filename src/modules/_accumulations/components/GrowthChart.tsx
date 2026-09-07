@@ -8,6 +8,7 @@ interface GrowthChartProps {
   data: ChartPoint[];
   color: string;
   height?: number;
+  formatValue?: (value: number) => string;
 }
 
 const PADDING = { top: 12, right: 8, bottom: 80 , left: 6 };
@@ -20,10 +21,12 @@ interface TooltipState {
   point: ChartPoint;
 }
 
-export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => {
+export const GrowthChart = ({ data, color, height = 280, formatValue }: GrowthChartProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const currency = useCurrency();
+
+  const format = formatValue ?? ((v: number) => formatAmount(v, currency?.symbol));
 
   useEffect(() => {
     const el = containerRef.current;
@@ -219,7 +222,7 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
 
       <div className={styles.yAxis} style={{ height: svgHeight }}>
         <span className={styles.labelYGhost}>
-          {formatAmount(ticks.length > 0 ? Math.max(...ticks.map(t => Math.abs(t))) : 0, currency?.symbol)}
+          {format(ticks.length > 0 ? Math.max(...ticks.map(t => Math.abs(t))) : 0)}
         </span>
         {[...ticks].reverse().map((tick, i) => (
           <span
@@ -227,7 +230,7 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
             className={styles.labelY}
             style={{ top: getY(tick), transform: 'translateY(-50%)' }}
           >
-            {formatAmount(tick, currency?.symbol)}
+            {format(tick)}
           </span>
         ))}
       </div>
@@ -241,7 +244,7 @@ export const GrowthChart = ({ data, color, height = 280 }: GrowthChartProps) => 
             transform: 'translate(-50%, -100%)',
           }}
         >
-          <span className={styles.tooltipValue}>{formatAmount(tooltip.point.value, currency?.symbol)}</span>
+          <span className={styles.tooltipValue}>{format(tooltip.point.value)}</span>
         </div>
       )}
     </div>

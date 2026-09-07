@@ -310,6 +310,20 @@ end;
 $$;
 
 -- ────────────────────────────────────────────────────────────────────────────
+-- Источник: src/modules/_admin/_dashboard/api/useAdminOperationsDynamics.sql
+-- Админ: динамика операций (id + created_at для всех операций).
+create or replace function public.admin_get_operations_dynamics()
+returns table (id uuid, created_at timestamptz)
+language sql
+security definer
+set search_path = public
+as $$
+  select o.id, o.created_at
+  from public.operations o
+  order by o.created_at asc;
+$$;
+
+-- ────────────────────────────────────────────────────────────────────────────
 -- Источник: src/modules/_admin/_dashboard/api/useAdminStats.sql
 -- Админ: статистика дашборда.
 create or replace function public.admin_get_dashboard_stats()

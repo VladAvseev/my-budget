@@ -675,6 +675,10 @@ export interface Database {
         Args: Record<string, never>;
         Returns: DatabaseSize;
       };
+      admin_get_operations_dynamics: {
+        Args: Record<string, never>;
+        Returns: { created_at: string }[];
+      };
     };
   };
 }
