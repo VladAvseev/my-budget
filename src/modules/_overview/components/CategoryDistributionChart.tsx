@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
-import { VButtonGroup } from '@/shared/ui/VButtonGroup';
+import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
-import { formatAmount } from '@/shared/utils';
-import { useCurrency } from '@/shared/hooks';
+import { formatAmount, convertAmount } from '@/shared/utils';
+import { useCurrency, useExchangeRates, useProfile } from '@/shared/hooks';
+import { QUICK_CURRENCIES, getCurrencyByCode } from '@/shared/constants/currencies';
 import { useOverviewCategories } from '../api/useOverviewCategories';
 import { buildChartData, type ChartData } from '../utils/overview';
 import styles from './CategoryDistributionChart.module.css';
@@ -22,11 +23,32 @@ const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: strin
   { value: 'savings', label: 'Накопления' },
 ];
 
+const CURRENCY_OPTIONS: VButtonGroupOption[] = [
+  { value: 'BYN', label: 'BYN' },
+  { value: 'RUB', label: 'RUB' },
+  { value: 'USD', label: 'USD' },
+];
+
+const isQuickCurrency = (code: string | null): code is string =>
+  code !== null && (QUICK_CURRENCIES as readonly string[]).includes(code);
+
 export const CategoryDistributionChart = ({
   operationsByReport,
 }: CategoryDistributionChartProps) => {
   const currency = useCurrency();
+  const { data: profile } = useProfile();
+  const { data: rates } = useExchangeRates();
   const [selectedType, setSelectedType] = useState<'expense' | 'income' | 'savings'>('expense');
+
+  const profileCurrency = profile?.currency ?? null;
+  const defaultCurrency = isQuickCurrency(profileCurrency) ? profileCurrency : null;
+  const [selectedCurrency, setSelectedCurrency] = useState<string | null>(defaultCurrency);
+  const isCurrencyDisabled = !isQuickCurrency(profileCurrency);
+
+  const displayCurrency = selectedCurrency && rates ? selectedCurrency : null;
+  const displaySymbol = displayCurrency
+    ? getCurrencyByCode(displayCurrency)?.symbol
+    : currency?.symbol;
 
   const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
 
@@ -89,10 +111,33 @@ export const CategoryDistributionChart = ({
 
   const { segments, total, hasNegative } = chartData;
 
-  const donutSegments: DonutSegment[] = segments;
+  const donutSegments: DonutSegment[] = segments.map((segment) => ({
+    ...segment,
+    convertedTotal:
+      displayCurrency && rates && defaultCurrency
+        ? convertAmount(segment.total, defaultCurrency, displayCurrency, rates)
+        : undefined,
+  }));
+
+  const convertedTotal = donutSegments.reduce(
+    (sum, seg) => sum + (seg.convertedTotal ?? seg.total),
+    0,
+  );
 
   return (
     <VCard className={styles.content}>
+      <div className={styles.header}>
+        <div className={styles.title}>Структура операций</div>
+        <div title={isCurrencyDisabled ? 'Сначала выберите валюту в профиле' : undefined}>
+          <VButtonGroup
+            options={CURRENCY_OPTIONS}
+            value={selectedCurrency}
+            onChange={(value) => setSelectedCurrency(value as string)}
+            disabled={isCurrencyDisabled}
+          />
+        </div>
+      </div>
+
       <VButtonGroup options={typeOptions} value={selectedType} onChange={setSelectedType} />
 
       {segments.length === 0 || hasNegative || total <= 0 ? (
@@ -101,10 +146,15 @@ export const CategoryDistributionChart = ({
         </div>
       ) : (
         <div className={styles.chartWrapper}>
-          <DonutChart segments={donutSegments} total={total} />
+          <DonutChart
+            segments={donutSegments}
+            total={total}
+            displayTotal={convertedTotal}
+            displaySymbol={displaySymbol}
+          />
 
           <div className={styles.legend}>
-            {segments.flatMap((segment) => [
+            {donutSegments.flatMap((segment) => [
               <span
                 key={`${segment.key}-dot`}
                 className={`${styles.dot} ${styles.dotSegment}`}
@@ -123,7 +173,7 @@ export const CategoryDistributionChart = ({
                 key={`${segment.key}-amount`}
                 className={`${styles.textBold} ${styles.justifyEnd}`}
               >
-                {formatAmount(segment.total, currency?.symbol)}
+                {formatAmount(segment.convertedTotal ?? segment.total, displaySymbol)}
               </span>,
             ])}
           </div>

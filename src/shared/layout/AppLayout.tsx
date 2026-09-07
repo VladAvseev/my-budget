@@ -193,7 +193,9 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             </VCard>
           </div>
 
-          <main ref={mainRef} className={styles.mainDesktop}>{children}</main>
+          <main ref={mainRef} className={styles.mainDesktop}>
+            {children}
+          </main>
         </div>
       </div>
     );
@@ -238,7 +240,9 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
         </div>
       )}
 
-      <main ref={mainRef} className={styles.mainMobile}>{children}</main>
+      <main ref={mainRef} className={styles.mainMobile}>
+        {children}
+      </main>
     </div>
   );
 };
