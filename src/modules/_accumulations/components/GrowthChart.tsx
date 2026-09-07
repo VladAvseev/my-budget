@@ -120,15 +120,13 @@ export const GrowthChart = ({ data, color, height = 280, formatValue }: GrowthCh
   }, [data, getX, getY, plotHeight]);
 
   const handleDotEnter = useCallback(
-    (e: React.MouseEvent, point: ChartPoint) => {
-      const svgRect = (e.target as SVGCircleElement).closest('svg')?.getBoundingClientRect();
-      if (!svgRect) return;
+    (_e: React.MouseEvent, point: ChartPoint) => {
       const idx = data.indexOf(point);
-      const x = getX(idx);
-      const y = getY(point.value);
+      const el = containerRef.current;
+      const scrollLeft = el ? el.scrollLeft : 0;
       setTooltip({
-        x: svgRect.left + x,
-        y: svgRect.top + y - 12,
+        x: getX(idx) - scrollLeft,
+        y: getY(point.value) - 12,
         point,
       });
     },
@@ -137,13 +135,30 @@ export const GrowthChart = ({ data, color, height = 280, formatValue }: GrowthCh
 
   const handleDotLeave = useCallback(() => setTooltip(null), []);
 
+  const handleScroll = useCallback(() => {
+    setTooltip((prev) => {
+      if (!prev) return null;
+      const el = containerRef.current;
+      if (!el) return null;
+      const idx = data.indexOf(prev.point);
+      const dotX = getX(idx);
+      if (dotX < el.scrollLeft || dotX > el.scrollLeft + el.clientWidth) {
+        return null;
+      }
+      return {
+        ...prev,
+        x: dotX - el.scrollLeft,
+      };
+    });
+  }, [data, getX]);
+
   if (data.length === 0) {
     return <div className={styles.empty}>Нет данных для отображения</div>;
   }
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.container} ref={containerRef}>
+      <div className={styles.container} ref={containerRef} onScroll={handleScroll}>
         <div className={styles.chartWrap}>
           <svg
           className={styles.chart}
