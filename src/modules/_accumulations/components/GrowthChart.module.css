@@ -99,3 +99,9 @@
 .tooltipValue {
   font-weight: var(--font-weight-bold);
 }
+
+.tooltipChange {
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-bold);
+  margin-top: 2px;
+}

@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useRef, useEffect } from 'react';
+import { useMemo, useState, useCallback, useRef, useEffect, useLayoutEffect } from 'react';
 import type { ChartPoint } from '../utils/buildGrowthChartData';
 import { formatAmount } from '@/shared/utils/format';
 import { useCurrency } from '@/shared/hooks';
@@ -9,6 +9,7 @@ interface GrowthChartProps {
   color: string;
   height?: number;
   formatValue?: (value: number) => string;
+  showChange?: boolean;
 }
 
 const PADDING = { top: 12, right: 8, bottom: 80 , left: 6 };
@@ -21,8 +22,10 @@ interface TooltipState {
   point: ChartPoint;
 }
 
-export const GrowthChart = ({ data, color, height = 280, formatValue }: GrowthChartProps) => {
+export const GrowthChart = ({ data, color, height = 280, formatValue, showChange }: GrowthChartProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
+  const [clampedX, setClampedX] = useState<number | null>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const currency = useCurrency();
 
@@ -152,6 +155,27 @@ export const GrowthChart = ({ data, color, height = 280, formatValue }: GrowthCh
     });
   }, [data, getX]);
 
+  useLayoutEffect(() => {
+    if (!tooltip || !tooltipRef.current) {
+      setClampedX(null);
+      return;
+    }
+    const el = tooltipRef.current;
+    const wrapper = el.parentElement;
+    if (!wrapper) return;
+
+    const tooltipRect = el.getBoundingClientRect();
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const halfW = tooltipRect.width / 2;
+    const wrapperWidth = wrapperRect.width;
+
+    let x = tooltip.x;
+    if (x - halfW < 0) x = halfW;
+    if (x + halfW > wrapperWidth) x = wrapperWidth - halfW;
+
+    setClampedX(x !== tooltip.x ? x : null);
+  }, [tooltip]);
+
   if (data.length === 0) {
     return <div className={styles.empty}>Нет данных для отображения</div>;
   }
@@ -252,14 +276,27 @@ export const GrowthChart = ({ data, color, height = 280, formatValue }: GrowthCh
 
       {tooltip && (
         <div
+          ref={tooltipRef}
           className={styles.tooltip}
           style={{
-            left: tooltip.x,
+            left: clampedX ?? tooltip.x,
             top: tooltip.y,
             transform: 'translate(-50%, -100%)',
           }}
         >
           <span className={styles.tooltipValue}>{format(tooltip.point.value)}</span>
+          {showChange && (() => {
+            const idx = data.indexOf(tooltip.point);
+            if (idx <= 0) return null;
+            const change = tooltip.point.value - data[idx - 1].value;
+            const changeColor =
+              change > 0 ? 'var(--color-success)' : change < 0 ? 'var(--color-error)' : 'var(--color-warning)';
+            return (
+              <div className={styles.tooltipChange} style={{ color: changeColor }}>
+                {change > 0 ? '+' : ''}{format(change)}
+              </div>
+            );
+          })()}
         </div>
       )}
     </div>

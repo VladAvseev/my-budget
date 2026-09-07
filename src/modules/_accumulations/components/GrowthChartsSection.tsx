@@ -95,7 +95,7 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
             <VLoader />
           </div>
         ) : (
-          <GrowthChart data={chartData} color={color} />
+          <GrowthChart data={chartData} color={color} showChange />
         )}
       </VCard>
     </div>
