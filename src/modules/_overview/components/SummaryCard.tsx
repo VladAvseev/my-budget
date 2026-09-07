@@ -1,6 +1,5 @@
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
-import { useCurrency } from '@/shared/hooks';
 import { percentOfIncome } from '../utils/overview';
 import styles from './SummaryCard.module.css';
 
@@ -8,11 +7,27 @@ interface SummaryCardProps {
   income: number;
   expenses: number;
   savings: number;
+  displayCurrency: string | null;
+  rates: Record<string, number> | undefined;
+  defaultCurrency: string | null;
+  displaySymbol: string | undefined;
 }
 
-export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => {
-  const currency = useCurrency();
+export const SummaryCard = ({
+  income,
+  expenses,
+  savings,
+  displayCurrency,
+  rates,
+  defaultCurrency,
+  displaySymbol,
+}: SummaryCardProps) => {
   const balance = income - expenses - savings;
+
+  const convertOptions =
+    displayCurrency && rates && defaultCurrency
+      ? { from: defaultCurrency, to: displayCurrency, rates }
+      : undefined;
 
   const items = [
     {
@@ -46,7 +61,7 @@ export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => 
         <VCard key={item.label} className={styles.card}>
           <div className={styles.label}>{item.label}</div>
           <div className={styles.value} style={{ color: item.color }}>
-            {formatAmount(item.value, currency?.symbol)}
+            {formatAmount(item.value, displaySymbol, convertOptions)}
           </div>
           {item.percent != null && <div className={styles.percent}>{item.percent}% от доходов</div>}
         </VCard>

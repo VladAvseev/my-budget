@@ -4,6 +4,7 @@ import { HIDDEN_AMOUNT, useCurrency, useExchangeRates } from '@/shared/hooks';
 import { QUICK_CURRENCIES, getCurrencyByCode } from '@/shared/constants/currencies';
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
+import { VHint } from '@/shared/ui/VHint';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { convertAmount, formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
@@ -125,14 +126,14 @@ export const AccumulationsStructure = ({
         <div className={styles.content}>
           <div className={styles.header}>
             <div className={styles.title}>{title}</div>
-            <div title={isDisabled ? 'Сначала выберите валюту в профиле' : undefined}>
+            <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
               <VButtonGroup
                 options={CURRENCY_OPTIONS}
                 value={selectedCurrency}
                 onChange={(value) => setSelectedCurrency(value as string)}
                 disabled={isDisabled}
               />
-            </div>
+            </VHint>
           </div>
 
           {segments.length === 0 && <div className={styles.message}>Накоплений нет</div>}

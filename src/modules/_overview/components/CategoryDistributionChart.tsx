@@ -1,11 +1,10 @@
 import { useState, useMemo } from 'react';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
-import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
+import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { formatAmount, convertAmount } from '@/shared/utils';
-import { useCurrency, useExchangeRates, useProfile } from '@/shared/hooks';
-import { QUICK_CURRENCIES, getCurrencyByCode } from '@/shared/constants/currencies';
+import type { ConvertOptions } from '@/shared/utils/format';
 import { useOverviewCategories } from '../api/useOverviewCategories';
 import { buildChartData, type ChartData } from '../utils/overview';
 import styles from './CategoryDistributionChart.module.css';
@@ -15,6 +14,10 @@ interface CategoryDistributionChartProps {
     string,
     Array<{ type: string; amount: string; category_id: string | null }>
   >;
+  displayCurrency: string | null;
+  rates: Record<string, number> | undefined;
+  defaultCurrency: string | null;
+  displaySymbol: string | undefined;
 }
 
 const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: string }> = [
@@ -23,32 +26,14 @@ const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: strin
   { value: 'savings', label: 'Накопления' },
 ];
 
-const CURRENCY_OPTIONS: VButtonGroupOption[] = [
-  { value: 'BYN', label: 'BYN' },
-  { value: 'RUB', label: 'RUB' },
-  { value: 'USD', label: 'USD' },
-];
-
-const isQuickCurrency = (code: string | null): code is string =>
-  code !== null && (QUICK_CURRENCIES as readonly string[]).includes(code);
-
 export const CategoryDistributionChart = ({
   operationsByReport,
+  displayCurrency,
+  rates,
+  defaultCurrency,
+  displaySymbol,
 }: CategoryDistributionChartProps) => {
-  const currency = useCurrency();
-  const { data: profile } = useProfile();
-  const { data: rates } = useExchangeRates();
   const [selectedType, setSelectedType] = useState<'expense' | 'income' | 'savings'>('expense');
-
-  const profileCurrency = profile?.currency ?? null;
-  const defaultCurrency = isQuickCurrency(profileCurrency) ? profileCurrency : null;
-  const [selectedCurrency, setSelectedCurrency] = useState<string | null>(defaultCurrency);
-  const isCurrencyDisabled = !isQuickCurrency(profileCurrency);
-
-  const displayCurrency = selectedCurrency && rates ? selectedCurrency : null;
-  const displaySymbol = displayCurrency
-    ? getCurrencyByCode(displayCurrency)?.symbol
-    : currency?.symbol;
 
   const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
 
@@ -111,12 +96,16 @@ export const CategoryDistributionChart = ({
 
   const { segments, total, hasNegative } = chartData;
 
+  const convertOptions: ConvertOptions | undefined =
+    displayCurrency && rates && defaultCurrency
+      ? { from: defaultCurrency, to: displayCurrency, rates }
+      : undefined;
+
   const donutSegments: DonutSegment[] = segments.map((segment) => ({
     ...segment,
-    convertedTotal:
-      displayCurrency && rates && defaultCurrency
-        ? convertAmount(segment.total, defaultCurrency, displayCurrency, rates)
-        : undefined,
+    convertedTotal: convertOptions
+      ? convertAmount(segment.total, convertOptions.from, convertOptions.to, convertOptions.rates)
+      : undefined,
   }));
 
   const convertedTotal = donutSegments.reduce(
@@ -126,17 +115,7 @@ export const CategoryDistributionChart = ({
 
   return (
     <VCard className={styles.content}>
-      <div className={styles.header}>
-        <div className={styles.title}>Структура операций</div>
-        <div title={isCurrencyDisabled ? 'Сначала выберите валюту в профиле' : undefined}>
-          <VButtonGroup
-            options={CURRENCY_OPTIONS}
-            value={selectedCurrency}
-            onChange={(value) => setSelectedCurrency(value as string)}
-            disabled={isCurrencyDisabled}
-          />
-        </div>
-      </div>
+      <div className={styles.title}>Структура операций</div>
 
       <VButtonGroup options={typeOptions} value={selectedType} onChange={setSelectedType} />
 
@@ -173,7 +152,7 @@ export const CategoryDistributionChart = ({
                 key={`${segment.key}-amount`}
                 className={`${styles.textBold} ${styles.justifyEnd}`}
               >
-                {formatAmount(segment.convertedTotal ?? segment.total, displaySymbol)}
+                {formatAmount(segment.total, displaySymbol, convertOptions)}
               </span>,
             ])}
           </div>
