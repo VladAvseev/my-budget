@@ -90,7 +90,7 @@ export const VModal = ({
   }
 
   return createPortal(
-    <div role="presentation" onClick={onClose} className={styles.overlay}>
+    <div role="presentation" className={styles.overlay}>
       <div
         ref={dialogRef}
         role="dialog"
