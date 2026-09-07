@@ -28,6 +28,10 @@
   white-space: nowrap;
 }
 
+.table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
 .table tbody tr:hover {
   background-color: var(--color-bg-surface-hover);
 }
