@@ -28,12 +28,14 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { formatAmount } from '@/shared/utils';
 import {
   useState,
+  useEffect,
+  useRef,
   type ComponentType,
   type Dispatch,
   type ReactNode,
   type SetStateAction,
 } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useSupportUnread } from '@/modules/_support/api/useSupportUnread';
 import styles from './AppLayout.module.css';
 
@@ -174,6 +176,12 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   const { capital } = useCapital();
   const { showBalance, showCapital } = useAmountsVisibility();
   const currency = useCurrency();
+  const mainRef = useRef<HTMLElement>(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    mainRef.current?.scrollTo(0, 0);
+  }, [location.pathname]);
 
   if (isDesktop) {
     return (
@@ -185,7 +193,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             </VCard>
           </div>
 
-          <main className={styles.mainDesktop}>{children}</main>
+          <main ref={mainRef} className={styles.mainDesktop}>{children}</main>
         </div>
       </div>
     );
@@ -230,7 +238,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
         </div>
       )}
 
-      <main className={styles.mainMobile}>{children}</main>
+      <main ref={mainRef} className={styles.mainMobile}>{children}</main>
     </div>
   );
 };
