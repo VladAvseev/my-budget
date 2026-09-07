@@ -1,4 +1,5 @@
 import type { ChartPoint, GrowthAggregation } from './buildGrowthChartData';
+import { getPeriodEnd, trimIncompletePeriod } from './buildGrowthChartData';
 
 export interface MonthlyStats {
   abs: number;
@@ -82,8 +83,12 @@ export const buildGrowthStats = (
   filteredData: ChartPoint[],
   fullData: ChartPoint[],
   aggregation: GrowthAggregation = 'M',
-): GrowthStats => ({
-  monthly: buildMonthlyStats(filteredData),
-  yearly: buildYearlyStats(fullData),
-  periodLabel: AGGREGATION_LABELS[aggregation],
-});
+): GrowthStats => {
+  const now = new Date();
+
+  return {
+    monthly: buildMonthlyStats(trimIncompletePeriod(filteredData, getPeriodEnd(aggregation), now)),
+    yearly: buildYearlyStats(trimIncompletePeriod(fullData, getPeriodEnd('M'), now)),
+    periodLabel: AGGREGATION_LABELS[aggregation],
+  };
+};

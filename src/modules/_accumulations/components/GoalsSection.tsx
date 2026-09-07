@@ -2,7 +2,13 @@ import { PlusIcon } from '@/shared/icons';
 import { useAccumulations, useGoals } from '@/shared/hooks';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Goal } from '@/shared/supabase/types/domain';
-import { buildGoalsProgress, formatAmount } from '@/shared/utils';
+import {
+  buildGoalForecast,
+  buildGoalsProgress,
+  formatAmount,
+  formatDisplay,
+  type GoalForecast,
+} from '@/shared/utils';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -16,6 +22,28 @@ import { useCategories } from '../api/useCategories';
 import { useSavingsOperations } from '../api/useSavingsOperations';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './GoalsSection.module.css';
+
+const GoalForecastInfo = ({
+  forecast,
+  symbol,
+  convertOptions,
+}: {
+  forecast: GoalForecast;
+  symbol: string | undefined;
+  convertOptions: { from: string; to: string; rates: Record<string, number> } | undefined;
+}) => {
+  if (forecast.requiredMonthly === null) {
+    return null;
+  }
+
+  return (
+    <div className={styles.forecast}>
+      <div className={styles.forecastRow}>
+        Чтобы успеть: ≈ {formatAmount(forecast.requiredMonthly, symbol, convertOptions)} в месяц
+      </div>
+    </div>
+  );
+};
 
 export const GoalsSection = () => {
   const { user } = useAuth();
@@ -87,6 +115,7 @@ export const GoalsSection = () => {
             const category = categoryById.get(goal.category_id) ?? null;
             const pending = Boolean((goal as { _optimistic?: boolean })._optimistic);
             const targetAmount = Number(goal.amount) || 0;
+            const forecast = buildGoalForecast(goal, progress.savedAmount);
 
             return (
               <VCard
@@ -116,6 +145,9 @@ export const GoalsSection = () => {
                     <span className={styles.dot} />
                   )}
                   <span className={styles.cardTitle}>{category?.name ?? 'Без категории'}</span>
+                  {goal.target_date && (
+                    <span className={styles.targetDate}>{formatDisplay(goal.target_date)}</span>
+                  )}
                   {progress.reached && <VBadge variant="success">Цель достигнута</VBadge>}
                 </div>
 
@@ -138,6 +170,14 @@ export const GoalsSection = () => {
                   </span>
                   <span className={styles.percent}>{progress.percent}%</span>
                 </div>
+
+                {!progress.reached && !pending && (
+                  <GoalForecastInfo
+                    forecast={forecast}
+                    symbol={displaySymbol}
+                    convertOptions={convertOptions}
+                  />
+                )}
               </VCard>
             );
           })}

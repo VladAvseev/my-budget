@@ -1,7 +1,12 @@
+-- Миграция: добавить в таблицу goals колонку с желаемой датой достижения цели.
+-- Выполнить в Supabase перед обновлением функций:
+-- alter table public.goals add column if not exists target_date date;
+
 -- Создание цели накопления для своей savings-категории текущим пользователем.
 create or replace function public.create_goal(
   p_category_id uuid,
-  p_amount numeric
+  p_amount numeric,
+  p_target_date date default null
 )
 returns jsonb
 language plpgsql
@@ -20,13 +25,14 @@ begin
     raise exception 'Категория не найдена среди категорий накоплений';
   end if;
 
-  insert into public.goals (user_id, category_id, amount)
-  values (auth.uid(), p_category_id, p_amount)
+  insert into public.goals (user_id, category_id, amount, target_date)
+  values (auth.uid(), p_category_id, p_amount, p_target_date)
   returning jsonb_build_object(
     'id', id,
     'user_id', user_id,
     'category_id', category_id,
     'amount', amount,
+    'target_date', target_date,
     'created_at', created_at,
     'updated_at', updated_at
   ) into result;

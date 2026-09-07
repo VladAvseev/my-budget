@@ -13,8 +13,10 @@ export { formatAmount, type ConvertOptions } from './format';
 export { getErrorMessage } from './errorMessage';
 export { trimStrings } from './trim';
 export {
+  buildGoalForecast,
   buildGoalsProgress,
   getCategorySavedTotal,
+  type GoalForecast,
   type GoalProgress,
   type GoalProgressSource,
 } from './goals';

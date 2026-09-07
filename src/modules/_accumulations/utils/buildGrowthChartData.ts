@@ -126,6 +126,19 @@ export const buildGrowthChartData = (
 
 const AGGREGATION_SIZE: Record<GrowthAggregation, number> = { M: 1, Q: 3, HY: 6, Y: 12 };
 
+export const getPeriodEnd = (aggregation: GrowthAggregation) => (start: Date): Date =>
+  addMonths(start, AGGREGATION_SIZE[aggregation]);
+
+export const trimIncompletePeriod = (
+  points: ChartPoint[],
+  periodEnd: (start: Date) => Date,
+  now: Date,
+): ChartPoint[] => {
+  if (points.length === 0) return points;
+  const last = points[points.length - 1];
+  return now < periodEnd(last.month) ? points.slice(0, -1) : points;
+};
+
 const QUARTER_LABELS = ['1 кв', '2 кв', '3 кв', '4 кв'];
 const HALF_LABELS = ['1 пол', '2 пол'];
 

@@ -13,6 +13,7 @@ begin
     'user_id', user_id,
     'category_id', category_id,
     'amount', amount,
+    'target_date', target_date,
     'created_at', created_at,
     'updated_at', updated_at
   ) order by created_at desc), '[]'::jsonb)

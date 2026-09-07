@@ -78,10 +78,12 @@ export type AccumulationUpdateInput = Partial<AccumulationInput>;
 export interface GoalInput {
   categoryId: string;
   amount: number;
+  targetDate?: string | null;
 }
 
 export interface GoalUpdateInput {
   amount: number;
+  targetDate?: string | null;
 }
 
 export interface CategoryLimitInput {

@@ -3,9 +3,10 @@ import { useAuth } from '@/shared/supabase/authProvider';
 import { useGoals } from '@/shared/hooks';
 import modalStyles from '@/shared/styles/modal.module.css';
 import commonStyles from '@/shared/styles/common.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { getErrorMessage, toISODate } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
+import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VModal } from '@/shared/ui/VModal';
 import { VSelect } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
@@ -25,8 +26,10 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
 
   const [categoryId, setCategoryId] = useState('');
   const [amount, setAmount] = useState('');
+  const [targetDate, setTargetDate] = useState('');
   const [categoryIdError, setCategoryIdError] = useState<string>();
   const [amountError, setAmountError] = useState<string>();
+  const [targetDateError, setTargetDateError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
 
   const options = useMemo(() => {
@@ -63,8 +66,18 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
     }
     setAmountError(undefined);
 
+    let targetDateValue: string | null = null;
+    if (targetDate) {
+      if (targetDate <= toISODate(new Date())) {
+        setTargetDateError('Дата должна быть в будущем');
+        return;
+      }
+      setTargetDateError(undefined);
+      targetDateValue = targetDate;
+    }
+
     createGoal.mutate(
-      { categoryId, amount: amountValue },
+      { categoryId, amount: amountValue, targetDate: targetDateValue },
       {
         onSuccess: onClose,
         onError: (error: Error) => setSubmitError(getErrorMessage(error)),
@@ -122,6 +135,16 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
               onChange={(value) => {
                 setAmount(value);
                 setAmountError(undefined);
+              }}
+            />
+            <VDatePicker
+              label="Желаемая дата достижения (необязательно)"
+              value={targetDate}
+              error={targetDateError}
+              disabled={createGoal.isPending}
+              onChange={(value) => {
+                setTargetDate(value);
+                setTargetDateError(undefined);
               }}
             />
           </>

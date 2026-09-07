@@ -16,6 +16,7 @@ export const useUpdateGoal = (userId: string) => {
       const { error } = await supabase.rpc('update_goal', {
         p_id: id,
         p_amount: input.amount,
+        p_target_date: input.targetDate ?? null,
       });
       if (error) throw error;
     },
@@ -28,6 +29,7 @@ export const useUpdateGoal = (userId: string) => {
             ? ({
                 ...item,
                 amount: String(input.amount),
+                target_date: input.targetDate ?? null,
                 _optimistic: true,
               } as Goal & OptimisticItem)
             : item,

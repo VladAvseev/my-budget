@@ -202,6 +202,7 @@ export interface Database {
           user_id: string;
           category_id: string;
           amount: string;
+          target_date: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -210,6 +211,7 @@ export interface Database {
           user_id?: string;
           category_id: string;
           amount?: string;
+          target_date?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -218,6 +220,7 @@ export interface Database {
           user_id?: string;
           category_id?: string;
           amount?: string;
+          target_date?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -525,6 +528,7 @@ export interface Database {
         Args: {
           p_category_id: string;
           p_amount: number;
+          p_target_date: string | null;
         };
         Returns: Goal;
       };
@@ -532,6 +536,7 @@ export interface Database {
         Args: {
           p_id: string;
           p_amount: number;
+          p_target_date: string | null;
         };
         Returns: Goal;
       };

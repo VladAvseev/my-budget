@@ -1,4 +1,5 @@
 import type { ChartPoint } from '@/modules/_accumulations/utils/buildGrowthChartData';
+import { trimIncompletePeriod } from '@/modules/_accumulations/utils/buildGrowthChartData';
 import type { DynamicsAggregation, DynamicsChartMode } from './buildOperationsDynamicsData';
 
 export interface DynamicsPeriodStats {
@@ -57,12 +58,23 @@ const buildLastPeriod = (
   return { abs: last.value - prev.value };
 };
 
+const getPeriodEnd = (aggregation: DynamicsAggregation) => (start: Date): Date => {
+  const end = new Date(start);
+  if (aggregation === 'D') end.setUTCDate(end.getUTCDate() + 1);
+  else if (aggregation === 'M') end.setUTCMonth(end.getUTCMonth() + 1);
+  else end.setUTCFullYear(end.getUTCFullYear() + 1);
+  return end;
+};
+
 export const buildOperationsDynamicsStats = (
   data: ChartPoint[],
   aggregation: DynamicsAggregation,
   mode: DynamicsChartMode,
 ): DynamicsStats => ({
-  periodRate: buildPeriodRate(data, mode),
+  periodRate: buildPeriodRate(
+    trimIncompletePeriod(data, getPeriodEnd(aggregation), new Date()),
+    mode,
+  ),
   lastPeriod: buildLastPeriod(data, mode),
   periodLabel: AGGREGATION_LABELS[aggregation],
   lastPeriodLabel: LAST_PERIOD_LABELS[aggregation],

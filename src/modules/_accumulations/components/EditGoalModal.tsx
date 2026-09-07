@@ -3,9 +3,10 @@ import { TrashIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Goal } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { getErrorMessage, toISODate } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
+import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
@@ -30,6 +31,8 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
 
   const [amount, setAmount] = useState(String(Number(goal.amount)));
   const [amountError, setAmountError] = useState<string>();
+  const [targetDate, setTargetDate] = useState(goal.target_date ?? '');
+  const [targetDateError, setTargetDateError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
 
   const isPending = updateGoal.isPending || removeGoal.isPending;
@@ -59,10 +62,20 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
     }
     setAmountError(undefined);
 
+    let targetDateValue: string | null = null;
+    if (targetDate) {
+      if (targetDate <= toISODate(new Date())) {
+        setTargetDateError('Дата должна быть в будущем');
+        return;
+      }
+      setTargetDateError(undefined);
+      targetDateValue = targetDate;
+    }
+
     updateGoal.mutate(
       {
         id: goal.id,
-        input: { amount: amountValue },
+        input: { amount: amountValue, targetDate: targetDateValue },
       },
       {
         onSuccess: onClose,
@@ -121,6 +134,16 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
           onChange={(value) => {
             setAmount(value);
             setAmountError(undefined);
+          }}
+        />
+        <VDatePicker
+          label="Желаемая дата достижения (необязательно)"
+          value={targetDate}
+          error={targetDateError}
+          disabled={isPending}
+          onChange={(value) => {
+            setTargetDate(value);
+            setTargetDateError(undefined);
           }}
         />
       </div>
