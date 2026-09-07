@@ -27,11 +27,11 @@ const AGGREGATION_LABELS: Record<GrowthAggregation, string> = {
 export const buildMonthlyStats = (data: ChartPoint[]): MonthlyStats | null => {
   if (data.length < 2) return null;
 
-  let absSum = 0;
-  for (let i = 0; i < data.length - 1; i++) {
-    absSum += data[i + 1].value - data[i].value;
+  let absSum = data[0].value;
+  for (let i = 1; i < data.length; i++) {
+    absSum += data[i].value - data[i - 1].value;
   }
-  const abs = absSum / (data.length - 1);
+  const abs = absSum / data.length;
 
   let firstIndex = -1;
   let firstValue = 0;
