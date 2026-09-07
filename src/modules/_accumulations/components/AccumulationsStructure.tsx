@@ -1,5 +1,5 @@
 import type { Category } from '@/shared/supabase/types/domain';
-import { HIDDEN_AMOUNT, useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { convertAmount, formatAmount } from '@/shared/utils';
@@ -16,7 +16,6 @@ interface AccumulationsStructureProps {
   categories: Category[];
   hideRing?: boolean;
   title?: string;
-  maskAmounts?: boolean;
   interactive?: boolean;
   displayCurrency: string | null;
   rates: Record<string, number> | undefined;
@@ -40,7 +39,6 @@ export const AccumulationsStructure = ({
   categories,
   hideRing = false,
   title = 'Структура накоплений',
-  maskAmounts = false,
   interactive = false,
   displayCurrency,
   rates,
@@ -94,7 +92,6 @@ export const AccumulationsStructure = ({
   const convertedTotal = segments.reduce((sum, seg) => sum + (seg.convertedTotal ?? seg.total), 0);
 
   const formatSegmentAmount = (segment: CategorySegment) => {
-    if (maskAmounts) return HIDDEN_AMOUNT;
     return formatAmount(
       segment.convertedTotal ?? segment.total,
       displaySymbol ?? currency?.symbol,
@@ -125,7 +122,6 @@ export const AccumulationsStructure = ({
                 <DonutChart
                   segments={donutSegments}
                   total={total}
-                  maskAmounts={maskAmounts}
                   displayTotal={convertedTotal}
                   displaySymbol={displaySymbol}
                 />

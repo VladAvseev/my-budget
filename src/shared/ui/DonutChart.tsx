@@ -19,7 +19,6 @@ interface DonutChartProps {
   total: number;
   size?: number;
   thickness?: number;
-  maskAmounts?: boolean;
   displayTotal?: number;
   displaySymbol?: string;
 }
@@ -68,7 +67,6 @@ export const DonutChart = ({
   total,
   size = 280,
   thickness = 60,
-  maskAmounts = false,
   displayTotal,
   displaySymbol,
 }: DonutChartProps) => {
@@ -125,9 +123,7 @@ export const DonutChart = ({
       </svg>
 
       <div className={styles.hole} style={{ width: innerR * 2, height: innerR * 2 }}>
-        <span className={styles.total}>
-          {maskAmounts ? '***' : formatAmount(displayTotal ?? total, symbol)}
-        </span>
+        <span className={styles.total}>{formatAmount(displayTotal ?? total, symbol)}</span>
       </div>
 
       {tooltip && (
@@ -142,9 +138,7 @@ export const DonutChart = ({
           <div className={styles.tooltipLabel}>{tooltip.segment.label}</div>
           <div className={styles.tooltipRow}>
             <span className={styles.tooltipValue}>
-              {maskAmounts
-                ? '***'
-                : formatAmount(tooltip.segment.convertedTotal ?? tooltip.segment.total, symbol)}
+              {formatAmount(tooltip.segment.convertedTotal ?? tooltip.segment.total, symbol)}
             </span>
             <span className={styles.tooltipPercent}>{tooltip.segment.percent.toFixed(1)}%</span>
           </div>

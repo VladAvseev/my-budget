@@ -1,11 +1,5 @@
 import { buildGoalsProgress, formatAmount, type GoalProgress } from '@/shared/utils';
-import {
-  useAccumulationsTotal,
-  useAmountsVisibility,
-  useCurrency,
-  useGoals,
-  HIDDEN_AMOUNT,
-} from '@/shared/hooks';
+import { useAccumulationsTotal, useCurrency, useGoals } from '@/shared/hooks';
 import { ChevronRightIcon, SavingsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
@@ -25,7 +19,6 @@ export const AccumulationsCard = () => {
   const savingsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
   const goalsQuery = useGoals(userId);
-  const { showCapital } = useAmountsVisibility();
   const currency = useCurrency();
 
   const accumulations = accumulationsQuery.accumulations;
@@ -81,9 +74,7 @@ export const AccumulationsCard = () => {
   const total = structureItems.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
   const formatPair = (savedAmount: number, targetAmount: number) =>
-    showCapital
-      ? `${formatAmount(savedAmount, currency?.symbol)} из ${formatAmount(targetAmount, currency?.symbol)}`
-      : `${HIDDEN_AMOUNT} из ${HIDDEN_AMOUNT}`;
+    `${formatAmount(savedAmount, currency?.symbol)} из ${formatAmount(targetAmount, currency?.symbol)}`;
 
   return (
     <Link
@@ -106,7 +97,6 @@ export const AccumulationsCard = () => {
               <AccumulationsLegend
                 items={structureItems}
                 categories={categories}
-                maskAmounts={!showCapital}
                 fullWidth
               />
             ) : (

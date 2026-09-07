@@ -1,5 +1,5 @@
 import type { Category } from '@/shared/supabase/types/domain';
-import { HIDDEN_AMOUNT, useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/hooks';
 import { formatAmount } from '@/shared/utils';
 import styles from './AccumulationsStructure.module.css';
 
@@ -21,7 +21,6 @@ interface CategorySegment {
 interface AccumulationsLegendProps {
   items: AccumulationsStructureItem[];
   categories: Category[];
-  maskAmounts?: boolean;
   fullWidth?: boolean;
 }
 
@@ -73,7 +72,6 @@ const buildSegments = (
 export const AccumulationsLegend = ({
   items,
   categories,
-  maskAmounts = false,
   fullWidth = false,
 }: AccumulationsLegendProps) => {
   const { segments } = buildSegments(items, categories);
@@ -97,7 +95,7 @@ export const AccumulationsLegend = ({
           {segment.percent.toFixed(1)}%
         </span>,
         <span key={`${segment.key}-amount`} className={`${styles.textBold} ${styles.justifyEnd}`}>
-          {maskAmounts ? HIDDEN_AMOUNT : formatAmount(segment.total, currency?.symbol)}
+          {formatAmount(segment.total, currency?.symbol)}
         </span>,
       ])}
     </div>

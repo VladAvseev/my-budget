@@ -1,10 +1,4 @@
-import {
-  HIDDEN_AMOUNT,
-  useAmountsVisibility,
-  useCapital,
-  useCurrency,
-  useProfile,
-} from '@/shared/hooks';
+import { useProfile } from '@/shared/hooks';
 import { CURRENCIES, QUICK_CURRENCIES } from '@/shared/constants/currencies';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
@@ -12,19 +6,15 @@ import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VSelect } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
-import { VToggle } from '@/shared/ui/VToggle';
 import commonStyles from '@/shared/styles/common.module.css';
-import { formatAmount, getErrorMessage } from '@/shared/utils';
+import { getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
 import { useUpdateCurrency } from '../api/useUpdateCurrency';
 import { useUpdateStartBalance } from '../api/useUpdateStartBalance';
 
 export const StartBalanceCard = () => {
   const { data: profile, isLoading } = useProfile();
-  const { balance, capital, isLoading: isAmountsLoading } = useCapital();
-  const { showBalance, showCapital, setShowBalance, setShowCapital } = useAmountsVisibility();
   const updateCurrency = useUpdateCurrency();
-  const currency = useCurrency();
 
   const currencyOptions = CURRENCIES.filter((c) =>
     (QUICK_CURRENCIES as readonly string[]).includes(c.code),
@@ -46,19 +36,6 @@ export const StartBalanceCard = () => {
           onChange={(value) => updateCurrency.mutate(value || null)}
         />
 
-        <AmountRow
-          label="Отображение Капитала"
-          visible={showCapital}
-          onToggle={setShowCapital}
-          value={isAmountsLoading ? '—' : formatAmount(capital, currency?.symbol)}
-        />
-        <AmountRow
-          label="Отображение Баланса"
-          visible={showBalance}
-          onToggle={setShowBalance}
-          value={isAmountsLoading ? '—' : formatAmount(balance, currency?.symbol)}
-        />
-
         {isLoading && (
           <div className={commonStyles.loaderContainer}>
             <VLoader size={28} />
@@ -76,25 +53,6 @@ export const StartBalanceCard = () => {
         )}
       </div>
     </VCard>
-  );
-};
-
-interface AmountRowProps {
-  label: string;
-  value: string;
-  visible: boolean;
-  onToggle: (checked: boolean) => void;
-}
-
-const AmountRow = ({ label, value, visible, onToggle }: AmountRowProps) => {
-  return (
-    <div className={commonStyles.infoRow}>
-      <span className={commonStyles.infoLabel}>{label}</span>
-      <div className={`${commonStyles.row} ${commonStyles.gapM}`}>
-        <span className={commonStyles.infoValueBold}>{visible ? value : HIDDEN_AMOUNT}</span>
-        <VToggle checked={visible} onChange={onToggle} />
-      </div>
-    </div>
   );
 };
 

@@ -1,7 +1,5 @@
 import {
-  HIDDEN_AMOUNT,
   useAdminStatus,
-  useAmountsVisibility,
   useBreakpoint,
   useCapital,
   useCurrency,
@@ -98,7 +96,6 @@ interface SidebarContentProps {
 const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
   const { balance } = useGlobalBalance();
   const { capital } = useCapital();
-  const { showBalance, showCapital } = useAmountsVisibility();
   const { isAdmin } = useAdminStatus();
   const currency = useCurrency();
 
@@ -113,13 +110,13 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
         <div className={styles.statRow}>
           <span className={styles.statLabel}>Капитал</span>
           <span className={styles.statValue}>
-            {showCapital ? formatAmount(capital, currency?.symbol) : HIDDEN_AMOUNT}
+            {formatAmount(capital, currency?.symbol)}
           </span>
         </div>
         <div className={styles.statRow}>
           <span className={styles.statLabel}>Баланс</span>
           <span className={styles.statValue}>
-            {showBalance ? formatAmount(balance, currency?.symbol) : HIDDEN_AMOUNT}
+            {formatAmount(balance, currency?.symbol)}
           </span>
         </div>
       </div>
@@ -174,7 +171,6 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { balance } = useGlobalBalance();
   const { capital } = useCapital();
-  const { showBalance, showCapital } = useAmountsVisibility();
   const currency = useCurrency();
   const mainRef = useRef<HTMLElement>(null);
   const location = useLocation();
@@ -208,13 +204,13 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
           <div className={styles.mobileStat}>
             <span className={styles.mobileStatLabel}>Капитал</span>
             <span className={styles.mobileStatValue}>
-              {showCapital ? formatAmount(capital, currency?.symbol) : HIDDEN_AMOUNT}
+              {formatAmount(capital, currency?.symbol)}
             </span>
           </div>
           <div className={styles.mobileStat}>
             <span className={styles.mobileStatLabel}>Баланс</span>
             <span className={styles.mobileStatValue}>
-              {showBalance ? formatAmount(balance, currency?.symbol) : HIDDEN_AMOUNT}
+              {formatAmount(balance, currency?.symbol)}
             </span>
           </div>
         </div>
