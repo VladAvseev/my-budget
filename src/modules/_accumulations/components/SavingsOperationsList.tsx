@@ -13,12 +13,30 @@ import { groupItemsByCategory } from '../utils/groupByCategory';
 import { SavingsOperationCard } from './SavingsOperationCard';
 import styles from './AccumulationsList.module.css';
 
-export const SavingsOperationsList = () => {
+interface SavingsOperationsListProps {
+  displayCurrency: string | null;
+  rates: Record<string, number> | undefined;
+  defaultCurrency: string | null;
+  displaySymbol: string | undefined;
+}
+
+export const SavingsOperationsList = ({
+  displayCurrency,
+  rates,
+  defaultCurrency,
+  displaySymbol,
+}: SavingsOperationsListProps) => {
   const { user } = useAuth();
   const currency = useCurrency();
   const userId = user?.id ?? '';
   const operationsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
+
+  const convertOptions =
+    displayCurrency && rates && defaultCurrency
+      ? { from: defaultCurrency, to: displayCurrency, rates }
+      : undefined;
+  const symbol = displaySymbol ?? currency?.symbol;
 
   const operations = operationsQuery.data ?? [];
   const categories = categoriesQuery.data ?? [];
@@ -47,6 +65,8 @@ export const SavingsOperationsList = () => {
           ? (categories.find((category) => category.id === operation.category_id) ?? null)
           : null
       }
+      displaySymbol={symbol}
+      convertOptions={convertOptions}
     />
   );
 
@@ -100,7 +120,8 @@ export const SavingsOperationsList = () => {
                             ),
                           0,
                         ),
-                        currency?.symbol,
+                        symbol,
+                        convertOptions,
                       )}
                     </span>
                   </span>

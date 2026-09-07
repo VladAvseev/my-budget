@@ -1,6 +1,6 @@
 import type { Category } from '@/shared/supabase/types/domain';
-import { useCurrency } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
+import type { ConvertOptions } from '@/shared/utils';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
@@ -11,11 +11,17 @@ import styles from './SavingsOperationCard.module.css';
 interface SavingsOperationCardProps {
   operation: SavingsOperation;
   category: Category | null;
+  displaySymbol?: string;
+  convertOptions?: ConvertOptions;
 }
 
-export const SavingsOperationCard = ({ operation, category }: SavingsOperationCardProps) => {
+export const SavingsOperationCard = ({
+  operation,
+  category,
+  displaySymbol,
+  convertOptions,
+}: SavingsOperationCardProps) => {
   const navigate = useNavigate();
-  const currency = useCurrency();
 
   const isWithdrawal = operation.type === 'savings_out';
   const amount = signedOperationAmount(
@@ -38,7 +44,7 @@ export const SavingsOperationCard = ({ operation, category }: SavingsOperationCa
     >
       <div className={styles.left}>
         <div className={`${styles.amount}${isWithdrawal ? ` ${styles.amountWithdrawal}` : ''}`}>
-          {formatAmount(amount, currency?.symbol)}
+          {formatAmount(amount, displaySymbol, convertOptions)}
         </div>
         {operation.description && <div className={styles.subtitle}>{operation.description}</div>}
         {operation.reportName && <div className={styles.subtitle}>{operation.reportName}</div>}

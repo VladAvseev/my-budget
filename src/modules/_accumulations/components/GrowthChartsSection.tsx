@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useAccumulations, useProfile } from '@/shared/hooks';
+import { convertAmount } from '@/shared/utils';
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -19,6 +20,10 @@ import styles from './GrowthChartsSection.module.css';
 
 interface GrowthChartsSectionProps {
   userId: string;
+  displayCurrency: string | null;
+  rates: Record<string, number> | undefined;
+  defaultCurrency: string | null;
+  displaySymbol: string | undefined;
 }
 
 const EMPTY_ARRAY: never[] = [];
@@ -35,7 +40,13 @@ const aggregationOptions: VButtonGroupOption[] = [
   { value: 'Y', label: 'год' },
 ];
 
-export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
+export const GrowthChartsSection = ({
+  userId,
+  displayCurrency,
+  rates,
+  defaultCurrency,
+  displaySymbol,
+}: GrowthChartsSectionProps) => {
   const [chartType, setChartType] = useState<GrowthChartType>('capital');
   const [aggregation, setAggregation] = useState<GrowthAggregation>('M');
 
@@ -68,14 +79,22 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
     [chartArgs, chartType, isLoading],
   );
 
+  const convertedChartData = useMemo(() => {
+    if (!displayCurrency || !rates || !defaultCurrency) return rawChartData;
+    return rawChartData.map((point) => ({
+      ...point,
+      value: convertAmount(point.value, defaultCurrency, displayCurrency, rates),
+    }));
+  }, [rawChartData, displayCurrency, rates, defaultCurrency]);
+
   const chartData = useMemo(
-    () => aggregatePoints(rawChartData, aggregation),
-    [rawChartData, aggregation],
+    () => aggregatePoints(convertedChartData, aggregation),
+    [convertedChartData, aggregation],
   );
 
   const stats = useMemo(
-    () => buildGrowthStats(chartData, rawChartData, aggregation),
-    [chartData, rawChartData, aggregation],
+    () => buildGrowthStats(chartData, convertedChartData, aggregation),
+    [chartData, convertedChartData, aggregation],
   );
 
   const color = chartType === 'accumulations' ? 'var(--color-accent)' : 'var(--color-success)';
@@ -92,14 +111,19 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
           />
         </div>
 
-        <GrowthStats stats={stats} />
+        <GrowthStats stats={stats} displaySymbol={displaySymbol} />
 
         {isLoading ? (
           <div className={commonStyles.loaderContainer}>
             <VLoader />
           </div>
         ) : (
-          <GrowthChart data={chartData} color={color} showChange />
+          <GrowthChart
+            data={chartData}
+            color={color}
+            showChange
+            displaySymbol={displaySymbol}
+          />
         )}
       </VCard>
     </div>

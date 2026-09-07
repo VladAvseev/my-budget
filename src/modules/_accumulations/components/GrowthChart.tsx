@@ -10,6 +10,7 @@ interface GrowthChartProps {
   height?: number;
   formatValue?: (value: number) => string;
   showChange?: boolean;
+  displaySymbol?: string;
 }
 
 const PADDING = { top: 12, right: 8, bottom: 80, left: 6 };
@@ -28,6 +29,7 @@ export const GrowthChart = ({
   height = 280,
   formatValue,
   showChange,
+  displaySymbol,
 }: GrowthChartProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [clampedX, setClampedX] = useState<number | null>(null);
@@ -35,7 +37,8 @@ export const GrowthChart = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const currency = useCurrency();
 
-  const format = formatValue ?? ((v: number) => formatAmount(v, currency?.symbol));
+  const format =
+    formatValue ?? ((v: number) => formatAmount(v, displaySymbol ?? currency?.symbol));
 
   useEffect(() => {
     const el = containerRef.current;

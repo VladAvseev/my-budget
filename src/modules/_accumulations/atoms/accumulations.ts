@@ -1,6 +1,8 @@
 import type { Accumulation, Goal } from '@/shared/supabase/types/domain';
 import { atom } from 'jotai';
 
+export const selectedDisplayCurrencyAtom = atom<string | null>(null);
+
 export interface AccumulationModalState {
   accumulation: Accumulation | null;
 }

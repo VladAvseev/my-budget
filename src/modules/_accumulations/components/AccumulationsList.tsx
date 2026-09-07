@@ -11,12 +11,30 @@ import { groupItemsByCategory } from '../utils/groupByCategory';
 import { AccumulationCard } from './AccumulationCard';
 import styles from './AccumulationsList.module.css';
 
-export const AccumulationsList = () => {
+interface AccumulationsListProps {
+  displayCurrency: string | null;
+  rates: Record<string, number> | undefined;
+  defaultCurrency: string | null;
+  displaySymbol: string | undefined;
+}
+
+export const AccumulationsList = ({
+  displayCurrency,
+  rates,
+  defaultCurrency,
+  displaySymbol,
+}: AccumulationsListProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const accumulationsQuery = useAccumulations(userId);
   const categoriesQuery = useCategories(userId);
   const currency = useCurrency();
+
+  const convertOptions =
+    displayCurrency && rates && defaultCurrency
+      ? { from: defaultCurrency, to: displayCurrency, rates }
+      : undefined;
+  const symbol = displaySymbol ?? currency?.symbol;
 
   const accumulations = accumulationsQuery.data ?? [];
   const categories = categoriesQuery.data ?? [];
@@ -79,7 +97,8 @@ export const AccumulationsList = () => {
                           (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
                           0,
                         ),
-                        currency?.symbol,
+                        symbol,
+                        convertOptions,
                       )}
                     </span>
                   </span>
@@ -98,6 +117,8 @@ export const AccumulationsList = () => {
                             ) ?? null)
                           : null
                       }
+                      displaySymbol={symbol}
+                      convertOptions={convertOptions}
                     />
                   ))}
                 </div>

@@ -5,6 +5,7 @@ import styles from './GrowthStats.module.css';
 
 interface GrowthStatsProps {
   stats: GrowthStatsData;
+  displaySymbol?: string;
 }
 
 const colorClass = (value: number): string =>
@@ -15,10 +16,10 @@ const formatPct = (value: number): string => {
   return `${sign}${value.toFixed(1)}%`;
 };
 
-export const GrowthStats = ({ stats }: GrowthStatsProps) => {
+export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
   const { monthly, yearly, periodLabel } = stats;
   const currency = useCurrency();
-  const symbol = currency?.symbol ?? '₽';
+  const symbol = displaySymbol ?? currency?.symbol ?? '₽';
 
   const formatSigned = (value: number): string => {
     const sign = value > 0 ? '+' : '';

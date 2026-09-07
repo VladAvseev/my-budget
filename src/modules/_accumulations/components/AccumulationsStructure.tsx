@@ -1,10 +1,6 @@
-import { useState } from 'react';
 import type { Category } from '@/shared/supabase/types/domain';
-import { HIDDEN_AMOUNT, useCurrency, useExchangeRates } from '@/shared/hooks';
-import { QUICK_CURRENCIES, getCurrencyByCode } from '@/shared/constants/currencies';
+import { HIDDEN_AMOUNT, useCurrency } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
-import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
-import { VHint } from '@/shared/ui/VHint';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { convertAmount, formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
@@ -22,7 +18,10 @@ interface AccumulationsStructureProps {
   title?: string;
   maskAmounts?: boolean;
   interactive?: boolean;
-  profileCurrency?: string | null;
+  displayCurrency: string | null;
+  rates: Record<string, number> | undefined;
+  defaultCurrency: string | null;
+  displaySymbol: string | undefined;
 }
 
 interface CategorySegment {
@@ -36,15 +35,6 @@ interface CategorySegment {
   end: number;
 }
 
-const CURRENCY_OPTIONS: VButtonGroupOption[] = [
-  { value: 'BYN', label: 'BYN' },
-  { value: 'RUB', label: 'RUB' },
-  { value: 'USD', label: 'USD' },
-];
-
-const isQuickCurrency = (code: string | null): code is string =>
-  code !== null && (QUICK_CURRENCIES as readonly string[]).includes(code);
-
 export const AccumulationsStructure = ({
   items,
   categories,
@@ -52,16 +42,13 @@ export const AccumulationsStructure = ({
   title = 'Структура накоплений',
   maskAmounts = false,
   interactive = false,
-  profileCurrency = null,
+  displayCurrency,
+  rates,
+  defaultCurrency,
+  displaySymbol,
 }: AccumulationsStructureProps) => {
   const categoriesById = new Map(categories.map((category) => [category.id, category]));
   const currency = useCurrency();
-
-  const defaultCurrency = isQuickCurrency(profileCurrency) ? profileCurrency : null;
-  const [selectedCurrency, setSelectedCurrency] = useState<string | null>(defaultCurrency);
-  const { data: rates } = useExchangeRates();
-
-  const isDisabled = !isQuickCurrency(profileCurrency);
 
   const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
@@ -81,11 +68,6 @@ export const AccumulationsStructure = ({
       });
     }
   }
-
-  const displayCurrency = selectedCurrency && rates ? selectedCurrency : null;
-  const displaySymbol = displayCurrency
-    ? getCurrencyByCode(displayCurrency)?.symbol
-    : currency?.symbol;
 
   const segments: CategorySegment[] = [];
   let cursor = 0;
@@ -113,7 +95,10 @@ export const AccumulationsStructure = ({
 
   const formatSegmentAmount = (segment: CategorySegment) => {
     if (maskAmounts) return HIDDEN_AMOUNT;
-    return formatAmount(segment.convertedTotal ?? segment.total, displaySymbol ?? currency?.symbol);
+    return formatAmount(
+      segment.convertedTotal ?? segment.total,
+      displaySymbol ?? currency?.symbol,
+    );
   };
 
   return (
@@ -126,14 +111,6 @@ export const AccumulationsStructure = ({
         <div className={styles.content}>
           <div className={styles.header}>
             <div className={styles.title}>{title}</div>
-            <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
-              <VButtonGroup
-                options={CURRENCY_OPTIONS}
-                value={selectedCurrency}
-                onChange={(value) => setSelectedCurrency(value as string)}
-                disabled={isDisabled}
-              />
-            </VHint>
           </div>
 
           {segments.length === 0 && <div className={styles.message}>Накоплений нет</div>}
