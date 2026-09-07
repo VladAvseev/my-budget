@@ -2,6 +2,7 @@ import { PlusIcon } from '@/shared/icons';
 import type { Report } from '@/shared/supabase/types/domain';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
+import { VHint } from '@/shared/ui/VHint';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount, parseISO } from '@/shared/utils';
@@ -80,14 +81,27 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
       )}
 
       <div className={styles.addButtonWrap}>
-        <VIconButton
-          ariaLabel="Новая операция"
-          onClick={() => setModal({ type: 'daily', operation: null })}
-          isDisabled={isAddBlocked}
-          color="var(--color-accent)"
-        >
-          <PlusIcon size={24} color="currentColor" />
-        </VIconButton>
+        {isAddBlocked ? (
+          <VHint hint="Все дни периода уже занесены в список" position="top-end">
+            <VIconButton
+              ariaLabel="Новая операция"
+              onClick={() => setModal({ type: 'daily', operation: null })}
+              isDisabled={isAddBlocked}
+              color="var(--color-accent)"
+            >
+              <PlusIcon size={24} color="currentColor" />
+            </VIconButton>
+          </VHint>
+        ) : (
+          <VIconButton
+            ariaLabel="Новая операция"
+            onClick={() => setModal({ type: 'daily', operation: null })}
+            isDisabled={isAddBlocked}
+            color="var(--color-accent)"
+          >
+            <PlusIcon size={24} color="currentColor" />
+          </VIconButton>
+        )}
       </div>
 
       {operationsQuery.error && (
