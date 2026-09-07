@@ -20,9 +20,9 @@ const AGGREGATION_LABELS: Record<DynamicsAggregation, string> = {
 };
 
 const LAST_PERIOD_LABELS: Record<DynamicsAggregation, string> = {
-  D: 'За последний день',
-  M: 'За последний месяц',
-  Y: 'За последний год',
+  D: 'За сегодня',
+  M: 'За текущий месяц',
+  Y: 'За текущий год',
 };
 
 const buildPeriodRate = (
@@ -70,12 +70,21 @@ export const buildOperationsDynamicsStats = (
   data: ChartPoint[],
   aggregation: DynamicsAggregation,
   mode: DynamicsChartMode,
-): DynamicsStats => ({
-  periodRate: buildPeriodRate(
-    trimIncompletePeriod(data, getPeriodEnd(aggregation), new Date()),
-    mode,
-  ),
-  lastPeriod: buildLastPeriod(data, mode),
-  periodLabel: AGGREGATION_LABELS[aggregation],
-  lastPeriodLabel: LAST_PERIOD_LABELS[aggregation],
-});
+): DynamicsStats => {
+  // Единственная точка — текущий незавершённый период: после обрезки серия
+  // пуста, поэтому в качестве среднего показываем значение этой точки.
+  const trimmed = trimIncompletePeriod(data, getPeriodEnd(aggregation), new Date());
+  const periodRate =
+    trimmed.length > 0
+      ? buildPeriodRate(trimmed, mode)
+      : data.length === 1
+        ? { abs: data[0].value }
+        : null;
+
+  return {
+    periodRate,
+    lastPeriod: buildLastPeriod(data, mode),
+    periodLabel: AGGREGATION_LABELS[aggregation],
+    lastPeriodLabel: LAST_PERIOD_LABELS[aggregation],
+  };
+};
