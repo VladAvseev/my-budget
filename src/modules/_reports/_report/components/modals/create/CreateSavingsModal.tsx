@@ -28,7 +28,6 @@ export const CreateSavingsModal = ({ type, report, onClose }: CreateSavingsModal
   const [date, setDate] = useState('');
   const [operationType, setOperationType] = useState<OperationType>(type);
   const [amountError, setAmountError] = useState<string>();
-  const [descriptionError, setDescriptionError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
 
   const isPending = createOperation.isPending;
@@ -53,12 +52,6 @@ export const CreateSavingsModal = ({ type, report, onClose }: CreateSavingsModal
       return;
     }
     setAmountError(undefined);
-
-    if (!description.trim()) {
-      setDescriptionError('Укажите описание операции');
-      return;
-    }
-    setDescriptionError(undefined);
 
     if (date && date < report.period_start) {
       setSubmitError(`Дата не может быть раньше начала периода (${formatDisplay(report.period_start)})`);
@@ -125,12 +118,8 @@ export const CreateSavingsModal = ({ type, report, onClose }: CreateSavingsModal
           label="Описание"
           placeholder="Описание операции"
           value={description}
-          error={descriptionError}
           disabled={isPending}
-          onChange={(value) => {
-            setDescription(value);
-            setDescriptionError(undefined);
-          }}
+          onChange={setDescription}
         />
         <CategorySelect
           userId={user?.id ?? ''}

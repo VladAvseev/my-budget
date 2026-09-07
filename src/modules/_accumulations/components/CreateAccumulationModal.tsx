@@ -24,7 +24,6 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
   const [categoryId, setCategoryId] = useState('');
   const [description, setDescription] = useState('');
   const [amountError, setAmountError] = useState<string>();
-  const [descriptionError, setDescriptionError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
 
   const options = useMemo(() => {
@@ -56,12 +55,6 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
       return;
     }
     setAmountError(undefined);
-
-    if (!trimmedDescription) {
-      setDescriptionError('Укажите описание начального накопления');
-      return;
-    }
-    setDescriptionError(undefined);
 
     createAccumulation.mutate(
       {
@@ -110,12 +103,8 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
           label="Описание"
           placeholder="Описание начального накопления"
           value={description}
-          error={descriptionError}
           disabled={createAccumulation.isPending}
-          onChange={(value) => {
-            setDescription(value);
-            setDescriptionError(undefined);
-          }}
+          onChange={setDescription}
         />
         <VSelect
           label="Категория"

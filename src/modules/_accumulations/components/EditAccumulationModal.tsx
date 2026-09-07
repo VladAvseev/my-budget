@@ -30,7 +30,6 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
   const [categoryId, setCategoryId] = useState(accumulation.category_id ?? '');
   const [description, setDescription] = useState(accumulation.description);
   const [amountError, setAmountError] = useState<string>();
-  const [descriptionError, setDescriptionError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
 
   const options = useMemo(() => {
@@ -72,12 +71,6 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
       return;
     }
     setAmountError(undefined);
-
-    if (!trimmedDescription) {
-      setDescriptionError('Укажите описание начального накопления');
-      return;
-    }
-    setDescriptionError(undefined);
 
     updateAccumulation.mutate(
       {
@@ -144,12 +137,8 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
           label="Описание"
           placeholder="Описание начального накопления"
           value={description}
-          error={descriptionError}
           disabled={isPending}
-          onChange={(value) => {
-            setDescription(value);
-            setDescriptionError(undefined);
-          }}
+          onChange={setDescription}
         />
         <VSelect
           label="Категория"

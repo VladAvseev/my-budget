@@ -32,7 +32,6 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
   const [description, setDescription] = useState(operation.description ?? '');
   const [date, setDate] = useState(operation.date ?? '');
   const [amountError, setAmountError] = useState<string>();
-  const [descriptionError, setDescriptionError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
 
   const isPending = updateOperation.isPending || removeOperation.isPending;
@@ -60,12 +59,6 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
       return;
     }
     setAmountError(undefined);
-
-    if (!description.trim()) {
-      setDescriptionError('Укажите описание операции');
-      return;
-    }
-    setDescriptionError(undefined);
 
     if (date && date < report.period_start) {
       setSubmitError(`Дата не может быть раньше начала периода (${formatDisplay(report.period_start)})`);
@@ -142,12 +135,8 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
           label="Описание"
           placeholder="Описание операции"
           value={description}
-          error={descriptionError}
           disabled={isPending}
-          onChange={(value) => {
-            setDescription(value);
-            setDescriptionError(undefined);
-          }}
+          onChange={setDescription}
         />
         <CategorySelect
           userId={user?.id ?? ''}
