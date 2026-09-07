@@ -28,7 +28,7 @@ const formatCount = (v: number): string => Math.round(v).toLocaleString('ru-RU')
 
 export const OperationsDynamicsCard = () => {
   const [mode, setMode] = useState<DynamicsChartMode>('cumulative');
-  const [aggregation, setAggregation] = useState<DynamicsAggregation>('M');
+  const [aggregation, setAggregation] = useState<DynamicsAggregation>('D');
   const operationsQuery = useAdminOperationsDynamics();
 
   const isLoading = operationsQuery.isLoading;
