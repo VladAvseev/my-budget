@@ -86,7 +86,7 @@ export const buildOperationsDynamicsData = ({
 }: BuildDynamicsDataArgs): ChartPoint[] => {
   if (operations.length === 0) return [];
 
-  const startDate = new Date(Date.UTC(2026, 7, 7));
+  const startDate = new Date(Date.UTC(2026, 6, 31));
   const now = startOfDay(new Date());
 
   const counts = new Map<string, number>();
