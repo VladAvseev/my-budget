@@ -1,5 +1,10 @@
 import type { ChartPoint, GrowthAggregation } from './buildGrowthChartData';
-import { getPeriodEnd, trimIncompletePeriod } from './buildGrowthChartData';
+import {
+  getPeriodEnd,
+  getPointChange,
+  trimIncompletePeriod,
+  type PointChange,
+} from './buildGrowthChartData';
 
 export interface MonthlyStats {
   abs: number;
@@ -9,6 +14,8 @@ export interface MonthlyStats {
 export interface GrowthStats {
   monthly: MonthlyStats | null;
   periodLabel: string;
+  currentPeriod: PointChange | null;
+  currentPeriodLabel: string;
 }
 
 const AGGREGATION_LABELS: Record<GrowthAggregation, string> = {
@@ -16,6 +23,13 @@ const AGGREGATION_LABELS: Record<GrowthAggregation, string> = {
   Q: 'В квартал',
   HY: 'В полугодие',
   Y: 'В год',
+};
+
+const CURRENT_PERIOD_LABELS: Record<GrowthAggregation, string> = {
+  M: 'За текущий месяц',
+  Q: 'За текущий квартал',
+  HY: 'За текущее полугодие',
+  Y: 'За текущий год',
 };
 
 export const buildMonthlyStats = (data: ChartPoint[]): MonthlyStats | null => {
@@ -59,11 +73,17 @@ export const buildMonthlyStats = (data: ChartPoint[]): MonthlyStats | null => {
 export const buildGrowthStats = (
   filteredData: ChartPoint[],
   aggregation: GrowthAggregation = 'M',
+  base = 0,
 ): GrowthStats => {
   const now = new Date();
 
   return {
     monthly: buildMonthlyStats(trimIncompletePeriod(filteredData, getPeriodEnd(aggregation), now)),
     periodLabel: AGGREGATION_LABELS[aggregation],
+    currentPeriod:
+      filteredData.length > 0
+        ? getPointChange(filteredData, filteredData.length - 1, base)
+        : null,
+    currentPeriodLabel: CURRENT_PERIOD_LABELS[aggregation],
   };
 };

@@ -17,8 +17,7 @@ const formatPct = (value: number): string => {
 };
 
 export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
-  const { monthly, periodLabel } = stats;
-  const currency = useCurrency();
+  const { monthly, periodLabel, currentPeriod, currentPeriodLabel } = stats;  const currency = useCurrency();
   const symbol = displaySymbol ?? currency?.symbol ?? '₽';
 
   const formatSigned = (value: number): string => {
@@ -26,14 +25,18 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
     return `${sign}${formatAmount(value, symbol)}`;
   };
 
-  const monthlyLine =
-    monthly !== null
-      ? monthly.pct !== null
-        ? `${formatSigned(monthly.abs)} (${formatPct(monthly.pct)})`
-        : `${formatSigned(monthly.abs)}`
-      : null;
+  const formatChange = (change: { abs: number; pct: number | null }): string =>
+    change.pct !== null
+      ? `${formatSigned(change.abs)} (${formatPct(change.pct)})`
+      : formatSigned(change.abs);
 
-  if (!monthlyLine) return null;
+  const monthlyLine =
+    monthly !== null ? formatChange(monthly) : null;
+
+  const currentPeriodLine =
+    currentPeriod !== null ? formatChange(currentPeriod) : null;
+
+  if (!monthlyLine && !currentPeriodLine) return null;
 
   return (
     <div className={styles.stats}>
@@ -41,6 +44,14 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
         <div className={styles.stat}>
           {periodLabel}:{' '}
           <span className={`${styles.statValue} ${colorClass(monthly.abs)}`}>{monthlyLine}</span>
+        </div>
+      )}
+      {currentPeriod !== null && (
+        <div className={styles.stat}>
+          {currentPeriodLabel}:{' '}
+          <span className={`${styles.statValue} ${colorClass(currentPeriod.abs)}`}>
+            {currentPeriodLine}
+          </span>
         </div>
       )}
     </div>

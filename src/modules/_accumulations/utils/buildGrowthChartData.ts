@@ -139,6 +139,24 @@ export const trimIncompletePeriod = (
   return now < periodEnd(last.month) ? points.slice(0, -1) : points;
 };
 
+export interface PointChange {
+  abs: number;
+  pct: number | null;
+}
+
+export const getPointChange = (data: ChartPoint[], index: number, base = 0): PointChange | null => {
+  if (index < 0 || index >= data.length) return null;
+
+  const value = data[index].value;
+  const previousValue = index === 0 ? base : data[index - 1].value;
+  const abs = value - previousValue;
+
+  const pct =
+    previousValue > 0 ? (value / previousValue - 1) * 100 : null;
+
+  return { abs, pct };
+};
+
 const QUARTER_LABELS = ['1 кв', '2 кв', '3 кв', '4 кв'];
 const HALF_LABELS = ['1 пол', '2 пол'];
 

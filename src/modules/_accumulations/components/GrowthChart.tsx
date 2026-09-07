@@ -1,5 +1,6 @@
 import { useMemo, useState, useCallback, useRef, useEffect, useLayoutEffect } from 'react';
 import type { ChartPoint } from '../utils/buildGrowthChartData';
+import { getPointChange } from '../utils/buildGrowthChartData';
 import { formatAmount } from '@/shared/utils/format';
 import { useCurrency } from '@/shared/hooks';
 import styles from './GrowthChart.module.css';
@@ -11,6 +12,7 @@ interface GrowthChartProps {
   formatValue?: (value: number) => string;
   showChange?: boolean;
   displaySymbol?: string;
+  base?: number;
 }
 
 const PADDING = { top: 12, right: 8, bottom: 80, left: 6 };
@@ -30,6 +32,7 @@ export const GrowthChart = ({
   formatValue,
   showChange,
   displaySymbol,
+  base = 0,
 }: GrowthChartProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [clampedX, setClampedX] = useState<number | null>(null);
@@ -304,19 +307,20 @@ export const GrowthChart = ({
           <span className={styles.tooltipValue}>{format(tooltip.point.value)}</span>
           {showChange &&
             (() => {
-              const idx = data.indexOf(tooltip.point);
-              if (idx <= 0) return null;
-              const change = tooltip.point.value - data[idx - 1].value;
+              const change = getPointChange(data, data.indexOf(tooltip.point), base);
+              if (!change) return null;
               const changeColor =
-                change > 0
+                change.abs > 0
                   ? 'var(--color-success)'
-                  : change < 0
+                  : change.abs < 0
                     ? 'var(--color-error)'
                     : 'var(--color-warning)';
+              const sign = change.abs > 0 ? '+' : change.abs < 0 ? '' : '±';
               return (
                 <div className={styles.tooltipChange} style={{ color: changeColor }}>
-                  {change > 0 ? '+' : change < 0 ? '' : '±'}
-                  {format(change)}
+                  {sign}
+                  {format(change.abs)}
+                  {change.pct !== null && ` (${change.pct > 0 ? '+' : ''}${change.pct.toFixed(1)}%)`}
                 </div>
               );
             })()}

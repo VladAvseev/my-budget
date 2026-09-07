@@ -80,14 +80,29 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
     }));
   }, [rawChartData, displayCurrency, rates, defaultCurrency]);
 
+  const rawBase = useMemo(() => {
+    const directTotal = (accumulationsQuery.data ?? EMPTY_ARRAY).reduce(
+      (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
+      0,
+    );
+    return chartType === 'capital'
+      ? (Number(profileQuery.data?.start_balance ?? 0) || 0) + directTotal
+      : directTotal;
+  }, [chartType, accumulationsQuery.data, profileQuery.data]);
+
+  const base = useMemo(() => {
+    if (!displayCurrency || !rates || !defaultCurrency) return rawBase;
+    return convertAmount(rawBase, defaultCurrency, displayCurrency, rates);
+  }, [rawBase, displayCurrency, rates, defaultCurrency]);
+
   const chartData = useMemo(
     () => aggregatePoints(convertedChartData, aggregation),
     [convertedChartData, aggregation],
   );
 
   const stats = useMemo(
-    () => buildGrowthStats(chartData, aggregation),
-    [chartData, aggregation],
+    () => buildGrowthStats(chartData, aggregation, base),
+    [chartData, aggregation, base],
   );
 
   const color = chartType === 'accumulations' ? 'var(--color-accent)' : 'var(--color-success)';
@@ -116,6 +131,7 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
             color={color}
             showChange
             displaySymbol={displaySymbol}
+            base={base}
           />
         )}
       </VCard>
