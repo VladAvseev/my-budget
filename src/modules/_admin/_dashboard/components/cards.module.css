@@ -11,6 +11,20 @@
   align-items: baseline;
 }
 
+.statGrid4 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: var(--space-xs) var(--space-m);
+  align-items: baseline;
+}
+
+.statGrid5 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto auto;
+  gap: var(--space-xs) var(--space-m);
+  align-items: baseline;
+}
+
 .statRowGroup {
   display: contents;
 }

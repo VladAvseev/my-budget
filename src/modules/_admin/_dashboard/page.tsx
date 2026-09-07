@@ -2,12 +2,10 @@ import commonStyles from '@/shared/styles/common.module.css';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useAdminStats } from './api/useAdminStats';
-import { ActivityCard } from './components/ActivityCard';
-import { ChurnCard } from './components/ChurnCard';
 import { DatabaseSizeCard } from './components/DatabaseSizeCard';
 import { OperationsDynamicsCard } from './components/OperationsDynamicsCard';
 import { ReportsOperationsCard } from './components/ReportsOperationsCard';
-import { UsersCard } from './components/UsersCard';
+import { UsersActivityCard } from './components/UsersActivityCard';
 import styles from './page.module.css';
 
 export const Page: React.FC = () => {
@@ -31,7 +29,6 @@ export const Page: React.FC = () => {
   }
 
   const { users, activity, churn, reports, operations } = statsQuery.data;
-  const usersTotal = users.total;
 
   return (
     <div className={commonStyles.page}>
@@ -41,19 +38,13 @@ export const Page: React.FC = () => {
           <OperationsDynamicsCard />
         </div>
         <div className={commonStyles.animateCard} style={{ animationDelay: '0.03s' }}>
-          <DatabaseSizeCard />
-        </div>
-        <div className={commonStyles.animateCard} style={{ animationDelay: '0.03s' }}>
-          <UsersCard stats={users} />
+          <ReportsOperationsCard reports={reports} operations={operations} />
         </div>
         <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
-          <ActivityCard stats={activity} total={usersTotal} />
+          <UsersActivityCard users={users} activity={activity} churn={churn} />
         </div>
         <div className={commonStyles.animateCard} style={{ animationDelay: '0.09s' }}>
-          <ChurnCard stats={churn} total={usersTotal} />
-        </div>
-        <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
-          <ReportsOperationsCard reports={reports} operations={operations} />
+          <DatabaseSizeCard />
         </div>
       </div>
     </div>
