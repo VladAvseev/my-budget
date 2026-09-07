@@ -23,7 +23,7 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
   const hasBudget = report.daily_budget != null;
   const operationsQuery = useOperations(report.id, 'daily');
   const setModal = useSetAtom(operationModalAtom);
-  const operations = operationsQuery.data ?? [];
+  const operations = useMemo(() => operationsQuery.data ?? [], [operationsQuery.data]);
 
   const { dayCount, spentTotal, deviationsSum } = useMemo(() => {
     const start = parseISO(report.period_start);
@@ -47,6 +47,15 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
 
   const budgetPeriod = dailyBudget * dayCount;
   const isAddBlocked = dayCount > 0 && operations.length >= dayCount;
+  const lastOperationId = useMemo(() => {
+    if (operations.length === 0) return null;
+    return operations.reduce((latest, op) => {
+      if (!latest) return op;
+      const latestDate = latest.date ?? '';
+      const opDate = op.date ?? '';
+      return opDate > latestDate ? op : latest;
+    }).id;
+  }, [operations]);
 
   return (
     <div className={styles.root}>
@@ -113,6 +122,7 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
               operation={operation}
               dailyBudget={hasBudget ? dailyBudget : null}
               pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
+              isDeletable={operation.id === lastOperationId}
             />
           </div>
         ))}

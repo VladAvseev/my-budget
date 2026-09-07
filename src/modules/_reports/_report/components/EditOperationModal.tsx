@@ -9,12 +9,13 @@ interface EditOperationModalProps {
   operation: Operation;
   report: Report;
   onClose: () => void;
+  isDeletable?: boolean;
 }
 
-export const EditOperationModal = ({ operation, report, onClose }: EditOperationModalProps) => {
+export const EditOperationModal = ({ operation, report, onClose, isDeletable }: EditOperationModalProps) => {
   const type = operation.type as OperationType;
   if (type === 'daily') {
-    return <EditDailyModal operation={operation} report={report} onClose={onClose} />;
+    return <EditDailyModal operation={operation} report={report} onClose={onClose} isDeletable={isDeletable} />;
   }
   if (isSavingsType(type)) {
     return <EditSavingsModal operation={operation} report={report} onClose={onClose} />;

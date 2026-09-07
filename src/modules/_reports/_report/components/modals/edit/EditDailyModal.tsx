@@ -2,8 +2,9 @@ import { TrashIcon } from '@/shared/icons';
 import type { Operation } from '@/shared/supabase/types/domain';
 import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { formatDisplay, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
+import { VHint } from '@/shared/ui/VHint';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
@@ -16,9 +17,10 @@ interface EditDailyModalProps {
   operation: Operation;
   report: Report;
   onClose: () => void;
+  isDeletable?: boolean;
 }
 
-export const EditDailyModal = ({ operation, report, onClose }: EditDailyModalProps) => {
+export const EditDailyModal = ({ operation, report, onClose, isDeletable = true }: EditDailyModalProps) => {
   const updateOperation = useUpdateOperation(report.id);
   const removeOperation = useRemoveOperation(report.id);
 
@@ -76,15 +78,29 @@ export const EditDailyModal = ({ operation, report, onClose }: EditDailyModalPro
       error={submitError}
       footer={
         <div className={modalStyles.footerSplit}>
-          <VIconButton
-            ariaLabel="Удалить операцию"
-            onClick={handleDelete}
-            isLoading={removeOperation.isPending}
-            isDisabled={isPending}
-            color="var(--color-error)"
-          >
-            <TrashIcon size={24} color="currentColor" />
-          </VIconButton>
+          {isDeletable ? (
+            <VIconButton
+              ariaLabel="Удалить операцию"
+              onClick={handleDelete}
+              isLoading={removeOperation.isPending}
+              isDisabled={isPending}
+              color="var(--color-error)"
+            >
+              <TrashIcon size={24} color="currentColor" />
+            </VIconButton>
+          ) : (
+            <VHint hint="Сначала удалите последний созданный ежедневный расход" position='top-start'>
+              <VIconButton
+                ariaLabel="Удалить операцию"
+                onClick={handleDelete}
+                isLoading={removeOperation.isPending}
+                isDisabled
+                color="var(--color-error)"
+              >
+                <TrashIcon size={24} color="currentColor" />
+              </VIconButton>
+            </VHint>
+          )}
           <div className={modalStyles.footerRight}>
             <VButton variant="secondary" onClick={handleClose} isDisabled={isPending}>
               Отмена
@@ -101,6 +117,9 @@ export const EditDailyModal = ({ operation, report, onClose }: EditDailyModalPro
       }
     >
       <div className={modalStyles.content}>
+        {operation.date && (
+          <div className={modalStyles.dateLabel}>{formatDisplay(operation.date)}</div>
+        )}
         <VTextInput
           label="Сумма"
           numeric

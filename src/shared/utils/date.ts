@@ -77,3 +77,22 @@ export function isSameDay(a: Date, b: Date | null): boolean {
       a.getDate() === b.getDate(),
   );
 }
+
+export function getNextFreeDate(
+  usedDates: string[],
+  periodStart: string,
+  periodEnd: string,
+): string | null {
+  const start = parseISO(periodStart);
+  const end = parseISO(periodEnd);
+  if (!start || !end || start.getTime() > end.getTime()) return null;
+
+  const used = new Set(usedDates.filter(Boolean));
+  const day = new Date(start);
+  while (day.getTime() <= end.getTime()) {
+    const iso = toISODate(day);
+    if (!used.has(iso)) return iso;
+    day.setDate(day.getDate() + 1);
+  }
+  return null;
+}

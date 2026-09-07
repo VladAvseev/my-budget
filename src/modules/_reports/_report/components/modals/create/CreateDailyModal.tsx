@@ -1,11 +1,12 @@
 import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { formatDisplay, getErrorMessage, getNextFreeDate } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useCreateDailyExpense } from '../../../api/useCreateDailyExpense';
+import { useOperations } from '../../../api/useOperations';
 import { getAmountError } from '../shared/amountValidation';
 
 interface CreateDailyModalProps {
@@ -15,6 +16,7 @@ interface CreateDailyModalProps {
 
 export const CreateDailyModal = ({ report, onClose }: CreateDailyModalProps) => {
   const createDailyExpense = useCreateDailyExpense(report.id);
+  const operationsQuery = useOperations(report.id, 'daily');
 
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
@@ -22,6 +24,12 @@ export const CreateDailyModal = ({ report, onClose }: CreateDailyModalProps) => 
   const [submitError, setSubmitError] = useState<string>();
 
   const isPending = createDailyExpense.isPending;
+
+  const nextDate = useMemo(() => {
+    const operations = operationsQuery.data ?? [];
+    const usedDates = operations.map((op) => op.date ?? '');
+    return getNextFreeDate(usedDates, report.period_start, report.period_end);
+  }, [operationsQuery.data, report.period_start, report.period_end]);
 
   const handleClose = () => {
     if (isPending) {
@@ -70,6 +78,7 @@ export const CreateDailyModal = ({ report, onClose }: CreateDailyModalProps) => 
       }
     >
       <div className={modalStyles.content}>
+        {nextDate && <div className={modalStyles.dateLabel}>{formatDisplay(nextDate)}</div>}
         <VTextInput
           label="Сумма"
           numeric

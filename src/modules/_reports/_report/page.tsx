@@ -66,6 +66,7 @@ export const Page: React.FC = () => {
               operation={operationModal.operation}
               report={report}
               onClose={() => setOperationModal(null)}
+              isDeletable={operationModal.isDeletable}
             />
           ) : (
             operationModal && (

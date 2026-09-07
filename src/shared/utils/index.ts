@@ -4,6 +4,7 @@ export {
   formatChatDate,
   formatChatTime,
   formatDisplay,
+  getNextFreeDate,
   isSameDay,
   parseISO,
   toISODate,

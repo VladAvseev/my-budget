@@ -4,6 +4,12 @@
   gap: var(--space-l);
 }
 
+.dateLabel {
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
 .footerSplit {
   display: flex;
   justify-content: space-between;

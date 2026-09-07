@@ -11,12 +11,14 @@ interface DailyOperationCardProps {
   operation: Operation;
   dailyBudget: number | null;
   pending?: boolean;
+  isDeletable?: boolean;
 }
 
 export const DailyOperationCard = ({
   operation,
   dailyBudget,
   pending = false,
+  isDeletable = false,
 }: DailyOperationCardProps) => {
   const setModal = useSetAtom(operationModalAtom);
   const currency = useCurrency();
@@ -28,14 +30,14 @@ export const DailyOperationCard = ({
 
   const handleOpen = () => {
     if (!pending) {
-      setModal({ type: 'daily', operation });
+      setModal({ type: 'daily', operation, isDeletable });
     }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (!pending && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
-      setModal({ type: 'daily', operation });
+      setModal({ type: 'daily', operation, isDeletable });
     }
   };
 
