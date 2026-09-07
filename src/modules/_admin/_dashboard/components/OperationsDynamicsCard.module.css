@@ -17,6 +17,12 @@
   color: var(--color-text-primary);
 }
 
+.total {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
 .controls {
   display: flex;
   justify-content: space-between;

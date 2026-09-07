@@ -54,6 +54,9 @@ export const OperationsDynamicsCard = () => {
     <VCard className={styles.card}>
       <div className={styles.header}>
         <div className={styles.title}>Динамика операций</div>
+        {!isLoading && (
+          <span className={styles.total}>Всего: {operationsQuery.data?.length ?? 0}</span>
+        )}
       </div>
       <div className={styles.controls}>
         <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />
