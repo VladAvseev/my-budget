@@ -128,18 +128,30 @@ export const GrowthChart = ({
     return `${top} ${bottomRight} ${bottomLeft} Z`;
   }, [data, getX, getY, plotHeight]);
 
+  const getDotX = useCallback(
+    (idx: number) => {
+      const el = containerRef.current;
+      if (!el) return getX(idx);
+      const svgEl = el.querySelector('svg');
+      if (!svgEl) return getX(idx);
+      const svgRect = svgEl.getBoundingClientRect();
+      const wrapperRect = el.parentElement?.getBoundingClientRect();
+      if (!wrapperRect) return getX(idx);
+      return svgRect.left + getX(idx) - wrapperRect.left;
+    },
+    [getX],
+  );
+
   const handleDotEnter = useCallback(
     (_e: React.MouseEvent, point: ChartPoint) => {
       const idx = data.indexOf(point);
-      const el = containerRef.current;
-      const scrollLeft = el ? el.scrollLeft : 0;
       setTooltip({
-        x: getX(idx) - scrollLeft,
+        x: getDotX(idx),
         y: getY(point.value) - 12,
         point,
       });
     },
-    [data, getX, getY],
+    [data, getDotX, getY],
   );
 
   const handleDotLeave = useCallback(() => setTooltip(null), []);
@@ -156,10 +168,10 @@ export const GrowthChart = ({
       }
       return {
         ...prev,
-        x: dotX - el.scrollLeft,
+        x: getDotX(idx),
       };
     });
-  }, [data, getX]);
+  }, [data, getX, getDotX]);
 
   useLayoutEffect(() => {
     if (!tooltip || !tooltipRef.current) {
@@ -300,11 +312,12 @@ export const GrowthChart = ({
                     : 'var(--color-warning)';
               return (
                 <div className={styles.tooltipChange} style={{ color: changeColor }}>
-                  {change > 0 ? '+' : ''}
+                  {change > 0 ? '+' : change < 0 ? '' : '±'}
                   {format(change)}
                 </div>
               );
             })()}
+          <div className={styles.tooltipLabel}>{tooltip.point.label}</div>
         </div>
       )}
     </div>

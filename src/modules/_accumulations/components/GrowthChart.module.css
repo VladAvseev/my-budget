@@ -100,6 +100,11 @@
   font-weight: var(--font-weight-bold);
 }
 
+.tooltipLabel {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
 .tooltipChange {
   font-size: var(--font-size-s);
   font-weight: var(--font-weight-bold);
