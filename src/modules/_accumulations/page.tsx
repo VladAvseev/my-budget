@@ -1,7 +1,6 @@
 import { PlusIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useAccumulations, useCurrency, useExchangeRates, useProfile } from '@/shared/hooks';
-import { QUICK_CURRENCIES, getCurrencyByCode } from '@/shared/constants/currencies';
+import { useAccumulations } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
@@ -10,7 +9,7 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import commonStyles from '@/shared/styles/common.module.css';
 import styles from './page.module.css';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -18,6 +17,7 @@ import {
   goalModalAtom,
   selectedDisplayCurrencyAtom,
 } from './atoms/accumulations';
+import { useDisplayCurrency } from './hooks/useDisplayCurrency';
 import { useCategories } from './api/useCategories';
 import { useSavingsOperations } from './api/useSavingsOperations';
 import { AccumulationsList } from './components/AccumulationsList';
@@ -36,9 +36,6 @@ const CURRENCY_OPTIONS: VButtonGroupOption[] = [
   { value: 'USD', label: 'USD' },
 ];
 
-const isQuickCurrency = (code: string | null): code is string =>
-  code !== null && (QUICK_CURRENCIES as readonly string[]).includes(code);
-
 export const Page: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -48,32 +45,18 @@ export const Page: React.FC = () => {
   const categoriesQuery = useCategories(userId);
   const [accumulationModal, setAccumulationModal] = useAtom(accumulationModalAtom);
   const [goalModal, setGoalModal] = useAtom(goalModalAtom);
-  const [selectedCurrency, setSelectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
-  const currency = useCurrency();
-  const { data: profile } = useProfile();
-  const { data: rates } = useExchangeRates();
-
-  const profileCurrency = profile?.currency ?? null;
-  const defaultCurrency = isQuickCurrency(profileCurrency) ? profileCurrency : null;
-  const isCurrencyDisabled = !isQuickCurrency(profileCurrency);
+  const {
+    selectedCurrency,
+    defaultCurrency,
+    isCurrencyDisabled,
+  } = useDisplayCurrency();
+  const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
 
   useEffect(() => {
     if (defaultCurrency) {
       setSelectedCurrency(defaultCurrency);
     }
   }, [defaultCurrency, setSelectedCurrency]);
-
-  const displayCurrency = selectedCurrency && rates ? selectedCurrency : null;
-  const displaySymbol = displayCurrency
-    ? getCurrencyByCode(displayCurrency)?.symbol
-    : currency?.symbol;
-
-  const conversionProps = {
-    displayCurrency,
-    rates,
-    defaultCurrency,
-    displaySymbol,
-  };
 
   const accumulations = accumulationsQuery.data ?? [];
   const savings = savingsQuery.data ?? [];
@@ -120,26 +103,22 @@ export const Page: React.FC = () => {
         }
       />
 
-      <GrowthChartsSection userId={userId} {...conversionProps} />
+      <GrowthChartsSection userId={userId} />
 
       {structureLoading ? (
         <div className={commonStyles.loaderContainer}>
           <VLoader />
         </div>
       ) : (
-        <AccumulationsStructure
-          items={structureItems}
-          categories={categories}
-          {...conversionProps}
-        />
+        <AccumulationsStructure items={structureItems} categories={categories} />
       )}
-      <GoalsSection {...conversionProps} />
+      <GoalsSection />
 
       <div className={commonStyles.row}>
         <div className={commonStyles.titleXl}>Накопления</div>
       </div>
 
-      <SavingsOperationsList {...conversionProps} />
+      <SavingsOperationsList />
 
       <div className={styles.header}>
         <div className={commonStyles.titleXl}>Начальные накопления</div>
@@ -153,7 +132,7 @@ export const Page: React.FC = () => {
         </VIconButton>
       </div>
 
-      <AccumulationsList {...conversionProps} />
+      <AccumulationsList />
 
       {accumulationModal?.accumulation ? (
         <EditAccumulationModal

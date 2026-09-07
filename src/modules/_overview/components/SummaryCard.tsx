@@ -1,5 +1,6 @@
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import { percentOfIncome } from '../utils/overview';
 import styles from './SummaryCard.module.css';
 
@@ -7,27 +8,11 @@ interface SummaryCardProps {
   income: number;
   expenses: number;
   savings: number;
-  displayCurrency: string | null;
-  rates: Record<string, number> | undefined;
-  defaultCurrency: string | null;
-  displaySymbol: string | undefined;
 }
 
-export const SummaryCard = ({
-  income,
-  expenses,
-  savings,
-  displayCurrency,
-  rates,
-  defaultCurrency,
-  displaySymbol,
-}: SummaryCardProps) => {
+export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => {
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
   const balance = income - expenses - savings;
-
-  const convertOptions =
-    displayCurrency && rates && defaultCurrency
-      ? { from: defaultCurrency, to: displayCurrency, rates }
-      : undefined;
 
   const items = [
     {

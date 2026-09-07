@@ -1,5 +1,4 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useCurrency } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
@@ -9,34 +8,17 @@ import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useCategories } from '../api/useCategories';
 import { useSavingsOperations } from '../api/useSavingsOperations';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import { groupItemsByCategory } from '../utils/groupByCategory';
 import { SavingsOperationCard } from './SavingsOperationCard';
 import styles from './AccumulationsList.module.css';
 
-interface SavingsOperationsListProps {
-  displayCurrency: string | null;
-  rates: Record<string, number> | undefined;
-  defaultCurrency: string | null;
-  displaySymbol: string | undefined;
-}
-
-export const SavingsOperationsList = ({
-  displayCurrency,
-  rates,
-  defaultCurrency,
-  displaySymbol,
-}: SavingsOperationsListProps) => {
+export const SavingsOperationsList = () => {
   const { user } = useAuth();
-  const currency = useCurrency();
   const userId = user?.id ?? '';
   const operationsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
-
-  const convertOptions =
-    displayCurrency && rates && defaultCurrency
-      ? { from: defaultCurrency, to: displayCurrency, rates }
-      : undefined;
-  const symbol = displaySymbol ?? currency?.symbol;
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   const operations = operationsQuery.data ?? [];
   const categories = categoriesQuery.data ?? [];
@@ -65,8 +47,6 @@ export const SavingsOperationsList = ({
           ? (categories.find((category) => category.id === operation.category_id) ?? null)
           : null
       }
-      displaySymbol={symbol}
-      convertOptions={convertOptions}
     />
   );
 
@@ -120,7 +100,7 @@ export const SavingsOperationsList = ({
                             ),
                           0,
                         ),
-                        symbol,
+                        displaySymbol,
                         convertOptions,
                       )}
                     </span>

@@ -1,27 +1,21 @@
 import type { Category } from '@/shared/supabase/types/domain';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
-import type { ConvertOptions } from '@/shared/utils';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import { useNavigate } from 'react-router-dom';
 import type { SavingsOperation } from '../api/useSavingsOperations';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './SavingsOperationCard.module.css';
 
 interface SavingsOperationCardProps {
   operation: SavingsOperation;
   category: Category | null;
-  displaySymbol?: string;
-  convertOptions?: ConvertOptions;
 }
 
-export const SavingsOperationCard = ({
-  operation,
-  category,
-  displaySymbol,
-  convertOptions,
-}: SavingsOperationCardProps) => {
+export const SavingsOperationCard = ({ operation, category }: SavingsOperationCardProps) => {
   const navigate = useNavigate();
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   const isWithdrawal = operation.type === 'savings_out';
   const amount = signedOperationAmount(

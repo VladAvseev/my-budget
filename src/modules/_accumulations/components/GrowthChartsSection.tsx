@@ -7,6 +7,7 @@ import { VLoader } from '@/shared/ui/VLoader';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useReports } from '../api/useReports';
 import { useOverviewOperationsMap } from '../api/useOverviewOperationsMap';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import {
   buildGrowthChartData,
   aggregatePoints,
@@ -20,10 +21,6 @@ import styles from './GrowthChartsSection.module.css';
 
 interface GrowthChartsSectionProps {
   userId: string;
-  displayCurrency: string | null;
-  rates: Record<string, number> | undefined;
-  defaultCurrency: string | null;
-  displaySymbol: string | undefined;
 }
 
 const EMPTY_ARRAY: never[] = [];
@@ -40,15 +37,11 @@ const aggregationOptions: VButtonGroupOption[] = [
   { value: 'Y', label: 'год' },
 ];
 
-export const GrowthChartsSection = ({
-  userId,
-  displayCurrency,
-  rates,
-  defaultCurrency,
-  displaySymbol,
-}: GrowthChartsSectionProps) => {
+export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
   const [chartType, setChartType] = useState<GrowthChartType>('capital');
   const [aggregation, setAggregation] = useState<GrowthAggregation>('M');
+
+  const { displayCurrency, rates, defaultCurrency, displaySymbol } = useDisplayCurrency();
 
   const reportsQuery = useReports();
   const accumulationsQuery = useAccumulations(userId);

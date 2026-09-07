@@ -6,6 +6,9 @@ export interface Currency {
 
 export const QUICK_CURRENCIES = ['BYN', 'RUB', 'USD'] as const;
 
+export const isQuickCurrency = (code: string | null): code is string =>
+  code !== null && (QUICK_CURRENCIES as readonly string[]).includes(code);
+
 export const CURRENCIES: Currency[] = [
   { code: 'BYN', name: 'Белорусский рубль', symbol: 'Б' },
   { code: 'RUB', name: 'Российский рубль', symbol: '₽' },

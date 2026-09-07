@@ -1,6 +1,5 @@
 import type { Operation, OperationType } from '@/shared/supabase/types/domain';
 import type { Report } from '@/shared/supabase/types/domain';
-import type { ConvertOptions } from '@/shared/utils/format';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -8,24 +7,18 @@ import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { Link } from 'react-router-dom';
 import { useOverviewCategories } from '../api/useOverviewCategories';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import { buildCategoryGroups, buildReportGroups, type ReportAmount } from '../utils/overview';
 import styles from './CategoryBreakdown.module.css';
 
 interface CategoryBreakdownProps {
   reports: Report[];
   operationsByReport: Map<string, Operation[]>;
-  displayCurrency: string | null;
-  rates: Record<string, number> | undefined;
-  defaultCurrency: string | null;
-  displaySymbol: string | undefined;
 }
 
-const ReportLinkRow = ({
-  report,
-  amount,
-  displaySymbol,
-  convertOptions,
-}: ReportAmount & { displaySymbol: string | undefined; convertOptions?: ConvertOptions }) => {
+const ReportLinkRow = ({ report, amount }: ReportAmount) => {
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
+
   return (
     <Link to={`/reports/${report.id}`} className={styles.linkRow}>
       <VCard interactive className={styles.linkRowCard}>
@@ -46,14 +39,11 @@ const hasOperations = (operationsByReport: Map<string, Operation[]>, typeFilter:
 const AccordionSummary = ({
   total,
   reportCount,
-  displaySymbol,
-  convertOptions,
 }: {
   total: number;
   reportCount: number;
-  displaySymbol: string | undefined;
-  convertOptions?: ConvertOptions;
 }) => {
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
   const average = reportCount > 0 ? total / reportCount : 0;
 
   return (
@@ -74,20 +64,9 @@ const AccordionSummary = ({
   );
 };
 
-export const CategoryBreakdown = ({
-  reports,
-  operationsByReport,
-  displayCurrency,
-  rates,
-  defaultCurrency,
-  displaySymbol,
-}: CategoryBreakdownProps) => {
+export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreakdownProps) => {
   const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
-
-  const convertOptions =
-    displayCurrency && rates && defaultCurrency
-      ? { from: defaultCurrency, to: displayCurrency, rates }
-      : undefined;
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   const expensesLoading = expenseCategories.isLoading;
   const incomesLoading = incomeCategories.isLoading;
@@ -158,24 +137,13 @@ export const CategoryBreakdown = ({
                     }}
                   />
                   <span className={styles.accordionGrow}>{group.label}</span>
-                  <AccordionSummary
-                    total={group.total}
-                    reportCount={reports.length}
-                    displaySymbol={displaySymbol}
-                    convertOptions={convertOptions}
-                  />
+                  <AccordionSummary total={group.total} reportCount={reports.length} />
                 </span>
               }
             >
               <div className={styles.accordionRow}>
                 {group.byReport.map((item) => (
-                  <ReportLinkRow
-                    key={item.report.id}
-                    report={item.report}
-                    amount={item.amount}
-                    displaySymbol={displaySymbol}
-                    convertOptions={convertOptions}
-                  />
+                  <ReportLinkRow key={item.report.id} report={item.report} amount={item.amount} />
                 ))}
               </div>
             </VAccordion>
@@ -208,24 +176,13 @@ export const CategoryBreakdown = ({
                     style={{ backgroundColor: 'var(--color-accent)' }}
                   />
                   <span className={styles.accordionGrow}>Ежедневные расходы</span>
-                  <AccordionSummary
-                    total={totalDaily}
-                    reportCount={reports.length}
-                    displaySymbol={displaySymbol}
-                    convertOptions={convertOptions}
-                  />
+                  <AccordionSummary total={totalDaily} reportCount={reports.length} />
                 </span>
               }
             >
               <div className={styles.accordionRow}>
                 {dailyGroups.map((item) => (
-                  <ReportLinkRow
-                    key={item.report.id}
-                    report={item.report}
-                    amount={item.amount}
-                    displaySymbol={displaySymbol}
-                    convertOptions={convertOptions}
-                  />
+                  <ReportLinkRow key={item.report.id} report={item.report} amount={item.amount} />
                 ))}
               </div>
             </VAccordion>

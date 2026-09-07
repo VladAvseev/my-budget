@@ -1,5 +1,5 @@
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useAccumulations, useCurrency } from '@/shared/hooks';
+import { useAccumulations } from '@/shared/hooks';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -7,34 +7,17 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useCategories } from '../api/useCategories';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import { groupItemsByCategory } from '../utils/groupByCategory';
 import { AccumulationCard } from './AccumulationCard';
 import styles from './AccumulationsList.module.css';
 
-interface AccumulationsListProps {
-  displayCurrency: string | null;
-  rates: Record<string, number> | undefined;
-  defaultCurrency: string | null;
-  displaySymbol: string | undefined;
-}
-
-export const AccumulationsList = ({
-  displayCurrency,
-  rates,
-  defaultCurrency,
-  displaySymbol,
-}: AccumulationsListProps) => {
+export const AccumulationsList = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const accumulationsQuery = useAccumulations(userId);
   const categoriesQuery = useCategories(userId);
-  const currency = useCurrency();
-
-  const convertOptions =
-    displayCurrency && rates && defaultCurrency
-      ? { from: defaultCurrency, to: displayCurrency, rates }
-      : undefined;
-  const symbol = displaySymbol ?? currency?.symbol;
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   const accumulations = accumulationsQuery.data ?? [];
   const categories = categoriesQuery.data ?? [];
@@ -97,7 +80,7 @@ export const AccumulationsList = ({
                           (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
                           0,
                         ),
-                        symbol,
+                        displaySymbol,
                         convertOptions,
                       )}
                     </span>
@@ -117,8 +100,6 @@ export const AccumulationsList = ({
                             ) ?? null)
                           : null
                       }
-                      displaySymbol={symbol}
-                      convertOptions={convertOptions}
                     />
                   ))}
                 </div>

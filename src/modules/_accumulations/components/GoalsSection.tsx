@@ -1,5 +1,5 @@
 import { PlusIcon } from '@/shared/icons';
-import { useAccumulations, useGoals, useCurrency } from '@/shared/hooks';
+import { useAccumulations, useGoals } from '@/shared/hooks';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Goal } from '@/shared/supabase/types/domain';
 import { buildGoalsProgress, formatAmount } from '@/shared/utils';
@@ -14,21 +14,10 @@ import { useSetAtom } from 'jotai';
 import { goalModalAtom } from '../atoms/accumulations';
 import { useCategories } from '../api/useCategories';
 import { useSavingsOperations } from '../api/useSavingsOperations';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './GoalsSection.module.css';
 
-interface GoalsSectionProps {
-  displayCurrency: string | null;
-  rates: Record<string, number> | undefined;
-  defaultCurrency: string | null;
-  displaySymbol: string | undefined;
-}
-
-export const GoalsSection = ({
-  displayCurrency,
-  rates,
-  defaultCurrency,
-  displaySymbol,
-}: GoalsSectionProps) => {
+export const GoalsSection = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const goalsQuery = useGoals(userId);
@@ -36,12 +25,7 @@ export const GoalsSection = ({
   const savingsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
   const setGoalModal = useSetAtom(goalModalAtom);
-  const currency = useCurrency();
-
-  const convertOptions =
-    displayCurrency && rates && defaultCurrency
-      ? { from: defaultCurrency, to: displayCurrency, rates }
-      : undefined;
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   const goals = goalsQuery.data ?? [];
   const categories = categoriesQuery.data ?? [];
@@ -147,19 +131,10 @@ export const GoalsSection = ({
 
                 <div className={styles.cardBottom}>
                   <span className={styles.savedAmount}>
-                    {formatAmount(
-                      progress.savedAmount,
-                      displaySymbol ?? currency?.symbol,
-                      convertOptions,
-                    )}
+                    {formatAmount(progress.savedAmount, displaySymbol, convertOptions)}
                   </span>
                   <span className={styles.targetAmount}>
-                    из{' '}
-                    {formatAmount(
-                      targetAmount,
-                      displaySymbol ?? currency?.symbol,
-                      convertOptions,
-                    )}
+                    из {formatAmount(targetAmount, displaySymbol, convertOptions)}
                   </span>
                   <span className={styles.percent}>{progress.percent}%</span>
                 </div>

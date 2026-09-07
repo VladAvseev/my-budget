@@ -6,14 +6,13 @@ import { VHint } from '@/shared/ui/VHint';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import commonStyles from '@/shared/styles/common.module.css';
-import { useCurrency, useExchangeRates, useProfile } from '@/shared/hooks';
-import { QUICK_CURRENCIES, getCurrencyByCode } from '@/shared/constants/currencies';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOverviewOperationsMap } from './api/useOverviewOperationsMap';
 import { useReports } from './api/useReports';
 import { selectedReportIdsAtom, selectedDisplayCurrencyAtom } from './atoms/overview';
+import { useDisplayCurrency } from './hooks/useDisplayCurrency';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
 import { CategoryDistributionChart } from './components/CategoryDistributionChart';
 import { ReportsFilter } from './components/ReportsFilter';
@@ -26,33 +25,19 @@ const CURRENCY_OPTIONS: VButtonGroupOption[] = [
   { value: 'USD', label: 'USD' },
 ];
 
-const isQuickCurrency = (code: string | null): code is string =>
-  code !== null && (QUICK_CURRENCIES as readonly string[]).includes(code);
-
 export const Page: React.FC = () => {
   const navigate = useNavigate();
   const reportsQuery = useReports();
   const [selectedIds] = useAtom(selectedReportIdsAtom);
-  const [selectedCurrency, setSelectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
-
-  const currency = useCurrency();
-  const { data: profile } = useProfile();
-  const { data: rates } = useExchangeRates();
-
-  const profileCurrency = profile?.currency ?? null;
-  const defaultCurrency = isQuickCurrency(profileCurrency) ? profileCurrency : null;
-  const isCurrencyDisabled = !isQuickCurrency(profileCurrency);
+  const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
+  const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
+  const { defaultCurrency, isCurrencyDisabled } = useDisplayCurrency();
 
   useEffect(() => {
     if (defaultCurrency) {
       setSelectedCurrency(defaultCurrency);
     }
   }, [defaultCurrency, setSelectedCurrency]);
-
-  const displayCurrency = selectedCurrency && rates ? selectedCurrency : null;
-  const displaySymbol = displayCurrency
-    ? getCurrencyByCode(displayCurrency)?.symbol
-    : currency?.symbol;
 
   const reports = reportsQuery.data ?? [];
   const selectedReports = reports.filter((report) => selectedIds.includes(report.id));
@@ -152,29 +137,15 @@ export const Page: React.FC = () => {
                       income={totals.income}
                       expenses={totals.expense + totals.daily}
                       savings={totals.savings}
-                      displayCurrency={displayCurrency}
-                      rates={rates}
-                      defaultCurrency={defaultCurrency}
-                      displaySymbol={displaySymbol}
                     />
                   </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
-                    <CategoryDistributionChart
-                      operationsByReport={operationsByReport}
-                      displayCurrency={displayCurrency}
-                      rates={rates}
-                      defaultCurrency={defaultCurrency}
-                      displaySymbol={displaySymbol}
-                    />
+                    <CategoryDistributionChart operationsByReport={operationsByReport} />
                   </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.18s' }}>
                     <CategoryBreakdown
                       reports={selectedReports}
                       operationsByReport={operationsByReport}
-                      displayCurrency={displayCurrency}
-                      rates={rates}
-                      defaultCurrency={defaultCurrency}
-                      displaySymbol={displaySymbol}
                     />
                   </div>
                 </>

@@ -1,9 +1,9 @@
 import type { Category } from '@/shared/supabase/types/domain';
-import { useCurrency } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { convertAmount, formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './AccumulationsStructure.module.css';
 
 export interface AccumulationsStructureItem {
@@ -17,10 +17,6 @@ interface AccumulationsStructureProps {
   hideRing?: boolean;
   title?: string;
   interactive?: boolean;
-  displayCurrency: string | null;
-  rates: Record<string, number> | undefined;
-  defaultCurrency: string | null;
-  displaySymbol: string | undefined;
 }
 
 interface CategorySegment {
@@ -40,13 +36,9 @@ export const AccumulationsStructure = ({
   hideRing = false,
   title = 'Структура накоплений',
   interactive = false,
-  displayCurrency,
-  rates,
-  defaultCurrency,
-  displaySymbol,
 }: AccumulationsStructureProps) => {
   const categoriesById = new Map(categories.map((category) => [category.id, category]));
-  const currency = useCurrency();
+  const { displayCurrency, rates, defaultCurrency, displaySymbol } = useDisplayCurrency();
 
   const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
@@ -92,10 +84,7 @@ export const AccumulationsStructure = ({
   const convertedTotal = segments.reduce((sum, seg) => sum + (seg.convertedTotal ?? seg.total), 0);
 
   const formatSegmentAmount = (segment: CategorySegment) => {
-    return formatAmount(
-      segment.convertedTotal ?? segment.total,
-      displaySymbol ?? currency?.symbol,
-    );
+    return formatAmount(segment.convertedTotal ?? segment.total, displaySymbol);
   };
 
   return (

@@ -1,30 +1,27 @@
 import type { Category } from '@/shared/supabase/types/domain';
 import type { Accumulation } from '@/shared/supabase/types/domain';
-import type { ConvertOptions } from '@/shared/utils';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
 import { useSetAtom } from 'jotai';
 import { accumulationModalAtom } from '../atoms/accumulations';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './AccumulationCard.module.css';
 
 interface AccumulationCardProps {
   accumulation: Accumulation;
   category: Category | null;
   pending?: boolean;
-  displaySymbol?: string;
-  convertOptions?: ConvertOptions;
 }
 
 export const AccumulationCard = ({
   accumulation,
   category,
   pending = false,
-  displaySymbol,
-  convertOptions,
 }: AccumulationCardProps) => {
   const setModal = useSetAtom(accumulationModalAtom);
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   const handleOpen = () => {
     if (!pending) {

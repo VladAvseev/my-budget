@@ -4,8 +4,8 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { formatAmount, convertAmount } from '@/shared/utils';
-import type { ConvertOptions } from '@/shared/utils/format';
 import { useOverviewCategories } from '../api/useOverviewCategories';
+import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import { buildChartData, type ChartData } from '../utils/overview';
 import styles from './CategoryDistributionChart.module.css';
 
@@ -14,10 +14,6 @@ interface CategoryDistributionChartProps {
     string,
     Array<{ type: string; amount: string; category_id: string | null }>
   >;
-  displayCurrency: string | null;
-  rates: Record<string, number> | undefined;
-  defaultCurrency: string | null;
-  displaySymbol: string | undefined;
 }
 
 const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: string }> = [
@@ -28,12 +24,9 @@ const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: strin
 
 export const CategoryDistributionChart = ({
   operationsByReport,
-  displayCurrency,
-  rates,
-  defaultCurrency,
-  displaySymbol,
 }: CategoryDistributionChartProps) => {
   const [selectedType, setSelectedType] = useState<'expense' | 'income' | 'savings'>('expense');
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
 
@@ -95,11 +88,6 @@ export const CategoryDistributionChart = ({
   }
 
   const { segments, total, hasNegative } = chartData;
-
-  const convertOptions: ConvertOptions | undefined =
-    displayCurrency && rates && defaultCurrency
-      ? { from: defaultCurrency, to: displayCurrency, rates }
-      : undefined;
 
   const donutSegments: DonutSegment[] = segments.map((segment) => ({
     ...segment,
