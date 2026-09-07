@@ -35,6 +35,7 @@ export const VSelect = ({
 }: VSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const hasError = Boolean(error);
   const hasValue = value !== '';
@@ -48,6 +49,15 @@ export const VSelect = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (isOpen && dropdownRef.current) {
+      const selected = dropdownRef.current.querySelector('[data-selected="true"]');
+      if (selected) {
+        selected.scrollIntoView({ block: 'nearest' });
+      }
+    }
+  }, [isOpen]);
 
   const selectedOption = options.find((option) => option.value === value);
   const displayText = selectedOption ? selectedOption.label : emptyText;
@@ -107,7 +117,7 @@ export const VSelect = ({
         </span>
       </div>
       {isOpen && !disabled && (
-        <div role="listbox" className={styles.dropdown}>
+        <div ref={dropdownRef} role="listbox" className={styles.dropdown}>
           {options.map((option) => (
             <Option
               key={option.value}
