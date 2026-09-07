@@ -1,3 +1,5 @@
+import { useAdminSupportOpenCount } from '@/modules/_admin/_support/api/useAdminSupportOpenCount';
+import { useSupportUnread } from '@/modules/_support/api/useSupportUnread';
 import {
   useAdminStatus,
   useBreakpoint,
@@ -7,6 +9,7 @@ import {
 } from '@/shared/hooks';
 import {
   BanknotesIcon,
+  ChevronRightIcon,
   HelpIcon,
   HomeIcon,
   MenuIcon,
@@ -15,26 +18,23 @@ import {
   ReportsIcon,
   SavingsIcon,
   SettingsIcon,
-  UserIcon,
   type IconProps,
 } from '@/shared/icons';
-import { useAdminSupportOpenCount } from '@/modules/_admin/_support/api/useAdminSupportOpenCount';
 import { useAuth } from '@/shared/supabase/authProvider';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { formatAmount } from '@/shared/utils';
 import {
-  useState,
   useEffect,
   useRef,
+  useState,
   type ComponentType,
   type Dispatch,
   type ReactNode,
   type SetStateAction,
 } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useSupportUnread } from '@/modules/_support/api/useSupportUnread';
 import styles from './AppLayout.module.css';
 
 interface AppLayoutProps {
@@ -49,7 +49,6 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Главная', icon: HomeIcon },
-  { to: '/profile', label: 'Профиль', icon: UserIcon },
   { to: '/reports', label: 'Периоды', icon: ReportsIcon },
   { to: '/accumulations', label: 'Накопления', icon: SavingsIcon },
   { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
@@ -93,6 +92,24 @@ interface SidebarContentProps {
   setIsMenuOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
+const ProfileLink = () => {
+  const { user } = useAuth();
+
+  const email = user?.email ?? '';
+  const initial = email ? email[0].toUpperCase() : '?';
+  const name = email ? email.split('@')[0] : 'Профиль';
+
+  return (
+    <NavLink to="/profile" className={styles.profileLink}>
+      <div className={styles.profileAvatar}>{initial}</div>
+      <span className={styles.profileName}>{name}</span>
+      <span className={styles.profileChevron}>
+        <ChevronRightIcon size={14} />
+      </span>
+    </NavLink>
+  );
+};
+
 const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
   const { balance } = useGlobalBalance();
   const { capital } = useCapital();
@@ -109,17 +126,15 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
       <div className={styles.stats}>
         <div className={styles.statRow}>
           <span className={styles.statLabel}>Капитал</span>
-          <span className={styles.statValue}>
-            {formatAmount(capital, currency?.symbol)}
-          </span>
+          <span className={styles.statValue}>{formatAmount(capital, currency?.symbol)}</span>
         </div>
         <div className={styles.statRow}>
           <span className={styles.statLabel}>Баланс</span>
-          <span className={styles.statValue}>
-            {formatAmount(balance, currency?.symbol)}
-          </span>
+          <span className={styles.statValue}>{formatAmount(balance, currency?.symbol)}</span>
         </div>
       </div>
+      
+      <ProfileLink />
 
       <nav className={styles.nav}>
         {NAV_ITEMS.map((item) => (
