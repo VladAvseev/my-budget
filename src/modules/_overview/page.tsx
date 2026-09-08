@@ -5,6 +5,7 @@ import { VCard } from '@/shared/ui/VCard';
 import { VHint } from '@/shared/ui/VHint';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
+import { useAuth } from '@/shared/supabase/authProvider';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
@@ -13,6 +14,7 @@ import { useOverviewOperationsMap } from './api/useOverviewOperationsMap';
 import { useReports } from './api/useReports';
 import { selectedReportIdsAtom, selectedDisplayCurrencyAtom } from './atoms/overview';
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
+import { GrowthDynamicsCard } from '@/modules/_accumulations/components/GrowthDynamicsCard';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
 import { CategoryDistributionChart } from './components/CategoryDistributionChart';
 import { ReportsFilter } from './components/ReportsFilter';
@@ -27,11 +29,19 @@ const CURRENCY_OPTIONS: VButtonGroupOption[] = [
 
 export const Page: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const userId = user?.id ?? '';
   const reportsQuery = useReports();
   const [selectedIds] = useAtom(selectedReportIdsAtom);
   const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
   const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
-  const { defaultCurrency, isCurrencyDisabled } = useDisplayCurrency();
+  const {
+    defaultCurrency,
+    isCurrencyDisabled,
+    displayCurrency,
+    rates,
+    displaySymbol,
+  } = useDisplayCurrency();
 
   useEffect(() => {
     if (defaultCurrency) {
@@ -82,6 +92,17 @@ export const Page: React.FC = () => {
           </VHint>
         }
       />
+
+      <GrowthDynamicsCard
+        userId={userId}
+        chartType="capital"
+        title="Динамика капитала"
+        currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
+      />
+
+      <div className={commonStyles.row}>
+        <div className={commonStyles.titleXl}>Отчёт по периодам</div>
+      </div>
 
       <div className={commonStyles.animateCard}>
         <ReportsFilter reports={reports} />

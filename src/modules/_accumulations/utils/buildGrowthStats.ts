@@ -1,4 +1,4 @@
-import type { ChartPoint, GrowthAggregation } from './buildGrowthChartData';
+import type { ChartPoint, GrowthAggregation, GrowthChartMode } from './buildGrowthChartData';
 import {
   getPeriodEnd,
   getPointChange,
@@ -74,11 +74,31 @@ export const buildGrowthStats = (
   filteredData: ChartPoint[],
   aggregation: GrowthAggregation = 'M',
   base = 0,
+  mode: GrowthChartMode = 'total',
 ): GrowthStats => {
   const now = new Date();
+  const trimmed = trimIncompletePeriod(filteredData, getPeriodEnd(aggregation), now);
+
+  if (mode === 'period') {
+    return {
+      monthly:
+        trimmed.length > 0
+          ? {
+              abs: (trimmed[trimmed.length - 1].value - base) / trimmed.length,
+              pct: null,
+            }
+          : null,
+      periodLabel: AGGREGATION_LABELS[aggregation],
+      currentPeriod:
+        filteredData.length > 0
+          ? getPointChange(filteredData, filteredData.length - 1, base)
+          : null,
+      currentPeriodLabel: CURRENT_PERIOD_LABELS[aggregation],
+    };
+  }
 
   return {
-    monthly: buildMonthlyStats(trimIncompletePeriod(filteredData, getPeriodEnd(aggregation), now)),
+    monthly: buildMonthlyStats(trimmed),
     periodLabel: AGGREGATION_LABELS[aggregation],
     currentPeriod:
       filteredData.length > 0

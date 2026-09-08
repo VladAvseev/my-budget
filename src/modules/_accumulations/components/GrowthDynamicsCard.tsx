@@ -7,27 +7,38 @@ import { VLoader } from '@/shared/ui/VLoader';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useReports } from '../api/useReports';
 import { useOverviewOperationsMap } from '../api/useOverviewOperationsMap';
-import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import {
   buildGrowthChartData,
   aggregatePoints,
+  toPeriodDeltas,
   type GrowthChartType,
+  type GrowthChartMode,
   type GrowthAggregation,
 } from '../utils/buildGrowthChartData';
 import { buildGrowthStats } from '../utils/buildGrowthStats';
 import { GrowthChart } from './GrowthChart';
 import { GrowthStats } from './GrowthStats';
-import styles from './GrowthChartsSection.module.css';
+import styles from './GrowthDynamicsCard.module.css';
 
-interface GrowthChartsSectionProps {
+export interface GrowthDynamicsCardCurrency {
+  displayCurrency: string | null;
+  defaultCurrency: string | null;
+  rates?: Record<string, number> | null;
+  displaySymbol?: string;
+}
+
+interface GrowthDynamicsCardProps {
   userId: string;
+  chartType: GrowthChartType;
+  title: string;
+  currency: GrowthDynamicsCardCurrency;
 }
 
 const EMPTY_ARRAY: never[] = [];
 
-const chartTypeOptions: VButtonGroupOption[] = [
-  { value: 'capital', label: 'Капитал' },
-  { value: 'accumulations', label: 'Накопления' },
+const modeOptions: VButtonGroupOption[] = [
+  { value: 'total', label: 'Всего' },
+  { value: 'period', label: 'За период' },
 ];
 
 const aggregationOptions: VButtonGroupOption[] = [
@@ -37,11 +48,21 @@ const aggregationOptions: VButtonGroupOption[] = [
   { value: 'Y', label: 'год' },
 ];
 
-export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
-  const [chartType, setChartType] = useState<GrowthChartType>('capital');
+const modeColors: Record<GrowthChartMode, string> = {
+  total: 'var(--color-success)',
+  period: 'var(--color-accent)',
+};
+
+export const GrowthDynamicsCard = ({
+  userId,
+  chartType,
+  title,
+  currency,
+}: GrowthDynamicsCardProps) => {
+  const [mode, setMode] = useState<GrowthChartMode>('total');
   const [aggregation, setAggregation] = useState<GrowthAggregation>('M');
 
-  const { displayCurrency, rates, defaultCurrency, displaySymbol } = useDisplayCurrency();
+  const { displayCurrency, defaultCurrency, rates, displaySymbol } = currency;
 
   const reportsQuery = useReports();
   const accumulationsQuery = useAccumulations(userId);
@@ -100,18 +121,25 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
     [convertedChartData, aggregation],
   );
 
-  const stats = useMemo(
-    () => buildGrowthStats(chartData, aggregation, base),
-    [chartData, aggregation, base],
+  const displayData = useMemo(
+    () => (mode === 'period' ? toPeriodDeltas(chartData, base) : chartData),
+    [chartData, base, mode],
   );
 
-  const color = chartType === 'accumulations' ? 'var(--color-accent)' : 'var(--color-success)';
+  const stats = useMemo(
+    () => buildGrowthStats(chartData, aggregation, base, mode),
+    [chartData, aggregation, base, mode],
+  );
 
   return (
     <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
       <VCard className={styles.mobileCompact}>
+        <div className={styles.header}>
+          <div className={styles.title}>{title}</div>
+        </div>
+
         <div className={styles.controls}>
-          <VButtonGroup options={chartTypeOptions} value={chartType} onChange={setChartType} />
+          <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />
           <VButtonGroup
             options={aggregationOptions}
             value={aggregation}
@@ -127,9 +155,9 @@ export const GrowthChartsSection = ({ userId }: GrowthChartsSectionProps) => {
           </div>
         ) : (
           <GrowthChart
-            data={chartData}
-            color={color}
-            showChange
+            data={displayData}
+            color={modeColors[mode]}
+            showChange={mode === 'total'}
             displaySymbol={displaySymbol}
             base={base}
           />

@@ -72,7 +72,7 @@ export const OperationsDynamicsCard = () => {
       ) : (
         <GrowthChart
           data={chartData}
-          color="var(--color-accent)"
+          color={mode === 'cumulative' ? 'var(--color-success)' : 'var(--color-accent)'}
           formatValue={formatCount}
           showChange={mode === 'cumulative'}
         />

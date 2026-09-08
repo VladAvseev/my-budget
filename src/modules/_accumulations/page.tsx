@@ -23,7 +23,7 @@ import { useSavingsOperations } from './api/useSavingsOperations';
 import { AccumulationsList } from './components/AccumulationsList';
 import { AccumulationsStructure } from './components/AccumulationsStructure';
 import { CreateAccumulationModal } from './components/CreateAccumulationModal';
-import { GrowthChartsSection } from './components/GrowthChartsSection';
+import { GrowthDynamicsCard } from './components/GrowthDynamicsCard';
 import { CreateGoalModal } from './components/CreateGoalModal';
 import { EditAccumulationModal } from './components/EditAccumulationModal';
 import { EditGoalModal } from './components/EditGoalModal';
@@ -49,6 +49,9 @@ export const Page: React.FC = () => {
     selectedCurrency,
     defaultCurrency,
     isCurrencyDisabled,
+    displayCurrency,
+    rates,
+    displaySymbol,
   } = useDisplayCurrency();
   const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
 
@@ -103,7 +106,12 @@ export const Page: React.FC = () => {
         }
       />
 
-      <GrowthChartsSection userId={userId} />
+      <GrowthDynamicsCard
+        userId={userId}
+        chartType="accumulations"
+        title="Динамика накоплений"
+        currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
+      />
 
       {structureLoading ? (
         <div className={commonStyles.loaderContainer}>
