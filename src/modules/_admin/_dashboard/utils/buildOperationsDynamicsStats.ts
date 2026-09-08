@@ -1,6 +1,7 @@
 import type { ChartPoint } from '@/modules/_accumulations/utils/buildGrowthChartData';
 import { trimIncompletePeriod } from '@/modules/_accumulations/utils/buildGrowthChartData';
 import type { DynamicsAggregation, DynamicsChartMode } from './buildOperationsDynamicsData';
+import { moscowToday } from './buildOperationsDynamicsData';
 
 export interface DynamicsPeriodStats {
   abs: number;
@@ -58,13 +59,15 @@ const buildLastPeriod = (
   return { abs: last.value - prev.value };
 };
 
-const getPeriodEnd = (aggregation: DynamicsAggregation) => (start: Date): Date => {
-  const end = new Date(start);
-  if (aggregation === 'D') end.setUTCDate(end.getUTCDate() + 1);
-  else if (aggregation === 'M') end.setUTCMonth(end.getUTCMonth() + 1);
-  else end.setUTCFullYear(end.getUTCFullYear() + 1);
-  return end;
-};
+const getPeriodEnd =
+  (aggregation: DynamicsAggregation) =>
+  (start: Date): Date => {
+    const end = new Date(start);
+    if (aggregation === 'D') end.setUTCDate(end.getUTCDate() + 1);
+    else if (aggregation === 'M') end.setUTCMonth(end.getUTCMonth() + 1);
+    else end.setUTCFullYear(end.getUTCFullYear() + 1);
+    return end;
+  };
 
 export const buildOperationsDynamicsStats = (
   data: ChartPoint[],
@@ -73,7 +76,7 @@ export const buildOperationsDynamicsStats = (
 ): DynamicsStats => {
   // Единственная точка — текущий незавершённый период: после обрезки серия
   // пуста, поэтому в качестве среднего показываем значение этой точки.
-  const trimmed = trimIncompletePeriod(data, getPeriodEnd(aggregation), new Date());
+  const trimmed = trimIncompletePeriod(data, getPeriodEnd(aggregation), moscowToday());
   const periodRate =
     trimmed.length > 0
       ? buildPeriodRate(trimmed, mode)

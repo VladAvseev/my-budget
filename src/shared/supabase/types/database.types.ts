@@ -682,7 +682,7 @@ export interface Database {
       };
       admin_get_operations_dynamics: {
         Args: Record<string, never>;
-        Returns: { created_at: string }[];
+        Returns: { day: string; operations_count: number }[];
       };
     };
   };

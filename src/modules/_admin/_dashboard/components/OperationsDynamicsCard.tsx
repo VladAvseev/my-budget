@@ -38,11 +38,16 @@ export const OperationsDynamicsCard = () => {
       isLoading
         ? []
         : buildOperationsDynamicsData({
-            operations: operationsQuery.data ?? [],
+            daily: operationsQuery.data ?? [],
             aggregation,
             mode,
           }),
     [operationsQuery.data, aggregation, mode, isLoading],
+  );
+
+  const totalOperations = useMemo(
+    () => (operationsQuery.data ?? []).reduce((sum, row) => sum + row.operations_count, 0),
+    [operationsQuery.data],
   );
 
   const stats = useMemo(
@@ -54,9 +59,7 @@ export const OperationsDynamicsCard = () => {
     <VCard className={styles.card}>
       <div className={styles.header}>
         <div className={styles.title}>Рост количества операций</div>
-        {!isLoading && (
-          <span className={styles.total}>Всего: {operationsQuery.data?.length ?? 0}</span>
-        )}
+        {!isLoading && <span className={styles.total}>Всего: {totalOperations}</span>}
       </div>
       <div className={styles.controls}>
         <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />

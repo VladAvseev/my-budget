@@ -3,6 +3,35 @@ import type { ChartPoint } from '@/modules/_accumulations/utils/buildGrowthChart
 export type DynamicsChartMode = 'cumulative' | 'period';
 export type DynamicsAggregation = 'D' | 'M' | 'Y';
 
+// Одна строка на московские сутки, возвращаемая админской функцией БД.
+export interface DynamicsDailyRow {
+  day: string; // 'YYYY-MM-DD' — календарный день по времени Москвы
+  operations_count: number;
+}
+
+// Метки времени приводятся к московскому календарному дню. МСК = UTC+3,
+// переход на летнее время отменён с 2014 года, поэтому смещение постоянно.
+export const MOSCOW_UTC_OFFSET_MS = 3 * 60 * 60 * 1000;
+
+// «Синтетическая» дата: полночь UTC, чьи UTC-поля равны московскому календарю.
+export const moscowToday = (): Date => {
+  const shifted = new Date(Date.now() + MOSCOW_UTC_OFFSET_MS);
+  return new Date(Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate()));
+};
+
+const toSyntheticDay = (date: Date): Date =>
+  new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+
+// 'YYYY-MM-DD' разбирается напрямую в синтетическую дату, без привязки к
+// таймзоне браузера (SQL уже отдал московский календарный день).
+const parseDay = (day: string): Date | null => {
+  const parts = day.split('-');
+  if (parts.length !== 3) return null;
+  const [year, month, date] = parts.map(Number);
+  if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(date)) return null;
+  return new Date(Date.UTC(year, month - 1, date));
+};
+
 const MONTH_LABELS = [
   'Янв',
   'Фев',
@@ -35,14 +64,6 @@ const formatMonthLabel = (date: Date): string =>
 
 const formatYearLabel = (date: Date): string => `${date.getUTCFullYear()} год`;
 
-const toUTCDate = (iso: string): Date => {
-  const d = new Date(iso);
-  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-};
-
-const startOfDay = (date: Date): Date =>
-  new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-
 const addDays = (date: Date, n: number): Date => {
   const d = new Date(date);
   d.setUTCDate(d.getUTCDate() + n);
@@ -74,27 +95,38 @@ const getNext = (date: Date, aggregation: DynamicsAggregation): Date => {
 };
 
 export interface BuildDynamicsDataArgs {
-  operations: { created_at: string }[];
+  daily: DynamicsDailyRow[];
   aggregation: DynamicsAggregation;
   mode: DynamicsChartMode;
 }
 
 export const buildOperationsDynamicsData = ({
-  operations,
+  daily,
   aggregation,
   mode,
 }: BuildDynamicsDataArgs): ChartPoint[] => {
-  if (operations.length === 0) return [];
-
-  const startDate = new Date(Date.UTC(2026, 6, 31));
-  const now = startOfDay(new Date());
+  if (daily.length === 0) return [];
 
   const counts = new Map<string, number>();
-  for (const op of operations) {
-    const date = toUTCDate(op.created_at);
+  let firstDay: Date | null = null;
+  let lastDay: Date | null = null;
+
+  for (const row of daily) {
+    const date = parseDay(row.day);
+    if (!date) continue;
     const key = getKey(date, aggregation);
-    counts.set(key, (counts.get(key) ?? 0) + 1);
+    counts.set(key, (counts.get(key) ?? 0) + row.operations_count);
+    if (!firstDay || date < firstDay) firstDay = date;
+    if (!lastDay || date > lastDay) lastDay = date;
   }
+
+  if (!firstDay || !lastDay) return [];
+
+  // Границы серии выводятся из самих данных и доводятся до сегодняшнего дня:
+  // иначе накопительный итог расходится с общим количеством операций в таблице.
+  const today = moscowToday();
+  const startDate = firstDay < today ? firstDay : today;
+  const now = lastDay > today ? lastDay : today;
 
   const points: ChartPoint[] = [];
   let cumulative = 0;
@@ -106,7 +138,7 @@ export const buildOperationsDynamicsData = ({
     cumulative += count;
 
     points.push({
-      month: new Date(cursor),
+      month: toSyntheticDay(cursor),
       label: getLabel(cursor, aggregation),
       value: mode === 'cumulative' ? cumulative : count,
     });
