@@ -123,7 +123,7 @@ export const Page: React.FC = () => {
       <GoalsSection />
 
       <div className={commonStyles.row}>
-        <div className={commonStyles.titleXl}>Накопления</div>
+        <div className={commonStyles.titleXl}>История накоплений</div>
       </div>
 
       <SavingsOperationsList />
