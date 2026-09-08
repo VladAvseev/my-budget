@@ -2,6 +2,7 @@ import type { Operation } from '@/shared/supabase/types/domain';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
+import { VCurrencyRates } from '@/shared/ui/VCurrencyRates';
 import { VHint } from '@/shared/ui/VHint';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
@@ -38,13 +39,8 @@ export const Page: React.FC = () => {
   const [selectedIds] = useAtom(selectedReportIdsAtom);
   const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
   const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
-  const {
-    defaultCurrency,
-    isCurrencyDisabled,
-    displayCurrency,
-    rates,
-    displaySymbol,
-  } = useDisplayCurrency();
+  const { defaultCurrency, isCurrencyDisabled, displayCurrency, rates, displaySymbol } =
+    useDisplayCurrency();
 
   useEffect(() => {
     if (defaultCurrency) {
@@ -105,12 +101,21 @@ export const Page: React.FC = () => {
           backAriaLabel="Назад на главную"
           hideOnMobile
         />
-        {isDesktop && currencySwitcher}
+        {isDesktop && (
+          <div className={styles.headerActions}>
+            <VCurrencyRates selectedCurrency={displayCurrency} rates={rates} orientation="row" />
+            {currencySwitcher}
+          </div>
+        )}
       </div>
 
       {!isDesktop && (
         <div className={styles.currencyRow}>
-          <div className={commonStyles.titleXl}>Аналитика</div>
+          {displayCurrency ? (
+            <VCurrencyRates selectedCurrency={displayCurrency} rates={rates} orientation="stack" />
+          ) : (
+            <div className={commonStyles.titleXl}>Аналитика</div>
+          )}
           {currencySwitcher}
         </div>
       )}

@@ -4,3 +4,10 @@
   justify-content: space-between;
   gap: var(--space-m);
 }
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+  flex-shrink: 0;
+}

@@ -4,6 +4,7 @@ import { useAccumulations, useBreakpoint } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
+import { VCurrencyRates } from '@/shared/ui/VCurrencyRates';
 import { VHint } from '@/shared/ui/VHint';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
@@ -107,12 +108,21 @@ export const Page: React.FC = () => {
           backAriaLabel="Назад на главную"
           hideOnMobile
         />
-        {isDesktop && currencySwitcher}
+        {isDesktop && (
+          <div className={styles.headerActions}>
+            <VCurrencyRates selectedCurrency={displayCurrency} rates={rates} orientation="row" />
+            {currencySwitcher}
+          </div>
+        )}
       </div>
 
       {!isDesktop && (
         <div className={styles.currencyRow}>
-          <div className={commonStyles.titleXl}>Накопления</div>
+          {displayCurrency ? (
+            <VCurrencyRates selectedCurrency={displayCurrency} rates={rates} orientation="stack" />
+          ) : (
+            <div className={commonStyles.titleXl}>Накопления</div>
+          )}
           {currencySwitcher}
         </div>
       )}

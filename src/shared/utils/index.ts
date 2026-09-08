@@ -36,3 +36,4 @@ export {
   type MonthOption,
 } from './monthMapping';
 export { convertAmount } from './convertCurrency';
+export { getOtherCurrencyRates, formatCurrencyRate, type CurrencyRateItem } from './currencyRates';
