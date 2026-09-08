@@ -1,3 +1,19 @@
+/*
+ * Официальный иконочный шрифт Национального банка РБ с графическим знаком
+ * белорусского рубля (постановление Правления НБ РБ от 27.01.2026 № 25).
+ * Используется только для PUA-кода U+E901, чтобы не влиять на остальной текст.
+ * https://www.nbrb.by/coinsbanknotes/byn-ico/nbrb-font
+ */
+@font-face {
+  font-family: 'nbrb';
+  src:
+    url('./shared/assets/fonts/nbrb/nbrb.woff2') format('woff2'),
+    url('./shared/assets/fonts/nbrb/nbrb.woff') format('woff'),
+    url('./shared/assets/fonts/nbrb/nbrb.ttf') format('truetype');
+  font-display: swap;
+  unicode-range: U+E901;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,6 +23,7 @@
 body {
   font-family:
     'Roboto',
+    'nbrb',
     -apple-system,
     'BlinkMacSystemFont',
     'Segoe UI',
