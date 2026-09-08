@@ -9,6 +9,7 @@
 .left {
   display: flex;
   flex-direction: column;
+  align-self: flex-start;
   gap: var(--space-xs);
   min-width: 0;
 }
@@ -32,6 +33,7 @@
 }
 
 .badge {
+  align-self: flex-start;
   font-size: var(--font-size-m);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
