@@ -59,8 +59,8 @@ const GoalForecastInfo = ({
   return (
     <div className={styles.forecast}>
       <div className={styles.forecastRow}>
-        Рекомендуется пополнять на ≈{' '}
-        {formatAmount(forecast.requiredMonthly, symbol, convertOptions)} в месяц
+        Рекомендуется пополнять на {' '}
+        {formatAmount(Math.ceil(forecast.requiredMonthly), symbol, convertOptions)} в месяц
       </div>
     </div>
   );
