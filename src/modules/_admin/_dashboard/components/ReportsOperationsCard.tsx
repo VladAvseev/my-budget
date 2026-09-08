@@ -116,7 +116,7 @@ export const ReportsOperationsCard: React.FC<ReportsOperationsCardProps> = ({
                 {percent(segment.total, total)}%
               </span>,
               <span key={`${segment.key}-value`} className={styles.value}>
-                {segment.total} шт.
+                {segment.total}
               </span>,
             ])}
           </div>
