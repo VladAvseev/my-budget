@@ -55,6 +55,24 @@ export const buildGoalsProgress = (
     };
   });
 
+export interface GoalsOverallProgress {
+  totalSaved: number;
+  totalTarget: number;
+  percent: number;
+}
+
+export const buildGoalsOverallProgress = (progress: GoalProgress[]): GoalsOverallProgress => {
+  const totalSaved = progress.reduce((sum, item) => sum + item.savedAmount, 0);
+  const totalTarget = progress.reduce((sum, item) => sum + (Number(item.goal.amount) || 0), 0);
+  const rawPercent = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
+
+  return {
+    totalSaved,
+    totalTarget,
+    percent: Math.min(100, Math.max(0, Math.round(rawPercent))),
+  };
+};
+
 export interface GoalForecast {
   targetDate: string | null;
   monthsLeft: number | null;

@@ -14,9 +14,11 @@ export { getErrorMessage } from './errorMessage';
 export { trimStrings } from './trim';
 export {
   buildGoalForecast,
+  buildGoalsOverallProgress,
   buildGoalsProgress,
   getCategorySavedTotal,
   type GoalForecast,
+  type GoalsOverallProgress,
   type GoalProgress,
   type GoalProgressSource,
 } from './goals';

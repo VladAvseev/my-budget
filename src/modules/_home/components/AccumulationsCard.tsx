@@ -1,4 +1,9 @@
-import { buildGoalsProgress, formatAmount, type GoalProgress } from '@/shared/utils';
+import {
+  buildGoalsOverallProgress,
+  buildGoalsProgress,
+  formatAmount,
+  type GoalProgress,
+} from '@/shared/utils';
 import { useAccumulationsTotal, useCurrency, useGoals } from '@/shared/hooks';
 import { ChevronRightIcon, SavingsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
@@ -73,6 +78,8 @@ export const AccumulationsCard = () => {
 
   const total = structureItems.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
+  const overall = buildGoalsOverallProgress(progressList);
+
   const formatPair = (savedAmount: number, targetAmount: number) =>
     `${formatAmount(savedAmount, currency?.symbol)} из ${formatAmount(targetAmount, currency?.symbol)}`;
 
@@ -110,36 +117,25 @@ export const AccumulationsCard = () => {
         {hasGoals && (
           <div className={styles.section}>
             <div className={styles.sectionTitle}>Цели</div>
-            <div className={styles.goalsList}>
-              {progressList.map((progress) => {
-                const category =
-                  categories.find((item) => item.id === progress.goal.category_id) ?? null;
-                const targetAmount = Number(progress.goal.amount) || 0;
-
-                return (
-                  <div key={progress.goal.id} className={styles.goalItem}>
-                    <div className={styles.goalTop}>
-                      <span
-                        className={styles.goalDot}
-                        style={{
-                          backgroundColor: category?.color ?? 'var(--color-border)',
-                        }}
-                      />
-                      <span className={styles.goalName}>{category?.name ?? 'Без категории'}</span>
-                      <span className={styles.goalPercent}>{progress.percent}%</span>
-                    </div>
-                    <div className={styles.goalBar}>
-                      <div
-                        className={styles.goalBarFill}
-                        style={{ width: `${progress.percent}%` }}
-                      />
-                    </div>
-                    <div className={styles.goalAmounts}>
-                      {formatPair(progress.savedAmount, targetAmount)}
-                    </div>
-                  </div>
-                );
-              })}
+            <div className={styles.goalsOverall}>
+              <div
+                className={styles.goalBar}
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={overall.percent}
+              >
+                <div
+                  className={styles.goalBarFill}
+                  style={{ width: `${overall.percent}%` }}
+                />
+              </div>
+              <div className={styles.goalsOverallRow}>
+                <span className={styles.goalAmounts}>
+                  {formatPair(overall.totalSaved, overall.totalTarget)}
+                </span>
+                <span className={styles.goalPercent}>{overall.percent}%</span>
+              </div>
             </div>
           </div>
         )}

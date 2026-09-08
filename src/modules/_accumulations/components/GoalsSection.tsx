@@ -4,9 +4,11 @@ import { useAuth } from '@/shared/supabase/authProvider';
 import type { Goal } from '@/shared/supabase/types/domain';
 import {
   buildGoalForecast,
+  buildGoalsOverallProgress,
   buildGoalsProgress,
   formatAmount,
   formatDisplay,
+  toISODate,
   type GoalForecast,
 } from '@/shared/utils';
 import { VBadge } from '@/shared/ui/VBadge';
@@ -18,10 +20,28 @@ import { VLoader } from '@/shared/ui/VLoader';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useSetAtom } from 'jotai';
 import { goalModalAtom } from '../atoms/accumulations';
+import { useAverageMonthlyGrowth } from '../hooks/useAverageMonthlyGrowth';
 import { useCategories } from '../api/useCategories';
 import { useSavingsOperations } from '../api/useSavingsOperations';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './GoalsSection.module.css';
+
+const pluralYears = (years: number): string => {
+  const mod10 = years % 10;
+  const mod100 = years % 100;
+  if (mod10 === 1 && mod100 !== 11) return `${years} год`;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${years} года`;
+  return `${years} лет`;
+};
+
+const formatMonthsDuration = (totalMonths: number): string => {
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  const parts: string[] = [];
+  if (years > 0) parts.push(pluralYears(years));
+  if (months > 0) parts.push(`${months} мес.`);
+  return parts.join(' ');
+};
 
 const GoalForecastInfo = ({
   forecast,
@@ -39,7 +59,8 @@ const GoalForecastInfo = ({
   return (
     <div className={styles.forecast}>
       <div className={styles.forecastRow}>
-        Чтобы успеть: ≈ {formatAmount(forecast.requiredMonthly, symbol, convertOptions)} в месяц
+        Рекомендуется пополнять на ≈{' '}
+        {formatAmount(forecast.requiredMonthly, symbol, convertOptions)} в месяц
       </div>
     </div>
   );
@@ -54,6 +75,7 @@ export const GoalsSection = () => {
   const categoriesQuery = useCategories(userId);
   const setGoalModal = useSetAtom(goalModalAtom);
   const { displaySymbol, convertOptions } = useDisplayCurrency();
+  const avgMonthlyGrowth = useAverageMonthlyGrowth(userId);
 
   const goals = goalsQuery.data ?? [];
   const categories = categoriesQuery.data ?? [];
@@ -64,6 +86,20 @@ export const GoalsSection = () => {
     savingsQuery.data ?? [],
   );
   progressList.sort((a, b) => Math.abs(b.savedAmount) - Math.abs(a.savedAmount));
+  const overallProgress = buildGoalsOverallProgress(progressList);
+
+  const overallRemaining = Math.max(0, overallProgress.totalTarget - overallProgress.totalSaved);
+  const overallForecastMonths =
+    overallRemaining > 0 && avgMonthlyGrowth !== null && avgMonthlyGrowth > 0
+      ? Math.ceil(overallRemaining / avgMonthlyGrowth)
+      : null;
+  const overallForecastDate =
+    overallForecastMonths !== null
+      ? (() => {
+          const now = new Date();
+          return toISODate(new Date(now.getFullYear(), now.getMonth() + overallForecastMonths, 1));
+        })()
+      : null;
 
   const isLoading =
     goalsQuery.isLoading ||
@@ -109,7 +145,42 @@ export const GoalsSection = () => {
       )}
 
       {!isLoading && progressList.length > 0 && (
-        <div className={styles.list}>
+        <>
+          {progressList.length > 1 && (
+            <div className={commonStyles.animateCard}>
+              <VCard className={styles.overall}>
+                <div
+                  className={styles.track}
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={overallProgress.percent}
+                >
+                  <div
+                    className={styles.fill}
+                    style={{ width: `${overallProgress.percent}%` }}
+                  />
+                </div>
+                <div className={styles.cardBottom}>
+                  <span className={styles.savedAmount}>
+                    {formatAmount(overallProgress.totalSaved, displaySymbol, convertOptions)}
+                  </span>
+                  <span className={styles.targetAmount}>
+                    из {formatAmount(overallProgress.totalTarget, displaySymbol, convertOptions)}
+                  </span>
+                  <span className={styles.percent}>{overallProgress.percent}%</span>
+                </div>
+                {overallForecastMonths !== null && overallForecastDate && (
+                  <div className={styles.overallForecast}>
+                    Достижима к {formatDisplay(overallForecastDate)} (за{' '}
+                    {formatMonthsDuration(overallForecastMonths)})
+                  </div>
+                )}
+              </VCard>
+            </div>
+          )}
+
+          <div className={styles.list}>
           {progressList.map((progress, index) => {
             const goal: Goal = progress.goal;
             const category = categoryById.get(goal.category_id) ?? null;
@@ -181,7 +252,8 @@ export const GoalsSection = () => {
               </VCard>
             );
           })}
-        </div>
+          </div>
+        </>
       )}
     </div>
   );

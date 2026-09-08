@@ -116,6 +116,9 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
   const { isAdmin } = useAdminStatus();
   const currency = useCurrency();
 
+  const showCapital =
+    formatAmount(capital, currency?.symbol) !== formatAmount(balance, currency?.symbol);
+
   return (
     <>
       <div className={styles.brand}>
@@ -124,10 +127,12 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
       </div>
 
       <div className={styles.stats}>
-        <div className={styles.statRow}>
-          <span className={styles.statLabel}>Капитал</span>
-          <span className={styles.statValue}>{formatAmount(capital, currency?.symbol)}</span>
-        </div>
+        {showCapital && (
+          <div className={styles.statRow}>
+            <span className={styles.statLabel}>Капитал</span>
+            <span className={styles.statValue}>{formatAmount(capital, currency?.symbol)}</span>
+          </div>
+        )}
         <div className={styles.statRow}>
           <span className={styles.statLabel}>Баланс</span>
           <span className={styles.statValue}>{formatAmount(balance, currency?.symbol)}</span>
@@ -194,6 +199,9 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     mainRef.current?.scrollTo(0, 0);
   }, [location.pathname]);
 
+  const showCapital =
+    formatAmount(capital, currency?.symbol) !== formatAmount(balance, currency?.symbol);
+
   if (isDesktop) {
     return (
       <div className={styles.desktopRoot}>
@@ -216,12 +224,14 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     <div className={styles.mobileRoot}>
       <div className={styles.mobileHeader}>
         <div className={styles.mobileStats}>
-          <div className={styles.mobileStat}>
-            <span className={styles.mobileStatLabel}>Капитал</span>
-            <span className={styles.mobileStatValue}>
-              {formatAmount(capital, currency?.symbol)}
-            </span>
-          </div>
+          {showCapital && (
+            <div className={styles.mobileStat}>
+              <span className={styles.mobileStatLabel}>Капитал</span>
+              <span className={styles.mobileStatValue}>
+                {formatAmount(capital, currency?.symbol)}
+              </span>
+            </div>
+          )}
           <div className={styles.mobileStat}>
             <span className={styles.mobileStatLabel}>Баланс</span>
             <span className={styles.mobileStatValue}>

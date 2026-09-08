@@ -48,6 +48,17 @@
   min-width: 280px;
 }
 
+.overall {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.overallForecast {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
 .cardTop {
   display: flex;
   align-items: center;
