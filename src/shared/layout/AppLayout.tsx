@@ -10,7 +10,6 @@ import {
 import {
   BanknotesIcon,
   ChevronRightIcon,
-  HelpIcon,
   HomeIcon,
   MenuIcon,
   MessageIcon,
@@ -52,7 +51,6 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/reports', label: 'Периоды', icon: ReportsIcon },
   { to: '/accumulations', label: 'Накопления', icon: SavingsIcon },
   { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
-  { to: '/help', label: 'Помощь', icon: HelpIcon },
   { to: '/support', label: 'Поддержка', icon: MessageIcon },
 ];
 

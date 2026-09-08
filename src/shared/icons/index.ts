@@ -7,7 +7,6 @@ export { ChevronRightIcon } from './ChevronRightIcon';
 export { ClearIcon } from './ClearIcon';
 export { EyeIcon } from './EyeIcon';
 export { EyeOffIcon } from './EyeOffIcon';
-export { HelpIcon } from './HelpIcon';
 export { HomeIcon } from './HomeIcon';
 export { ImportIcon } from './ImportIcon';
 export { LoaderIcon } from './LoaderIcon';

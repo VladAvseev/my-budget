@@ -1,13 +1,11 @@
 import { CheckIcon } from '@/shared/icons';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
-import { useNavigate } from 'react-router-dom';
 import { useCompleteOnboarding } from '../api/useCompleteOnboarding';
 import { useOnboardingChecklist } from '../api/useOnboardingChecklist';
 import styles from '../homeCard.module.css';
 
 export const OnboardingCard = () => {
-  const navigate = useNavigate();
   const { items, allDone, onboarded, isLoading, error } = useOnboardingChecklist();
   const completeOnboarding = useCompleteOnboarding();
 
@@ -46,16 +44,13 @@ export const OnboardingCard = () => {
           Завершить
         </VButton>
       ) : (
-        <div className={styles.buttonRow}>
-          <VButton
-            variant="secondary"
-            onClick={() => completeOnboarding.mutate()}
-            isLoading={completeOnboarding.isPending}
-          >
-            Пропустить
-          </VButton>
-          <VButton onClick={() => navigate('/help')}>Помощь</VButton>
-        </div>
+        <VButton
+          variant="secondary"
+          onClick={() => completeOnboarding.mutate()}
+          isLoading={completeOnboarding.isPending}
+        >
+          Пропустить
+        </VButton>
       )}
     </VCard>
   );
