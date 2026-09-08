@@ -53,7 +53,7 @@ export const OperationsDynamicsCard = () => {
   return (
     <VCard className={styles.card}>
       <div className={styles.header}>
-        <div className={styles.title}>Динамика операций</div>
+        <div className={styles.title}>Рост количества операций</div>
         {!isLoading && (
           <span className={styles.total}>Всего: {operationsQuery.data?.length ?? 0}</span>
         )}

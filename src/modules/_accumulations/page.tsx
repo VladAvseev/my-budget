@@ -109,7 +109,7 @@ export const Page: React.FC = () => {
       <GrowthDynamicsCard
         userId={userId}
         chartType="accumulations"
-        title="Динамика накоплений"
+        title="Рост накоплений"
         currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
       />
 

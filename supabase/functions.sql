@@ -324,7 +324,7 @@ $$;
 
 -- ────────────────────────────────────────────────────────────────────────────
 -- Источник: src/modules/_admin/_dashboard/api/useAdminOperationsDynamics.sql
--- Админ: динамика операций (только даты создания).
+-- Админ: рост количества операций (только даты создания).
 create or replace function public.admin_get_operations_dynamics()
 returns table (created_at timestamptz)
 language sql
