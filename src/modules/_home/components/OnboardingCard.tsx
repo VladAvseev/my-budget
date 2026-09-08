@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { CheckIcon } from '@/shared/icons';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
@@ -6,7 +7,8 @@ import { useOnboardingChecklist } from '../api/useOnboardingChecklist';
 import styles from '../homeCard.module.css';
 
 export const OnboardingCard = () => {
-  const { items, allDone, onboarded, isLoading, error } = useOnboardingChecklist();
+  const navigate = useNavigate();
+  const { items, nextItem, allDone, onboarded, isLoading, error } = useOnboardingChecklist();
   const completeOnboarding = useCompleteOnboarding();
 
   if (onboarded || error || isLoading) {
@@ -44,13 +46,18 @@ export const OnboardingCard = () => {
           Завершить
         </VButton>
       ) : (
-        <VButton
-          variant="secondary"
-          onClick={() => completeOnboarding.mutate()}
-          isLoading={completeOnboarding.isPending}
-        >
-          Пропустить
-        </VButton>
+        <div className={styles.buttonRow}>
+          <VButton
+            variant="secondary"
+            onClick={() => completeOnboarding.mutate()}
+            isLoading={completeOnboarding.isPending}
+            >
+            Пропустить
+          </VButton>
+            {nextItem && (
+              <VButton onClick={() => navigate(nextItem.route)}>{nextItem.actionLabel}</VButton>
+            )}
+        </div>
       )}
     </VCard>
   );
