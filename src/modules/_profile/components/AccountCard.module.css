@@ -19,3 +19,13 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.actionsRow {
+  display: flex;
+  gap: var(--space-s);
+  flex-wrap: wrap;
+}
+
+.logoutButton {
+  margin-left: auto;
+}

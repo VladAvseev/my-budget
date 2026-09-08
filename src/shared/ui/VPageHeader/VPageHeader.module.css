@@ -17,3 +17,9 @@
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
 }
+
+@media (max-width: 1023px) {
+  .hideOnMobile {
+    display: none;
+  }
+}

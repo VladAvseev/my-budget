@@ -1,7 +1,6 @@
 import commonStyles from '@/shared/styles/common.module.css';
 import type { AdminUserRow } from '@/shared/supabase/types/domain';
 import { VLoader } from '@/shared/ui/VLoader';
-import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils/date';
 import { useMemo, useState } from 'react';
@@ -19,24 +18,23 @@ interface Column {
 }
 
 const COLUMNS: Column[] = [
-  { key: 'email', label: 'Email', sortType: 'string' },
-  { key: 'last_active_at', label: 'Последняя активность', sortType: 'date' },
-  { key: 'onboarded', label: 'Онбординг', sortType: 'boolean' },
-  { key: 'sawNews', label: 'Просмотр новости', sortType: 'boolean' },
-  { key: 'categoriesCount', label: 'Категории', sortType: 'number' },
+  { key: 'email', label: 'Пользователь', sortType: 'string' },
+  { key: 'last_active_at', label: 'Активность', sortType: 'date' },
   { key: 'reportsCount', label: 'Периоды', sortType: 'number' },
-  { key: 'operationsCount', label: 'Операции', sortType: 'number' },
+  { key: 'operationsCount', label: 'Опер', sortType: 'number' },
   { key: 'incomeCount', label: 'Доходы', sortType: 'number' },
   { key: 'dailyCount', label: 'Еж. расходы', sortType: 'number' },
   { key: 'expenseCount', label: 'Расходы', sortType: 'number' },
-  { key: 'savingsCount', label: 'Накопления (периоды)', sortType: 'number' },
-  { key: 'accumulationsCount', label: 'Накопления (ручные)', sortType: 'number' },
+  { key: 'savingsCount', label: 'Накопления', sortType: 'number' },
+  { key: 'accumulationsCount', label: 'Накопления (нач)', sortType: 'number' },
+  { key: 'categoriesCount', label: 'Категории', sortType: 'number' },
+  { key: 'goalsCount', label: 'Цели', sortType: 'number' },
 ];
 
 const formatDate = (value: string | null): string =>
   value ? formatDisplay(value.slice(0, 10)) : '—';
 
-const formatBool = (value: boolean): string => (value ? 'Да' : 'Нет');
+const formatEmail = (value: string): string => value.split('@')[0] ?? value;
 
 const cellToString = (row: AdminUserRow, key: ColumnKey): string => {
   const value = row[key];
@@ -45,9 +43,6 @@ const cellToString = (row: AdminUserRow, key: ColumnKey): string => {
       return String(value).toLowerCase();
     case 'last_active_at':
       return formatDate(value as string | null).toLowerCase();
-    case 'onboarded':
-    case 'sawNews':
-      return formatBool(value as boolean).toLowerCase();
     default:
       return String(value).toLowerCase();
   }
@@ -132,7 +127,6 @@ export const Page: React.FC = () => {
   if (usersQuery.isError) {
     return (
       <div className={commonStyles.page}>
-        <VPageHeader title="Пользователи" />
         <div className={commonStyles.textSecondary}>Не удалось загрузить пользователей</div>
       </div>
     );
@@ -140,9 +134,7 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <VPageHeader title="Пользователи" />
       <VTextInput
-        label="Поиск"
         value={search}
         onChange={setSearch}
         placeholder="Поиск по всем колонкам"
@@ -176,11 +168,8 @@ export const Page: React.FC = () => {
             ) : (
               rows.map((row) => (
                 <tr key={row.user_id}>
-                  <td>{row.email}</td>
+                  <td>{formatEmail(row.email)}</td>
                   <td>{formatDate(row.last_active_at)}</td>
-                  <td>{formatBool(row.onboarded)}</td>
-                  <td>{formatBool(row.sawNews)}</td>
-                  <td className={styles.numCell}>{row.categoriesCount}</td>
                   <td className={styles.numCell}>{row.reportsCount}</td>
                   <td className={styles.numCell}>{row.operationsCount}</td>
                   <td className={styles.numCell}>{row.incomeCount}</td>
@@ -188,6 +177,8 @@ export const Page: React.FC = () => {
                   <td className={styles.numCell}>{row.expenseCount}</td>
                   <td className={styles.numCell}>{row.savingsCount}</td>
                   <td className={styles.numCell}>{row.accumulationsCount}</td>
+                  <td className={styles.numCell}>{row.categoriesCount}</td>
+                  <td className={styles.numCell}>{row.goalsCount}</td>
                 </tr>
               ))
             )}

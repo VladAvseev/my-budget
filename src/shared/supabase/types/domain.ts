@@ -157,6 +157,7 @@ export interface AdminUserRow {
   expenseCount: number;
   savingsCount: number;
   accumulationsCount: number;
+  goalsCount: number;
 }
 
 export interface DatabaseSize {

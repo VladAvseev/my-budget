@@ -1,6 +1,7 @@
 .headerActions {
   display: flex;
   gap: var(--space-s);
+  margin-left: 0;
 }
 
 .newsList {

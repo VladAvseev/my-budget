@@ -1,6 +1,6 @@
 import { PlusIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { useAccumulations } from '@/shared/hooks';
+import { useAccumulations, useBreakpoint } from '@/shared/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
@@ -39,6 +39,7 @@ const CURRENCY_OPTIONS: VButtonGroupOption[] = [
 export const Page: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isDesktop } = useBreakpoint();
   const userId = user?.id ?? '';
   const accumulationsQuery = useAccumulations(userId);
   const savingsQuery = useSavingsOperations(userId);
@@ -79,32 +80,42 @@ export const Page: React.FC = () => {
     })),
   ];
 
+  const currencySwitcher = isCurrencyDisabled ? (
+    <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
+      <VButtonGroup
+        options={CURRENCY_OPTIONS}
+        value={selectedCurrency}
+        onChange={(value) => setSelectedCurrency(value as string)}
+        disabled={isCurrencyDisabled}
+      />
+    </VHint>
+  ) : (
+    <VButtonGroup
+      options={CURRENCY_OPTIONS}
+      value={selectedCurrency}
+      onChange={(value) => setSelectedCurrency(value as string)}
+      disabled={isCurrencyDisabled}
+    />
+  );
+
   return (
     <div className={commonStyles.page}>
-      <VPageHeader
-        title="Накопления"
-        onBack={() => navigate('/')}
-        backAriaLabel="Назад на главную"
-        right={
-          isCurrencyDisabled ? (
-            <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
-              <VButtonGroup
-                options={CURRENCY_OPTIONS}
-                value={selectedCurrency}
-                onChange={(value) => setSelectedCurrency(value as string)}
-                disabled={isCurrencyDisabled}
-              />
-            </VHint>
-          ) : (
-            <VButtonGroup
-              options={CURRENCY_OPTIONS}
-              value={selectedCurrency}
-              onChange={(value) => setSelectedCurrency(value as string)}
-              disabled={isCurrencyDisabled}
-            />
-          )
-        }
-      />
+      <div className={commonStyles.pageHeaderRow}>
+        <VPageHeader
+          title="Накопления"
+          onBack={() => navigate('/')}
+          backAriaLabel="Назад на главную"
+          hideOnMobile
+        />
+        {isDesktop && currencySwitcher}
+      </div>
+
+      {!isDesktop && (
+        <div className={styles.currencyRow}>
+          <div className={commonStyles.titleXl}>Накопления</div>
+          {currencySwitcher}
+        </div>
+      )}
 
       <GrowthDynamicsCard
         userId={userId}

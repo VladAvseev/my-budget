@@ -1,11 +1,6 @@
-import { LogoutIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/supabase/authProvider';
-import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
-import { VIconButton } from '@/shared/ui/VIconButton';
 import commonStyles from '@/shared/styles/common.module.css';
 import type { ReactNode } from 'react';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AccountCard } from './components/AccountCard';
 import { CategorySection } from './components/CategorySection';
@@ -20,19 +15,6 @@ const AnimatedItem = ({ delay, children }: { delay: string; children: ReactNode 
 
 export const Page: React.FC = () => {
   const navigate = useNavigate();
-  const { signOut } = useAuth();
-  const [isSigningOut, setIsSigningOut] = useState(false);
-  const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
-
-  const handleSignOut = async () => {
-    setIsSigningOut(true);
-    try {
-      await signOut();
-    } finally {
-      setIsSigningOut(false);
-      setIsLogoutConfirmOpen(false);
-    }
-  };
 
   return (
     <div className={commonStyles.page}>
@@ -40,16 +22,7 @@ export const Page: React.FC = () => {
         title="Профиль"
         onBack={() => navigate('/')}
         backAriaLabel="Назад на главную"
-        right={
-          <VIconButton
-            ariaLabel="Выйти из аккаунта"
-            onClick={() => setIsLogoutConfirmOpen(true)}
-            isDisabled={isSigningOut}
-            color="var(--color-error)"
-          >
-            <LogoutIcon size={24} color="currentColor" />
-          </VIconButton>
-        }
+        hideOnMobile
       />
 
       <AnimatedItem delay="0s">
@@ -64,17 +37,6 @@ export const Page: React.FC = () => {
       <AnimatedItem delay="0.18s">
         <CategorySection />
       </AnimatedItem>
-
-      <VConfirmModal
-        visible={isLogoutConfirmOpen}
-        title="Выйти из аккаунта"
-        message="Вы действительно хотите выйти из аккаунта?"
-        confirmLabel="Выйти"
-        cancelLabel="Отмена"
-        isLoading={isSigningOut}
-        onCancel={() => setIsLogoutConfirmOpen(false)}
-        onConfirm={handleSignOut}
-      />
     </div>
   );
 };

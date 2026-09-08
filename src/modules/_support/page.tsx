@@ -66,6 +66,7 @@ export const Page: React.FC = () => {
         title="Поддержка"
         onBack={() => navigate('/')}
         backAriaLabel="Назад на главную"
+        hideOnMobile
       />
 
       {hasChat && !isOpen && (

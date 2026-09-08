@@ -11,7 +11,6 @@ import {
   BanknotesIcon,
   ChevronRightIcon,
   HomeIcon,
-  MenuIcon,
   MessageIcon,
   OverviewIcon,
   ReportsIcon,
@@ -22,16 +21,14 @@ import {
 import { useAuth } from '@/shared/supabase/authProvider';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
-import { VIconButton } from '@/shared/ui/VIconButton';
 import { formatAmount } from '@/shared/utils';
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type ComponentType,
-  type Dispatch,
   type ReactNode,
-  type SetStateAction,
 } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import styles from './AppLayout.module.css';
@@ -44,10 +41,11 @@ interface NavItem {
   to: string;
   label: string;
   icon: ComponentType<IconProps>;
+  end?: boolean;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Главная', icon: HomeIcon },
+  { to: '/', label: 'Главная', icon: HomeIcon, end: true },
   { to: '/reports', label: 'Периоды', icon: ReportsIcon },
   { to: '/accumulations', label: 'Накопления', icon: SavingsIcon },
   { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
@@ -86,10 +84,6 @@ const AdminOpenBadge = ({ className }: { className?: string }) => {
   );
 };
 
-interface SidebarContentProps {
-  setIsMenuOpen?: Dispatch<SetStateAction<boolean>>;
-}
-
 const ProfileLink = () => {
   const { user } = useAuth();
 
@@ -108,7 +102,7 @@ const ProfileLink = () => {
   );
 };
 
-const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
+const SidebarContent = () => {
   const { balance } = useGlobalBalance();
   const { capital } = useCapital();
   const { isAdmin } = useAdminStatus();
@@ -136,21 +130,12 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
           <span className={styles.statValue}>{formatAmount(balance, currency?.symbol)}</span>
         </div>
       </div>
-      
+
       <ProfileLink />
 
       <nav className={styles.nav}>
         {NAV_ITEMS.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            onClick={() => {
-              if (setIsMenuOpen) {
-                setIsMenuOpen(false);
-              }
-            }}
-            className={styles.navLink}
-          >
+          <NavLink key={item.to} to={item.to} end={item.end} className={styles.navLink}>
             <span className={styles.navLinkContent}>
               <item.icon size={18} />
               {item.label}
@@ -162,15 +147,7 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
         {isAdmin && (
           <>
             <div className={styles.adminBorder} />
-            <NavLink
-              to="/admin"
-              onClick={() => {
-                if (setIsMenuOpen) {
-                  setIsMenuOpen(false);
-                }
-              }}
-              className={styles.navLink}
-            >
+            <NavLink to="/admin" className={styles.navLink}>
               <span className={styles.navLinkContent}>
                 <SettingsIcon size={18} />
                 Админ-панель
@@ -184,9 +161,114 @@ const SidebarContent = ({ setIsMenuOpen }: SidebarContentProps) => {
   );
 };
 
+const MobileProfileLink = () => {
+  const { user } = useAuth();
+
+  const email = user?.email ?? '';
+  const initial = email ? email[0].toUpperCase() : '?';
+
+  return (
+    <NavLink to="/profile" aria-label="Профиль" className={styles.mobileProfileLink}>
+      <span className={styles.profileAvatar}>{initial}</span>
+    </NavLink>
+  );
+};
+
+interface EdgeOverflow {
+  first: boolean;
+  last: boolean;
+}
+
+const MobileFooter = () => {
+  const { isAdmin } = useAdminStatus();
+  const navRef = useRef<HTMLDivElement>(null);
+  const firstLabelRef = useRef<HTMLSpanElement>(null);
+  const lastLabelRef = useRef<HTMLSpanElement>(null);
+  const [edgeOverflow, setEdgeOverflow] = useState<EdgeOverflow>({ first: false, last: false });
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const checkOverflow = (label: HTMLSpanElement | null) =>
+        Boolean(label?.parentElement && label.scrollWidth > label.parentElement.clientWidth);
+
+      setEdgeOverflow((prev) => {
+        const next = {
+          first: checkOverflow(firstLabelRef.current),
+          last: checkOverflow(lastLabelRef.current),
+        };
+        return prev.first === next.first && prev.last === next.last ? prev : next;
+      });
+    };
+
+    measure();
+
+    const nav = navRef.current;
+    const observer = new ResizeObserver(measure);
+    if (nav) {
+      observer.observe(nav);
+    }
+    window.addEventListener('resize', measure);
+    document.fonts?.ready.then(measure);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, [isAdmin]);
+
+  const lastRegularIndex = NAV_ITEMS.length - 1;
+
+  const getLabelClassName = (isFirst: boolean, isLast: boolean) => {
+    if (isFirst && edgeOverflow.first) {
+      return `${styles.mobileNavLabel} ${styles.mobileNavLabelStart}`;
+    }
+    if (isLast && edgeOverflow.last) {
+      return `${styles.mobileNavLabel} ${styles.mobileNavLabelEnd}`;
+    }
+    return styles.mobileNavLabel;
+  };
+
+  return (
+    <nav className={styles.mobileFooter}>
+      <div className={styles.mobileNav} ref={navRef}>
+        {NAV_ITEMS.map((item, index) => {
+          const isFirst = index === 0;
+          const isLast = !isAdmin && index === lastRegularIndex;
+
+          return (
+            <NavLink key={item.to} to={item.to} end={item.end} className={styles.mobileNavItem}>
+              <span className={styles.mobileNavIcon}>
+                <item.icon size={22} />
+                {item.to === '/support' && <SupportUnreadBadge className={styles.mobileNavBadge} />}
+              </span>
+              <span
+                ref={isFirst ? firstLabelRef : isLast ? lastLabelRef : undefined}
+                className={getLabelClassName(isFirst, isLast)}
+              >
+                {item.label}
+              </span>
+            </NavLink>
+          );
+        })}
+
+        {isAdmin && (
+          <NavLink to="/admin" className={styles.mobileNavItem}>
+            <span className={styles.mobileNavIcon}>
+              <SettingsIcon size={22} />
+              <AdminOpenBadge className={styles.mobileNavBadge} />
+            </span>
+            <span ref={lastLabelRef} className={getLabelClassName(false, true)}>
+              Админ-панель
+            </span>
+          </NavLink>
+        )}
+      </div>
+    </nav>
+  );
+};
+
 export const AppLayout = ({ children }: AppLayoutProps) => {
   const { isDesktop } = useBreakpoint();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { balance } = useGlobalBalance();
   const { capital } = useCapital();
   const currency = useCurrency();
@@ -220,7 +302,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
 
   return (
     <div className={styles.mobileRoot}>
-      <div className={styles.mobileHeader}>
+      <header className={styles.mobileHeader}>
         <div className={styles.mobileStats}>
           {showCapital && (
             <div className={styles.mobileStat}>
@@ -237,31 +319,14 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             </span>
           </div>
         </div>
-        <span className={styles.menuButtonWrapper}>
-          <VIconButton
-            ariaLabel="Открыть меню"
-            onClick={() => setIsMenuOpen(true)}
-            color="var(--color-text-primary)"
-          >
-            <MenuIcon size={24} color="currentColor" />
-          </VIconButton>
-          <SupportUnreadBadge className={styles.menuBadge} />
-          <AdminOpenBadge className={styles.menuAdminBadge} />
-        </span>
-      </div>
-
-      {isMenuOpen && (
-        <div className={styles.mobileMenuOverlay}>
-          <div onClick={() => setIsMenuOpen(false)} className={styles.mobileMenuBackdrop} />
-          <VCard className={styles.mobileMenuPanel}>
-            <SidebarContent setIsMenuOpen={setIsMenuOpen} />
-          </VCard>
-        </div>
-      )}
+        <MobileProfileLink />
+      </header>
 
       <main ref={mainRef} className={styles.mainMobile}>
         {children}
       </main>
+
+      <MobileFooter />
     </div>
   );
 };

@@ -6,7 +6,9 @@ import { VHint } from '@/shared/ui/VHint';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useAuth } from '@/shared/supabase/authProvider';
+import { useBreakpoint } from '@/shared/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
+import styles from './page.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +32,7 @@ const CURRENCY_OPTIONS: VButtonGroupOption[] = [
 export const Page: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isDesktop } = useBreakpoint();
   const userId = user?.id ?? '';
   const reportsQuery = useReports();
   const [selectedIds] = useAtom(selectedReportIdsAtom);
@@ -75,32 +78,42 @@ export const Page: React.FC = () => {
     return total;
   }, [operationsByReport]);
 
+  const currencySwitcher = isCurrencyDisabled ? (
+    <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
+      <VButtonGroup
+        options={CURRENCY_OPTIONS}
+        value={selectedCurrency}
+        onChange={(value) => setSelectedCurrency(value as string)}
+        disabled={isCurrencyDisabled}
+      />
+    </VHint>
+  ) : (
+    <VButtonGroup
+      options={CURRENCY_OPTIONS}
+      value={selectedCurrency}
+      onChange={(value) => setSelectedCurrency(value as string)}
+      disabled={isCurrencyDisabled}
+    />
+  );
+
   return (
     <div className={commonStyles.page}>
-      <VPageHeader
-        title="Аналитика"
-        onBack={() => navigate('/')}
-        backAriaLabel="Назад на главную"
-        right={
-          isCurrencyDisabled ? (
-            <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
-              <VButtonGroup
-                options={CURRENCY_OPTIONS}
-                value={selectedCurrency}
-                onChange={(value) => setSelectedCurrency(value as string)}
-                disabled={isCurrencyDisabled}
-              />
-            </VHint>
-          ) : (
-            <VButtonGroup
-              options={CURRENCY_OPTIONS}
-              value={selectedCurrency}
-              onChange={(value) => setSelectedCurrency(value as string)}
-              disabled={isCurrencyDisabled}
-            />
-          )
-        }
-      />
+      <div className={commonStyles.pageHeaderRow}>
+        <VPageHeader
+          title="Аналитика"
+          onBack={() => navigate('/')}
+          backAriaLabel="Назад на главную"
+          hideOnMobile
+        />
+        {isDesktop && currencySwitcher}
+      </div>
+
+      {!isDesktop && (
+        <div className={styles.currencyRow}>
+          <div className={commonStyles.titleXl}>Аналитика</div>
+          {currencySwitcher}
+        </div>
+      )}
 
       <GrowthDynamicsCard
         userId={userId}

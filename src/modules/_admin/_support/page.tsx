@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import commonStyles from '@/shared/styles/common.module.css';
-import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useAdminSupportChats } from './api/useAdminSupportChats';
 import { ChatDetail } from './components/ChatDetail';
 import { ChatList } from './components/ChatList';
@@ -26,7 +25,6 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <VPageHeader title="Обращения" />
       <ChatList
         chats={chats}
         isLoading={chatsQuery.isLoading}

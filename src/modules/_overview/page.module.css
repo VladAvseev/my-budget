@@ -1,10 +1,3 @@
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-m);
-}
-
 .currencyRow {
   display: flex;
   align-items: center;

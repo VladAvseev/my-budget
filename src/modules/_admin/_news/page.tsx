@@ -4,7 +4,6 @@ import type { NewsRow } from '@/shared/supabase/types/domain';
 import { VButton } from '@/shared/ui/VButton';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
-import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useState } from 'react';
 import { useAdminNewsList, useSetShowNews } from './api/useAdminNews';
 import { CreateNewsModal } from './components/CreateNewsModal';
@@ -31,7 +30,6 @@ export const Page: React.FC = () => {
   if (newsListQuery.isError) {
     return (
       <div className={commonStyles.page}>
-        <VPageHeader title="Что нового?" />
         <div className={commonStyles.textSecondary}>Не удалось загрузить новости</div>
       </div>
     );
@@ -41,31 +39,28 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <VPageHeader
-        title="Что нового?"
-        right={
-          <div className={styles.headerActions}>
-            <VButton
-              variant="secondary"
-              isLoading={setShowNews.isPending}
-              onClick={() => setShowNews.mutate(true)}
-            >
-              Показать всем
-            </VButton>
-            <VButton
-              variant="danger"
-              isLoading={setShowNews.isPending}
-              onClick={() => setShowNews.mutate(false)}
-            >
-              Скрыть от всех
-            </VButton>
-            <VButton onClick={() => setCreateOpen(true)}>
-              <PlusIcon size={18} color="currentColor" />
-              Добавить
-            </VButton>
-          </div>
-        }
-      />
+      <div className={commonStyles.pageHeaderRow}>
+        <div className={styles.headerActions}>
+          <VButton
+            variant="secondary"
+            isLoading={setShowNews.isPending}
+            onClick={() => setShowNews.mutate(true)}
+          >
+            Показать всем
+          </VButton>
+          <VButton
+            variant="danger"
+            isLoading={setShowNews.isPending}
+            onClick={() => setShowNews.mutate(false)}
+          >
+            Скрыть от всех
+          </VButton>
+          <VButton onClick={() => setCreateOpen(true)}>
+            <PlusIcon size={18} color="currentColor" />
+            Добавить
+          </VButton>
+        </div>
+      </div>
 
       {newsList.length === 0 ? (
         <div className={commonStyles.textSecondary}>Новостей пока нет</div>

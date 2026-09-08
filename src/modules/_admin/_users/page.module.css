@@ -13,7 +13,7 @@
 }
 
 .table th {
-  padding: var(--space-s) var(--space-m);
+  padding: var(--space-s) var(--space-xs);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
@@ -22,7 +22,7 @@
 }
 
 .table td {
-  padding: var(--space-s) var(--space-m);
+  padding: var(--space-s) var(--space-xs);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text-primary);
   white-space: nowrap;

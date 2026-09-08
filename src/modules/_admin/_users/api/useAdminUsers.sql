@@ -25,7 +25,8 @@ begin
     'dailyCount', coalesce(o.daily_cnt, 0),
     'expenseCount', coalesce(o.expense_cnt, 0),
     'savingsCount', coalesce(o.savings_cnt, 0),
-    'accumulationsCount', coalesce(a.cnt, 0)
+    'accumulationsCount', coalesce(a.cnt, 0),
+    'goalsCount', coalesce(g.cnt, 0)
   ))
   into result
   from public.profiles p
@@ -54,7 +55,12 @@ begin
     select user_id, count(*) as cnt
     from public.accumulations
     group by user_id
-  ) a on a.user_id = p.user_id;
+  ) a on a.user_id = p.user_id
+  left join (
+    select user_id, count(*) as cnt
+    from public.goals
+    group by user_id
+  ) g on g.user_id = p.user_id;
 
   return coalesce(result, '[]'::jsonb);
 end;

@@ -1,18 +1,20 @@
-import { ChevronRightIcon } from '@/shared/icons';
+import { ChevronRightIcon, PlusIcon } from '@/shared/icons';
 import commonStyles from '@/shared/styles/common.module.css';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
+import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils';
 import { useAtom } from 'jotai';
 import { Link } from 'react-router-dom';
 import { useReports } from '../api/useReports';
-import { searchQueryAtom } from '../atoms/reports';
+import { createModalOpenAtom, searchQueryAtom } from '../atoms/reports';
 import styles from './ReportsList.module.css';
 
 export const ReportsList = () => {
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
+  const [, setIsCreateOpen] = useAtom(createModalOpenAtom);
   const { data, isLoading, error } = useReports();
 
   const reports = data ?? [];
@@ -35,12 +37,23 @@ export const ReportsList = () => {
 
   return (
     <div className={styles.root}>
-      <VTextInput
-        label="Поиск"
-        placeholder="Поиск по названию"
-        value={searchQuery}
-        onChange={setSearchQuery}
-      />
+      <div className={styles.toolbar}>
+        <VTextInput
+          placeholder="Поиск по названию"
+          value={searchQuery}
+          onChange={setSearchQuery}
+          className={styles.searchInput}
+        />
+        <VIconButton
+          ariaLabel="Добавить период"
+          onClick={() => setIsCreateOpen(true)}
+          isDisabled={isLoading}
+          color="var(--color-accent)"
+          className={styles.addButton}
+        >
+          <PlusIcon size={24} color="currentColor" />
+        </VIconButton>
+      </div>
 
       {error && <VBanner type="error" visible message="Не удалось загрузить периоды" />}
 

@@ -23,22 +23,22 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <VPageHeader
-        title={report?.name ?? 'Период'}
-        onBack={() => navigate('/reports')}
-        backAriaLabel="Назад к периодам"
-        right={
-          report && !isLoading ? (
-            <VIconButton
-              ariaLabel="Настройки периода"
-              onClick={() => navigate(`/reports/${report.id}/settings`)}
-              color="var(--color-text-primary)"
-            >
-              <SettingsIcon size={24} color="currentColor" />
-            </VIconButton>
-          ) : undefined
-        }
-      />
+      <div className={commonStyles.pageHeaderRow}>
+        <VPageHeader
+          title={report?.name ?? 'Период'}
+          onBack={() => navigate('/reports')}
+          backAriaLabel="Назад к периодам"
+        />
+        {report && !isLoading && (
+          <VIconButton
+            ariaLabel="Настройки периода"
+            onClick={() => navigate(`/reports/${report.id}/settings`)}
+            color="var(--color-text-primary)"
+          >
+            <SettingsIcon size={24} color="currentColor" />
+          </VIconButton>
+        )}
+      </div>
 
       {isLoading && (
         <div className={commonStyles.loaderContainer}>

@@ -4,6 +4,22 @@
   gap: var(--space-l);
 }
 
+.toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-s);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.addButton {
+  flex-shrink: 0;
+  margin-bottom: 1px;
+}
+
 .loaderWrap {
   display: flex;
   justify-content: center;

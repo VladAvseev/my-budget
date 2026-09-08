@@ -1,6 +1,5 @@
 import commonStyles from '@/shared/styles/common.module.css';
 import { VLoader } from '@/shared/ui/VLoader';
-import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useAdminStats } from './api/useAdminStats';
 import { OperationsDynamicsCard } from './components/OperationsDynamicsCard';
 import { ReportsOperationsCard } from './components/ReportsOperationsCard';
@@ -21,7 +20,6 @@ export const Page: React.FC = () => {
   if (statsQuery.isError || !statsQuery.data) {
     return (
       <div className={commonStyles.page}>
-        <VPageHeader title="Дашборд" />
         <div className={commonStyles.textSecondary}>Не удалось загрузить статистику</div>
       </div>
     );
@@ -31,7 +29,6 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <VPageHeader title="Дашборд" />
       <div className={styles.grid}>
         <div className={`${commonStyles.animateCard} ${styles.fullWidth}`}>
           <OperationsDynamicsCard />

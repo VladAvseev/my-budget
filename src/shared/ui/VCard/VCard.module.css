@@ -12,6 +12,7 @@
 @media (max-width: 600px) {
   .card {
     padding: var(--space-s);
+    border-radius: var(--radius-m);
   }
 }
 
