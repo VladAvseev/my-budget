@@ -140,6 +140,17 @@ export const trimIncompletePeriod = (
   return now < periodEnd(last.month) ? points.slice(0, -1) : points;
 };
 
+// Первый агрегированный период неполный, если серия начинается не с первого
+// календарного месяца своего периода (для кв/пг/год): прирост в нём занижен.
+export const trimLeadingPartialPeriod = (
+  points: ChartPoint[],
+  aggregation: GrowthAggregation,
+): ChartPoint[] => {
+  if (aggregation === 'M' || points.length === 0) return points;
+  const size = AGGREGATION_SIZE[aggregation];
+  return points[0].month.getMonth() % size !== 0 ? points.slice(1) : points;
+};
+
 export interface PointChange {
   abs: number;
   pct: number | null;

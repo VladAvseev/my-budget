@@ -3,6 +3,7 @@ import {
   getPeriodEnd,
   getPointChange,
   trimIncompletePeriod,
+  trimLeadingPartialPeriod,
   type PointChange,
 } from './buildGrowthChartData';
 
@@ -77,7 +78,10 @@ export const buildGrowthStats = (
   mode: GrowthChartMode = 'total',
 ): GrowthStats => {
   const now = new Date();
-  const trimmed = trimIncompletePeriod(filteredData, getPeriodEnd(aggregation), now);
+  const trimmed = trimLeadingPartialPeriod(
+    trimIncompletePeriod(filteredData, getPeriodEnd(aggregation), now),
+    aggregation,
+  );
 
   if (mode === 'period') {
     return {
