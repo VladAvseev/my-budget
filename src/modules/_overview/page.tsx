@@ -82,14 +82,23 @@ export const Page: React.FC = () => {
         onBack={() => navigate('/')}
         backAriaLabel="Назад на главную"
         right={
-          <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
+          isCurrencyDisabled ? (
+            <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
+              <VButtonGroup
+                options={CURRENCY_OPTIONS}
+                value={selectedCurrency}
+                onChange={(value) => setSelectedCurrency(value as string)}
+                disabled={isCurrencyDisabled}
+              />
+            </VHint>
+          ) : (
             <VButtonGroup
               options={CURRENCY_OPTIONS}
               value={selectedCurrency}
               onChange={(value) => setSelectedCurrency(value as string)}
               disabled={isCurrencyDisabled}
             />
-          </VHint>
+          )
         }
       />
 
