@@ -49,7 +49,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/reports', label: 'Периоды', icon: ReportsIcon },
   { to: '/accumulations', label: 'Накопления', icon: SavingsIcon },
   { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
-  { to: '/support', label: 'Поддержка', icon: MessageIcon },
+  { to: '/support', label: 'Помощь', icon: MessageIcon },
 ];
 
 const SupportUnreadBadge = ({ className }: { className?: string }) => {
@@ -258,7 +258,7 @@ const MobileFooter = () => {
               <AdminOpenBadge className={styles.mobileNavBadge} />
             </span>
             <span ref={lastLabelRef} className={getLabelClassName(false, true)}>
-              Админ-панель
+              Админ
             </span>
           </NavLink>
         )}

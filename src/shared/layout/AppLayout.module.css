@@ -329,15 +329,10 @@
 }
 
 .mobileNavLabel {
-  visibility: hidden;
   white-space: nowrap;
   font-size: var(--font-size-s);
   line-height: var(--line-height-tight);
-}
 
-.mobileNavItem[aria-current='page'] .mobileNavLabel {
-  visibility: visible;
-}
 
 .mobileNavLabelStart {
   align-self: flex-start;
