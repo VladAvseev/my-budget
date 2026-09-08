@@ -16,6 +16,7 @@ import {
   ReportsIcon,
   SavingsIcon,
   SettingsIcon,
+  UserIcon,
   type IconProps,
 } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
@@ -161,18 +162,11 @@ const SidebarContent = () => {
   );
 };
 
-const MobileProfileLink = () => {
-  const { user } = useAuth();
-
-  const email = user?.email ?? '';
-  const initial = email ? email[0].toUpperCase() : '?';
-
-  return (
-    <NavLink to="/profile" aria-label="Профиль" className={styles.mobileProfileLink}>
-      <span className={styles.profileAvatar}>{initial}</span>
-    </NavLink>
-  );
-};
+const MobileProfileLink = () => (
+  <NavLink to="/profile" aria-label="Профиль" className={styles.mobileProfileLink}>
+    <UserIcon size={22} />
+  </NavLink>
+);
 
 interface EdgeOverflow {
   first: boolean;
