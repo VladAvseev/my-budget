@@ -9,6 +9,12 @@
     box-shadow 0.15s ease;
 }
 
+@media (max-width: 600px) {
+  .card {
+    padding: var(--space-s);
+  }
+}
+
 .interactive {
   cursor: pointer;
 }
