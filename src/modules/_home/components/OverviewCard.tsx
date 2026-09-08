@@ -1,4 +1,9 @@
-import { useCurrency, useProfile, useUserSummary } from '@/shared/hooks';
+import {
+  useAccumulationsTotal,
+  useCurrency,
+  useProfile,
+  useUserSummary,
+} from '@/shared/hooks';
 import { ChevronRightIcon, OverviewIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import summaryStyles from '@/shared/styles/summary.module.css';
@@ -13,10 +18,11 @@ export const OverviewCard = () => {
   const userId = user?.id ?? '';
   const { data: summaryData, isFetched: summaryFetched } = useUserSummary(userId);
   const summary = summaryData ?? { income: 0, expense: 0, savings: 0, daily: 0 };
+  const accumulationsQuery = useAccumulationsTotal(userId);
   const profileQuery = useProfile();
   const currency = useCurrency();
 
-  if (!profileQuery.isFetched || !summaryFetched) {
+  if (!profileQuery.isFetched || !summaryFetched || !accumulationsQuery.isFetched) {
     return (
       <VCard
         className={`${styles.loadingCard} ${styles.animateCard}`}
@@ -28,8 +34,10 @@ export const OverviewCard = () => {
   }
 
   const startBalance = Number(profileQuery.data?.start_balance ?? 0) || 0;
-  const income = summary.income + startBalance;
-  const balance = income - summary.expense - summary.daily - summary.savings;
+  const initialSavings = accumulationsQuery.total;
+  const income = summary.income + startBalance + initialSavings;
+  const savingsTotal = summary.savings + initialSavings;
+  const balance = income - summary.expense - summary.daily - savingsTotal;
   const percentOfIncome = (value: number) =>
     income > 0 ? Math.max(0, Math.round((value / income) * 100)) : null;
 
@@ -39,7 +47,6 @@ export const OverviewCard = () => {
       value: formatAmount(income, currency?.symbol),
       percent: null,
       color: 'var(--color-success)',
-      note: 'с учётом нач. баланса',
     },
     {
       label: 'Расходы',
@@ -49,8 +56,8 @@ export const OverviewCard = () => {
     },
     {
       label: 'Накопления',
-      value: formatAmount(summary.savings, currency?.symbol),
-      percent: percentOfIncome(summary.savings),
+      value: formatAmount(savingsTotal, currency?.symbol),
+      percent: percentOfIncome(savingsTotal),
       color: 'var(--color-warning)',
     },
     {
@@ -74,7 +81,9 @@ export const OverviewCard = () => {
           </span>
           <div className={summaryStyles.title}>Аналитика</div>
         </div>
-        <div className={summaryStyles.subtitle}>Все периоды</div>
+        <div className={summaryStyles.subtitle}>
+          Общая сводка с учётом начального баланса и накоплений
+        </div>
         <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
             <div key={`${item.label}-label`} className={summaryStyles.label}>
@@ -83,10 +92,6 @@ export const OverviewCard = () => {
             item.percent != null ? (
               <div key={`${item.label}-percent`} className={summaryStyles.percent}>
                 {item.percent}% от доходов
-              </div>
-            ) : 'note' in item && item.note ? (
-              <div key={`${item.label}-percent`} className={summaryStyles.percent}>
-                {item.note}
               </div>
             ) : (
               <span key={`${item.label}-percent`} />
