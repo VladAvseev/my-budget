@@ -10,7 +10,7 @@ export const isQuickCurrency = (code: string | null): code is string =>
   code !== null && (QUICK_CURRENCIES as readonly string[]).includes(code);
 
 export const CURRENCIES: Currency[] = [
-  { code: 'BYN', name: 'Белорусский рубль', symbol: 'Br' },
+  { code: 'BYN', name: 'Белорусский рубль', symbol: 'BYN' },
   { code: 'RUB', name: 'Российский рубль', symbol: '₽' },
   { code: 'USD', name: 'Доллар', symbol: '$' },
 ];
