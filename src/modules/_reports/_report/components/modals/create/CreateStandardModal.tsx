@@ -1,7 +1,7 @@
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { formatDisplay, getErrorMessage } from '@/shared/utils';
+import { capitalizeFirst, formatDisplay, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VModal } from '@/shared/ui/VModal';
@@ -109,7 +109,7 @@ export const CreateStandardModal = ({ type, report, onClose }: CreateStandardMod
           placeholder="Описание операции"
           value={description}
           disabled={isPending}
-          onChange={setDescription}
+          onChange={(value) => setDescription(capitalizeFirst(value))}
         />
         <CategorySelect
           userId={user?.id ?? ''}

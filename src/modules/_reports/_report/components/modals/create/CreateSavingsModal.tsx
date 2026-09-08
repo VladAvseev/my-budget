@@ -1,7 +1,7 @@
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { OperationType, Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { formatDisplay, getErrorMessage } from '@/shared/utils';
+import { capitalizeFirst, formatDisplay, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VDatePicker } from '@/shared/ui/VDatePicker';
@@ -123,7 +123,7 @@ export const CreateSavingsModal = ({ type, report, onClose }: CreateSavingsModal
           placeholder="Описание операции"
           value={description}
           disabled={isPending}
-          onChange={setDescription}
+          onChange={(value) => setDescription(capitalizeFirst(value))}
         />
         <CategorySelect
           userId={user?.id ?? ''}

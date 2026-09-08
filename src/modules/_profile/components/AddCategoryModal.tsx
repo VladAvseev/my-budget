@@ -4,7 +4,7 @@ import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import commonStyles from '@/shared/styles/common.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { capitalizeFirst, getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
 import { useCategories } from '../api/useCategories';
 import { useCreateCategory } from '../api/useCreateCategory';
@@ -88,7 +88,7 @@ export const AddCategoryModal = ({ type, visible, onClose }: AddCategoryModalPro
           error={nameError}
           disabled={createCategory.isPending}
           onChange={(nextValue) => {
-            setName(nextValue);
+            setName(capitalizeFirst(nextValue));
             setNameError(undefined);
           }}
         />

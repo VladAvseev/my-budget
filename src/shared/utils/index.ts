@@ -9,6 +9,7 @@ export {
   parseISO,
   toISODate,
 } from './date';
+export { capitalizeFirst } from './capitalize';
 export { formatAmount, type ConvertOptions } from './format';
 export { getErrorMessage } from './errorMessage';
 export { trimStrings } from './trim';

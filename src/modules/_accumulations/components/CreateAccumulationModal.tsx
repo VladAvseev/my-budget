@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/shared/supabase/authProvider';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { capitalizeFirst, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VModal } from '@/shared/ui/VModal';
@@ -108,7 +108,7 @@ export const CreateAccumulationModal = ({ onClose }: CreateAccumulationModalProp
           placeholder="Описание начального накопления"
           value={description}
           disabled={createAccumulation.isPending}
-          onChange={setDescription}
+          onChange={(value) => setDescription(capitalizeFirst(value))}
         />
         <VSelect
           label="Категория"

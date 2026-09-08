@@ -3,7 +3,7 @@ import { TrashIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
 import type { Accumulation } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { capitalizeFirst, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VIconButton } from '@/shared/ui/VIconButton';
@@ -138,7 +138,7 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
           placeholder="Описание начального накопления"
           value={description}
           disabled={isPending}
-          onChange={setDescription}
+          onChange={(value) => setDescription(capitalizeFirst(value))}
         />
         <VSelect
           label="Категория"

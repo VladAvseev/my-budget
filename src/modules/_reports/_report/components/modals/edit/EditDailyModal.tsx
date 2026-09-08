@@ -2,7 +2,7 @@ import { TrashIcon } from '@/shared/icons';
 import type { Operation } from '@/shared/supabase/types/domain';
 import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { formatDisplay, getErrorMessage } from '@/shared/utils';
+import { capitalizeFirst, formatDisplay, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VHint } from '@/shared/ui/VHint';
 import { VIconButton } from '@/shared/ui/VIconButton';
@@ -145,7 +145,7 @@ export const EditDailyModal = ({
           placeholder="Описание операции"
           value={description}
           disabled={isPending}
-          onChange={setDescription}
+          onChange={(value) => setDescription(capitalizeFirst(value))}
         />
       </div>
     </VModal>

@@ -1,6 +1,6 @@
 import type { Report } from '@/shared/supabase/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { formatDisplay, getErrorMessage, getNextFreeDate } from '@/shared/utils';
+import { capitalizeFirst, formatDisplay, getErrorMessage, getNextFreeDate } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
@@ -96,7 +96,7 @@ export const CreateDailyModal = ({ report, onClose }: CreateDailyModalProps) => 
           placeholder="Описание операции"
           value={description}
           disabled={isPending}
-          onChange={setDescription}
+          onChange={(value) => setDescription(capitalizeFirst(value))}
         />
       </div>
     </VModal>

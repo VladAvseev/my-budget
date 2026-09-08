@@ -7,7 +7,7 @@ import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import commonStyles from '@/shared/styles/common.module.css';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { capitalizeFirst, getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
 import type { CategoryType } from '@/shared/supabase/types/domain';
 import { useCategories } from '../api/useCategories';
@@ -110,7 +110,7 @@ export const EditCategoryModal = ({
           error={nameError}
           disabled={updateCategory.isPending}
           onChange={(nextValue) => {
-            setName(nextValue);
+            setName(capitalizeFirst(nextValue));
             setNameError(undefined);
           }}
         />
