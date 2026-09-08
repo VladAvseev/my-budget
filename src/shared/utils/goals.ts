@@ -1,3 +1,4 @@
+import { toISODate } from './date';
 import {
   signedOperationAmount,
   type Accumulation,
@@ -16,6 +17,7 @@ export interface GoalProgress {
   savedAmount: number;
   percent: number;
   reached: boolean;
+  overdue: boolean;
 }
 
 export const getCategorySavedTotal = (
@@ -46,12 +48,17 @@ export const buildGoalsProgress = (
     const savedAmount = getCategorySavedTotal(goal.category_id, accumulations, savingsOperations);
     const target = Number(goal.amount) || 0;
     const rawPercent = target > 0 ? (savedAmount / target) * 100 : 0;
+    const reached = target > 0 && savedAmount >= target;
 
     return {
       goal,
       savedAmount,
       percent: Math.min(100, Math.max(0, Math.round(rawPercent))),
-      reached: target > 0 && savedAmount >= target,
+      reached,
+      // Просрочена: дата есть, она в прошлом и цель не достигнута.
+      // Сравнение ISO-строк YYYY-MM-DD; дата «сегодня» ещё не просрочка.
+      overdue:
+        goal.target_date !== null && goal.target_date < toISODate(new Date()) && !reached,
     };
   });
 
@@ -62,7 +69,12 @@ export interface GoalsOverallProgress {
 }
 
 export const buildGoalsOverallProgress = (progress: GoalProgress[]): GoalsOverallProgress => {
-  const totalSaved = progress.reduce((sum, item) => sum + item.savedAmount, 0);
+  // Перевыполнение отдельной цели не увеличивает общий прогресс:
+  // вклад цели ограничен её суммой (минимум 0 при отрицательных накоплениях).
+  const totalSaved = progress.reduce(
+    (sum, item) => sum + Math.max(0, Math.min(item.savedAmount, Number(item.goal.amount) || 0)),
+    0,
+  );
   const totalTarget = progress.reduce((sum, item) => sum + (Number(item.goal.amount) || 0), 0);
   const rawPercent = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
 

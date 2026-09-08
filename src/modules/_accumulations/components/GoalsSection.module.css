@@ -54,6 +54,17 @@
   gap: var(--space-m);
 }
 
+.overallTitle {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.periodRow {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
 .overallForecast {
   font-size: var(--font-size-s);
   color: var(--color-text-secondary);

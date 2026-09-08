@@ -1,7 +1,11 @@
 import { PlusIcon } from '@/shared/icons';
 import { useAccumulations, useGoals } from '@/shared/hooks';
 import { useAuth } from '@/shared/supabase/authProvider';
-import type { Goal } from '@/shared/supabase/types/domain';
+import {
+  signedOperationAmount,
+  type Goal,
+  type OperationType,
+} from '@/shared/supabase/types/domain';
 import {
   buildGoalForecast,
   buildGoalsOverallProgress,
@@ -19,8 +23,10 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useSetAtom } from 'jotai';
+import { useMemo } from 'react';
 import { goalModalAtom } from '../atoms/accumulations';
 import { useAverageMonthlyGrowth } from '../hooks/useAverageMonthlyGrowth';
+import { useReports } from '../api/useReports';
 import { useCategories } from '../api/useCategories';
 import { useSavingsOperations } from '../api/useSavingsOperations';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
@@ -73,19 +79,23 @@ export const GoalsSection = () => {
   const accumulationsQuery = useAccumulations(userId);
   const savingsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
+  const reportsQuery = useReports();
   const setGoalModal = useSetAtom(goalModalAtom);
   const { displaySymbol, convertOptions } = useDisplayCurrency();
   const avgMonthlyGrowth = useAverageMonthlyGrowth(userId);
 
-  const goals = goalsQuery.data ?? [];
+  const goals = useMemo(() => goalsQuery.data ?? [], [goalsQuery.data]);
   const categories = categoriesQuery.data ?? [];
 
-  const progressList = buildGoalsProgress(
-    goals,
-    accumulationsQuery.data ?? [],
-    savingsQuery.data ?? [],
+  const progressList = useMemo(
+    () =>
+      buildGoalsProgress(
+        goals,
+        accumulationsQuery.data ?? [],
+        savingsQuery.data ?? [],
+      ).sort((a, b) => Math.abs(b.savedAmount) - Math.abs(a.savedAmount)),
+    [goals, accumulationsQuery.data, savingsQuery.data],
   );
-  progressList.sort((a, b) => Math.abs(b.savedAmount) - Math.abs(a.savedAmount));
   const overallProgress = buildGoalsOverallProgress(progressList);
 
   const overallRemaining = Math.max(0, overallProgress.totalTarget - overallProgress.totalSaved);
@@ -101,12 +111,65 @@ export const GoalsSection = () => {
         })()
       : null;
 
+  // План пополнения: цели с будущей датой — по своей дате, без даты/просроченные —
+  // по прогнозному сроку общей суммы; достигнутые цели не требуют пополнений.
+  // Каждое слагаемое округляется вверх, чтобы план совпадал с суммой
+  // целых рекомендаций из карточек целей.
+  const monthlyPlan = useMemo(() => {
+    if (overallForecastMonths === null) {
+      return progressList.reduce(
+        (sum, p) => sum + Math.ceil(buildGoalForecast(p.goal, p.savedAmount).requiredMonthly ?? 0),
+        0,
+      );
+    }
+    let total = 0;
+    for (const p of progressList) {
+      if (p.reached) continue;
+      const required = buildGoalForecast(p.goal, p.savedAmount).requiredMonthly;
+      if (required !== null) {
+        total += Math.ceil(required);
+        continue;
+      }
+      const remaining = Math.max(0, (Number(p.goal.amount) || 0) - p.savedAmount);
+      total += Math.ceil(remaining / overallForecastMonths);
+    }
+    return total;
+  }, [progressList, overallForecastMonths]);
+
+  // Текущий период: отчёт, внутри которого находится сегодня.
+  const todayISO = toISODate(new Date());
+  const currentReport = (reportsQuery.data ?? []).find(
+    (report) => report.period_start <= todayISO && todayISO <= report.period_end,
+  );
+
+  // Прогресс пополнений за текущий период: нетто по категориям целей.
+  const goalCategoryIds = useMemo(
+    () => new Set(goals.map((goal) => goal.category_id)),
+    [goals],
+  );
+  const currentPeriodSaved = useMemo(() => {
+    if (!currentReport) return 0;
+    return (savingsQuery.data ?? []).reduce((sum, operation) => {
+      if (operation.report_id !== currentReport.id) return sum;
+      if (operation.category_id === null || !goalCategoryIds.has(operation.category_id)) return sum;
+      return (
+        sum +
+        signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0)
+      );
+    }, 0);
+  }, [currentReport, savingsQuery.data, goalCategoryIds]);
+
+  const showPeriodProgress = monthlyPlan > 0;
+  const periodPlanPercent =
+    monthlyPlan > 0
+      ? Math.min(100, Math.max(0, Math.round((currentPeriodSaved / monthlyPlan) * 100)))
+      : 0;
+
   const isLoading =
     goalsQuery.isLoading ||
     accumulationsQuery.isLoading ||
     savingsQuery.isLoading ||
     categoriesQuery.isLoading;
-
   const categoryById = new Map(categories.map((category) => [category.id, category]));
 
   return (
@@ -146,39 +209,46 @@ export const GoalsSection = () => {
 
       {!isLoading && progressList.length > 0 && (
         <>
-          {progressList.length > 1 && (
-            <div className={commonStyles.animateCard}>
-              <VCard className={styles.overall}>
+          <div className={commonStyles.animateCard}>
+            <VCard className={styles.overall}>
+              <div className={styles.overallTitle}>Общий прогресс</div>
+              <div
+                className={styles.track}
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={overallProgress.percent}
+              >
                 <div
-                  className={styles.track}
-                  role="progressbar"
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={overallProgress.percent}
-                >
-                  <div
-                    className={styles.fill}
-                    style={{ width: `${overallProgress.percent}%` }}
-                  />
+                  className={styles.fill}
+                  style={{ width: `${overallProgress.percent}%` }}
+                />
+              </div>
+              <div className={styles.cardBottom}>
+                <span className={styles.savedAmount}>
+                  {formatAmount(overallProgress.totalSaved, displaySymbol, convertOptions)}
+                </span>
+                <span className={styles.targetAmount}>
+                  из {formatAmount(overallProgress.totalTarget, displaySymbol, convertOptions)}
+                </span>
+                <span className={styles.percent}>{overallProgress.percent}%</span>
+              </div>
+              {showPeriodProgress && (
+                <div className={styles.periodRow}>
+                  Пополнено в текущем периоде:{' '}
+                  {formatAmount(currentPeriodSaved, displaySymbol, convertOptions)} из{' '}
+                  {formatAmount(monthlyPlan, displaySymbol, convertOptions)} (
+                  {periodPlanPercent}%)
                 </div>
-                <div className={styles.cardBottom}>
-                  <span className={styles.savedAmount}>
-                    {formatAmount(overallProgress.totalSaved, displaySymbol, convertOptions)}
-                  </span>
-                  <span className={styles.targetAmount}>
-                    из {formatAmount(overallProgress.totalTarget, displaySymbol, convertOptions)}
-                  </span>
-                  <span className={styles.percent}>{overallProgress.percent}%</span>
+              )}
+              {overallForecastMonths !== null && overallForecastDate && (
+                <div className={styles.overallForecast}>
+                  Достижима к {formatDisplay(overallForecastDate)} (за{' '}
+                  {formatMonthsDuration(overallForecastMonths)})
                 </div>
-                {overallForecastMonths !== null && overallForecastDate && (
-                  <div className={styles.overallForecast}>
-                    Достижима к {formatDisplay(overallForecastDate)} (за{' '}
-                    {formatMonthsDuration(overallForecastMonths)})
-                  </div>
-                )}
-              </VCard>
-            </div>
-          )}
+              )}
+            </VCard>
+          </div>
 
           <div className={styles.list}>
           {progressList.map((progress, index) => {
@@ -219,6 +289,7 @@ export const GoalsSection = () => {
                   {goal.target_date && (
                     <span className={styles.targetDate}>{formatDisplay(goal.target_date)}</span>
                   )}
+                  {progress.overdue && <VBadge variant="warning">Просрочена</VBadge>}
                   {progress.reached && <VBadge variant="success">Цель достигнута</VBadge>}
                 </div>
 
