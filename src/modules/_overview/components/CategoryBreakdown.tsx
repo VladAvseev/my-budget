@@ -14,7 +14,11 @@ import styles from './CategoryBreakdown.module.css';
 interface CategoryBreakdownProps {
   reports: Report[];
   operationsByReport: Map<string, Operation[]>;
+  comparedReport: Report | null;
+  comparedOperationsByReport: Map<string, Operation[]>;
 }
+
+const EPSILON = 0.005;
 
 const ReportLinkRow = ({ report, amount }: ReportAmount) => {
   const { displaySymbol, convertOptions } = useDisplayCurrency();
@@ -36,25 +40,52 @@ const hasOperations = (operationsByReport: Map<string, Operation[]>, typeFilter:
     operations.some((operation) => typeFilter.includes(operation.type as OperationType)),
   );
 
+interface PeriodInfo {
+  name: string;
+  value: number;
+  lowerIsBetter: boolean;
+}
+
+const PeriodLine = ({ name, value, average, lowerIsBetter }: PeriodInfo & { average: number }) => {
+  const { displaySymbol, convertOptions } = useDisplayCurrency();
+  const diff = value - average;
+  const isEven = Math.abs(diff) < EPSILON;
+  const isGood = lowerIsBetter ? diff < 0 : diff > 0;
+
+  let delta: string | null = null;
+  let deltaClass = styles.deltaEven;
+  if (isEven) {
+    delta = '0%';
+  } else if (average !== 0) {
+    delta = `${diff > 0 ? '+' : '-'}${Math.round((Math.abs(diff) / Math.abs(average)) * 100)}%`;
+    deltaClass = isGood ? styles.deltaGood : styles.deltaBad;
+  }
+
+  return (
+    <span className={styles.summaryLine}>
+      {name}:{' '}
+      <span className={styles.strong}>{formatAmount(value, displaySymbol, convertOptions)}</span>
+      {delta && <span className={deltaClass}> ({delta})</span>}
+    </span>
+  );
+};
+
 const AccordionSummary = ({
   total,
   reportCount,
+  period,
 }: {
   total: number;
   reportCount: number;
+  period: PeriodInfo | null;
 }) => {
   const { displaySymbol, convertOptions } = useDisplayCurrency();
   const average = reportCount > 0 ? total / reportCount : 0;
 
   return (
     <span className={styles.accordionSummary}>
-      <span className={styles.accordionSummaryLine}>
-        Всего:{' '}
-        <span className={styles.strong}>
-          {formatAmount(total, displaySymbol, convertOptions)}
-        </span>
-      </span>
-      <span className={styles.accordionSummaryLine}>
+      {period && <PeriodLine {...period} average={average} />}
+      <span className={styles.summaryLine}>
         В месяц:{' '}
         <span className={styles.strong}>
           {formatAmount(average, displaySymbol, convertOptions)}
@@ -64,7 +95,12 @@ const AccordionSummary = ({
   );
 };
 
-export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreakdownProps) => {
+export const CategoryBreakdown = ({
+  reports,
+  operationsByReport,
+  comparedReport,
+  comparedOperationsByReport,
+}: CategoryBreakdownProps) => {
   const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 
@@ -92,22 +128,59 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
     ['savings', 'savings_out'],
   );
 
-  const sectionTitle = (label: string, average: number) => (
+  const comparedReports = comparedReport ? [comparedReport] : [];
+  const comparedDaily = buildReportGroups(comparedReports, comparedOperationsByReport, ['daily']);
+  const comparedExpenseGroups = buildCategoryGroups(
+    comparedReports,
+    comparedOperationsByReport,
+    expenseCategories.data ?? [],
+    ['expense'],
+  );
+  const comparedIncomeGroups = buildCategoryGroups(
+    comparedReports,
+    comparedOperationsByReport,
+    incomeCategories.data ?? [],
+    ['income'],
+  );
+  const comparedSavingsGroups = buildCategoryGroups(
+    comparedReports,
+    comparedOperationsByReport,
+    savingsCategories.data ?? [],
+    ['savings', 'savings_out'],
+  );
+
+  const comparedDailyTotal = comparedDaily.reduce((sum, item) => sum + item.amount, 0);
+  const comparedGroupValue = (
+    groups: ReturnType<typeof buildCategoryGroups>,
+    key: string,
+  ): number => groups.find((group) => group.key === key)?.total ?? 0;
+  const comparedTotalOf = (groups: ReturnType<typeof buildCategoryGroups>) =>
+    groups.reduce((sum, group) => sum + group.total, 0);
+
+  const periodInfo = (value: number, lowerIsBetter: boolean): PeriodInfo | null =>
+    comparedReport ? { name: comparedReport.name, value, lowerIsBetter } : null;
+
+  const sectionTitle = (label: string, average: number, period: PeriodInfo | null) => (
     <div className={styles.sectionHeader}>
       <div className={styles.sectionLabel}>{label}</div>
-      <div className={styles.sectionAverage}>
-        В месяц:{' '}
-        <span className={styles.strong}>
-          {formatAmount(average, displaySymbol, convertOptions)}
-        </span>
+      <div className={styles.sectionSummary}>
+        {period && <PeriodLine {...period} average={average} />}
+        <div className={styles.sectionAverage}>
+          В месяц:{' '}
+          <span className={styles.strong}>
+            {formatAmount(average, displaySymbol, convertOptions)}
+          </span>
+        </div>
       </div>
     </div>
   );
 
   const categoryAccordions = (
     groups: ReturnType<typeof buildCategoryGroups>,
+    comparedGroups: ReturnType<typeof buildCategoryGroups>,
     loading: boolean,
     typeFilter: OperationType[],
+    lowerIsBetter: boolean,
   ) => {
     if (loading && hasOperations(operationsByReport, typeFilter)) {
       return (
@@ -137,7 +210,14 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
                     }}
                   />
                   <span className={styles.accordionGrow}>{group.label}</span>
-                  <AccordionSummary total={group.total} reportCount={reports.length} />
+                  <AccordionSummary
+                    total={group.total}
+                    reportCount={reports.length}
+                    period={periodInfo(
+                      comparedGroupValue(comparedGroups, group.key),
+                      lowerIsBetter,
+                    )}
+                  />
                 </span>
               }
             >
@@ -166,7 +246,11 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
     <div className={styles.root}>
       {hasExpenseOrDaily && (
         <div className={styles.section}>
-          {sectionTitle('Расходы', sectionAverage(totalDaily + totalOf(expenseGroups)))}
+          {sectionTitle(
+            'Расходы',
+            sectionAverage(totalDaily + totalOf(expenseGroups)),
+            periodInfo(comparedDailyTotal + comparedTotalOf(comparedExpenseGroups), true),
+          )}
           {dailyGroups.length > 0 && (
             <VAccordion
               header={
@@ -176,7 +260,11 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
                     style={{ backgroundColor: 'var(--color-accent)' }}
                   />
                   <span className={styles.accordionGrow}>Ежедневные расходы</span>
-                  <AccordionSummary total={totalDaily} reportCount={reports.length} />
+                  <AccordionSummary
+                    total={totalDaily}
+                    reportCount={reports.length}
+                    period={periodInfo(comparedDailyTotal, true)}
+                  />
                 </span>
               }
             >
@@ -187,22 +275,48 @@ export const CategoryBreakdown = ({ reports, operationsByReport }: CategoryBreak
               </div>
             </VAccordion>
           )}
-          {categoryAccordions(expenseGroups, expensesLoading, ['expense'])}
+          {categoryAccordions(
+            expenseGroups,
+            comparedExpenseGroups,
+            expensesLoading,
+            ['expense'],
+            true,
+          )}
         </div>
       )}
 
       {(incomeGroups.length > 0 || hasOperations(operationsByReport, ['income'])) && (
         <div className={styles.section}>
-          {sectionTitle('Доходы', sectionAverage(totalOf(incomeGroups)))}
-          {categoryAccordions(incomeGroups, incomesLoading, ['income'])}
+          {sectionTitle(
+            'Доходы',
+            sectionAverage(totalOf(incomeGroups)),
+            periodInfo(comparedTotalOf(comparedIncomeGroups), false),
+          )}
+          {categoryAccordions(
+            incomeGroups,
+            comparedIncomeGroups,
+            incomesLoading,
+            ['income'],
+            false,
+          )}
         </div>
       )}
 
       {(savingsGroups.length > 0 ||
         hasOperations(operationsByReport, ['savings', 'savings_out'])) && (
         <div className={styles.section}>
-          {sectionTitle('Накопления', sectionAverage(totalOf(savingsGroups)))}
-          {categoryAccordions(savingsGroups, savingsLoading, ['savings', 'savings_out'])}
+          {sectionTitle(
+            'Накопления',
+            sectionAverage(totalOf(savingsGroups)),
+            periodInfo(comparedTotalOf(comparedSavingsGroups), false),
+          )}
+          {categoryAccordions(
+            savingsGroups,
+            comparedSavingsGroups,
+            savingsLoading,
+            ['savings', 'savings_out'],
+            false,
+          )}
         </div>
       )}
     </div>

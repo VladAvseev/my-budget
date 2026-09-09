@@ -23,6 +23,13 @@
   color: var(--color-text-primary);
 }
 
+.sectionSummary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+}
+
 .sectionAverage {
   font-size: var(--font-size-m);
   color: var(--color-text-primary);
@@ -31,6 +38,21 @@
 
 .strong {
   font-weight: var(--font-weight-bold);
+}
+
+.deltaGood {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-success);
+}
+
+.deltaBad {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-error);
+}
+
+.deltaEven {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
 }
 
 .accordionList {
@@ -72,7 +94,7 @@
   white-space: nowrap;
 }
 
-.accordionSummaryLine {
+.summaryLine {
   font-size: var(--font-size-m);
   color: var(--color-text-primary);
 }
@@ -96,7 +118,7 @@
 
 .linkRowAmount {
   font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
 }
 

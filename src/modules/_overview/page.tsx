@@ -15,11 +15,16 @@ import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOverviewOperationsMap } from './api/useOverviewOperationsMap';
 import { useReports } from './api/useReports';
-import { selectedReportIdsAtom, selectedDisplayCurrencyAtom } from './atoms/overview';
+import {
+  comparedReportIdAtom,
+  selectedReportIdsAtom,
+  selectedDisplayCurrencyAtom,
+} from './atoms/overview';
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
 import { GrowthDynamicsCard } from '@/modules/_accumulations/components/GrowthDynamicsCard';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
 import { CategoryDistributionChart } from './components/CategoryDistributionChart';
+import { PeriodCompareSelect } from './components/PeriodCompareSelect';
 import { ReportsFilter } from './components/ReportsFilter';
 import { SummaryCard } from './components/SummaryCard';
 import { emptyAmounts, sumOperations } from './utils/overview';
@@ -37,6 +42,7 @@ export const Page: React.FC = () => {
   const userId = user?.id ?? '';
   const reportsQuery = useReports();
   const [selectedIds] = useAtom(selectedReportIdsAtom);
+  const [comparedId] = useAtom(comparedReportIdAtom);
   const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
   const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
   const { defaultCurrency, isCurrencyDisabled, displayCurrency, rates, displaySymbol } =
@@ -48,7 +54,7 @@ export const Page: React.FC = () => {
     }
   }, [defaultCurrency, setSelectedCurrency]);
 
-  const reports = reportsQuery.data ?? [];
+  const reports = useMemo(() => reportsQuery.data ?? [], [reportsQuery.data]);
   const selectedReports = reports.filter((report) => selectedIds.includes(report.id));
 
   const {
@@ -60,6 +66,20 @@ export const Page: React.FC = () => {
   const operationsByReport = useMemo(
     () => operationsMap ?? new Map<string, Operation[]>(),
     [operationsMap],
+  );
+
+  const comparedReport = useMemo(
+    () => reports.find((report) => report.id === comparedId) ?? null,
+    [reports, comparedId],
+  );
+
+  const { data: comparedOperationsMap } = useOverviewOperationsMap(
+    comparedReport ? [comparedReport.id] : [],
+  );
+
+  const comparedOperationsByReport = useMemo(
+    () => comparedOperationsMap ?? new Map<string, Operation[]>(),
+    [comparedOperationsMap],
   );
 
   const totals = useMemo(() => {
@@ -190,10 +210,15 @@ export const Page: React.FC = () => {
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
                     <CategoryDistributionChart operationsByReport={operationsByReport} />
                   </div>
+                  <div className={commonStyles.animateCard} style={{ animationDelay: '0.15s' }}>
+                    <PeriodCompareSelect reports={reports} />
+                  </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.18s' }}>
                     <CategoryBreakdown
                       reports={selectedReports}
                       operationsByReport={operationsByReport}
+                      comparedReport={comparedOperationsMap ? comparedReport : null}
+                      comparedOperationsByReport={comparedOperationsByReport}
                     />
                   </div>
                 </>
