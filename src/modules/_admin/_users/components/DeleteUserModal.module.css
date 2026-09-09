@@ -1,0 +1,10 @@
+.warning {
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+}
+
+.email {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  word-break: break-all;
+}
