@@ -20,7 +20,7 @@
 
 - **Модули (страницы):** `src/modules/_<раздел>/`. Каждый модуль содержит `index.tsx` (экспортирует функцию, возвращающую `<Route>`) и `page.tsx` (экспортирует компонент `Page`). Подразделы admin-панели — вложенные модули (`_admin/_dashboard`, `_admin/_users` и т.д.).
 - **Общее:** `src/shared/` — `ui/` (UI-kit `V*`), `icons/` (собственные SVG-иконки), `theme/` (темы: `ThemeProvider`, `useTheme`, типы, `storage`, `theme.css` с дизайн-токенами), `supabase/` (клиент, сервисы, типы, route-guards, `authProvider`), `hooks/` (хуки TanStack Query, `useBreakpoint`), `utils/` (форматирование, даты, ошибки), `styles/` (общие CSS-modules).
-- **Маршруты:** собираются в `src/App.tsx` из функций модулей (login, registration, home, profile, reports, accumulations, overview, help, support, admin, notFound).
+- **Маршруты:** собираются в `src/App.tsx` из функций модулей (login, registration, home, profile, reports, accumulations, overview, admin, notFound).
 
 ## Ключевые конвенции
 

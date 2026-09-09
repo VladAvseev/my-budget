@@ -13,42 +13,6 @@ revoke all on function public.admin_get_dashboard_stats() from public;
 revoke all on function public.admin_get_dashboard_stats() from anon;
 grant execute on function public.admin_get_dashboard_stats() to authenticated;
 
-revoke all on function public.admin_get_news_list() from public;
-revoke all on function public.admin_get_news_list() from anon;
-grant execute on function public.admin_get_news_list() to authenticated;
-
-revoke all on function public.admin_update_news(bigint, text) from public;
-revoke all on function public.admin_update_news(bigint, text) from anon;
-grant execute on function public.admin_update_news(bigint, text) to authenticated;
-
-revoke all on function public.admin_set_show_news(boolean) from public;
-revoke all on function public.admin_set_show_news(boolean) from anon;
-grant execute on function public.admin_set_show_news(boolean) to authenticated;
-
-revoke all on function public.admin_get_support_chats() from public;
-revoke all on function public.admin_get_support_chats() from anon;
-grant execute on function public.admin_get_support_chats() to authenticated;
-
-revoke all on function public.admin_get_support_chat(uuid) from public;
-revoke all on function public.admin_get_support_chat(uuid) from anon;
-grant execute on function public.admin_get_support_chat(uuid) to authenticated;
-
-revoke all on function public.admin_send_support_message(uuid, text) from public;
-revoke all on function public.admin_send_support_message(uuid, text) from anon;
-grant execute on function public.admin_send_support_message(uuid, text) to authenticated;
-
-revoke all on function public.admin_set_support_open(uuid, boolean) from public;
-revoke all on function public.admin_set_support_open(uuid, boolean) from anon;
-grant execute on function public.admin_set_support_open(uuid, boolean) to authenticated;
-
-revoke all on function public.admin_clear_support_chat(uuid) from public;
-revoke all on function public.admin_clear_support_chat(uuid) from anon;
-grant execute on function public.admin_clear_support_chat(uuid) to authenticated;
-
-revoke all on function public.admin_get_support_open_count() from public;
-revoke all on function public.admin_get_support_open_count() from anon;
-grant execute on function public.admin_get_support_open_count() to authenticated;
-
 revoke all on function public.admin_get_database_size() from public;
 revoke all on function public.admin_get_database_size() from anon;
 grant execute on function public.admin_get_database_size() to authenticated;
@@ -84,14 +48,6 @@ grant execute on function public.get_report_summary(uuid) to authenticated;
 revoke all on function public.get_reports() from public;
 revoke all on function public.get_reports() from anon;
 grant execute on function public.get_reports() to authenticated;
-
-revoke all on function public.get_latest_news() from public;
-revoke all on function public.get_latest_news() from anon;
-grant execute on function public.get_latest_news() to authenticated;
-
-revoke all on function public.hide_news() from public;
-revoke all on function public.hide_news() from anon;
-grant execute on function public.hide_news() to authenticated;
 
 revoke all on function public.get_savings_operations(uuid) from public;
 revoke all on function public.get_savings_operations(uuid) from anon;
@@ -188,19 +144,3 @@ grant execute on function public.delete_category(uuid) to authenticated;
 revoke all on function public.update_start_balance(numeric) from public;
 revoke all on function public.update_start_balance(numeric) from anon;
 grant execute on function public.update_start_balance(numeric) to authenticated;
-
-revoke all on function public.get_support_chat(uuid) from public;
-revoke all on function public.get_support_chat(uuid) from anon;
-grant execute on function public.get_support_chat(uuid) to authenticated;
-
-revoke all on function public.get_support_unread_count(uuid) from public;
-revoke all on function public.get_support_unread_count(uuid) from anon;
-grant execute on function public.get_support_unread_count(uuid) to authenticated;
-
-revoke all on function public.send_support_message(text) from public;
-revoke all on function public.send_support_message(text) from anon;
-grant execute on function public.send_support_message(text) to authenticated;
-
-revoke all on function public.mark_support_read() from public;
-revoke all on function public.mark_support_read() from anon;
-grant execute on function public.mark_support_read() to authenticated;

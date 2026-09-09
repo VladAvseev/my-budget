@@ -1,19 +1,15 @@
 import type {
   Accumulation,
   AdminDashboardStats,
-  AdminSupportChat,
   AdminUserRow,
   Category,
   CategoryLimit,
   DatabaseSize,
   Goal,
-  NewsRow,
   Operation,
   OperationSummary,
   Profile,
   Report,
-  SupportChatData,
-  SupportMessage,
 } from './domain';
 
 export interface Database {
@@ -26,7 +22,6 @@ export interface Database {
           start_balance: string;
           currency: string | null;
           onboarded: boolean;
-          show_news: boolean;
           role: string;
           last_active_at: string | null;
           created_at: string;
@@ -38,7 +33,6 @@ export interface Database {
           start_balance?: string;
           currency?: string | null;
           onboarded?: boolean;
-          show_news?: boolean;
           role?: string;
           last_active_at?: string | null;
           created_at?: string;
@@ -50,7 +44,6 @@ export interface Database {
           start_balance?: string;
           currency?: string | null;
           onboarded?: boolean;
-          show_news?: boolean;
           role?: string;
           last_active_at?: string | null;
           created_at?: string;
@@ -256,75 +249,6 @@ export interface Database {
         };
         Relationships: [];
       };
-      news: {
-        Row: {
-          id: number;
-          text: string;
-          created_at: string;
-        };
-        Insert: {
-          id?: number;
-          text: string;
-          created_at?: string;
-        };
-        Update: {
-          id?: number;
-          text?: string;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
-      support_chats: {
-        Row: {
-          user_id: string;
-          is_open: boolean;
-          user_read_at: string | null;
-          admin_read_at: string | null;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          user_id: string;
-          is_open?: boolean;
-          user_read_at?: string | null;
-          admin_read_at?: string | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          user_id?: string;
-          is_open?: boolean;
-          user_read_at?: string | null;
-          admin_read_at?: string | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
-      support_messages: {
-        Row: {
-          id: string;
-          user_id: string;
-          author_role: string;
-          text: string;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          user_id: string;
-          author_role: string;
-          text: string;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          user_id?: string;
-          author_role?: string;
-          text?: string;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -355,14 +279,6 @@ export interface Database {
       get_reports: {
         Args: Record<string, never>;
         Returns: Report[];
-      };
-      get_latest_news: {
-        Args: Record<string, never>;
-        Returns: NewsRow[];
-      };
-      hide_news: {
-        Args: Record<string, never>;
-        Returns: undefined;
       };
       get_savings_operations: {
         Args: {
@@ -580,28 +496,6 @@ export interface Database {
         };
         Returns: undefined;
       };
-      get_support_chat: {
-        Args: {
-          p_user_id: string;
-        };
-        Returns: SupportChatData;
-      };
-      get_support_unread_count: {
-        Args: {
-          p_user_id: string;
-        };
-        Returns: number;
-      };
-      send_support_message: {
-        Args: {
-          p_text: string;
-        };
-        Returns: SupportMessage;
-      };
-      mark_support_read: {
-        Args: Record<string, never>;
-        Returns: undefined;
-      };
       admin_get_dashboard_stats: {
         Args: Record<string, never>;
         Returns: AdminDashboardStats;
@@ -609,72 +503,6 @@ export interface Database {
       admin_get_users: {
         Args: Record<string, never>;
         Returns: AdminUserRow[];
-      };
-      admin_get_news_list: {
-        Args: Record<string, never>;
-        Returns: NewsRow[];
-      };
-      admin_create_news: {
-        Args: {
-          p_text: string;
-        };
-        Returns: NewsRow;
-      };
-      admin_update_news: {
-        Args: {
-          p_id: number;
-          p_text: string;
-        };
-        Returns: undefined;
-      };
-      admin_delete_news: {
-        Args: {
-          p_id: number;
-        };
-        Returns: undefined;
-      };
-      admin_set_show_news: {
-        Args: {
-          p_show: boolean;
-        };
-        Returns: undefined;
-      };
-      admin_get_support_chats: {
-        Args: Record<string, never>;
-        Returns: AdminSupportChat[];
-      };
-      admin_get_support_chat: {
-        Args: {
-          p_user_id: string;
-        };
-        Returns: {
-          messages: SupportMessage[];
-          isOpen: boolean;
-        } | null;
-      };
-      admin_send_support_message: {
-        Args: {
-          p_user_id: string;
-          p_text: string;
-        };
-        Returns: SupportMessage;
-      };
-      admin_set_support_open: {
-        Args: {
-          p_user_id: string;
-          p_open: boolean;
-        };
-        Returns: undefined;
-      };
-      admin_clear_support_chat: {
-        Args: {
-          p_user_id: string;
-        };
-        Returns: undefined;
-      };
-      admin_get_support_open_count: {
-        Args: Record<string, never>;
-        Returns: number;
       };
       admin_get_database_size: {
         Args: Record<string, never>;

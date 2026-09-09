@@ -46,8 +46,7 @@ Dev-сервер запустится на порту из переменной 
 - Логин и регистрация (`/login`, `/registration`)
 - Главная (`/`), профиль (`/profile`)
 - Обзор (`/overview`), отчёты (`/reports`), накопления (`/accumulations`)
-- Помощь (`/help`), поддержка (`/support`)
-- Админ-панель (`/admin`: dashboard, users, support, news)
+- Админ-панель (`/admin`: dashboard, users)
 
 ## Конвенции
 

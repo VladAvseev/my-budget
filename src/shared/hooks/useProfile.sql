@@ -19,7 +19,6 @@ begin
     'start_balance', start_balance,
     'currency', currency,
     'onboarded', onboarded,
-    'show_news', show_news,
     'role', role,
     'last_active_at', last_active_at,
     'created_at', created_at,

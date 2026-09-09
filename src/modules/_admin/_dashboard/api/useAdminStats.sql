@@ -19,8 +19,7 @@ begin
             select 1 from public.reports r where r.user_id = p.user_id
           )
         ),
-        'onboarded', count(*) filter (where p.onboarded),
-        'sawNews', count(*) filter (where not p.show_news)
+        'onboarded', count(*) filter (where p.onboarded)
       )
       from public.profiles p
     ),

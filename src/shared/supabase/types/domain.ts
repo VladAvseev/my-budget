@@ -6,9 +6,6 @@ export type Category = Database['public']['Tables']['categories']['Row'];
 export type Accumulation = Database['public']['Tables']['accumulations']['Row'];
 export type Goal = Database['public']['Tables']['goals']['Row'];
 export type CategoryLimit = Database['public']['Tables']['category_limits']['Row'];
-export type NewsRow = Database['public']['Tables']['news']['Row'];
-export type SupportChat = Database['public']['Tables']['support_chats']['Row'];
-export type SupportMessage = Database['public']['Tables']['support_messages']['Row'];
 export type Profile = Database['public']['Tables']['profiles']['Row'];
 
 export type OperationType = 'income' | 'expense' | 'savings' | 'savings_out' | 'daily';
@@ -96,15 +93,6 @@ export interface ProfileInput {
   email?: string;
   startBalance?: number;
   onboarded?: boolean;
-  showNews?: boolean;
-}
-
-export interface SupportChatData {
-  messages: SupportMessage[];
-  isOpen: boolean;
-  userReadAt: string | null;
-  unreadCount: number;
-  chatExists: boolean;
 }
 
 export interface AdminDashboardStats {
@@ -112,7 +100,6 @@ export interface AdminDashboardStats {
     total: number;
     withoutReports: number;
     onboarded: number;
-    sawNews: number;
   };
   activity: {
     dau: number;
@@ -148,7 +135,6 @@ export interface AdminUserRow {
   email: string;
   last_active_at: string | null;
   onboarded: boolean;
-  sawNews: boolean;
   reportsCount: number;
   operationsCount: number;
   categoriesCount: number;
@@ -163,13 +149,4 @@ export interface AdminUserRow {
 export interface DatabaseSize {
   sizeBytes: number;
   sizePretty: string;
-}
-
-export interface AdminSupportChat {
-  user_id: string;
-  email: string;
-  isOpen: boolean;
-  unreadCount: number;
-  lastText: string | null;
-  lastAt: string | null;
 }

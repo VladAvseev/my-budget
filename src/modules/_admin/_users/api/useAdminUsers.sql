@@ -17,7 +17,6 @@ begin
     'email', p.email,
     'last_active_at', p.last_active_at,
     'onboarded', p.onboarded,
-    'sawNews', not p.show_news,
     'reportsCount', coalesce(r.cnt, 0),
     'operationsCount', coalesce(o.cnt, 0),
     'categoriesCount', coalesce(c.cnt, 0),

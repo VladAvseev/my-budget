@@ -75,38 +75,6 @@
   color: var(--color-text-secondary);
 }
 
-.newsCard {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-s);
-  flex: 1 1 100%;
-  min-width: 300px;
-  padding-right: var(--space-xxl);
-}
-
-.newsList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-s);
-}
-
-.newsItem {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
-}
-
-.newsItemText {
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.closeButton {
-  position: absolute;
-  top: var(--space-m);
-  right: var(--space-m);
-}
-
 .checklist {
   display: flex;
   flex-direction: column;

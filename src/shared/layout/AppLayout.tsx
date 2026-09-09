@@ -1,5 +1,3 @@
-import { useAdminSupportOpenCount } from '@/modules/_admin/_support/api/useAdminSupportOpenCount';
-import { useSupportUnread } from '@/modules/_support/api/useSupportUnread';
 import {
   useAdminStatus,
   useBreakpoint,
@@ -11,7 +9,6 @@ import {
   BanknotesIcon,
   ChevronRightIcon,
   HomeIcon,
-  MessageIcon,
   OverviewIcon,
   ReportsIcon,
   SavingsIcon,
@@ -20,7 +17,6 @@ import {
   type IconProps,
 } from '@/shared/icons';
 import { useAuth } from '@/shared/supabase/authProvider';
-import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import {
@@ -50,40 +46,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
   { to: '/reports', label: 'Периоды', icon: ReportsIcon },
   { to: '/accumulations', label: 'Накопления', icon: SavingsIcon },
-  { to: '/support', label: 'Помощь', icon: MessageIcon },
 ];
-
-const SupportUnreadBadge = ({ className }: { className?: string }) => {
-  const { user } = useAuth();
-  const unreadQuery = useSupportUnread(user?.id ?? '');
-  const unread = unreadQuery.data ?? 0;
-
-  if (unread <= 0) {
-    return null;
-  }
-
-  return (
-    <VBadge variant="accent" className={className}>
-      {unread}
-    </VBadge>
-  );
-};
-
-const AdminOpenBadge = ({ className }: { className?: string }) => {
-  const { isAdmin } = useAdminStatus();
-  const openQuery = useAdminSupportOpenCount(isAdmin);
-  const openCount = openQuery.data ?? 0;
-
-  if (!isAdmin || openCount <= 0) {
-    return null;
-  }
-
-  return (
-    <VBadge variant="warning" className={className}>
-      {openCount}
-    </VBadge>
-  );
-};
 
 const ProfileLink = () => {
   const { user } = useAuth();
@@ -140,7 +103,6 @@ const SidebarContent = () => {
             <span className={styles.navLinkContent}>
               <item.icon size={18} />
               {item.label}
-              {item.to === '/support' && <SupportUnreadBadge className={styles.navBadge} />}
             </span>
           </NavLink>
         ))}
@@ -152,7 +114,6 @@ const SidebarContent = () => {
               <span className={styles.navLinkContent}>
                 <SettingsIcon size={18} />
                 Админ-панель
-                <AdminOpenBadge className={styles.navBadge} />
               </span>
             </NavLink>
           </>
@@ -233,7 +194,6 @@ const MobileFooter = () => {
             <NavLink key={item.to} to={item.to} end={item.end} className={styles.mobileNavItem}>
               <span className={styles.mobileNavIcon}>
                 <item.icon size={22} />
-                {item.to === '/support' && <SupportUnreadBadge className={styles.mobileNavBadge} />}
               </span>
               <span
                 ref={isFirst ? firstLabelRef : isLast ? lastLabelRef : undefined}
@@ -249,7 +209,6 @@ const MobileFooter = () => {
           <NavLink to="/admin" className={styles.mobileNavItem}>
             <span className={styles.mobileNavIcon}>
               <SettingsIcon size={22} />
-              <AdminOpenBadge className={styles.mobileNavBadge} />
             </span>
             <span ref={lastLabelRef} className={getLabelClassName(false, true)}>
               Админ

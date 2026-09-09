@@ -8,7 +8,6 @@ import { reports } from '@/modules/_reports';
 import { accumulations } from '@/modules/_accumulations';
 import { overview } from '@/modules/_overview';
 import { home } from '@/modules/_home';
-import { support } from '@/modules/_support';
 import { admin } from '@/modules/_admin';
 import { notFound } from '@/modules/_notFound';
 
@@ -24,7 +23,6 @@ const App: React.FC = () => {
           {reports()}
           {accumulations()}
           {overview()}
-          {support()}
           {admin()}
           {notFound()}
         </Routes>
