@@ -1,0 +1,8 @@
+# Файлы, не попадающие в контекст сборки web-образа
+node_modules
+dist
+.git
+.env
+.VSCodeCounter
+supabase_logs.json
+README.md
