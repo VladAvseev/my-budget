@@ -17,7 +17,7 @@ const formatPct = (value: number): string => {
 };
 
 export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
-  const { monthly, periodLabel, currentPeriod, currentPeriodLabel } = stats;
+  const { monthly, recent, periodLabel, currentPeriod, currentPeriodLabel } = stats;
   const currency = useCurrency();
   const symbol = displaySymbol ?? currency?.symbol ?? '₽';
 
@@ -43,6 +43,14 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
         <div className={styles.stat}>
           {periodLabel}:{' '}
           <span className={`${styles.statValue} ${colorClass(monthly.abs)}`}>{monthlyLine}</span>
+        </div>
+      )}
+      {recent !== null && (
+        <div className={styles.stat}>
+          В месяц (за последний год):{' '}
+          <span className={`${styles.statValue} ${colorClass(recent.abs)}`}>
+            {formatChange(recent)}
+          </span>
         </div>
       )}
       {currentPeriod !== null && (

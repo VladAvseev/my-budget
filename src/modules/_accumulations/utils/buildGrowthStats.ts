@@ -14,10 +14,15 @@ export interface MonthlyStats {
 
 export interface GrowthStats {
   monthly: MonthlyStats | null;
+  recent: MonthlyStats | null;
   periodLabel: string;
   currentPeriod: PointChange | null;
   currentPeriodLabel: string;
 }
+
+// Окно «за последний год» из завершённых календарных месяцев: ровно один раз
+// попадает каждый месяц, поэтому годовая сезонность компенсируется.
+export const RECENT_WINDOW_MONTHS = 12;
 
 const AGGREGATION_LABELS: Record<GrowthAggregation, string> = {
   M: 'В месяц',
@@ -71,6 +76,49 @@ export const buildMonthlyStats = (data: ChartPoint[]): MonthlyStats | null => {
   return { abs, pct };
 };
 
+/**
+ * Средний прирост за последние `windowMonths` завершённых месяцев:
+ * abs — рост внутри окна (базой служит точка перед окном, а не ноль),
+ * pct — среднегеометрический рост по окну. null, если завершённых месяцев
+ * не больше `windowMonths` (при равном окне строка дублировала бы общее).
+ */
+export const buildWindowedMonthlyStats = (
+  data: ChartPoint[],
+  windowMonths: number,
+): MonthlyStats | null => {
+  if (data.length < windowMonths + 1) return null;
+
+  const window = data.slice(data.length - windowMonths);
+  const baseValue = data[data.length - windowMonths - 1].value;
+  const lastValue = window[window.length - 1].value;
+  const abs = (lastValue - baseValue) / windowMonths;
+
+  let firstIndex = -1;
+  let firstValue = 0;
+  for (let i = 0; i < window.length; i++) {
+    if (window[i].value !== 0) {
+      firstIndex = i;
+      firstValue = window[i].value;
+      break;
+    }
+  }
+
+  const months = window.length - 1 - firstIndex;
+
+  if (
+    firstIndex === -1 ||
+    months <= 0 ||
+    lastValue === 0 ||
+    Math.sign(firstValue) !== Math.sign(lastValue)
+  ) {
+    return { abs, pct: null };
+  }
+
+  const pct = (Math.pow(lastValue / firstValue, 1 / months) - 1) * 100;
+
+  return { abs, pct };
+};
+
 export const buildGrowthStats = (
   filteredData: ChartPoint[],
   aggregation: GrowthAggregation = 'M',
@@ -83,6 +131,10 @@ export const buildGrowthStats = (
     aggregation,
   );
 
+  // Строка «за последний год» считается только для помесячной группировки.
+  const recent =
+    aggregation === 'M' ? buildWindowedMonthlyStats(trimmed, RECENT_WINDOW_MONTHS) : null;
+
   if (mode === 'period') {
     return {
       monthly:
@@ -92,6 +144,13 @@ export const buildGrowthStats = (
               pct: null,
             }
           : null,
+      recent:
+        recent === null
+          ? null
+          : {
+              abs: recent.abs,
+              pct: null,
+            },
       periodLabel: AGGREGATION_LABELS[aggregation],
       currentPeriod:
         filteredData.length > 0
@@ -103,6 +162,7 @@ export const buildGrowthStats = (
 
   return {
     monthly: buildMonthlyStats(trimmed),
+    recent,
     periodLabel: AGGREGATION_LABELS[aggregation],
     currentPeriod:
       filteredData.length > 0 ? getPointChange(filteredData, filteredData.length - 1, base) : null,

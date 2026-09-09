@@ -7,13 +7,18 @@ import {
   getPeriodEnd,
   trimIncompletePeriod,
 } from '../utils/buildGrowthChartData';
-import { buildMonthlyStats } from '../utils/buildGrowthStats';
+import {
+  buildWindowedMonthlyStats,
+  buildMonthlyStats,
+  RECENT_WINDOW_MONTHS,
+} from '../utils/buildGrowthStats';
 
 const EMPTY_ARRAY: never[] = [];
 
 /**
- * Средний прирост накоплений в месяц (по завершённым месяцам) —
- * то же значение, что статка «В месяц» графика роста накоплений.
+ * Средний прирост накоплений в месяц — по последним 12 завершённым месяцам
+ * (то же значение, что строка «В месяц (за последний год)» графика роста
+ * накоплений); если завершённых месяцев не больше 12 — общее среднее.
  * Использует общие query-ключи с карточкой графика: данные берутся из кэша.
  */
 export const useAverageMonthlyGrowth = (userId: string): number | null => {
@@ -46,6 +51,7 @@ export const useAverageMonthlyGrowth = (userId: string): number | null => {
     );
 
     const completed = trimIncompletePeriod(rawChartData, getPeriodEnd('M'), new Date());
-    return buildMonthlyStats(completed)?.abs ?? null;
+    const windowed = buildWindowedMonthlyStats(completed, RECENT_WINDOW_MONTHS);
+    return (windowed ?? buildMonthlyStats(completed))?.abs ?? null;
   }, [isLoading, reports, operationsQuery.data, accumulationsQuery.data, profileQuery.data]);
 };
