@@ -73,9 +73,8 @@ export const Page: React.FC = () => {
     [reports, comparedId],
   );
 
-  const { data: comparedOperationsMap } = useOverviewOperationsMap(
-    comparedReport ? [comparedReport.id] : [],
-  );
+  const { data: comparedOperationsMap, isLoading: comparedOperationsLoading } =
+    useOverviewOperationsMap(comparedReport ? [comparedReport.id] : []);
 
   const comparedOperationsByReport = useMemo(
     () => comparedOperationsMap ?? new Map<string, Operation[]>(),
@@ -211,7 +210,7 @@ export const Page: React.FC = () => {
                     <CategoryDistributionChart operationsByReport={operationsByReport} />
                   </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.15s' }}>
-                    <PeriodCompareSelect reports={reports} />
+                    <PeriodCompareSelect reports={reports} isLoading={comparedOperationsLoading} />
                   </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.18s' }}>
                     <CategoryBreakdown

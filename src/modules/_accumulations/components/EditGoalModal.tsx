@@ -56,8 +56,8 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
     setSubmitError(undefined);
     const amountValue = Number(amount);
 
-    if (!amount || Number.isNaN(amountValue) || amountValue < 0) {
-      setAmountError('Укажите неотрицательную сумму');
+    if (!amount || Number.isNaN(amountValue) || amountValue <= 0) {
+      setAmountError('Сумма должна быть больше нуля');
       return;
     }
     setAmountError(undefined);

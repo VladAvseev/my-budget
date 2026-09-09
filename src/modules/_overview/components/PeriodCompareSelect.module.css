@@ -1,0 +1,20 @@
+.row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-m);
+}
+
+.select {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--space-xxl);
+  padding-bottom: var(--space-m);
+  color: var(--color-text-secondary);
+}
