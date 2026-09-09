@@ -43,9 +43,9 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Главная', icon: HomeIcon, end: true },
-  { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
   { to: '/reports', label: 'Периоды', icon: ReportsIcon },
   { to: '/accumulations', label: 'Накопления', icon: SavingsIcon },
+  { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
 ];
 
 const ProfileLink = () => {
