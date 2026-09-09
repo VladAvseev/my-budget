@@ -56,7 +56,7 @@ export const ChangePasswordModal = ({ visible, onClose }: ChangePasswordModalPro
     changePassword.mutate(newPassword, {
       onSuccess: (result) => {
         if (result.error) {
-          setSubmitError(getErrorMessage(result.error.message));
+          setSubmitError(getErrorMessage(result.error));
           return;
         }
         handleClose();

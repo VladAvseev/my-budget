@@ -15,7 +15,7 @@ export const useRegistration = () => {
       authService.signUp(credentials.email, credentials.password),
     onSuccess: (result) => {
       if (result.error) {
-        setError(getErrorMessage(result.error.message));
+        setError(getErrorMessage(result.error));
         return;
       }
       navigate('/');
