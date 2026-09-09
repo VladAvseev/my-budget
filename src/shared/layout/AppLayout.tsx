@@ -79,7 +79,7 @@ const SidebarContent = () => {
     <>
       <div className={styles.brand}>
         <BanknotesIcon size={24} />
-        <span className={styles.brandTitle}>Мой бюджет</span>
+        <span className={styles.brandTitle}>Мои финансы</span>
       </div>
 
       <div className={styles.stats}>

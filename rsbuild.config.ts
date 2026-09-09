@@ -20,7 +20,7 @@ export default defineConfig({
   },
   html: {
     template: './public/index.html',
-    title: 'Мой бюджет',
+    title: 'Мои финансы',
   },
   splitChunks: {
     preset: 'default',

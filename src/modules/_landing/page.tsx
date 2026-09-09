@@ -53,7 +53,7 @@ export const Page: React.FC = () => {
         <div className={`${styles.container} ${styles.headerInner}`}>
           <Link to="/" className={styles.logo}>
             <BanknotesIcon size={24} color="currentColor" />
-            <span className={styles.logoName}>Мой бюджет</span>
+            <span className={styles.logoName}>Мои финансы</span>
           </Link>
           <nav className={styles.headerActions}>
             <Link to="/login">
@@ -82,7 +82,7 @@ export const Page: React.FC = () => {
                 className={`${styles.heroText} ${styles.animate}`}
                 style={{ animationDelay: '0.16s' }}
               >
-                «Мой бюджет» помогает фиксировать доходы и расходы, копить на цели и понимать, куда
+                «Мои финансы» помогает фиксировать доходы и расходы, копить на цели и понимать, куда
                 уходит каждая трата.
               </p>
               <div
@@ -162,7 +162,7 @@ export const Page: React.FC = () => {
         <section className={`${styles.section} ${styles.sectionAlt}`}>
           <div className={styles.container}>
             <div className={styles.sectionHead}>
-              <h2 className={styles.sectionTitle}>Почему «Мой бюджет»?</h2>
+              <h2 className={styles.sectionTitle}>Почему «Мои финансы»?</h2>
               <p className={styles.sectionText}>
                 Приложение создано для тех, кто хочет простого и гибкого учёта финансов.
               </p>
@@ -205,7 +205,7 @@ export const Page: React.FC = () => {
 
       <footer className={styles.footer}>
         <div className={`${styles.container} ${styles.footerInner}`}>
-          <span className={styles.footerCopy}>© {new Date().getFullYear()} «Мой бюджет»</span>
+          <span className={styles.footerCopy}>© {new Date().getFullYear()} «Мои финансы»</span>
         </div>
       </footer>
     </div>
