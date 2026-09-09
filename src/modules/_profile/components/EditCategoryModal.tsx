@@ -1,6 +1,6 @@
-import type { Category } from '@/shared/supabase/types/domain';
+import type { Category } from '@/shared/api/types/domain';
 import { TrashIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/supabase/authProvider';
+import { useAuth } from '@/shared/api/authProvider';
 import { VButton } from '@/shared/ui/VButton';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
@@ -9,7 +9,7 @@ import commonStyles from '@/shared/styles/common.module.css';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { capitalizeFirst, getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
-import type { CategoryType } from '@/shared/supabase/types/domain';
+import type { CategoryType } from '@/shared/api/types/domain';
 import { useCategories } from '../api/useCategories';
 import { useUpdateCategory } from '../api/useUpdateCategory';
 import { CategoryColorPalette } from './CategoryColorPalette';

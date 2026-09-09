@@ -51,12 +51,12 @@ export const OnboardingCard = () => {
             variant="secondary"
             onClick={() => completeOnboarding.mutate()}
             isLoading={completeOnboarding.isPending}
-            >
+          >
             Пропустить
           </VButton>
-            {nextItem && (
-              <VButton onClick={() => navigate(nextItem.route)}>{nextItem.actionLabel}</VButton>
-            )}
+          {nextItem && (
+            <VButton onClick={() => navigate(nextItem.route)}>{nextItem.actionLabel}</VButton>
+          )}
         </div>
       )}
     </VCard>

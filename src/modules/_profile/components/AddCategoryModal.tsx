@@ -1,5 +1,5 @@
-import type { CategoryType } from '@/shared/supabase/types/domain';
-import { useAuth } from '@/shared/supabase/authProvider';
+import type { CategoryType } from '@/shared/api/types/domain';
+import { useAuth } from '@/shared/api/authProvider';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';

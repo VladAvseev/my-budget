@@ -1,8 +1,9 @@
 import { goalsQueryKey } from '@/shared/hooks';
-import { supabase } from '@/shared/supabase/supabase';
-import type { Goal } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Goal } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/** DELETE /goals/:id (порт delete_goal) + оптимистика. */
 const removeGoalMutationKey = ['removeGoal'] as const;
 
 export const useRemoveGoal = (userId: string) => {
@@ -12,8 +13,7 @@ export const useRemoveGoal = (userId: string) => {
   return useMutation({
     mutationKey: removeGoalMutationKey,
     mutationFn: async (id: string) => {
-      const { error } = await supabase.rpc('delete_goal', { p_id: id });
-      if (error) throw error;
+      await api.del(`/goals/${id}`);
     },
     onMutate: async (id) => {
       const previous = queryClient.getQueryData<Goal[]>(key) ?? [];

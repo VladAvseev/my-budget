@@ -1,10 +1,10 @@
-import type { Category } from '@/shared/supabase/types/domain';
+import type { Category } from '@/shared/api/types/domain';
 import {
   signedOperationAmount,
   type Operation,
   type OperationType,
-} from '@/shared/supabase/types/domain';
-import type { Report } from '@/shared/supabase/types/domain';
+} from '@/shared/api/types/domain';
+import type { Report } from '@/shared/api/types/domain';
 
 export interface ChartSegment {
   key: string;

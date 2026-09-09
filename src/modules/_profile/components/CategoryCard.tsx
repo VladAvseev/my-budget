@@ -1,4 +1,4 @@
-import type { Category } from '@/shared/supabase/types/domain';
+import type { Category } from '@/shared/api/types/domain';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VCard } from '@/shared/ui/VCard';
 import styles from './CategoryCard.module.css';

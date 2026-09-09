@@ -1,7 +1,7 @@
-import type { CategoryType } from '@/shared/supabase/types/domain';
-import type { Category } from '@/shared/supabase/types/domain';
+import type { CategoryType } from '@/shared/api/types/domain';
+import type { Category } from '@/shared/api/types/domain';
 import { PlusIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/supabase/authProvider';
+import { useAuth } from '@/shared/api/authProvider';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';

@@ -1,5 +1,5 @@
 import { registration } from '@/modules/_registration';
-import { AuthProvider } from '@/shared/supabase/authProvider';
+import { AuthProvider } from '@/shared/api/authProvider';
 import React from 'react';
 import { BrowserRouter, Routes } from 'react-router-dom';
 import { login } from '@/modules/_login';

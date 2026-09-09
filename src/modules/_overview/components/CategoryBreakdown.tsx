@@ -1,5 +1,5 @@
-import type { Operation, OperationType } from '@/shared/supabase/types/domain';
-import type { Report } from '@/shared/supabase/types/domain';
+import type { Operation, OperationType } from '@/shared/api/types/domain';
+import type { Report } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';

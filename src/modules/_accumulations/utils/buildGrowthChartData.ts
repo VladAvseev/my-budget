@@ -1,4 +1,4 @@
-import type { Accumulation, Operation, Report } from '@/shared/supabase/types/domain';
+import type { Accumulation, Operation, Report } from '@/shared/api/types/domain';
 import { sumOperations } from '@/modules/_overview/utils/overview';
 
 export interface ChartPoint {
@@ -127,8 +127,10 @@ export const buildGrowthChartData = (
 
 const AGGREGATION_SIZE: Record<GrowthAggregation, number> = { M: 1, Q: 3, HY: 6, Y: 12 };
 
-export const getPeriodEnd = (aggregation: GrowthAggregation) => (start: Date): Date =>
-  addMonths(start, AGGREGATION_SIZE[aggregation]);
+export const getPeriodEnd =
+  (aggregation: GrowthAggregation) =>
+  (start: Date): Date =>
+    addMonths(start, AGGREGATION_SIZE[aggregation]);
 
 export const trimIncompletePeriod = (
   points: ChartPoint[],
@@ -163,8 +165,7 @@ export const getPointChange = (data: ChartPoint[], index: number, base = 0): Poi
   const previousValue = index === 0 ? base : data[index - 1].value;
   const abs = value - previousValue;
 
-  const pct =
-    previousValue > 0 ? (value / previousValue - 1) * 100 : null;
+  const pct = previousValue > 0 ? (value / previousValue - 1) * 100 : null;
 
   return { abs, pct };
 };
@@ -173,7 +174,7 @@ export const toPeriodDeltas = (points: ChartPoint[], base = 0): ChartPoint[] =>
   points.map((point, index) => ({
     month: point.month,
     label: point.label,
-    value: (index === 0 ? point.value - base : point.value - points[index - 1].value),
+    value: index === 0 ? point.value - base : point.value - points[index - 1].value,
   }));
 
 const QUARTER_LABELS = ['1 кв', '2 кв', '3 кв', '4 кв'];

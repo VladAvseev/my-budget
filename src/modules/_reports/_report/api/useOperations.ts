@@ -1,16 +1,14 @@
-import { isSavingsType, type Operation, type OperationType } from '@/shared/supabase/types/domain';
-import { supabase } from '@/shared/supabase/supabase';
+import { isSavingsType, type Operation, type OperationType } from '@/shared/api/types/domain';
+import { api } from '@/shared/api/http';
 import { operationsQueryKey } from './keys';
 import { useQueries, useQuery } from '@tanstack/react-query';
 
-const fetchOperations = async (reportId: string, type: OperationType) => {
-  const { data, error } = await supabase.rpc('get_operations_by_report', {
-    p_report_id: reportId,
-    p_type: type,
-  });
-  if (error) throw error;
-  return (data as Operation[]) ?? [];
-};
+/**
+ * GET /operations?reportId=&type= (порт get_operations_by_report).
+ * Для daily сервер сортирует по дате расхода, для остальных — по created_at.
+ */
+const fetchOperations = async (reportId: string, type: OperationType) =>
+  (await api.get<Operation[]>(`/operations?reportId=${reportId}&type=${type}`)) ?? [];
 
 export const useOperations = (reportId: string, type: OperationType) =>
   useQuery<Operation[]>({

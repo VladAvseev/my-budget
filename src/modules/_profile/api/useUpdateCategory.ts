@@ -1,9 +1,13 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Category, CategoryUpdateInput } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Category, CategoryUpdateInput } from '@/shared/api/types/domain';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * PATCH /categories/:id (порт update_category). Отправляем только реально
+ * переданные поля — серверный PATCH-whitelist не затирает остальное null'ами.
+ */
 const updateCategoryMutationKey = ['updateCategory'] as const;
 
 export const useUpdateCategory = (userId: string) => {
@@ -12,12 +16,10 @@ export const useUpdateCategory = (userId: string) => {
   return useMutation({
     mutationKey: updateCategoryMutationKey,
     mutationFn: async ({ id, input }: { id: string; input: CategoryUpdateInput }) => {
-      const { error } = await supabase.rpc('update_category', {
-        p_id: id,
-        p_name: input.name !== undefined ? trimStrings(input.name) : null,
-        p_color: input.color ?? null,
-      });
-      if (error) throw error;
+      const body: Record<string, unknown> = {};
+      if (input.name !== undefined) body.name = trimStrings(input.name);
+      if (input.color !== undefined) body.color = input.color;
+      await api.patch(`/categories/${id}`, body);
     },
     onMutate: async ({ id, input }) => {
       const key = ['categories', userId];

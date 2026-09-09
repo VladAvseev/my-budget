@@ -1,5 +1,5 @@
 import commonStyles from '@/shared/styles/common.module.css';
-import type { AdminUserRow } from '@/shared/supabase/types/domain';
+import type { AdminUserRow } from '@/shared/api/types/domain';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils/date';

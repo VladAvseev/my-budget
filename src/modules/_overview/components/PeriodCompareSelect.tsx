@@ -1,4 +1,4 @@
-import type { Report } from '@/shared/supabase/types/domain';
+import type { Report } from '@/shared/api/types/domain';
 import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';

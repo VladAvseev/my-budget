@@ -1,4 +1,4 @@
-import type { Accumulation, Goal } from '@/shared/supabase/types/domain';
+import type { Accumulation, Goal } from '@/shared/api/types/domain';
 import { atom } from 'jotai';
 
 export const selectedDisplayCurrencyAtom = atom<string | null>(null);

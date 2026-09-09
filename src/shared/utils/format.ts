@@ -14,9 +14,7 @@ export function formatAmount(
   if (!Number.isFinite(value)) {
     return '0';
   }
-  const converted = convert
-    ? convertAmount(value, convert.from, convert.to, convert.rates)
-    : value;
+  const converted = convert ? convertAmount(value, convert.from, convert.to, convert.rates) : value;
   const formatted = converted.toLocaleString('ru-RU', {
     maximumFractionDigits: 2,
   });

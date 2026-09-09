@@ -1,9 +1,10 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Accumulation, AccumulationInput } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Accumulation, AccumulationInput } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/** POST /accumulations (порт create_accumulation) + прежняя оптимистика. */
 const createAccumulationMutationKey = ['createAccumulation'] as const;
 
 export const useCreateAccumulation = (userId: string) => {
@@ -12,12 +13,11 @@ export const useCreateAccumulation = (userId: string) => {
   return useMutation({
     mutationKey: createAccumulationMutationKey,
     mutationFn: async (input: AccumulationInput) => {
-      const { error } = await supabase.rpc('create_accumulation', {
-        p_amount: input.amount,
-        p_description: trimStrings(input.description),
-        p_category_id: input.categoryId ?? null,
+      await api.post('/accumulations', {
+        amount: input.amount,
+        description: trimStrings(input.description),
+        categoryId: input.categoryId ?? null,
       });
-      if (error) throw error;
     },
     onMutate: async (input) => {
       const key = ['accumulations', userId];

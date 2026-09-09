@@ -1,4 +1,4 @@
-import type { Category, CategoryLimit, Operation } from '@/shared/supabase/types/domain';
+import type { Category, CategoryLimit, Operation } from '@/shared/api/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import { useCurrency } from '@/shared/hooks';

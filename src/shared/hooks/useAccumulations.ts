@@ -1,7 +1,8 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Accumulation } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Accumulation } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
+/** GET /accumulations (порт get_accumulations); user — из токена, userId — для ключа кэша. */
 export const accumulationsQueryKey = (userId: string) => ['accumulations', userId] as const;
 
 export const useAccumulations = (userId: string) =>
@@ -9,11 +10,7 @@ export const useAccumulations = (userId: string) =>
     queryKey: accumulationsQueryKey(userId),
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_accumulations', { p_user_id: userId });
-      if (error) throw error;
-      return (data as Accumulation[]) ?? [];
-    },
+    queryFn: async () => (await api.get<Accumulation[]>('/accumulations')) ?? [],
   });
 
 export const useAccumulationsTotal = (userId: string) => {

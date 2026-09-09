@@ -16,7 +16,7 @@ import {
   UserIcon,
   type IconProps,
 } from '@/shared/icons';
-import { useAuth } from '@/shared/supabase/authProvider';
+import { useAuth } from '@/shared/api/authProvider';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import {

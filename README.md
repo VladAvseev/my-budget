@@ -10,7 +10,7 @@
 - **Язык:** TypeScript (strict mode)
 - **Линтер:** ESLint 9 (flat config)
 - **Форматтер:** Prettier
-- **Данные:** Supabase (`@supabase/supabase-js`) + TanStack Query (`@tanstack/react-query`)
+- **Данные:** собственный REST-бэкенд (`server/`, Express + PostgreSQL) через fetch-клиент + TanStack Query (`@tanstack/react-query`)
 - **Стейт-менеджмент:** Jotai (`jotai`)
 
 ## Быстрый старт
@@ -35,11 +35,12 @@ Dev-сервер запустится на порту из переменной 
 
 ## Переменные окружения
 
-| Переменная          | Описание                    | По умолчанию |
-| ------------------- | --------------------------- | ------------ |
-| `DEV_PORT`          | Порт dev-сервера            | `3001`       |
-| `SUPABASE_URL`      | URL проекта Supabase        | —            |
-| `SUPABASE_ANON_KEY` | Публичный anon-key Supabase | —            |
+| Переменная | Описание         | По умолчанию |
+| ---------- | ---------------- | ------------ |
+| `DEV_PORT` | Порт dev-сервера | `3001`       |
+
+API вызывается по same-origin `/api/v1`; в dev-режиме проксируется
+`server.proxy` в `rsbuild.config.ts` на локальный Express (порт 5001).
 
 ## Разделы
 
@@ -52,6 +53,6 @@ Dev-сервер запустится на порту из переменной 
 
 - Импорты только через алиас `@/*` → `src/*`.
 - Стилизация: CSS-modules + CSS-переменные из `theme.css`; дизайн-токены в TS не дублируются.
-- Работа с данными только через сервисы `@/shared/supabase/services` и хуки TanStack Query.
+- Работа с данными только через HTTP-клиент `@/shared/api/http` и хуки TanStack Query.
 - Страницы подключаются лениво через `AsyncPage` из `@/shared/ui/AsyncPage`.
 - Подробнее — в `AGENTS.md`.

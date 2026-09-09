@@ -1,4 +1,4 @@
-import type { Operation } from '@/shared/supabase/types/domain';
+import type { Operation } from '@/shared/api/types/domain';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
@@ -6,7 +6,7 @@ import { VCurrencyRates } from '@/shared/ui/VCurrencyRates';
 import { VHint } from '@/shared/ui/VHint';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
-import { useAuth } from '@/shared/supabase/authProvider';
+import { useAuth } from '@/shared/api/authProvider';
 import { useBreakpoint } from '@/shared/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
 import styles from './page.module.css';

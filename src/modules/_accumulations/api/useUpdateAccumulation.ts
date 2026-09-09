@@ -1,9 +1,13 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Accumulation, AccumulationUpdateInput } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Accumulation, AccumulationUpdateInput } from '@/shared/api/types/domain';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * PATCH /accumulations/:id (порт update_accumulation). Отсылаем только
+ * переданные поля — null в amount сервер не примет, и это правильно.
+ */
 const updateAccumulationMutationKey = ['updateAccumulation'] as const;
 
 export const useUpdateAccumulation = (userId: string) => {
@@ -13,13 +17,11 @@ export const useUpdateAccumulation = (userId: string) => {
   return useMutation({
     mutationKey: updateAccumulationMutationKey,
     mutationFn: async ({ id, input }: { id: string; input: AccumulationUpdateInput }) => {
-      const { error } = await supabase.rpc('update_accumulation', {
-        p_id: id,
-        p_amount: input.amount ?? null,
-        p_description: input.description !== undefined ? trimStrings(input.description) : null,
-        p_category_id: input.categoryId ?? null,
-      });
-      if (error) throw error;
+      const body: Record<string, unknown> = {};
+      if (input.amount !== undefined) body.amount = input.amount;
+      if (input.description !== undefined) body.description = trimStrings(input.description);
+      if (input.categoryId !== undefined) body.categoryId = input.categoryId;
+      await api.patch(`/accumulations/${id}`, body);
     },
     onMutate: async ({ id, input }) => {
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];

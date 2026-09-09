@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { Report } from '@/shared/supabase/types/domain';
-import type { OperationType } from '@/shared/supabase/types/domain';
+import type { Report } from '@/shared/api/types/domain';
+import type { OperationType } from '@/shared/api/types/domain';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import commonStyles from '@/shared/styles/common.module.css';
 import { OperationList } from './OperationList';

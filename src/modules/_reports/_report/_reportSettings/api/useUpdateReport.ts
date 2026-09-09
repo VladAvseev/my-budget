@@ -1,22 +1,26 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { ReportUpdateInput } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { ReportUpdateInput } from '@/shared/api/types/domain';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * PATCH /reports/:id (порт update_report): либо { name } — переименование,
+ * либо { hasDailyExpenses, dailyBudget?, periodStart?, periodEnd? } —
+ * вкл/выкл ежедневных расходов. Отсылаются только переданные поля
+ * (серверный if/elsif ветвит их точно как прежний RPC).
+ */
 export const useUpdateReport = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (input: ReportUpdateInput) => {
-      const { error } = await supabase.rpc('update_report', {
-        p_id: id,
-        p_name: input.name !== undefined ? trimStrings(input.name) : null,
-        p_has_daily_expenses: input.hasDailyExpenses ?? null,
-        p_daily_budget: input.dailyBudget ?? null,
-        p_period_start: input.periodStart ?? null,
-        p_period_end: input.periodEnd ?? null,
-      });
-      if (error) throw error;
+      const body: Record<string, unknown> = {};
+      if (input.name !== undefined) body.name = trimStrings(input.name);
+      if (input.hasDailyExpenses !== undefined) body.hasDailyExpenses = input.hasDailyExpenses;
+      if (input.dailyBudget !== undefined) body.dailyBudget = input.dailyBudget;
+      if (input.periodStart !== undefined) body.periodStart = input.periodStart;
+      if (input.periodEnd !== undefined) body.periodEnd = input.periodEnd;
+      await api.patch(`/reports/${id}`, body);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reports', id] });

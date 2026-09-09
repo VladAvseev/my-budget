@@ -40,8 +40,7 @@ export const GrowthChart = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const currency = useCurrency();
 
-  const format =
-    formatValue ?? ((v: number) => formatAmount(v, displaySymbol ?? currency?.symbol));
+  const format = formatValue ?? ((v: number) => formatAmount(v, displaySymbol ?? currency?.symbol));
 
   useEffect(() => {
     const el = containerRef.current;
@@ -320,7 +319,8 @@ export const GrowthChart = ({
                 <div className={styles.tooltipChange} style={{ color: changeColor }}>
                   {sign}
                   {format(change.abs)}
-                  {change.pct !== null && ` (${change.pct > 0 ? '+' : ''}${change.pct.toFixed(1)}%)`}
+                  {change.pct !== null &&
+                    ` (${change.pct > 0 ? '+' : ''}${change.pct.toFixed(1)}%)`}
                 </div>
               );
             })()}

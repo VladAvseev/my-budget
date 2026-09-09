@@ -1,13 +1,16 @@
-import { supabase } from '@/shared/supabase/supabase';
+import { api } from '@/shared/api/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * DELETE /reports/:id/daily-expenses (порт disable_daily_expenses):
+ * сервер одной транзакцией удаляет daily-операции и сбрасывает настройки.
+ */
 export const useDisableDailyExpenses = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.rpc('disable_daily_expenses', { p_report_id: id });
-      if (error) throw error;
+      await api.del(`/reports/${id}/daily-expenses`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reports', id] });

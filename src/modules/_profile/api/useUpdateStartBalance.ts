@@ -1,16 +1,20 @@
-import { supabase } from '@/shared/supabase/supabase';
+import { api } from '@/shared/api/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * PATCH /users/me { startBalance } (порт update_start_balance):
+ * стартовый баланс для глобальной сводки.
+ */
 export const useUpdateStartBalance = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (startBalance: number) => {
-      const { error } = await supabase.rpc('update_start_balance', { p_amount: startBalance });
-      if (error) throw error;
+      await api.patch('/users/me', { startBalance });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
+      queryClient.invalidateQueries({ queryKey: ['userSummary'] });
     },
   });
 };

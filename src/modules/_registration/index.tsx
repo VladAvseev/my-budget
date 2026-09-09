@@ -1,4 +1,4 @@
-import { PublicRoute } from '@/shared/supabase/components/PublicRoute';
+import { PublicRoute } from '@/shared/api/components/PublicRoute';
 import { AsyncPage } from '@/shared/ui/AsyncPage';
 import { Route } from 'react-router-dom';
 

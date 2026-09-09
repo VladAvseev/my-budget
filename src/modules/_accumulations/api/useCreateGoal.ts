@@ -1,9 +1,10 @@
 import { goalsQueryKey } from '@/shared/hooks';
-import { supabase } from '@/shared/supabase/supabase';
-import type { Goal, GoalInput } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Goal, GoalInput } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/** POST /goals (порт create_goal): 400 чужая/не savings категория, 409 дубль. */
 const createGoalMutationKey = ['createGoal'] as const;
 
 export const useCreateGoal = (userId: string) => {
@@ -12,12 +13,11 @@ export const useCreateGoal = (userId: string) => {
   return useMutation({
     mutationKey: createGoalMutationKey,
     mutationFn: async (input: GoalInput) => {
-      const { error } = await supabase.rpc('create_goal', {
-        p_category_id: input.categoryId,
-        p_amount: input.amount,
-        p_target_date: input.targetDate ?? null,
+      await api.post('/goals', {
+        categoryId: input.categoryId,
+        amount: input.amount,
+        targetDate: input.targetDate ?? null,
       });
-      if (error) throw error;
     },
     onMutate: async (input) => {
       const key = goalsQueryKey(userId);

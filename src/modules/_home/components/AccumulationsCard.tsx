@@ -6,8 +6,8 @@ import {
 } from '@/shared/utils';
 import { useAccumulationsTotal, useCurrency, useGoals } from '@/shared/hooks';
 import { ChevronRightIcon, SavingsIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/supabase/authProvider';
-import { signedOperationAmount, type OperationType } from '@/shared/supabase/types/domain';
+import { useAuth } from '@/shared/api/authProvider';
+import { signedOperationAmount, type OperationType } from '@/shared/api/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { useMemo } from 'react';
@@ -101,11 +101,7 @@ export const AccumulationsCard = () => {
           <div className={styles.section}>
             <div className={styles.sectionTitle}>Структура накоплений</div>
             {total > 0 ? (
-              <AccumulationsLegend
-                items={structureItems}
-                categories={categories}
-                fullWidth
-              />
+              <AccumulationsLegend items={structureItems} categories={categories} fullWidth />
             ) : (
               <div className={styles.emptyMessage}>Доли накоплений невозможно отобразить</div>
             )}
@@ -125,10 +121,7 @@ export const AccumulationsCard = () => {
                 aria-valuemax={100}
                 aria-valuenow={overall.percent}
               >
-                <div
-                  className={styles.goalBarFill}
-                  style={{ width: `${overall.percent}%` }}
-                />
+                <div className={styles.goalBarFill} style={{ width: `${overall.percent}%` }} />
               </div>
               <div className={styles.goalsOverallRow}>
                 <span className={styles.goalAmounts}>

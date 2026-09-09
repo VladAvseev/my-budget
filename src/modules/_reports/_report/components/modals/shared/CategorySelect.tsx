@@ -1,4 +1,4 @@
-import type { CategoryType } from '@/shared/supabase/types/domain';
+import type { CategoryType } from '@/shared/api/types/domain';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VSelect } from '@/shared/ui/VSelect';
 import { useMemo } from 'react';

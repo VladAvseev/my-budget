@@ -1,4 +1,4 @@
-import type { OperationType } from '@/shared/supabase/types/domain';
+import type { OperationType } from '@/shared/api/types/domain';
 
 export const operationsQueryKey = (reportId: string, type: OperationType) =>
   ['reports', reportId, 'operations', type] as const;

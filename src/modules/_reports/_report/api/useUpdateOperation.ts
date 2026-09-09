@@ -1,10 +1,15 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Operation, OperationUpdateInput } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Operation, OperationUpdateInput } from '@/shared/api/types/domain';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * PATCH /operations/:id (порт update_operation). Отправляем только реально
+ * заполненные поля: null в amount смысл иметь не может (NOT NULL), а
+ * categoryId/description = null — легальное «очистить».
+ */
 const updateOperationMutationKey = ['updateOperation'] as const;
 
 export const useUpdateOperation = (reportId: string) => {
@@ -13,15 +18,13 @@ export const useUpdateOperation = (reportId: string) => {
   return useMutation({
     mutationKey: updateOperationMutationKey,
     mutationFn: async ({ id, input }: { id: string; input: OperationUpdateInput }) => {
-      const { error } = await supabase.rpc('update_operation', {
-        p_id: id,
-        p_amount: input.amount ?? null,
-        p_category_id: input.categoryId ?? null,
-        p_description: input.description ?? null,
-        p_type: input.type ?? null,
-        p_date: input.date ?? null,
-      });
-      if (error) throw error;
+      const body: Record<string, unknown> = {};
+      if (input.amount !== undefined && input.amount !== null) body.amount = input.amount;
+      if (input.categoryId !== undefined) body.categoryId = input.categoryId;
+      if (input.description !== undefined) body.description = trimStrings(input.description);
+      if (input.type !== undefined) body.type = input.type;
+      if (input.date !== undefined) body.date = input.date;
+      await api.patch(`/operations/${id}`, body);
     },
     onMutate: async ({ id, input }) => {
       const prefix = ['reports', reportId, 'operations'];

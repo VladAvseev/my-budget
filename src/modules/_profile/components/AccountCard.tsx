@@ -1,5 +1,5 @@
 import { useProfile } from '@/shared/hooks';
-import { useAuth } from '@/shared/supabase/authProvider';
+import { useAuth } from '@/shared/api/authProvider';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';

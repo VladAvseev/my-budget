@@ -1,7 +1,8 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Goal } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Goal } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
+/** GET /goals (порт get_goals): цели; user — из токена, userId только для ключа кэша. */
 export const goalsQueryKey = (userId: string) => ['goals', userId] as const;
 
 export const useGoals = (userId: string) =>
@@ -9,9 +10,5 @@ export const useGoals = (userId: string) =>
     queryKey: goalsQueryKey(userId),
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_goals', { p_user_id: userId });
-      if (error) throw error;
-      return (data as Goal[]) ?? [];
-    },
+    queryFn: async () => (await api.get<Goal[]>('/goals')) ?? [],
   });

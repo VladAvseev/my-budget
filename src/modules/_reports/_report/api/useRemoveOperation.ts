@@ -1,8 +1,9 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Operation } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Operation } from '@/shared/api/types/domain';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/** DELETE /operations/:id (порт delete_operation) + оптимистичное удаление. */
 const removeOperationMutationKey = ['removeOperation'] as const;
 
 export const useRemoveOperation = (reportId: string) => {
@@ -11,8 +12,7 @@ export const useRemoveOperation = (reportId: string) => {
   return useMutation({
     mutationKey: removeOperationMutationKey,
     mutationFn: async (id: string) => {
-      const { error } = await supabase.rpc('delete_operation', { p_id: id });
-      if (error) throw error;
+      await api.del(`/operations/${id}`);
     },
     onMutate: async (id) => {
       const prefix = ['reports', reportId, 'operations'];

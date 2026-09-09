@@ -1,7 +1,8 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { CategoryLimit } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { CategoryLimit } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
+/** GET /reports/:id/category-limits (порт get_category_limits). */
 export const categoryLimitsQueryKey = (reportId: string) =>
   ['reports', reportId, 'limits'] as const;
 
@@ -10,11 +11,6 @@ export const useCategoryLimits = (reportId: string) =>
     queryKey: categoryLimitsQueryKey(reportId),
     enabled: Boolean(reportId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_category_limits', {
-        p_report_id: reportId,
-      });
-      if (error) throw error;
-      return (data as CategoryLimit[]) ?? [];
-    },
+    queryFn: async () =>
+      (await api.get<CategoryLimit[]>(`/reports/${reportId}/category-limits`)) ?? [],
   });

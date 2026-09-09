@@ -1,5 +1,5 @@
-import type { LoginCredentials } from '@/shared/supabase/types/auth.types';
-import { authService } from '@/shared/supabase/services/auth';
+import type { LoginCredentials } from '@/shared/api/types/auth.types';
+import { authService } from '@/shared/api/services/auth';
 import { getErrorMessage } from '@/shared/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';

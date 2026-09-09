@@ -1,4 +1,4 @@
-import { useAuth } from '@/shared/supabase/authProvider';
+import { useAuth } from '@/shared/api/authProvider';
 import { useGlobalBalance, useUserSummary } from './useGlobalBalance';
 import { useAccumulationsTotal } from './useAccumulations';
 

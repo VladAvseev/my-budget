@@ -1,4 +1,4 @@
-import { authService } from '@/shared/supabase/services/auth';
+import { authService } from '@/shared/api/services/auth';
 import { useMutation } from '@tanstack/react-query';
 
 export const useChangePassword = () => {

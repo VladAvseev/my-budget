@@ -1,12 +1,96 @@
-import type { Database } from './database.types';
+/**
+ * Доменные типы данных приложения.
+ *
+ * Раньше генерировались из схемы Supabase (database.types.ts). Теперь
+ * описаны руками и зеркалят ответы REST-бэкенда (`server/`), который,
+ * в свою очередь, точно воспроизводит jsonb-формы прежних RPC-функций:
+ * ключи snake_case, numeric приходит ЧИСЛОМ (jsonb), но для совместимости
+ * со старым кодом поля amount/start_balance типизированы строкой — UI
+ * везде оборачивает их Number(...), строку и число это не ломает.
+ */
 
-export type Operation = Database['public']['Tables']['operations']['Row'];
-export type Report = Database['public']['Tables']['reports']['Row'];
-export type Category = Database['public']['Tables']['categories']['Row'];
-export type Accumulation = Database['public']['Tables']['accumulations']['Row'];
-export type Goal = Database['public']['Tables']['goals']['Row'];
-export type CategoryLimit = Database['public']['Tables']['category_limits']['Row'];
-export type Profile = Database['public']['Tables']['profiles']['Row'];
+export interface Operation {
+  id: string;
+  report_id: string;
+  user_id: string;
+  type: string;
+  amount: string;
+  category_id: string | null;
+  description: string | null;
+  date: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Report {
+  id: string;
+  user_id: string;
+  name: string;
+  code: string;
+  has_daily_expenses: boolean;
+  daily_budget: string | null;
+  period_start: string;
+  period_end: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Category {
+  id: string;
+  user_id: string;
+  type: string;
+  name: string;
+  color: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Accumulation {
+  id: string;
+  user_id: string;
+  category_id: string | null;
+  description: string;
+  amount: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Goal {
+  id: string;
+  user_id: string;
+  category_id: string;
+  amount: string;
+  target_date: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CategoryLimit {
+  id: string;
+  report_id: string;
+  category_id: string;
+  user_id: string;
+  amount: string;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * Профиль: форма строк прежней таблицы profiles. GET /users/me отдаёт
+ * camelCase PublicUser — адаптацию выполняет хук useProfile, поэтому
+ * потребители (AccountCard, StartBalanceCard, онбординг) не менялись.
+ */
+export interface Profile {
+  user_id: string;
+  email: string;
+  start_balance: string;
+  currency: string | null;
+  onboarded: boolean;
+  role: string;
+  last_active_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
 export type OperationType = 'income' | 'expense' | 'savings' | 'savings_out' | 'daily';
 export type CategoryType = 'expense' | 'income' | 'savings';

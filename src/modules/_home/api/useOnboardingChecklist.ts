@@ -1,6 +1,6 @@
 import { useProfile } from '@/shared/hooks';
-import { useAuth } from '@/shared/supabase/authProvider';
-import { supabase } from '@/shared/supabase/supabase';
+import { useAuth } from '@/shared/api/authProvider';
+import { api } from '@/shared/api/http';
 import { useQuery } from '@tanstack/react-query';
 
 export interface OnboardingItem {
@@ -17,6 +17,10 @@ export interface OnboardingState {
   operations: number;
 }
 
+/**
+ * Чек-лист онбординга: счётчики из GET /users/me/onboarding
+ * (порт get_onboarding_state) + профиль из useProfile.
+ */
 export const useOnboardingChecklist = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
@@ -27,13 +31,12 @@ export const useOnboardingChecklist = () => {
     queryKey: ['onboardingCounts', userId],
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_onboarding_state', {
-        p_user_id: userId,
-      });
-      if (error) throw error;
-      return (data as OnboardingState) ?? { categories: 0, reports: 0, operations: 0 };
-    },
+    queryFn: async () =>
+      (await api.get<OnboardingState>('/users/me/onboarding')) ?? {
+        categories: 0,
+        reports: 0,
+        operations: 0,
+      },
   });
 
   const profile = profileQuery.data ?? null;

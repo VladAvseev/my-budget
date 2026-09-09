@@ -1,4 +1,4 @@
-import type { Category } from '@/shared/supabase/types/domain';
+import type { Category } from '@/shared/api/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { convertAmount, formatAmount } from '@/shared/utils';

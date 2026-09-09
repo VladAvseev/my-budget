@@ -1,7 +1,12 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Operation } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Operation } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
+/**
+ * Карточка «Накопления»: GET /operations/savings
+ * (порт get_savings_operations) — пополнения/снятия с полями отчёта
+ * (reportName/reportPeriodStart — исторические camelCase-ключи RPC).
+ */
 export type SavingsOperation = Operation & { reportName: string; reportPeriodStart: string };
 
 export const useSavingsOperations = (userId: string) =>
@@ -9,11 +14,5 @@ export const useSavingsOperations = (userId: string) =>
     queryKey: ['savingsOperations', userId],
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_savings_operations', {
-        p_user_id: userId,
-      });
-      if (error) throw error;
-      return (data as SavingsOperation[]) ?? [];
-    },
+    queryFn: async () => (await api.get<SavingsOperation[]>('/operations/savings')) ?? [],
   });

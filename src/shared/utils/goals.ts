@@ -4,7 +4,7 @@ import {
   type Accumulation,
   type Goal,
   type OperationType,
-} from '@/shared/supabase/types/domain';
+} from '@/shared/api/types/domain';
 
 export interface GoalProgressSource {
   category_id: string | null;
@@ -57,8 +57,7 @@ export const buildGoalsProgress = (
       reached,
       // Просрочена: дата есть, она в прошлом и цель не достигнута.
       // Сравнение ISO-строк YYYY-MM-DD; дата «сегодня» ещё не просрочка.
-      overdue:
-        goal.target_date !== null && goal.target_date < toISODate(new Date()) && !reached,
+      overdue: goal.target_date !== null && goal.target_date < toISODate(new Date()) && !reached,
     };
   });
 

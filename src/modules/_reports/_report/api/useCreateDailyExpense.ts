@@ -1,6 +1,6 @@
-import { useAuth } from '@/shared/supabase/authProvider';
-import { supabase } from '@/shared/supabase/supabase';
-import type { Operation } from '@/shared/supabase/types/domain';
+import { useAuth } from '@/shared/api/authProvider';
+import { api } from '@/shared/api/http';
+import type { Operation } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { getNextFreeDate } from '@/shared/utils/date';
 import { trimStrings } from '@/shared/utils';
@@ -8,6 +8,12 @@ import { operationsQueryKey } from './keys';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * POST /reports/:id/daily-expenses (порт create_daily_expense): сервер сам
+ * ищет первую свободную дату периода отчёта (по своей копии периода —
+ * надёжнее, чем аргументы клиента; periodStart/periodEnd в сигнатуре
+ * оставлены для оптимистичной даты в кэше).
+ */
 const createDailyExpenseMutationKey = ['createDailyExpense'] as const;
 
 export const useCreateDailyExpense = (reportId: string) => {
@@ -18,21 +24,15 @@ export const useCreateDailyExpense = (reportId: string) => {
     mutationKey: createDailyExpenseMutationKey,
     mutationFn: async ({
       input,
-      periodStart,
-      periodEnd,
     }: {
       input: { amount: number; description?: string | null };
       periodStart: string;
       periodEnd: string;
     }) => {
-      const { error } = await supabase.rpc('create_daily_expense', {
-        p_report_id: reportId,
-        p_amount: input.amount,
-        p_description: input.description ?? null,
-        p_period_start: periodStart,
-        p_period_end: periodEnd,
+      await api.post(`/reports/${reportId}/daily-expenses`, {
+        amount: input.amount,
+        description: input.description ?? null,
       });
-      if (error) throw error;
     },
     onMutate: async ({ input, periodStart, periodEnd }) => {
       const key = operationsQueryKey(reportId, 'daily');

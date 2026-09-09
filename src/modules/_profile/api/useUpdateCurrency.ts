@@ -1,13 +1,15 @@
-import { supabase } from '@/shared/supabase/supabase';
+import { api } from '@/shared/api/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * PATCH /users/me { currency } (порт update_currency): смена валюты профиля.
+ */
 export const useUpdateCurrency = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (currency: string | null) => {
-      const { error } = await supabase.rpc('update_currency', { p_currency: currency });
-      if (error) throw error;
+      await api.patch('/users/me', { currency });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });

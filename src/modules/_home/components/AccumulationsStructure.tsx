@@ -1,4 +1,4 @@
-import type { Category } from '@/shared/supabase/types/domain';
+import type { Category } from '@/shared/api/types/domain';
 import { useCurrency } from '@/shared/hooks';
 import { formatAmount } from '@/shared/utils';
 import styles from './AccumulationsStructure.module.css';

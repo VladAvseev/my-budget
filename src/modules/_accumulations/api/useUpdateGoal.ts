@@ -1,9 +1,10 @@
 import { goalsQueryKey } from '@/shared/hooks';
-import { supabase } from '@/shared/supabase/supabase';
-import type { Goal, GoalUpdateInput } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Goal, GoalUpdateInput } from '@/shared/api/types/domain';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/** PATCH /goals/:id (порт update_goal): сумма и/или целевая дата. */
 const updateGoalMutationKey = ['updateGoal'] as const;
 
 export const useUpdateGoal = (userId: string) => {
@@ -13,12 +14,10 @@ export const useUpdateGoal = (userId: string) => {
   return useMutation({
     mutationKey: updateGoalMutationKey,
     mutationFn: async ({ id, input }: { id: string; input: GoalUpdateInput }) => {
-      const { error } = await supabase.rpc('update_goal', {
-        p_id: id,
-        p_amount: input.amount,
-        p_target_date: input.targetDate ?? null,
+      await api.patch(`/goals/${id}`, {
+        amount: input.amount,
+        targetDate: input.targetDate ?? null,
       });
-      if (error) throw error;
     },
     onMutate: async ({ id, input }) => {
       const previous = queryClient.getQueryData<Goal[]>(key) ?? [];

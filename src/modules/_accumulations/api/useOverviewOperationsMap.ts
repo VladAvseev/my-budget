@@ -1,7 +1,13 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Operation } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Operation } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
+/**
+ * Карта «отчёт → операции» для графиков роста на странице накоплений:
+ * GET /operations?reportIds= (порт get_operations_by_reports). Как и прежний
+ * RPC, ответ содержит только report_id/type/amount/category_id — типизация
+ * Operation[] сохранена для совместимости с потребителями.
+ */
 const overviewOperationsQueryKey = (reportIds: string[]) =>
   ['overview', 'operations', [...reportIds].sort().join('|')] as const;
 
@@ -11,11 +17,8 @@ export const useOverviewOperationsMap = (reportIds: string[]) =>
     enabled: reportIds.length > 0,
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_operations_by_reports', {
-        p_report_ids: reportIds,
-      });
-      if (error) throw error;
-      const operations = (data as Operation[]) ?? [];
+      const operations =
+        (await api.get<Operation[]>(`/operations?reportIds=${reportIds.join(',')}`)) ?? [];
       const map = new Map<string, Operation[]>();
       for (const operation of operations) {
         const list = map.get(operation.report_id) ?? [];

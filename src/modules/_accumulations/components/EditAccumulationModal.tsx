@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { TrashIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/supabase/authProvider';
-import type { Accumulation } from '@/shared/supabase/types/domain';
+import { useAuth } from '@/shared/api/authProvider';
+import type { Accumulation } from '@/shared/api/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { capitalizeFirst, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';

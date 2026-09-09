@@ -1,7 +1,7 @@
 import { ImportIcon, TrashIcon } from '@/shared/icons';
 import { createOptimisticId } from '@/shared/optimistic';
-import { useAuth } from '@/shared/supabase/authProvider';
-import type { Report } from '@/shared/supabase/types/domain';
+import { useAuth } from '@/shared/api/authProvider';
+import type { Report } from '@/shared/api/types/domain';
 import { getErrorMessage } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
@@ -12,7 +12,7 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { useMemo, useState } from 'react';
-import type { CategoryLimit } from '@/shared/supabase/types/domain';
+import type { CategoryLimit } from '@/shared/api/types/domain';
 import { useCategories } from '../../api/useCategories';
 import { useCategoryLimits } from '../../api/useCategoryLimits';
 import { useSetCategoryLimits } from '../api/useSetCategoryLimits';

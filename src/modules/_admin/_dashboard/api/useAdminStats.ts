@@ -1,14 +1,11 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { AdminDashboardStats } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { AdminDashboardStats } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
+/** GET /admin/dashboard/stats (порт admin_get_dashboard_stats). */
 export const useAdminStats = () =>
   useQuery<AdminDashboardStats>({
     queryKey: ['admin', 'stats'],
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc('admin_get_dashboard_stats');
-      if (error) throw error;
-      return data;
-    },
+    queryFn: () => api.get<AdminDashboardStats>('/admin/dashboard/stats'),
     refetchInterval: 60_000,
   });

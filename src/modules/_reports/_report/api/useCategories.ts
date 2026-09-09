@@ -1,18 +1,13 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Category, CategoryType } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Category, CategoryType } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
+/** GET /categories [?type=] (порт get_categories) для страницы отчёта. */
 export const useCategories = (userId: string, type?: CategoryType) =>
   useQuery<Category[]>({
     queryKey: ['categories', userId, type],
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_categories', {
-        p_user_id: userId,
-        p_type: type ?? null,
-      });
-      if (error) throw error;
-      return (data as Category[]) ?? [];
-    },
+    queryFn: async () =>
+      (await api.get<Category[]>(`/categories${type ? `?type=${type}` : ''}`)) ?? [],
   });

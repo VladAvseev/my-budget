@@ -1,25 +1,9 @@
-import { defineConfig, loadEnv } from '@rsbuild/core';
+import { defineConfig } from '@rsbuild/core';
 import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
 import { pluginReact } from '@rsbuild/plugin-react';
 
-const { parsed: env } = loadEnv();
-
-const runtimeEnvKeys = ['SUPABASE_URL', 'SUPABASE_ANON_KEY'];
-
-const define = Object.fromEntries(
-  runtimeEnvKeys
-    .filter((key) => env[key] != null)
-    .flatMap((key) => [
-      [`process.env.${key}`, JSON.stringify(env[key])],
-      [`import.meta.env.${key}`, JSON.stringify(env[key])],
-    ]),
-);
-
 export default defineConfig({
   plugins: [pluginReact(), pluginAssetsRetry()],
-  source: {
-    define,
-  },
   resolve: {
     alias: {
       '@': './src',
@@ -28,6 +12,11 @@ export default defineConfig({
   server: {
     port: Number(process.env.DEV_PORT) || 3001,
     open: true,
+    // В dev запросы фронтенда идут на тот же путь /api/v1, что и в проде,
+    // а прокси отдают локальный Express (server/, npm run dev там же).
+    proxy: {
+      '/api': 'http://localhost:5001',
+    },
   },
   html: {
     template: './public/index.html',
@@ -36,13 +25,6 @@ export default defineConfig({
   splitChunks: {
     preset: 'default',
     cacheGroups: {
-      supabase: {
-        test: /[\\/]node_modules[\\/]@supabase[\\/]/,
-        name: 'supabase',
-        chunks: 'all',
-        priority: 0,
-        enforce: true,
-      },
       reactQuery: {
         test: /[\\/]node_modules[\\/]@tanstack[\\/]/,
         name: 'react-query',

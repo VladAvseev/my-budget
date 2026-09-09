@@ -1,5 +1,5 @@
 import { AppLayout } from '@/shared/layout/AppLayout';
-import { RoleRoute } from '@/shared/supabase/components/RoleRoute';
+import { RoleRoute } from '@/shared/api/components/RoleRoute';
 import { Navigate, Route } from 'react-router-dom';
 import { dashboard } from './_dashboard';
 import { users } from './_users';

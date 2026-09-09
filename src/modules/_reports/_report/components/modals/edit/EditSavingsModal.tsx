@@ -1,7 +1,7 @@
 import { TrashIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/supabase/authProvider';
-import type { Operation, OperationType } from '@/shared/supabase/types/domain';
-import type { Report } from '@/shared/supabase/types/domain';
+import { useAuth } from '@/shared/api/authProvider';
+import type { Operation, OperationType } from '@/shared/api/types/domain';
+import type { Report } from '@/shared/api/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { capitalizeFirst, formatDisplay, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';

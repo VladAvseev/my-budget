@@ -1,8 +1,13 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Report, ReportInput } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Report, ReportInput } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * POST /reports (порт create_report): body в camelCase; сервер сам решает
+ * уникальность кода ('Такой период уже существует' → 409) и то, что бюджет
+ * пишется только при включённом daily-режиме. Оптимистичная вставка прежняя.
+ */
 const createReportMutationKey = ['createReport'] as const;
 
 export const useCreateReport = () => {
@@ -11,15 +16,14 @@ export const useCreateReport = () => {
   return useMutation({
     mutationKey: createReportMutationKey,
     mutationFn: async (input: ReportInput) => {
-      const { error } = await supabase.rpc('create_report', {
-        p_name: input.name.trim(),
-        p_code: input.code ?? '',
-        p_has_daily_expenses: input.hasDailyExpenses ?? false,
-        p_daily_budget: input.dailyBudget ?? null,
-        p_period_start: input.periodStart,
-        p_period_end: input.periodEnd,
+      await api.post('/reports', {
+        name: input.name.trim(),
+        code: input.code ?? '',
+        hasDailyExpenses: input.hasDailyExpenses ?? false,
+        dailyBudget: input.dailyBudget ?? null,
+        periodStart: input.periodStart,
+        periodEnd: input.periodEnd,
       });
-      if (error) throw error;
     },
     onMutate: async (input) => {
       const key = ['reports'];

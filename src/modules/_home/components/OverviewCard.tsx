@@ -1,11 +1,6 @@
-import {
-  useAccumulationsTotal,
-  useCurrency,
-  useProfile,
-  useUserSummary,
-} from '@/shared/hooks';
+import { useAccumulationsTotal, useCurrency, useProfile, useUserSummary } from '@/shared/hooks';
 import { ChevronRightIcon, OverviewIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/supabase/authProvider';
+import { useAuth } from '@/shared/api/authProvider';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';

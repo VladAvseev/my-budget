@@ -1,7 +1,8 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Accumulation } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Accumulation } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/** DELETE /accumulations/:id (порт delete_accumulation) + оптимистика. */
 const removeAccumulationMutationKey = ['removeAccumulation'] as const;
 
 export const useRemoveAccumulation = (userId: string) => {
@@ -11,8 +12,7 @@ export const useRemoveAccumulation = (userId: string) => {
   return useMutation({
     mutationKey: removeAccumulationMutationKey,
     mutationFn: async (id: string) => {
-      const { error } = await supabase.rpc('delete_accumulation', { p_id: id });
-      if (error) throw error;
+      await api.del(`/accumulations/${id}`);
     },
     onMutate: async (id) => {
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];

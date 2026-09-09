@@ -1,7 +1,8 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { Category } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { Category } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/** DELETE /categories/:id (порт delete_category) + оптимистичное удаление. */
 const removeCategoryMutationKey = ['removeCategory'] as const;
 
 export const useRemoveCategory = (userId: string) => {
@@ -10,8 +11,7 @@ export const useRemoveCategory = (userId: string) => {
   return useMutation({
     mutationKey: removeCategoryMutationKey,
     mutationFn: async (id: string) => {
-      const { error } = await supabase.rpc('delete_category', { p_id: id });
-      if (error) throw error;
+      await api.del(`/categories/${id}`);
     },
     onMutate: async (id) => {
       const key = ['categories', userId];

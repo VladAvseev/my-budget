@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useAuth } from '@/shared/supabase/authProvider';
+import { useAuth } from '@/shared/api/authProvider';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { capitalizeFirst, getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';

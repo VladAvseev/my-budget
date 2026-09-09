@@ -1,4 +1,4 @@
-import type { Operation } from '@/shared/supabase/types/domain';
+import type { Operation } from '@/shared/api/types/domain';
 import { useCurrency } from '@/shared/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';

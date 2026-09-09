@@ -17,7 +17,8 @@ const formatPct = (value: number): string => {
 };
 
 export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
-  const { monthly, periodLabel, currentPeriod, currentPeriodLabel } = stats;  const currency = useCurrency();
+  const { monthly, periodLabel, currentPeriod, currentPeriodLabel } = stats;
+  const currency = useCurrency();
   const symbol = displaySymbol ?? currency?.symbol ?? '₽';
 
   const formatSigned = (value: number): string => {
@@ -30,11 +31,9 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
       ? `${formatSigned(change.abs)} (${formatPct(change.pct)})`
       : formatSigned(change.abs);
 
-  const monthlyLine =
-    monthly !== null ? formatChange(monthly) : null;
+  const monthlyLine = monthly !== null ? formatChange(monthly) : null;
 
-  const currentPeriodLine =
-    currentPeriod !== null ? formatChange(currentPeriod) : null;
+  const currentPeriodLine = currentPeriod !== null ? formatChange(currentPeriod) : null;
 
   if (!monthlyLine && !currentPeriodLine) return null;
 

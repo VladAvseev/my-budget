@@ -1,4 +1,4 @@
-import type { Report } from '@/shared/supabase/types/domain';
+import type { Report } from '@/shared/api/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { capitalizeFirst, formatDisplay, getErrorMessage, getNextFreeDate } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';

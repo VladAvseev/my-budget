@@ -105,9 +105,7 @@ export const buildGrowthStats = (
     monthly: buildMonthlyStats(trimmed),
     periodLabel: AGGREGATION_LABELS[aggregation],
     currentPeriod:
-      filteredData.length > 0
-        ? getPointChange(filteredData, filteredData.length - 1, base)
-        : null,
+      filteredData.length > 0 ? getPointChange(filteredData, filteredData.length - 1, base) : null,
     currentPeriodLabel: CURRENT_PERIOD_LABELS[aggregation],
   };
 };

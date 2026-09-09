@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import commonStyles from '@/shared/styles/common.module.css';
-import type { AdminDashboardStats } from '@/shared/supabase/types/domain';
+import type { AdminDashboardStats } from '@/shared/api/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';

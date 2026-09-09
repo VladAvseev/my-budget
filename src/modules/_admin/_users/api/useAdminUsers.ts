@@ -1,14 +1,11 @@
-import { supabase } from '@/shared/supabase/supabase';
-import type { AdminUserRow } from '@/shared/supabase/types/domain';
+import { api } from '@/shared/api/http';
+import type { AdminUserRow } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
+/** GET /admin/users (порт admin_get_users): таблица пользователей админки. */
 export const useAdminUsers = () =>
   useQuery<AdminUserRow[]>({
     queryKey: ['admin', 'users'],
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc('admin_get_users');
-      if (error) throw error;
-      return data ?? [];
-    },
+    queryFn: async () => (await api.get<AdminUserRow[]>('/admin/users')) ?? [],
     refetchInterval: 60_000,
   });

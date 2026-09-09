@@ -1,5 +1,5 @@
 import commonStyles from '@/shared/styles/common.module.css';
-import type { Report } from '@/shared/supabase/types/domain';
+import type { Report } from '@/shared/api/types/domain';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';

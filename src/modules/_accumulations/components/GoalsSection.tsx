@@ -1,11 +1,7 @@
 import { PlusIcon } from '@/shared/icons';
 import { useAccumulations, useGoals } from '@/shared/hooks';
-import { useAuth } from '@/shared/supabase/authProvider';
-import {
-  signedOperationAmount,
-  type Goal,
-  type OperationType,
-} from '@/shared/supabase/types/domain';
+import { useAuth } from '@/shared/api/authProvider';
+import { signedOperationAmount, type Goal, type OperationType } from '@/shared/api/types/domain';
 import {
   buildGoalForecast,
   buildGoalsOverallProgress,
@@ -65,7 +61,7 @@ const GoalForecastInfo = ({
   return (
     <div className={styles.forecast}>
       <div className={styles.forecastRow}>
-        Рекомендуется пополнять на {' '}
+        Рекомендуется пополнять на{' '}
         {formatAmount(Math.ceil(forecast.requiredMonthly), symbol, convertOptions)} в месяц
       </div>
     </div>
@@ -89,11 +85,9 @@ export const GoalsSection = () => {
 
   const progressList = useMemo(
     () =>
-      buildGoalsProgress(
-        goals,
-        accumulationsQuery.data ?? [],
-        savingsQuery.data ?? [],
-      ).sort((a, b) => Math.abs(b.savedAmount) - Math.abs(a.savedAmount)),
+      buildGoalsProgress(goals, accumulationsQuery.data ?? [], savingsQuery.data ?? []).sort(
+        (a, b) => Math.abs(b.savedAmount) - Math.abs(a.savedAmount),
+      ),
     [goals, accumulationsQuery.data, savingsQuery.data],
   );
   const overallProgress = buildGoalsOverallProgress(progressList);
@@ -143,18 +137,14 @@ export const GoalsSection = () => {
   );
 
   // Прогресс пополнений за текущий период: нетто по категориям целей.
-  const goalCategoryIds = useMemo(
-    () => new Set(goals.map((goal) => goal.category_id)),
-    [goals],
-  );
+  const goalCategoryIds = useMemo(() => new Set(goals.map((goal) => goal.category_id)), [goals]);
   const currentPeriodSaved = useMemo(() => {
     if (!currentReport) return 0;
     return (savingsQuery.data ?? []).reduce((sum, operation) => {
       if (operation.report_id !== currentReport.id) return sum;
       if (operation.category_id === null || !goalCategoryIds.has(operation.category_id)) return sum;
       return (
-        sum +
-        signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0)
+        sum + signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0)
       );
     }, 0);
   }, [currentReport, savingsQuery.data, goalCategoryIds]);
@@ -219,10 +209,7 @@ export const GoalsSection = () => {
                 aria-valuemax={100}
                 aria-valuenow={overallProgress.percent}
               >
-                <div
-                  className={styles.fill}
-                  style={{ width: `${overallProgress.percent}%` }}
-                />
+                <div className={styles.fill} style={{ width: `${overallProgress.percent}%` }} />
               </div>
               <div className={styles.cardBottom}>
                 <span className={styles.savedAmount}>
@@ -237,8 +224,7 @@ export const GoalsSection = () => {
                 <div className={styles.periodRow}>
                   Пополнено в текущем периоде:{' '}
                   {formatAmount(currentPeriodSaved, displaySymbol, convertOptions)} из{' '}
-                  {formatAmount(monthlyPlan, displaySymbol, convertOptions)} (
-                  {periodPlanPercent}%)
+                  {formatAmount(monthlyPlan, displaySymbol, convertOptions)} ({periodPlanPercent}%)
                 </div>
               )}
               {overallForecastMonths !== null && overallForecastDate && (
@@ -251,78 +237,78 @@ export const GoalsSection = () => {
           </div>
 
           <div className={styles.list}>
-          {progressList.map((progress, index) => {
-            const goal: Goal = progress.goal;
-            const category = categoryById.get(goal.category_id) ?? null;
-            const pending = Boolean((goal as { _optimistic?: boolean })._optimistic);
-            const targetAmount = Number(goal.amount) || 0;
-            const forecast = buildGoalForecast(goal, progress.savedAmount);
+            {progressList.map((progress, index) => {
+              const goal: Goal = progress.goal;
+              const category = categoryById.get(goal.category_id) ?? null;
+              const pending = Boolean((goal as { _optimistic?: boolean })._optimistic);
+              const targetAmount = Number(goal.amount) || 0;
+              const forecast = buildGoalForecast(goal, progress.savedAmount);
 
-            return (
-              <VCard
-                key={goal.id}
-                role="button"
-                tabIndex={pending ? -1 : 0}
-                aria-disabled={pending}
-                aria-label={`Цель: ${category?.name ?? 'Без категории'}`}
-                onClick={() => {
-                  if (!pending) {
-                    setGoalModal({ goal });
-                  }
-                }}
-                onKeyDown={(event) => {
-                  if (!pending && (event.key === 'Enter' || event.key === ' ')) {
-                    event.preventDefault();
-                    setGoalModal({ goal });
-                  }
-                }}
-                className={`${commonStyles.animateCard} ${styles.card}`}
-                style={{ animationDelay: `${index * 0.03}s` }}
-              >
-                <div className={styles.cardTop}>
-                  {category?.color ? (
-                    <VCategoryDot color={category.color} />
-                  ) : (
-                    <span className={styles.dot} />
-                  )}
-                  <span className={styles.cardTitle}>{category?.name ?? 'Без категории'}</span>
-                  {goal.target_date && (
-                    <span className={styles.targetDate}>{formatDisplay(goal.target_date)}</span>
-                  )}
-                  {progress.overdue && <VBadge variant="warning">Просрочена</VBadge>}
-                  {progress.reached && <VBadge variant="success">Цель достигнута</VBadge>}
-                </div>
-
-                <div
-                  className={styles.track}
-                  role="progressbar"
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={progress.percent}
+              return (
+                <VCard
+                  key={goal.id}
+                  role="button"
+                  tabIndex={pending ? -1 : 0}
+                  aria-disabled={pending}
+                  aria-label={`Цель: ${category?.name ?? 'Без категории'}`}
+                  onClick={() => {
+                    if (!pending) {
+                      setGoalModal({ goal });
+                    }
+                  }}
+                  onKeyDown={(event) => {
+                    if (!pending && (event.key === 'Enter' || event.key === ' ')) {
+                      event.preventDefault();
+                      setGoalModal({ goal });
+                    }
+                  }}
+                  className={`${commonStyles.animateCard} ${styles.card}`}
+                  style={{ animationDelay: `${index * 0.03}s` }}
                 >
-                  <div className={styles.fill} style={{ width: `${progress.percent}%` }} />
-                </div>
+                  <div className={styles.cardTop}>
+                    {category?.color ? (
+                      <VCategoryDot color={category.color} />
+                    ) : (
+                      <span className={styles.dot} />
+                    )}
+                    <span className={styles.cardTitle}>{category?.name ?? 'Без категории'}</span>
+                    {goal.target_date && (
+                      <span className={styles.targetDate}>{formatDisplay(goal.target_date)}</span>
+                    )}
+                    {progress.overdue && <VBadge variant="warning">Просрочена</VBadge>}
+                    {progress.reached && <VBadge variant="success">Цель достигнута</VBadge>}
+                  </div>
 
-                <div className={styles.cardBottom}>
-                  <span className={styles.savedAmount}>
-                    {formatAmount(progress.savedAmount, displaySymbol, convertOptions)}
-                  </span>
-                  <span className={styles.targetAmount}>
-                    из {formatAmount(targetAmount, displaySymbol, convertOptions)}
-                  </span>
-                  <span className={styles.percent}>{progress.percent}%</span>
-                </div>
+                  <div
+                    className={styles.track}
+                    role="progressbar"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={progress.percent}
+                  >
+                    <div className={styles.fill} style={{ width: `${progress.percent}%` }} />
+                  </div>
 
-                {!progress.reached && !pending && (
-                  <GoalForecastInfo
-                    forecast={forecast}
-                    symbol={displaySymbol}
-                    convertOptions={convertOptions}
-                  />
-                )}
-              </VCard>
-            );
-          })}
+                  <div className={styles.cardBottom}>
+                    <span className={styles.savedAmount}>
+                      {formatAmount(progress.savedAmount, displaySymbol, convertOptions)}
+                    </span>
+                    <span className={styles.targetAmount}>
+                      из {formatAmount(targetAmount, displaySymbol, convertOptions)}
+                    </span>
+                    <span className={styles.percent}>{progress.percent}%</span>
+                  </div>
+
+                  {!progress.reached && !pending && (
+                    <GoalForecastInfo
+                      forecast={forecast}
+                      symbol={displaySymbol}
+                      convertOptions={convertOptions}
+                    />
+                  )}
+                </VCard>
+              );
+            })}
           </div>
         </>
       )}
