@@ -3,6 +3,7 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { useAdminStats } from './api/useAdminStats';
 import { OperationsDynamicsCard } from './components/OperationsDynamicsCard';
 import { ReportsOperationsCard } from './components/ReportsOperationsCard';
+import { StorageCard } from './components/StorageCard';
 import { UsersActivityCard } from './components/UsersActivityCard';
 import styles from './page.module.css';
 
@@ -38,6 +39,12 @@ export const Page: React.FC = () => {
         </div>
         <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
           <UsersActivityCard users={users} activity={activity} churn={churn} />
+        </div>
+        <div
+          className={`${commonStyles.animateCard} ${styles.fullWidth}`}
+          style={{ animationDelay: '0.09s' }}
+        >
+          <StorageCard />
         </div>
       </div>
     </div>

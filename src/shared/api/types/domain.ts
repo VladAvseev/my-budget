@@ -235,6 +235,18 @@ export interface DatabaseSize {
   sizePretty: string;
 }
 
+/** Размер таблицы (pg_total_relation_size: данные + индексы + TOAST), байты. */
+export interface TableStorageSize {
+  name: string;
+  sizeBytes: number;
+}
+
+/** Ответ GET /admin/dashboard/storage-breakdown (карточка «Хранилище»). */
+export interface StorageBreakdown {
+  databaseBytes: number;
+  tables: TableStorageSize[];
+}
+
 // ── Логи запросов (GET /admin/logs, GET /admin/logs/metrics) ───────────────
 
 export type AdminLogsStatusFilter = 'all' | 'success' | 'error';

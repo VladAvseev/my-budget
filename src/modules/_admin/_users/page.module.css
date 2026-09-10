@@ -59,6 +59,10 @@
   text-align: right;
 }
 
+.actionCell {
+  text-align: center;
+}
+
 .empty {
   padding: var(--space-xl) var(--space-m);
   text-align: center;

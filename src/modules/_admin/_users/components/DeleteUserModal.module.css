@@ -1,0 +1,16 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.confirmText {
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.email {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-error);
+  word-break: break-all;
+}

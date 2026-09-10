@@ -1,10 +1,14 @@
+import { useAuth } from '@/shared/api/authProvider';
 import commonStyles from '@/shared/styles/common.module.css';
 import type { AdminUserRow } from '@/shared/api/types/domain';
+import { TrashIcon } from '@/shared/icons';
+import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils/date';
 import { useMemo, useState } from 'react';
 import { useAdminUsers } from './api/useAdminUsers';
+import { DeleteUserModal } from './components/DeleteUserModal';
 import styles from './page.module.css';
 
 type SortDirection = 'asc' | 'desc';
@@ -85,8 +89,10 @@ const compareRows = (
 };
 
 export const Page: React.FC = () => {
+  const { user: current } = useAuth();
   const usersQuery = useAdminUsers();
   const [search, setSearch] = useState('');
+  const [deletingUser, setDeletingUser] = useState<AdminUserRow | null>(null);
   const [sortKey, setSortKey] = useState<ColumnKey>('last_active_at');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
@@ -156,12 +162,13 @@ export const Page: React.FC = () => {
                   </button>
                 </th>
               ))}
+              <th>Действие</th>
             </tr>
           </thead>
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={COLUMNS.length} className={styles.empty}>
+                <td colSpan={COLUMNS.length + 1} className={styles.empty}>
                   Пользователи не найдены
                 </td>
               </tr>
@@ -179,12 +186,31 @@ export const Page: React.FC = () => {
                   <td className={styles.numCell}>{row.accumulationsCount}</td>
                   <td className={styles.numCell}>{row.categoriesCount}</td>
                   <td className={styles.numCell}>{row.goalsCount}</td>
+                  <td className={styles.actionCell}>
+                    {row.user_id !== current?.id && (
+                      <VIconButton
+                        ariaLabel={`Удалить ${row.email}`}
+                        color="var(--color-error)"
+                        onClick={() => setDeletingUser(row)}
+                      >
+                        <TrashIcon size={18} color="currentColor" />
+                      </VIconButton>
+                    )}
+                  </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
+
+      {deletingUser && (
+        <DeleteUserModal
+          key={deletingUser.user_id}
+          user={deletingUser}
+          onClose={() => setDeletingUser(null)}
+        />
+      )}
     </div>
   );
 };
