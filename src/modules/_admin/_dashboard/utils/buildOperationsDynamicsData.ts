@@ -13,6 +13,11 @@ export interface DynamicsDailyRow {
 // переход на летнее время отменён с 2014 года, поэтому смещение постоянно.
 export const MOSCOW_UTC_OFFSET_MS = 3 * 60 * 60 * 1000;
 
+// Дата запуска проекта: с неё начинается график роста и, соответственно,
+// расчёт среднего роста. Операций с created_at раньше этой даты в базе нет
+// (исторические данные мигрированы позже запуска).
+export const DYNAMICS_START_DATE = '2026-07-31';
+
 // «Синтетическая» дата: полночь UTC, чьи UTC-поля равны московскому календарю.
 export const moscowToday = (): Date => {
   const shifted = new Date(Date.now() + MOSCOW_UTC_OFFSET_MS);
@@ -108,7 +113,6 @@ export const buildOperationsDynamicsData = ({
   if (daily.length === 0) return [];
 
   const counts = new Map<string, number>();
-  let firstDay: Date | null = null;
   let lastDay: Date | null = null;
 
   for (const row of daily) {
@@ -116,17 +120,22 @@ export const buildOperationsDynamicsData = ({
     if (!date) continue;
     const key = getKey(date, aggregation);
     counts.set(key, (counts.get(key) ?? 0) + row.operations_count);
-    if (!firstDay || date < firstDay) firstDay = date;
     if (!lastDay || date > lastDay) lastDay = date;
   }
 
-  if (!firstDay || !lastDay) return [];
+  if (!lastDay) return [];
 
-  // Границы серии выводятся из самих данных и доводятся до сегодняшнего дня:
-  // иначе накопительный итог расходится с общим количеством операций в таблице.
+  // Правый край доводим до сегодняшнего дня (или до последней даты, если данные
+  // опережают «сегодня»): иначе накопительный итог расходится с общим
+  // количеством операций в таблице.
   const today = moscowToday();
-  const startDate = firstDay < today ? firstDay : today;
   const now = lastDay > today ? lastDay : today;
+  // Левый край фиксирован — дата запуска: график и среднее роста всегда
+  // считаются с 31.07.2026, даже если первые операции приходят позже (до
+  // них серия идёт нулями). В будущее не уходим: если сегодня раньше
+  // запуска, отсчитываем от сегодняшнего дня.
+  const launch = parseDay(DYNAMICS_START_DATE);
+  const startDate = launch && launch < now ? launch : now;
 
   const points: ChartPoint[] = [];
   let cumulative = 0;
