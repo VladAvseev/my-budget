@@ -3,6 +3,7 @@ import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
+import type { AdminAudience } from '@/shared/api/types/domain';
 import { useAdminOperationsDynamics } from '../api/useAdminOperationsDynamics';
 import {
   buildOperationsDynamicsData,
@@ -24,12 +25,19 @@ const aggregationOptions: VButtonGroupOption[] = [
   { value: 'Y', label: 'Год' },
 ];
 
+// Фильтр по роли автора операций: всего (user + admin) / только пользователи.
+const audienceOptions: VButtonGroupOption[] = [
+  { value: 'all', label: 'Все' },
+  { value: 'users', label: 'Пользователи' },
+];
+
 const formatCount = (v: number): string => Math.round(v).toLocaleString('ru-RU');
 
 export const OperationsDynamicsCard = () => {
   const [mode, setMode] = useState<DynamicsChartMode>('cumulative');
   const [aggregation, setAggregation] = useState<DynamicsAggregation>('D');
-  const operationsQuery = useAdminOperationsDynamics();
+  const [audience, setAudience] = useState<AdminAudience>('all');
+  const operationsQuery = useAdminOperationsDynamics(audience);
 
   const isLoading = operationsQuery.isLoading;
 
@@ -62,6 +70,7 @@ export const OperationsDynamicsCard = () => {
         {!isLoading && <span className={styles.total}>Всего: {totalOperations}</span>}
       </div>
       <div className={styles.controls}>
+        <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
         <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />
         <VButtonGroup options={aggregationOptions} value={aggregation} onChange={setAggregation} />
       </div>

@@ -14,6 +14,7 @@ import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { useAtom } from 'jotai';
 import { Fragment, useMemo, useState } from 'react';
 import { useAdminUsers } from '../_users/api/useAdminUsers';
+import { LogsDynamicsCard } from './components/LogsDynamicsCard';
 import { ADMIN_LOGS_LIMIT, useAdminLogs } from './api/useAdminLogs';
 import { useAdminLogsMetrics } from './api/useAdminLogsMetrics';
 import {
@@ -209,6 +210,8 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
+      <LogsDynamicsCard />
+
       <div className={commonStyles.row}>
         <VButtonGroup
           options={PERIOD_OPTIONS}

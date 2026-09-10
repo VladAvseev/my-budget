@@ -247,6 +247,25 @@ export interface StorageBreakdown {
 
 // ── Логи запросов (GET /admin/logs, GET /admin/logs/metrics) ───────────────
 
+/**
+ * Фильтр по роли автора (query `audience` в эндпоинтах графиков):
+ * all — все (пользователи + админы), users — только роль 'user' (без админов).
+ */
+export type AdminAudience = 'all' | 'users';
+
+/** Одна точка графика динамики логов: непустой МСК-час. */
+export interface AdminLogsDynamicsPoint {
+  /** Начало МСК-часа как 'YYYY-MM-DDTHH:00:00' (wall-clock Москвы). */
+  hour: string;
+  count: number;
+}
+
+/** Ответ GET /admin/logs/dynamics. */
+export interface AdminLogsDynamics {
+  audience: AdminAudience;
+  points: AdminLogsDynamicsPoint[];
+}
+
 export type AdminLogsStatusFilter = 'all' | 'success' | 'error';
 
 export type AdminLogsPeriod = '24h' | '7d' | '30d' | 'all';
