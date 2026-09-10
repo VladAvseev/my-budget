@@ -36,7 +36,6 @@ const PERIOD_OPTIONS: VButtonGroupOption[] = [
 
 const STATUS_OPTIONS: VButtonGroupOption[] = [
   { value: 'all', label: 'Все' },
-  { value: 'success', label: 'Успешные' },
   { value: 'error', label: 'С ошибкой' },
 ];
 
