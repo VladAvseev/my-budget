@@ -1,6 +1,8 @@
 # Полный пайплайн: сборка React → деплой docker-образа web на свой сервер
-# (когда заведён DEPLOY_SSH_KEY) → деплой в Object Storage (до реза на
-# my-finance.site) → зеркало репозитория в GitHub.
+# (когда заведён DEPLOY_SSH_KEY) → зеркало репозитория в GitHub.
+#
+# Легаси-деплой в Yandex Object Storage (прод my-finance.site до реза)
+# отключён: бакет удалён, статика легаси-прода больше не обновляется.
 
 stages:
   - build
@@ -9,7 +11,6 @@ stages:
 variables:
   # Общие переменные для всех джоб (не секретные)
   NODE_IMAGE: node:20-alpine
-  AWS_CLI_IMAGE: amazon/aws-cli:latest
 
 # ─────────────────────────────────────────────────────────────
 # Этап 1: Сборка React-приложения
@@ -35,36 +36,9 @@ build:
     - develop
 
 # ─────────────────────────────────────────────────────────────
-# Этап 2: Деплой в Object Storage
-# ─────────────────────────────────────────────────────────────
-deploy:
-  stage: deploy
-  image:
-    name: $AWS_CLI_IMAGE
-    entrypoint: ['']
-  dependencies:
-    - build
-  before_script:
-    # Генерируем .env из переменных GitLab CI/CD.
-    # Ключи НЕ лежат в репозитории — они заданы в Settings → CI/CD → Variables.
-    - echo "SUPABASE_URL=$SUPABASE_URL" > .env
-    - echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
-    # Проверка, что файл создан (для отладки; секреты не печатаем)
-    - cat .env | sed 's/=.*/=***/'
-  script:
-    # Настройка AWS CLI на Yandex Object Storage
-    - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
-    - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-    - aws configure set default.region ru-central1
-    # Синхронизация собранной статики в бакет
-    - aws --endpoint-url=https://storage.yandexcloud.net s3 sync dist/ s3://$BUCKET_NAME --delete
-  only:
-    - develop
-
-# ─────────────────────────────────────────────────────────────
-# Этап 3: Деплой web на свой сервер (docker compose, сервис web)
+# Этап 2: Деплой web на свой сервер (docker compose, сервис web)
 # Джоба создаётся только после заведения DEPLOY_SSH_KEY в Variables —
-# до этого пайплайн работает как раньше (OSS остаётся продом).
+# до этого пайплайн ограничивается сборкой и зеркалом.
 # На сервере: hard-reset клона client на origin/develop и пересборка
 # ТОЛЬКО web из общего стека /opt/mybudget/server (api и db не трогаются).
 # ─────────────────────────────────────────────────────────────
@@ -92,7 +66,7 @@ deploy-web:
       && docker compose up -d --build web"
 
 # ─────────────────────────────────────────────────────────────
-# Этап 4: Копирование репозитория в gitHub
+# Этап 3: Копирование репозитория в gitHub
 # ─────────────────────────────────────────────────────────────
 mirror-to-github:
   stage: deploy
@@ -105,4 +79,5 @@ mirror-to-github:
     - ssh-keyscan github.com >> ~/.ssh/known_hosts
     - git remote add github git@github.com:VladAvseev/my-budget.git
   script:
-    - git push github "HEAD:refs/heads/${CI_COMMIT_REF_NAME}"
+    # --force: зеркало однонаправленное (GitLab → GitHub), расходимость перезаписываем
+    - git push --force github "HEAD:refs/heads/${CI_COMMIT_REF_NAME}"
