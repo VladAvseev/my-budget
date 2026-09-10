@@ -7,5 +7,4 @@ export const useAdminUsers = () =>
   useQuery<AdminUserRow[]>({
     queryKey: ['admin', 'users'],
     queryFn: async () => (await api.get<AdminUserRow[]>('/admin/users')) ?? [],
-    refetchInterval: 60_000,
   });

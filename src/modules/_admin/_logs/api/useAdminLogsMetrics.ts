@@ -7,5 +7,4 @@ export const useAdminLogsMetrics = (period: AdminLogsPeriod) =>
   useQuery<AdminLogsMetrics>({
     queryKey: ['admin', 'logs', 'metrics', period],
     queryFn: () => api.get<AdminLogsMetrics>(`/admin/logs/metrics?period=${period}`),
-    refetchInterval: 60_000,
   });

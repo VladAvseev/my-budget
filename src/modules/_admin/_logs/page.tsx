@@ -8,11 +8,19 @@ import { VButton } from '@/shared/ui/VButton';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
+import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { useAtom } from 'jotai';
-import { Fragment, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
+import { useAdminUsers } from '../_users/api/useAdminUsers';
 import { ADMIN_LOGS_LIMIT, useAdminLogs } from './api/useAdminLogs';
 import { useAdminLogsMetrics } from './api/useAdminLogsMetrics';
-import { logsPageAtom, logsPeriodAtom, logsStatusAtom } from './atoms/logs';
+import {
+  LOG_USER_ANONYMOUS,
+  logsPageAtom,
+  logsPeriodAtom,
+  logsStatusAtom,
+  logsUserAtom,
+} from './atoms/logs';
 import styles from './page.module.css';
 
 const PERIOD_OPTIONS: VButtonGroupOption[] = [
@@ -121,11 +129,21 @@ const EndpointList: React.FC<EndpointListProps> = ({ title, items }) => (
 export const Page: React.FC = () => {
   const [period, setPeriod] = useAtom(logsPeriodAtom);
   const [status, setStatus] = useAtom(logsStatusAtom);
+  const [user, setUser] = useAtom(logsUserAtom);
   const [page, setPage] = useAtom(logsPageAtom);
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
 
+  const usersQuery = useAdminUsers();
+  const userOptions = useMemo<VSelectOption[]>(
+    () => [
+      { value: LOG_USER_ANONYMOUS, label: 'Без авторизации' },
+      ...(usersQuery.data ?? []).map((row) => ({ value: row.user_id, label: row.email })),
+    ],
+    [usersQuery.data],
+  );
+
   const metricsQuery = useAdminLogsMetrics(period as AdminLogsPeriod);
-  const logsQuery = useAdminLogs({ status: status as AdminLogsStatusFilter, page });
+  const logsQuery = useAdminLogs({ status: status as AdminLogsStatusFilter, userId: user, page });
 
   const toggleRow = (id: number) => {
     setExpandedIds((prev) => {
@@ -232,6 +250,17 @@ export const Page: React.FC = () => {
             }}
             label="Логи"
           />
+          <VSelect
+            className={styles.userSelect}
+            label="Пользователь"
+            options={userOptions}
+            value={user}
+            emptyText="Все пользователи"
+            onChange={(value) => {
+              setUser(value);
+              setPage(1);
+            }}
+          />
         </div>
 
         {logsQuery.isError || !logs ? (
@@ -247,13 +276,14 @@ export const Page: React.FC = () => {
                     <th>Путь</th>
                     <th>Статус</th>
                     <th>Время</th>
+                    <th>Пользователь</th>
                     <th>IP</th>
                   </tr>
                 </thead>
                 <tbody>
                   {logs.items.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className={styles.empty}>
+                      <td colSpan={7} className={styles.empty}>
                         Логи не найдены
                       </td>
                     </tr>
@@ -263,10 +293,7 @@ export const Page: React.FC = () => {
                       const isExpanded = expandedIds.has(row.id);
                       return (
                         <Fragment key={row.id}>
-                          <tr
-                            className={styles.rowClickable}
-                            onClick={() => toggleRow(row.id)}
-                          >
+                          <tr className={styles.rowClickable} onClick={() => toggleRow(row.id)}>
                             <td>{formatDateTime(row.createdAt)}</td>
                             <td>{row.method}</td>
                             <td>{row.path}</td>
@@ -274,17 +301,22 @@ export const Page: React.FC = () => {
                               {row.status}
                             </td>
                             <td>{formatNumber(row.durationMs)} мс</td>
+                            <td>
+                              {row.userEmail ?? (
+                                <span className={styles.userAnonymous}>
+                                  {row.isAuthenticated ? '—' : 'без авторизации'}
+                                </span>
+                              )}
+                            </td>
                             <td>{row.ip ?? '—'}</td>
                           </tr>
                           {isExpanded && (
                             <tr>
-                              <td colSpan={6} className={styles.detailsCell}>
+                              <td colSpan={7} className={styles.detailsCell}>
                                 <div className={styles.detailsGrid}>
                                   <div className={styles.detailsBlock}>
                                     <span className={styles.detailsTitle}>Тело запроса</span>
-                                    <pre className={styles.detailsCode}>
-                                      {formatJson(row.body)}
-                                    </pre>
+                                    <pre className={styles.detailsCode}>{formatJson(row.body)}</pre>
                                   </div>
                                   <div className={styles.detailsBlock}>
                                     <span className={styles.detailsTitle}>Ответ сервера</span>

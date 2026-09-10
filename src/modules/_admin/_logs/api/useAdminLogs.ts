@@ -4,16 +4,23 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 interface UseAdminLogsParams {
   status: AdminLogsStatusFilter;
+  /** '' — все авторы, 'anonymous' — без авторизации, иначе uuid пользователя. */
+  userId: string;
   page: number;
 }
 
 const LIMIT = 50;
 
 /** GET /admin/logs: страница логов запросов с фильтром и пагинацией. */
-export const useAdminLogs = ({ status, page }: UseAdminLogsParams) =>
+export const useAdminLogs = ({ status, userId, page }: UseAdminLogsParams) =>
   useQuery<AdminLogsPage>({
-    queryKey: ['admin', 'logs', { status, page }],
-    queryFn: () => api.get<AdminLogsPage>(`/admin/logs?status=${status}&page=${page}&limit=${LIMIT}`),
+    queryKey: ['admin', 'logs', { status, userId, page }],
+    queryFn: () =>
+      api.get<AdminLogsPage>(
+        `/admin/logs?status=${status}&page=${page}&limit=${LIMIT}${
+          userId ? `&userId=${encodeURIComponent(userId)}` : ''
+        }`,
+      ),
     placeholderData: keepPreviousData,
   });
 

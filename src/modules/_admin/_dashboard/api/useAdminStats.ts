@@ -7,5 +7,4 @@ export const useAdminStats = () =>
   useQuery<AdminDashboardStats>({
     queryKey: ['admin', 'stats'],
     queryFn: () => api.get<AdminDashboardStats>('/admin/dashboard/stats'),
-    refetchInterval: 60_000,
   });

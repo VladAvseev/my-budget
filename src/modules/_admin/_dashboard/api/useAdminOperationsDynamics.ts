@@ -11,5 +11,4 @@ export const useAdminOperationsDynamics = () =>
     queryKey: ['admin', 'operationsDynamics'],
     queryFn: async () =>
       (await api.get<DynamicsDailyRow[]>('/admin/dashboard/operations-dynamics')) ?? [],
-    refetchInterval: 60_000,
   });
