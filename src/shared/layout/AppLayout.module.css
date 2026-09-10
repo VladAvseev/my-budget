@@ -355,7 +355,7 @@
   white-space: nowrap;
   font-size: var(--font-size-s);
   line-height: var(--line-height-tight);
-
+}
 
 .mobileNavLabelStart {
   align-self: flex-start;
