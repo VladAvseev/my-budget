@@ -6,7 +6,7 @@ import {
   trimIncompletePeriod,
   trimLeadingPartialPeriod,
 } from '@/shared/utils/chartPoints';
-import type { GrowthChartMode } from './buildGrowthChartData';
+import type { GrowthChartMode } from './buildCapitalChartData';
 
 export interface MonthlyStats {
   abs: number;

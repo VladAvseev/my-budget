@@ -3,7 +3,6 @@ import { sumOperations } from '@/shared/utils/operations';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 
 export type GrowthChartMode = 'total' | 'period';
-export type GrowthPeriod = 'all' | 'year';
 
 const MONTH_LABELS = [
   'Янв',
@@ -34,19 +33,23 @@ const addMonths = (date: Date, n: number): Date =>
 const totalAccumulations = (accumulations: Accumulation[]): number =>
   accumulations.reduce((sum, a) => sum + (Number(a.amount) || 0), 0);
 
-export interface BuildGrowthChartDataArgs {
+export interface BuildCapitalChartDataArgs {
   reports: Report[];
   operationsByReport: Map<string, Operation[]>;
   accumulations: Accumulation[];
-  period: GrowthPeriod;
+  startBalance: number;
 }
 
-export const buildGrowthChartData = ({
+/**
+ * Помесячная серия капитала: стартовый баланс + прямые накопления, далее
+ * накопительный итог по доходам/расходам отчётов (за вычетом daily).
+ */
+export const buildCapitalChartData = ({
   reports,
   operationsByReport,
   accumulations,
-  period,
-}: BuildGrowthChartDataArgs): ChartPoint[] => {
+  startBalance,
+}: BuildCapitalChartDataArgs): ChartPoint[] => {
   if (reports.length === 0) return [];
 
   const reportsAsc = [...reports].sort(
@@ -66,26 +69,30 @@ export const buildGrowthChartData = ({
   let cumulativeValue = 0;
   const directTotal = totalAccumulations(accumulations);
 
+  let firstReportFound = false;
   let cursor = firstMonth;
   while (cursor <= now) {
     const key = monthKey(cursor);
     const summary = reportSummaries.get(key);
 
     if (summary) {
-      cumulativeValue += summary.savings;
+      if (!firstReportFound) {
+        cumulativeValue =
+          startBalance + directTotal + summary.income - summary.expense - summary.daily;
+        firstReportFound = true;
+      } else {
+        cumulativeValue += summary.income - summary.expense - summary.daily;
+      }
     }
 
     points.push({
       month: new Date(cursor),
       label: formatLabel(cursor),
-      value: directTotal + cumulativeValue,
+      value: firstReportFound ? cumulativeValue : startBalance + directTotal,
     });
 
     cursor = addMonths(cursor, 1);
   }
 
-  if (period === 'all') return points;
-
-  const cutoff = addMonths(now, -11);
-  return points.filter((p) => p.month >= cutoff);
+  return points;
 };

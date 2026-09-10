@@ -1,4 +1,4 @@
-import type { ChartPoint } from '@/modules/_accumulations/utils/buildGrowthChartData';
+import type { ChartPoint } from '@/shared/utils/chartPoints';
 
 export type DynamicsChartMode = 'cumulative' | 'period';
 export type DynamicsAggregation = 'D' | 'M' | 'Y';

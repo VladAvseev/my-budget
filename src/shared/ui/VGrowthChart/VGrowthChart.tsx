@@ -1,11 +1,11 @@
 import { useMemo, useState, useCallback, useRef, useEffect, useLayoutEffect } from 'react';
-import type { ChartPoint } from '../utils/buildGrowthChartData';
-import { getPointChange } from '../utils/buildGrowthChartData';
+import type { ChartPoint } from '@/shared/utils/chartPoints';
+import { getPointChange } from '@/shared/utils/chartPoints';
 import { formatAmount } from '@/shared/utils/format';
 import { useCurrency } from '@/shared/hooks';
-import styles from './GrowthChart.module.css';
+import styles from './VGrowthChart.module.css';
 
-interface GrowthChartProps {
+interface VGrowthChartProps {
   data: ChartPoint[];
   color: string;
   height?: number;
@@ -25,7 +25,7 @@ interface TooltipState {
   point: ChartPoint;
 }
 
-export const GrowthChart = ({
+export const VGrowthChart = ({
   data,
   color,
   height = 280,
@@ -33,7 +33,7 @@ export const GrowthChart = ({
   showChange,
   displaySymbol,
   base = 0,
-}: GrowthChartProps) => {
+}: VGrowthChartProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [clampedX, setClampedX] = useState<number | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);

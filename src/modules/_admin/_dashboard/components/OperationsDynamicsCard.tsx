@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VLoader } from '@/shared/ui/VLoader';
-import { GrowthChart } from '@/modules/_accumulations/components/GrowthChart';
+import { VGrowthChart } from '@/shared/ui/VGrowthChart';
 import { useAdminOperationsDynamics } from '../api/useAdminOperationsDynamics';
 import {
   buildOperationsDynamicsData,
@@ -73,7 +73,7 @@ export const OperationsDynamicsCard = () => {
           <VLoader />
         </div>
       ) : (
-        <GrowthChart
+        <VGrowthChart
           data={chartData}
           color={mode === 'cumulative' ? 'var(--color-success)' : 'var(--color-accent)'}
           formatValue={formatCount}

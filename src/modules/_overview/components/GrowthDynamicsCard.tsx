@@ -4,13 +4,14 @@ import { convertAmount } from '@/shared/utils';
 import {
   aggregatePoints,
   toPeriodDeltas,
+  type ChartPoint,
   type GrowthAggregation,
 } from '@/shared/utils/chartPoints';
 import { VGrowthDynamicsCard } from '@/shared/ui/VGrowthDynamicsCard';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useReports } from '../api/useReports';
 import { useOverviewOperationsMap } from '../api/useOverviewOperationsMap';
-import { buildGrowthChartData, type GrowthChartMode } from '../utils/buildGrowthChartData';
+import { buildCapitalChartData, type GrowthChartMode } from '../utils/buildCapitalChartData';
 import { buildGrowthStats } from '../utils/buildGrowthStats';
 
 export interface GrowthDynamicsCardCurrency {
@@ -42,6 +43,11 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
   const reportIds = useMemo(() => reports.map((r) => r.id), [reports]);
   const operationsQuery = useOverviewOperationsMap(reportIds);
 
+  const startBalance = useMemo(
+    () => Number(profileQuery.data?.start_balance ?? 0) || 0,
+    [profileQuery.data],
+  );
+
   const isLoading =
     reportsQuery.isLoading ||
     accumulationsQuery.isLoading ||
@@ -52,13 +58,13 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
     () =>
       isLoading
         ? []
-        : buildGrowthChartData({
+        : buildCapitalChartData({
             reports,
             operationsByReport: operationsQuery.data ?? new Map(),
             accumulations: accumulationsQuery.data ?? EMPTY_ARRAY,
-            period: 'all',
+            startBalance,
           }),
-    [reports, operationsQuery.data, accumulationsQuery.data, isLoading],
+    [reports, operationsQuery.data, accumulationsQuery.data, startBalance, isLoading],
   );
 
   const convertedChartData = useMemo(() => {
@@ -69,14 +75,13 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
     }));
   }, [rawChartData, displayCurrency, rates, defaultCurrency]);
 
-  const rawBase = useMemo(
-    () =>
-      (accumulationsQuery.data ?? EMPTY_ARRAY).reduce(
-        (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
-        0,
-      ),
-    [accumulationsQuery.data],
-  );
+  const rawBase = useMemo(() => {
+    const directTotal = (accumulationsQuery.data ?? EMPTY_ARRAY).reduce(
+      (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
+      0,
+    );
+    return startBalance + directTotal;
+  }, [startBalance, accumulationsQuery.data]);
 
   const base = useMemo(() => {
     if (!displayCurrency || !rates || !defaultCurrency) return rawBase;
@@ -88,7 +93,7 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
     [convertedChartData, aggregation],
   );
 
-  const displayData = useMemo(
+  const displayData: ChartPoint[] = useMemo(
     () => (mode === 'period' ? toPeriodDeltas(chartData, base) : chartData),
     [chartData, base, mode],
   );

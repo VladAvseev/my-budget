@@ -1,10 +1,10 @@
-import type { GrowthStats as GrowthStatsData } from '../utils/buildGrowthStats';
 import { useCurrency } from '@/shared/hooks';
 import { formatAmount } from '@/shared/utils/format';
+import type { VGrowthStatsData } from './types';
 import styles from './GrowthStats.module.css';
 
 interface GrowthStatsProps {
-  stats: GrowthStatsData;
+  stats: VGrowthStatsData;
   displaySymbol?: string;
 }
 

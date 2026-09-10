@@ -37,4 +37,16 @@ export {
   type MonthOption,
 } from './monthMapping';
 export { convertAmount } from './convertCurrency';
+export { sumOperations, emptyAmounts, type OperationAmounts } from './operations';
+export {
+  type ChartPoint,
+  type GrowthAggregation,
+  type PointChange,
+  getPeriodEnd,
+  trimIncompletePeriod,
+  trimLeadingPartialPeriod,
+  getPointChange,
+  toPeriodDeltas,
+  aggregatePoints,
+} from './chartPoints';
 export { getOtherCurrencyRates, formatCurrencyRate, type CurrencyRateItem } from './currencyRates';

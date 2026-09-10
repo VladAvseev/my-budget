@@ -1,5 +1,5 @@
-import type { ChartPoint } from '@/modules/_accumulations/utils/buildGrowthChartData';
-import { trimIncompletePeriod } from '@/modules/_accumulations/utils/buildGrowthChartData';
+import type { ChartPoint } from '@/shared/utils/chartPoints';
+import { trimIncompletePeriod } from '@/shared/utils/chartPoints';
 import type { DynamicsAggregation, DynamicsChartMode } from './buildOperationsDynamicsData';
 import { moscowToday } from './buildOperationsDynamicsData';
 

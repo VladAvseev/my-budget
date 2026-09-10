@@ -21,13 +21,13 @@ import {
   selectedDisplayCurrencyAtom,
 } from './atoms/overview';
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
-import { GrowthDynamicsCard } from '@/modules/_accumulations/components/GrowthDynamicsCard';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
 import { CategoryDistributionChart } from './components/CategoryDistributionChart';
+import { GrowthDynamicsCard } from './components/GrowthDynamicsCard';
 import { PeriodCompareSelect } from './components/PeriodCompareSelect';
 import { ReportsFilter } from './components/ReportsFilter';
 import { SummaryCard } from './components/SummaryCard';
-import { emptyAmounts, sumOperations } from './utils/overview';
+import { emptyAmounts, sumOperations } from '@/shared/utils';
 
 const CURRENCY_OPTIONS: VButtonGroupOption[] = [
   { value: 'BYN', label: 'BYN' },
@@ -140,7 +140,6 @@ export const Page: React.FC = () => {
 
       <GrowthDynamicsCard
         userId={userId}
-        chartType="capital"
         title="Рост капитала"
         currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
       />

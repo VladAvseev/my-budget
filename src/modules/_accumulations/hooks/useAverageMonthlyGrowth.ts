@@ -2,11 +2,8 @@ import { useMemo } from 'react';
 import { useAccumulations, useProfile } from '@/shared/hooks';
 import { useReports } from '../api/useReports';
 import { useOverviewOperationsMap } from '../api/useOverviewOperationsMap';
-import {
-  buildGrowthChartData,
-  getPeriodEnd,
-  trimIncompletePeriod,
-} from '../utils/buildGrowthChartData';
+import { getPeriodEnd, trimIncompletePeriod } from '@/shared/utils/chartPoints';
+import { buildGrowthChartData } from '../utils/buildGrowthChartData';
 import {
   buildWindowedMonthlyStats,
   buildMonthlyStats,
@@ -39,19 +36,15 @@ export const useAverageMonthlyGrowth = (userId: string): number | null => {
   return useMemo(() => {
     if (isLoading) return null;
 
-    const rawChartData = buildGrowthChartData(
-      {
-        reports,
-        operationsByReport: operationsQuery.data ?? new Map(),
-        accumulations: accumulationsQuery.data ?? EMPTY_ARRAY,
-        startBalance: Number(profileQuery.data?.start_balance ?? 0) || 0,
-        period: 'all',
-      },
-      'accumulations',
-    );
+    const rawChartData = buildGrowthChartData({
+      reports,
+      operationsByReport: operationsQuery.data ?? new Map(),
+      accumulations: accumulationsQuery.data ?? EMPTY_ARRAY,
+      period: 'all',
+    });
 
     const completed = trimIncompletePeriod(rawChartData, getPeriodEnd('M'), new Date());
     const windowed = buildWindowedMonthlyStats(completed, RECENT_WINDOW_MONTHS);
     return (windowed ?? buildMonthlyStats(completed))?.abs ?? null;
-  }, [isLoading, reports, operationsQuery.data, accumulationsQuery.data, profileQuery.data]);
+  }, [isLoading, reports, operationsQuery.data, accumulationsQuery.data]);
 };

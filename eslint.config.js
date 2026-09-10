@@ -30,5 +30,18 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
+  {
+    files: ['src/modules/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ImportDeclaration[source.value=/^@\\/modules\\//]',
+          message:
+            'Импорты между модулями запрещены: общее поднимайте в @/shared, бизнес-логика — внутри своего модуля.',
+        },
+      ],
+    },
+  },
   prettierConfig,
 );

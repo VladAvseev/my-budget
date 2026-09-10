@@ -10,6 +10,9 @@ import { overview } from '@/modules/_overview';
 import { home } from '@/modules/_home';
 import { admin } from '@/modules/_admin';
 import { notFound } from '@/modules/_notFound';
+import { AsyncPage } from '@/shared/ui/AsyncPage';
+
+const LandingPage = AsyncPage(() => import('@/modules/_landing/page'));
 
 const App: React.FC = () => {
   return (
@@ -18,7 +21,7 @@ const App: React.FC = () => {
         <Routes>
           {login()}
           {registration()}
-          {home()}
+          {home({ guest: <LandingPage /> })}
           {profile()}
           {reports()}
           {accumulations()}
