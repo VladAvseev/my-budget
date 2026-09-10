@@ -41,7 +41,7 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
     <div className={styles.stats}>
       {monthly !== null && (
         <div className={styles.stat}>
-          {periodLabel}:{' '}
+          {periodLabel}:{' (за всё время)'}
           <span className={`${styles.statValue} ${colorClass(monthly.abs)}`}>{monthlyLine}</span>
         </div>
       )}
