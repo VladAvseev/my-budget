@@ -101,20 +101,19 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <div className={commonStyles.pageHeaderRow}>
-        <VPageHeader
-          title="Накопления"
-          onBack={() => navigate('/')}
-          backAriaLabel="Назад на главную"
-          hideOnMobile
-        />
-        {isDesktop && (
+      {isDesktop && (
+        <div className={commonStyles.pageHeaderRow}>
+          <VPageHeader
+            title="Накопления"
+            onBack={() => navigate('/')}
+            backAriaLabel="Назад на главную"
+          />
           <div className={styles.headerActions}>
             <VCurrencyRates selectedCurrency={displayCurrency} rates={rates} orientation="row" />
             {currencySwitcher}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {!isDesktop && (
         <div className={styles.currencyRow}>
