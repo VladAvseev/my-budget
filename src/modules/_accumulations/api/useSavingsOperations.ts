@@ -3,9 +3,8 @@ import type { Operation } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- * GET /operations/savings (порт get_savings_operations) — все пополнения
- * и снятия с полями отчёта; reportName/reportPeriodStart — исторические
- * camelCase-ключи прежнего RPC.
+ * GET /operations/savings — все пополнения и снятия с полями отчёта;
+ * reportName/reportPeriodStart — исторические camelCase-ключи ответа.
  */
 export type SavingsOperation = Operation & { reportName: string; reportPeriodStart: string };
 

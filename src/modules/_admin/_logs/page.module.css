@@ -145,13 +145,6 @@
   background-color: var(--color-bg-surface);
 }
 
-.detailsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--space-m);
-  white-space: normal;
-}
-
 .detailsBlock {
   display: flex;
   flex-direction: column;

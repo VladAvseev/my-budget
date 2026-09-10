@@ -2,7 +2,7 @@ import { api } from '@/shared/api/http';
 import type { OperationSummary } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
-/** GET /reports/:id/summary (порт get_report_summary) — сводка по типам. */
+/** GET /reports/:id/summary — сводка по типам. */
 export const useSummary = (reportId: string) =>
   useQuery<OperationSummary>({
     queryKey: ['reports', reportId, 'summary'],

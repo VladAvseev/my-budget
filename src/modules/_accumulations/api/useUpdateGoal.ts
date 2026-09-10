@@ -4,7 +4,7 @@ import type { Goal, GoalUpdateInput } from '@/shared/api/types/domain';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** PATCH /goals/:id (порт update_goal): сумма и/или целевая дата. */
+/** PATCH /goals/:id: сумма и/или целевая дата. */
 const updateGoalMutationKey = ['updateGoal'] as const;
 
 export const useUpdateGoal = (userId: string) => {

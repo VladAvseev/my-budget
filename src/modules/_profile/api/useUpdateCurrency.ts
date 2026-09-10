@@ -2,7 +2,7 @@ import { api } from '@/shared/api/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * PATCH /users/me { currency } (порт update_currency): смена валюты профиля.
+ * PATCH /users/me { currency }: смена валюты профиля.
  */
 export const useUpdateCurrency = () => {
   const queryClient = useQueryClient();

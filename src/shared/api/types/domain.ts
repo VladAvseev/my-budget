@@ -1,12 +1,10 @@
 /**
  * Доменные типы данных приложения.
  *
- * Раньше генерировались из схемы Supabase (database.types.ts). Теперь
- * описаны руками и зеркалят ответы REST-бэкенда (`server/`), который,
- * в свою очередь, точно воспроизводит jsonb-формы прежних RPC-функций:
- * ключи snake_case, numeric приходит ЧИСЛОМ (jsonb), но для совместимости
- * со старым кодом поля amount/start_balance типизированы строкой — UI
- * везде оборачивает их Number(...), строку и число это не ломает.
+ * Описаны руками и зеркалят ответы REST-бэкенда (`server/`):
+ * ключи snake_case, numeric приходит ЧИСЛОМ, но для совместимости со старым
+ * кодом поля amount/start_balance типизированы строкой — UI везде оборачивает
+ * их Number(...), строку и число это не ломает.
  */
 
 export interface Operation {
@@ -257,15 +255,18 @@ export type AdminLogsPeriod = '24h' | '7d' | '30d' | 'all';
 export type AdminLogsSortField = 'date' | 'duration';
 export type AdminLogsSortOrder = 'asc' | 'desc';
 
-/** Одна строка лога: тела запросов/ответов сервер не хранит, query маскируется. */
+/**
+ * Одна строка лога: сервер хранит только метод, путь, статус, длительность,
+ * автора, ip и текст ошибки (для ответов с статусом >= 400).
+ */
 export interface AdminLogRow {
   id: number;
   createdAt: string;
   method: string;
   path: string;
-  query: unknown | null;
   status: number;
   durationMs: number;
+  /** Сообщение об ошибке; null — запрос успешный, раскрытие строки не нужно. */
   error: string | null;
   /** Автор запроса; null — запрос без авторизации (или пользователь удалён). */
   userId: string | null;
@@ -274,7 +275,6 @@ export interface AdminLogRow {
   /** true — на момент запроса был валидный access-токен. */
   isAuthenticated: boolean;
   ip: string | null;
-  userAgent: string | null;
 }
 
 export interface AdminLogsPage {

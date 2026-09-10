@@ -8,7 +8,7 @@ import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * POST /operations (порт create_operation): reportId уходит в теле,
+ * POST /operations: reportId уходит в теле,
  * user_id сервер берёт из JWT. Проверка своей savings-категории — на сервере.
  */
 const createOperationMutationKey = ['createOperation'] as const;

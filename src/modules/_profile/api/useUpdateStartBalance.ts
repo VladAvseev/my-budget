@@ -2,7 +2,7 @@ import { api } from '@/shared/api/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * PATCH /users/me { startBalance } (порт update_start_balance):
+ * PATCH /users/me { startBalance }:
  * стартовый баланс для глобальной сводки.
  */
 export const useUpdateStartBalance = () => {

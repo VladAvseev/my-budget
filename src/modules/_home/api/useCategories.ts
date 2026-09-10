@@ -3,8 +3,8 @@ import type { Category, CategoryType } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- * GET /categories?type= (порт get_categories). p_user_id не передаётся —
- * сервер определяет пользователя по JWT; userId остаётся только ключом кэша.
+ * GET /categories?type= — сервер определяет пользователя по JWT;
+ * userId остаётся только ключом кэша.
  */
 export const useCategories = (userId: string, type: CategoryType = 'savings') =>
   useQuery<Category[]>({

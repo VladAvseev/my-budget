@@ -3,9 +3,8 @@ import type { Report } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- * GET /reports/:id (порт get_report). Прежний RPC при RLS молча возвращал
- * null для чужого/удалённого отчёта — новый сервер отвечает 404, поэтому
- * 404 здесь так же превращается в null (страница покажет «не найден»).
+ * GET /reports/:id: сервер отвечает 404 на чужой или удалённый отчёт,
+ * поэтому 404 здесь превращается в null (страница покажет «не найден»).
  */
 export const useReport = (id: string) =>
   useQuery<Report | null>({

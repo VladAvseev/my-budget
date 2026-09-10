@@ -18,8 +18,7 @@ export interface OnboardingState {
 }
 
 /**
- * Чек-лист онбординга: счётчики из GET /users/me/onboarding
- * (порт get_onboarding_state) + профиль из useProfile.
+ * Чек-лист онбординга: счётчики из GET /users/me/onboarding + профиль из useProfile.
  */
 export const useOnboardingChecklist = () => {
   const { user } = useAuth();

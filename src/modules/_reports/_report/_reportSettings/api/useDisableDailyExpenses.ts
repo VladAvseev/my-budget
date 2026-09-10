@@ -2,7 +2,7 @@ import { api } from '@/shared/api/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * DELETE /reports/:id/daily-expenses (порт disable_daily_expenses):
+ * DELETE /reports/:id/daily-expenses:
  * сервер одной транзакцией удаляет daily-операции и сбрасывает настройки.
  */
 export const useDisableDailyExpenses = (id: string) => {

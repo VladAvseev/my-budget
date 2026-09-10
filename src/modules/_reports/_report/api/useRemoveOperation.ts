@@ -3,7 +3,7 @@ import type { Operation } from '@/shared/api/types/domain';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** DELETE /operations/:id (порт delete_operation) + оптимистичное удаление. */
+/** DELETE /operations/:id + оптимистичное удаление. */
 const removeOperationMutationKey = ['removeOperation'] as const;
 
 export const useRemoveOperation = (reportId: string) => {

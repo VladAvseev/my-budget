@@ -2,7 +2,7 @@ import { api } from '@/shared/api/http';
 import type { Report } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** DELETE /reports/:id (порт delete_report) + оптимистичное удаление из списка. */
+/** DELETE /reports/:id + оптимистичное удаление из списка. */
 const removeReportMutationKey = ['removeReport'] as const;
 
 export const useRemoveReport = (id: string) => {

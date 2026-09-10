@@ -4,7 +4,7 @@ import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * POST /reports (порт create_report): body в camelCase; сервер сам решает
+ * POST /reports: body в camelCase; сервер сам решает
  * уникальность кода ('Такой период уже существует' → 409) и то, что бюджет
  * пишется только при включённом daily-режиме. Оптимистичная вставка прежняя.
  */

@@ -6,7 +6,7 @@ import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * PATCH /operations/:id (порт update_operation). Отправляем только реально
+ * PATCH /operations/:id. Отправляем только реально
  * заполненные поля: null в amount смысл иметь не может (NOT NULL), а
  * categoryId/description = null — легальное «очистить».
  */

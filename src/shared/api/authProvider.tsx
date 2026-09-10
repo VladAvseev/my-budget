@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { authService } from './services/auth';
-import type { AuthContextType, User, Session } from './types/auth.types';
+import type { AuthContextType, AuthSession, AuthUser } from './types/auth.types';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -18,8 +18,8 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [session, setSession] = useState<AuthSession | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setSession(session);
         setUser(session?.user ?? null);
       } catch (error) {
-        console.error('Auth initialization error:', error);
+        console.error('Ошибка инициализации авторизации:', error);
       } finally {
         setLoading(false);
       }
@@ -39,8 +39,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const {
       data: { subscription },
-    } = authService.onAuthStateChange((event, session) => {
-      console.log('Auth event:', event);
+    } = authService.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
     });
@@ -62,9 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return result;
     },
     getToken: authService.getToken,
-    resetPassword: authService.resetPassword,
     updatePassword: authService.updatePassword,
-    refreshSession: authService.refreshSession,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

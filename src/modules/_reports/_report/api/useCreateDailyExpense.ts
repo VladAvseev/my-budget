@@ -9,7 +9,7 @@ import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * POST /reports/:id/daily-expenses (порт create_daily_expense): сервер сам
+ * POST /reports/:id/daily-expenses: сервер сам
  * ищет первую свободную дату периода отчёта (по своей копии периода —
  * надёжнее, чем аргументы клиента; periodStart/periodEnd в сигнатуре
  * оставлены для оптимистичной даты в кэше).

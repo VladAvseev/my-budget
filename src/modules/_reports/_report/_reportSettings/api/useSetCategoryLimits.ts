@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { categoryLimitsQueryKey } from '../../api/useCategoryLimits';
 
 /**
- * PUT /reports/:id/category-limits (порт set_category_limits): полная
+ * PUT /reports/:id/category-limits: полная
  * замена лимитов. Тело сервера ждёт { limits: [{ categoryId, amount }] } —
  * reportId из каждого элемента клиента здесь не нужен.
  */

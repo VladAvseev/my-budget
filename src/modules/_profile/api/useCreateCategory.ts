@@ -6,7 +6,7 @@ import { categoriesQueryKey } from './keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * POST /categories (порт create_category) с прежним оптимистичным обновлением:
+ * POST /categories с прежним оптимистичным обновлением:
  * добавляем черновик в кэш «все» и «по типу», при ошибке откатываем.
  */
 const createCategoryMutationKey = ['createCategory'] as const;

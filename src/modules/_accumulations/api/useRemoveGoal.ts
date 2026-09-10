@@ -3,7 +3,7 @@ import { api } from '@/shared/api/http';
 import type { Goal } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** DELETE /goals/:id (порт delete_goal) + оптимистика. */
+/** DELETE /goals/:id + оптимистика. */
 const removeGoalMutationKey = ['removeGoal'] as const;
 
 export const useRemoveGoal = (userId: string) => {

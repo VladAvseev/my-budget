@@ -3,7 +3,7 @@ import type { OperationSummary } from '@/shared/api/types/domain';
 import { summaryQueryKey } from './keys';
 import { useQuery } from '@tanstack/react-query';
 
-/** GET /reports/:id/summary (порт get_report_summary). */
+/** GET /reports/:id/summary. */
 export const useSummary = (reportId: string) =>
   useQuery<OperationSummary>({
     queryKey: summaryQueryKey(reportId),

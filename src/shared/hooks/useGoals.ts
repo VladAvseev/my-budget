@@ -2,7 +2,7 @@ import { api } from '@/shared/api/http';
 import type { Goal } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
-/** GET /goals (порт get_goals): цели; user — из токена, userId только для ключа кэша. */
+/** GET /goals: цели; user — из токена, userId только для ключа кэша. */
 export const goalsQueryKey = (userId: string) => ['goals', userId] as const;
 
 export const useGoals = (userId: string) =>

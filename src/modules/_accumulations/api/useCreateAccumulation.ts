@@ -4,7 +4,7 @@ import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** POST /accumulations (порт create_accumulation) + прежняя оптимистика. */
+/** POST /accumulations + прежняя оптимистика. */
 const createAccumulationMutationKey = ['createAccumulation'] as const;
 
 export const useCreateAccumulation = (userId: string) => {

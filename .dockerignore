@@ -4,5 +4,4 @@ dist
 .git
 .env
 .VSCodeCounter
-supabase_logs.json
 README.md

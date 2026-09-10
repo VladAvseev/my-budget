@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 
 /**
  * Карта «отчёт → операции» для распределения по категориям в overview:
- * GET /operations?reportIds= (порт get_operations_by_reports). Как и прежний
- * RPC, ответ содержит только report_id/type/amount/category_id — типизация
+ * GET /operations?reportIds= — ответ содержит только
+ * report_id/type/amount/category_id — типизация
  * Operation[] сохранена для совместимости с потребителями.
  */
 const overviewOperationsQueryKey = (reportIds: string[]) =>

@@ -4,7 +4,7 @@ import type { Goal, GoalInput } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** POST /goals (порт create_goal): 400 чужая/не savings категория, 409 дубль. */
+/** POST /goals: 400 чужая/не savings категория, 409 дубль. */
 const createGoalMutationKey = ['createGoal'] as const;
 
 export const useCreateGoal = (userId: string) => {

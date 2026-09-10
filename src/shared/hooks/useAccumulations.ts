@@ -2,7 +2,7 @@ import { api } from '@/shared/api/http';
 import type { Accumulation } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
-/** GET /accumulations (порт get_accumulations); user — из токена, userId — для ключа кэша. */
+/** GET /accumulations; user — из токена, userId — для ключа кэша. */
 export const accumulationsQueryKey = (userId: string) => ['accumulations', userId] as const;
 
 export const useAccumulations = (userId: string) =>

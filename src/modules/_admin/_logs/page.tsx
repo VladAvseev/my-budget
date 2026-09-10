@@ -64,17 +64,6 @@ const formatSeriesPoint = (iso: string, hourly: boolean): string => {
   return `${dayMonth} ${String(date.getHours()).padStart(2, '0')}:00`;
 };
 
-const formatJson = (value: unknown): string => {
-  if (value === null || value === undefined) {
-    return '—';
-  }
-  try {
-    return JSON.stringify(value, null, 2);
-  } catch {
-    return String(value);
-  }
-};
-
 const formatNumber = (value: number): string => value.toLocaleString('ru-RU');
 
 const formatMetric = (value: number | null, suffix = ''): string =>
@@ -344,13 +333,14 @@ export const Page: React.FC = () => {
                   ) : (
                     logs.items.map((row: AdminLogRow) => {
                       const isError = row.status >= 400;
-                      const hasDetails = row.query !== null || row.error !== null;
-                      const isExpanded = hasDetails && expandedIds.has(row.id);
+                      // Раскрытие строки нужно только ради текста ошибки —
+                      // параметров запроса сервер не хранит.
+                      const isExpanded = row.error !== null && expandedIds.has(row.id);
                       return (
                         <Fragment key={row.id}>
                           <tr
-                            className={hasDetails ? styles.rowClickable : undefined}
-                            onClick={hasDetails ? () => toggleRow(row.id) : undefined}
+                            className={row.error ? styles.rowClickable : undefined}
+                            onClick={row.error ? () => toggleRow(row.id) : undefined}
                           >
                             <td>{formatDateTime(row.createdAt)}</td>
                             <td>{row.method}</td>
@@ -368,24 +358,14 @@ export const Page: React.FC = () => {
                             </td>
                             <td>{row.ip ?? '—'}</td>
                           </tr>
-                          {isExpanded && (
+                          {isExpanded && row.error && (
                             <tr>
                               <td colSpan={7} className={styles.detailsCell}>
-                                <div className={styles.detailsGrid}>
-                                  <div className={styles.detailsBlock}>
-                                    <span className={styles.detailsTitle}>Параметры запроса</span>
-                                    <pre className={styles.detailsCode}>
-                                      {formatJson(row.query)}
-                                    </pre>
-                                  </div>
-                                  {row.error && (
-                                    <div className={styles.detailsBlock}>
-                                      <span className={styles.detailsTitle}>Ошибка</span>
-                                      <pre className={`${styles.detailsCode} ${styles.errorText}`}>
-                                        {row.error}
-                                      </pre>
-                                    </div>
-                                  )}
+                                <div className={styles.detailsBlock}>
+                                  <span className={styles.detailsTitle}>Ошибка</span>
+                                  <pre className={`${styles.detailsCode} ${styles.errorText}`}>
+                                    {row.error}
+                                  </pre>
                                 </div>
                               </td>
                             </tr>

@@ -3,7 +3,7 @@ import type { Category, CategoryType } from '@/shared/api/types/domain';
 import { categoriesQueryKey } from './keys';
 import { useQuery } from '@tanstack/react-query';
 
-/** GET /categories [?type=] (порт get_categories): все или по типу. */
+/** GET /categories [?type=]: все или по типу. */
 export const useCategories = (userId: string, type?: CategoryType) =>
   useQuery<Category[]>({
     queryKey: categoriesQueryKey(userId, type),

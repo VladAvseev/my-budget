@@ -5,7 +5,7 @@ import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * PATCH /accumulations/:id (порт update_accumulation). Отсылаем только
+ * PATCH /accumulations/:id. Отсылаем только
  * переданные поля — null в amount сервер не примет, и это правильно.
  */
 const updateAccumulationMutationKey = ['updateAccumulation'] as const;

@@ -2,7 +2,7 @@ import { api } from '@/shared/api/http';
 import type { Accumulation } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** DELETE /accumulations/:id (порт delete_accumulation) + оптимистика. */
+/** DELETE /accumulations/:id + оптимистика. */
 const removeAccumulationMutationKey = ['removeAccumulation'] as const;
 
 export const useRemoveAccumulation = (userId: string) => {

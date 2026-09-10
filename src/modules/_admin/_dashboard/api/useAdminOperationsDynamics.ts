@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import type { DynamicsDailyRow } from '../utils/buildOperationsDynamicsData';
 
 /**
- * GET /admin/dashboard/operations-dynamics (порт admin_get_operations_dynamics):
- * [{ day, operations_count }] — сутки по московскому времени, как в RPC.
+ * GET /admin/dashboard/operations-dynamics:
+ * [{ day, operations_count }] — сутки по московскому времени.
  */
 export const useAdminOperationsDynamics = () =>
   useQuery<DynamicsDailyRow[]>({

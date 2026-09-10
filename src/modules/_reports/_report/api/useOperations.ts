@@ -4,7 +4,7 @@ import { operationsQueryKey } from './keys';
 import { useQueries, useQuery } from '@tanstack/react-query';
 
 /**
- * GET /operations?reportId=&type= (порт get_operations_by_report).
+ * GET /operations?reportId=&type=.
  * Для daily сервер сортирует по дате расхода, для остальных — по created_at.
  */
 const fetchOperations = async (reportId: string, type: OperationType) =>

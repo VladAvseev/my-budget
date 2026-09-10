@@ -1,14 +1,14 @@
 /**
- * HTTP-клиент нового REST-бэкенда my-budget (репозиторий `server/`, Express).
+ * HTTP-клиент REST-бэкенда my-budget (репозиторий `server/`, Express).
  *
- * Заменяет собой `supabase-js`: та же responsibilities, но против /api/v1:
+ * Зоны ответственности:
  *   * обёртка над fetch с единым envelope ответа сервера:
  *     успех → { data }, ошибка → { error: { message, status } };
- *   * хранение пары токенов в localStorage (аналог persistSession: true);
- *   * автообновление access-токена по истечении и при 401 (аналог
- *     autoRefreshToken), с одно-полётной очередью: параллельные запросы
- *     во время refresh ждут один Promise, а не дерут /auth/refresh каждый;
- *   * события изменения сессии — минимальная замена onAuthStateChange.
+ *   * хранение пары токенов в localStorage и их автоочистка;
+ *   * автообновление access-токена по истечении и при 401, с одно-полётной
+ *     очередью: параллельные запросы во время refresh ждут один Promise,
+ *     а не дерут /auth/refresh каждый;
+ *   * события изменения сессии для auth-провайдера.
  *
  * Базовый путь '/api/v1' — same-origin: в проде nginx web-контейнера
  * проксирует /api/ на Express, в dev тот же прокси настроен в
@@ -81,7 +81,7 @@ export function clearStoredSession(): void {
   emitSessionChange();
 }
 
-// ── Шина событий сессии (замена supabase.auth.onAuthStateChange) ───────────
+// ── Шина событий сессии ─────────────────────────────────────────────────────
 // Провайдер получает уведомление при любом изменении хранилища; конкретные
 // события SIGNED_IN/SIGNED_OUT надстраивает services/auth.ts.
 

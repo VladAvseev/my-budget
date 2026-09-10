@@ -1,44 +1,32 @@
-export interface User {
-  id: string;
-  email: string;
-  email_confirmed_at: string | null;
-  created_at: string;
-  updated_at: string;
-  user_metadata: Record<string, any>;
-  app_metadata: {
-    provider: string;
-  };
-}
+import type { ApiUser, StoredSession } from '../http';
 
-export interface Session {
-  access_token: string;
-  refresh_token: string;
-  expires_in: number;
-  expires_at: number;
-  token_type: string;
-  user: User;
-}
+/** Пользователь в контексте авторизации — публичные поля из ответа API. */
+export type AuthUser = ApiUser;
 
-export interface AuthResponse {
-  data: {
-    user: User | null;
-    session: Session | null;
-  };
-  error: AuthError | null;
-}
+/** Активная сессия: пара токенов + абсолютное время жизни access-токена. */
+export type AuthSession = StoredSession;
 
+/** Ошибка auth-слоя: текст (сервер отдаёт его по-русски) + HTTP-статус. */
 export interface AuthError {
   message: string;
   status: number;
   name: string;
 }
 
-export type AuthEvent =
-  'SIGNED_IN' | 'SIGNED_OUT' | 'TOKEN_REFRESHED' | 'USER_UPDATED' | 'PASSWORD_RECOVERY';
+/** Ответ signUp/signIn: пользователь либо null, если что-то пошло не так. */
+export interface AuthResponse {
+  data: {
+    user: AuthUser | null;
+  };
+  error: AuthError | null;
+}
+
+/** События смены сессии, которые реально происходят в приложении. */
+export type AuthEvent = 'SIGNED_IN' | 'SIGNED_OUT';
 
 export interface AuthState {
-  user: User | null;
-  session: Session | null;
+  user: AuthUser | null;
+  session: AuthSession | null;
   loading: boolean;
   isAuthenticated: boolean;
 }
@@ -48,20 +36,10 @@ export interface LoginCredentials {
   password: string;
 }
 
-export interface RegisterCredentials extends LoginCredentials {
-  username?: string;
-}
-
 export interface AuthContextType extends AuthState {
-  signUp: (
-    email: string,
-    password: string,
-    metadata?: Record<string, any>,
-  ) => Promise<AuthResponse>;
+  signUp: (email: string, password: string) => Promise<AuthResponse>;
   signIn: (email: string, password: string) => Promise<AuthResponse>;
   signOut: () => Promise<{ error: AuthError | null }>;
   getToken: () => Promise<string | null>;
-  resetPassword: (email: string) => Promise<{ data: any; error: AuthError | null }>;
-  updatePassword: (newPassword: string) => Promise<{ data: any; error: AuthError | null }>;
-  refreshSession: () => Promise<{ session: Session | null; error: AuthError | null }>;
+  updatePassword: (newPassword: string) => Promise<{ error: AuthError | null }>;
 }

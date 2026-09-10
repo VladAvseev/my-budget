@@ -4,10 +4,10 @@ import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * PATCH /reports/:id (порт update_report): либо { name } — переименование,
+ * PATCH /reports/:id: либо { name } — переименование,
  * либо { hasDailyExpenses, dailyBudget?, periodStart?, periodEnd? } —
- * вкл/выкл ежедневных расходов. Отсылаются только переданные поля
- * (серверный if/elsif ветвит их точно как прежний RPC).
+ * вкл/выкл ежедневных расходов. Отсылаются только переданные поля —
+ * сервер обновляет ровно их.
  */
 export const useUpdateReport = (id: string) => {
   const queryClient = useQueryClient();

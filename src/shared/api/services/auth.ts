@@ -3,50 +3,19 @@ import {
   api,
   clearStoredSession,
   getStoredSession,
-  refreshSessionOnce,
   storeSession,
   subscribeSessionChange,
   type ApiSession,
-  type ApiUser,
 } from '../http';
-import type { AuthError, AuthEvent, AuthResponse, Session, User } from '../types/auth.types';
+import type { AuthError, AuthEvent, AuthResponse, AuthSession } from '../types/auth.types';
 
 /**
- * Сервис авторизации поверх нового REST-бэкенда (`server/`, модуль _auth).
+ * Сервис авторизации поверх REST-бэкенда (`server/`, модуль _auth).
  *
- * Публичный интерфейс намеренно сохранён прежним (signUp/signIn/signOut/
- * getSession/getToken/refreshSession/updatePassword/onAuthStateChange) —
- * authProvider, страницы логина/регистрации и смена пароля не менялись.
- * Внутри вместо supabase-js: пару access/refresh хранит http.ts,
- * события — своя шина, а legacy-форма Session/User (snake_case поля
- * GoTrue) достраивается адаптерами ниже.
+ * Хранение пары access/refresh и автообновление токена — на http.ts; здесь
+ * только вызовы /auth/*, нормализация ошибок и шина событий смены сессии,
+ * на которую подписывается AuthProvider.
  */
-
-/** Ответ сервера /auth/* (camelCase) → legacy-форма Supabase-сессии. */
-function toLegacyUser(u: ApiUser): User {
-  return {
-    id: u.id,
-    email: u.email,
-    // Подтверждение email на новом сервере не используется вовсе.
-    email_confirmed_at: null,
-    created_at: u.createdAt,
-    updated_at: u.updatedAt,
-    user_metadata: {},
-    app_metadata: { provider: 'email' },
-  };
-}
-
-function toLegacySession(accessToken: string, refreshToken: string, user: ApiUser): Session {
-  const expiresAt = Math.floor(Date.now() / 1000) + 3600; // TTL access-токена сервера — 1h
-  return {
-    access_token: accessToken,
-    refresh_token: refreshToken,
-    expires_in: 3600,
-    expires_at: expiresAt,
-    token_type: 'bearer',
-    user: toLegacyUser(user),
-  };
-}
 
 function toAuthError(error: unknown): AuthError {
   if (error instanceof ApiError) {
@@ -58,13 +27,13 @@ function toAuthError(error: unknown): AuthError {
   return { message: 'Неизвестная ошибка', status: 0, name: 'UnknownError' };
 }
 
-// ── минимальная шина AuthStateChange ────────────────────────────────────────
+// ── шина событий смены сессии ───────────────────────────────────────────────
 
-type AuthListener = (event: AuthEvent, session: Session | null) => void;
+type AuthListener = (event: AuthEvent, session: AuthSession | null) => void;
 const authListeners = new Set<AuthListener>();
 
 function emit(event: AuthEvent): void {
-  const session = currentSession();
+  const session = getStoredSession();
   authListeners.forEach((cb) => cb(event, session));
 }
 
@@ -77,19 +46,12 @@ subscribeSessionChange(() => {
 });
 let wasSignedIn = Boolean(getStoredSession());
 
-function currentSession(): Session | null {
-  const stored = getStoredSession();
-  if (!stored) return null;
-  return toLegacySession(stored.accessToken, stored.refreshToken, stored.user);
-}
-
 // ── сервис ──────────────────────────────────────────────────────────────────
 
 class AuthService {
   /**
-   * POST /auth/register. Сервер не шлёт писем (в отличие от GoTrue с
-   * email-confirmation) и сразу выдаёт сессию — как Supabase с выключенным
-   * confirm, поэтому SIGNED_IN эмитится сразу.
+   * POST /auth/register. Писем о подтверждении сервер не шлёт и сразу выдаёт
+   * сессию, поэтому SIGNED_IN эмитится немедленно.
    */
   async signUp(email: string, password: string): Promise<AuthResponse> {
     try {
@@ -97,29 +59,29 @@ class AuthService {
       storeSession(session);
       wasSignedIn = true;
       emit('SIGNED_IN');
-      return { data: { user: toLegacyUser(session.user), session: currentSession() }, error: null };
+      return { data: { user: session.user }, error: null };
     } catch (error) {
-      return { data: { user: null, session: null }, error: toAuthError(error) };
+      return { data: { user: null }, error: toAuthError(error) };
     }
   }
 
-  /** POST /auth/login — новая «сессия-устройство» (аналог signInWithPassword). */
+  /** POST /auth/login — новая «сессия-устройство» (одна строка в refresh_tokens). */
   async signIn(email: string, password: string): Promise<AuthResponse> {
     try {
       const session = await api.publicPost<ApiSession>('/auth/login', { email, password });
       storeSession(session);
       wasSignedIn = true;
       emit('SIGNED_IN');
-      return { data: { user: toLegacyUser(session.user), session: currentSession() }, error: null };
+      return { data: { user: session.user }, error: null };
     } catch (error) {
-      return { data: { user: null, session: null }, error: toAuthError(error) };
+      return { data: { user: null }, error: toAuthError(error) };
     }
   }
 
   /**
    * POST /auth/logout + локальная зачистка. Отозвать стараемся только свою
-   * текущую сессию — другие устройства пользователя живут (как signOut()
-   * Supabase без scope). Сетевую ошибку игнорируем: локально всё равно выход.
+   * текущую сессию — другие устройства пользователя продолжают жить.
+   * Сетевую ошибку игнорируем: локально выход всё равно должен случиться.
    */
   async signOut(): Promise<{ error: AuthError | null }> {
     const stored = getStoredSession();
@@ -137,44 +99,16 @@ class AuthService {
   }
 
   /**
-   * Аналог supabase.auth.getSession(): «есть ли живая сессия в хранилище».
-   * Проверка JWT на сервере не нужна: при истёкшем access http сам
-   * обновит пару при первом запросе.
+   * Начальное состояние для провайдера: «есть ли живая сессия в хранилище».
+   * Проверять токен на сервере не нужно: при истёкшем access http сам
+   * обновит пару при первом же запросе.
    */
-  async getSession(): Promise<{ session: Session | null; error: AuthError | null }> {
-    return { session: currentSession(), error: null };
+  async getSession(): Promise<{ session: AuthSession | null; error: AuthError | null }> {
+    return { session: getStoredSession(), error: null };
   }
 
   async getToken(): Promise<string | null> {
     return getStoredSession()?.accessToken ?? null;
-  }
-
-  /** Принудительный refresh (кнопки «обновить сессию» в коде нет, API сохранён). */
-  async refreshSession(): Promise<{ session: Session | null; error: AuthError | null }> {
-    const ok = await refreshSessionOnce();
-    return ok
-      ? { session: currentSession(), error: null }
-      : {
-          session: null,
-          error: { message: 'Сессия истекла, войдите заново', status: 401, name: 'AuthApiError' },
-        };
-  }
-
-  /**
-   * Восстановление пароля письмом на новом бэкенде не реализовано
-   * (нет e-mail-инфраструктуры). В UI путь не вызывается — метод оставлен
-   * для совместимости контекста и честно сообщает о недоступности.
-   */
-  async resetPassword(email: string): Promise<{ data: null; error: AuthError | null }> {
-    void email;
-    return {
-      data: null,
-      error: {
-        message: 'Восстановление пароля по email недоступно',
-        status: 501,
-        name: 'NotImplemented',
-      },
-    };
   }
 
   /**
@@ -183,19 +117,19 @@ class AuthService {
    * тоже уничтожаем локально: провайдер поймает SIGNED_OUT, гард
    * отведёт на /login — вход новым паролем.
    */
-  async updatePassword(newPassword: string): Promise<{ data: null; error: AuthError | null }> {
+  async updatePassword(newPassword: string): Promise<{ error: AuthError | null }> {
     try {
       await api.patch<null>('/auth/password', { newPassword });
-      clearStoredSession();
-      wasSignedIn = false;
-      emit('SIGNED_OUT');
-      return { data: null, error: null };
     } catch (error) {
-      return { data: null, error: toAuthError(error) };
+      return { error: toAuthError(error) };
     }
+    clearStoredSession();
+    wasSignedIn = false;
+    emit('SIGNED_OUT');
+    return { error: null };
   }
 
-  /** Подписка на смену сессии; контракт { data: { subscription } } сохранён. */
+  /** Подписка на смену сессии; возвращает функцию отписки в привычной обёртке. */
   onAuthStateChange(callback: AuthListener) {
     authListeners.add(callback);
     return { data: { subscription: { unsubscribe: () => authListeners.delete(callback) } } };

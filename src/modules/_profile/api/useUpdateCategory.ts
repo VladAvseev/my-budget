@@ -5,7 +5,7 @@ import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * PATCH /categories/:id (порт update_category). Отправляем только реально
+ * PATCH /categories/:id. Отправляем только реально
  * переданные поля — серверный PATCH-whitelist не затирает остальное null'ами.
  */
 const updateCategoryMutationKey = ['updateCategory'] as const;

@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useProfile } from './useProfile';
 
 /**
- * Глобальный баланс: GET /users/me/summary (порт get_user_summary).
+ * Глобальный баланс: GET /users/me/summary.
  * p_user_id не передаётся — сервер берёт пользователя из JWT.
  */
 

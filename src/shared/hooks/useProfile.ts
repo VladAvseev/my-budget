@@ -5,17 +5,16 @@ import type { Profile } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- * Профиль пользователя: GET /users/me (порт RPC get_or_create_profile).
- * «Or create» на новом сервере не нужен — строку создаёт регистрация,
- * а сервер отдаёт camelCase PublicUser; здесь он адаптируется к прежнему
+ * Профиль пользователя: GET /users/me.
+ * Сервер отдаёт camelCase PublicUser; здесь он адаптируется к прежнему
  * snake_case формату Profile, чтобы компоненты (AccountCard, StartBalanceCard,
  * онбординг) не менялись.
  */
 const toProfile = (u: ApiUser): Profile => ({
   user_id: u.id,
   email: u.email,
-  // start_balance типизирован строкой (как в прежнем Row profiles) —
-  // публичный API профиля уже привязан к Number(...) в UI.
+  // start_balance типизирован строкой — публичный API профиля уже привязан
+  // к Number(...) в UI.
   start_balance: String(u.startBalance),
   currency: u.currency,
   onboarded: u.onboarded,

@@ -2,7 +2,7 @@ import { api } from '@/shared/api/http';
 import type { Category } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** DELETE /categories/:id (порт delete_category) + оптимистичное удаление. */
+/** DELETE /categories/:id + оптимистичное удаление. */
 const removeCategoryMutationKey = ['removeCategory'] as const;
 
 export const useRemoveCategory = (userId: string) => {
