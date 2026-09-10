@@ -1,0 +1,170 @@
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-m);
+}
+
+.metricCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-m);
+}
+
+.metricLabel {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}
+
+.metricValue {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.metricValueError {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-error);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m);
+  align-items: flex-start;
+}
+
+.seriesTable,
+.endpointTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-s);
+}
+
+.seriesTable th,
+.endpointTable th {
+  padding: var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+}
+
+.seriesTable td,
+.endpointTable td {
+  padding: var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-l);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-s);
+}
+
+.table th {
+  padding: var(--space-s) var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--space-s) var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.table tbody tr.rowClickable {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.table tbody tr.rowClickable:hover {
+  background-color: var(--color-bg-surface-hover);
+}
+
+.statusOk {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-bold);
+}
+
+.statusError {
+  color: var(--color-error);
+  font-weight: var(--font-weight-bold);
+}
+
+.detailsCell {
+  padding: var(--space-s);
+  background-color: var(--color-bg-surface);
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-m);
+  white-space: normal;
+}
+
+.detailsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.detailsTitle {
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.detailsCode {
+  margin: 0;
+  padding: var(--space-s);
+  max-height: 240px;
+  overflow: auto;
+  border-radius: var(--radius-s);
+  background-color: var(--color-bg-primary);
+  font-family: monospace;
+  font-size: var(--font-size-s);
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.errorText {
+  color: var(--color-error);
+}
+
+.empty {
+  padding: var(--space-xl) var(--space-m);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-m);
+}
+
+.paginationInfo {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}

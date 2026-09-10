@@ -10,6 +10,7 @@ interface AdminTab {
 const ADMIN_TABS: AdminTab[] = [
   { to: '/admin/dashboard', label: 'Дашборд' },
   { to: '/admin/users', label: 'Пользователи' },
+  { to: '/admin/logs', label: 'Логи' },
 ];
 
 export const AdminLayout: React.FC = () => {

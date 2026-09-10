@@ -20,6 +20,7 @@ export const VTextInput = ({
   style,
   trailingIcon,
   className,
+  maxLength = 255,
   ...rest
 }: VTextInputProps) => {
   const errorId = useId();
@@ -42,7 +43,7 @@ export const VTextInput = ({
           onChange={handleChange}
           onFocus={onFocus}
           onBlur={onBlur}
-          maxLength={255}
+          maxLength={maxLength}
           className={`${styles.input}${trailingIcon ? ` ${styles.inputWithTrailing}` : ''}`}
           aria-invalid={hasError}
           aria-describedby={hasError ? errorId : undefined}

@@ -37,6 +37,9 @@ export const VPasswordInput = ({
       disabled={disabled}
       onChange={onChange}
       className={className}
+      // 72 — серверный предел пароля: bcrypt молча усекает ввод длиннее,
+      // поэтому формы не дают ввести больше (см. _auth/service на сервере).
+      maxLength={72}
       trailingIcon={
         <button
           type="button"

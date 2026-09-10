@@ -234,3 +234,61 @@ export interface DatabaseSize {
   sizeBytes: number;
   sizePretty: string;
 }
+
+// ── Логи запросов (GET /admin/logs, GET /admin/logs/metrics) ───────────────
+
+export type AdminLogsStatusFilter = 'all' | 'success' | 'error';
+
+export type AdminLogsPeriod = '24h' | '7d' | '30d' | 'all';
+
+/** Одна строка лога: пароли/refresh-токены сервер заменяет на '***'. */
+export interface AdminLogRow {
+  id: number;
+  createdAt: string;
+  method: string;
+  path: string;
+  query: unknown | null;
+  body: unknown | null;
+  status: number;
+  durationMs: number;
+  responseBody: unknown | null;
+  error: string | null;
+  userId: string | null;
+  ip: string | null;
+  userAgent: string | null;
+}
+
+export interface AdminLogsPage {
+  items: AdminLogRow[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface AdminLogEndpointStat {
+  endpoint: string;
+  count: number;
+  avgDurationMs: number;
+  errorCount: number;
+}
+
+export interface AdminLogsSeriesPoint {
+  /** ISO-строка начала интервала (час для периода 24h, иначе день). */
+  point: string;
+  total: number;
+  errors: number;
+}
+
+export interface AdminLogsMetrics {
+  period: AdminLogsPeriod;
+  total: number;
+  successCount: number;
+  errorCount: number;
+  /** доля ошибок 0..1, null — запросов за период не было */
+  errorRate: number | null;
+  avgDurationMs: number | null;
+  p95DurationMs: number | null;
+  topSlowestEndpoints: AdminLogEndpointStat[];
+  topErrorEndpoints: AdminLogEndpointStat[];
+  perPoint: AdminLogsSeriesPoint[];
+}
