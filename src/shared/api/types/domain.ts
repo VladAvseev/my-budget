@@ -253,17 +253,19 @@ export type AdminLogsStatusFilter = 'all' | 'success' | 'error';
 
 export type AdminLogsPeriod = '24h' | '7d' | '30d' | 'all';
 
-/** Одна строка лога: пароли/refresh-токены сервер заменяет на '***'. */
+/** Поле и порядок сортировки строк логов (query sort/order в GET /admin/logs). */
+export type AdminLogsSortField = 'date' | 'duration';
+export type AdminLogsSortOrder = 'asc' | 'desc';
+
+/** Одна строка лога: тела запросов/ответов сервер не хранит, query маскируется. */
 export interface AdminLogRow {
   id: number;
   createdAt: string;
   method: string;
   path: string;
   query: unknown | null;
-  body: unknown | null;
   status: number;
   durationMs: number;
-  responseBody: unknown | null;
   error: string | null;
   /** Автор запроса; null — запрос без авторизации (или пользователь удалён). */
   userId: string | null;

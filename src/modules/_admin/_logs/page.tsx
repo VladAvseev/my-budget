@@ -2,6 +2,8 @@ import commonStyles from '@/shared/styles/common.module.css';
 import type {
   AdminLogRow,
   AdminLogsPeriod,
+  AdminLogsSortField,
+  AdminLogsSortOrder,
   AdminLogsStatusFilter,
 } from '@/shared/api/types/domain';
 import { VButton } from '@/shared/ui/VButton';
@@ -18,6 +20,8 @@ import {
   LOG_USER_ANONYMOUS,
   logsPageAtom,
   logsPeriodAtom,
+  logsSortAtom,
+  logsSortOrderAtom,
   logsStatusAtom,
   logsUserAtom,
 } from './atoms/logs';
@@ -100,30 +104,50 @@ const EndpointList: React.FC<EndpointListProps> = ({ title, items }) => (
     {items.length === 0 ? (
       <span className={commonStyles.textSecondary}>Нет данных за период</span>
     ) : (
-      <table className={styles.endpointTable}>
-        <thead>
-          <tr>
-            <th>Эндпоинт</th>
-            <th>Запросов</th>
-            <th>Ср. время</th>
-            <th>Ошибок</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.endpoint}>
-              <td>{item.endpoint}</td>
-              <td>{formatNumber(item.count)}</td>
-              <td>{formatNumber(item.avgDurationMs)} мс</td>
-              <td className={item.errorCount > 0 ? styles.errorText : undefined}>
-                {formatNumber(item.errorCount)}
-              </td>
+      <div className={styles.tableWrapper}>
+        <table className={styles.endpointTable}>
+          <thead>
+            <tr>
+              <th>Эндпоинт</th>
+              <th>Запросов</th>
+              <th>Ср. время</th>
+              <th>Ошибок</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <tr key={item.endpoint}>
+                <td>{item.endpoint}</td>
+                <td>{formatNumber(item.count)}</td>
+                <td>{formatNumber(item.avgDurationMs)} мс</td>
+                <td className={item.errorCount > 0 ? styles.errorText : undefined}>
+                  {formatNumber(item.errorCount)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     )}
   </VCard>
+);
+
+interface SortHeaderProps {
+  label: string;
+  field: AdminLogsSortField;
+  activeField: AdminLogsSortField;
+  order: AdminLogsSortOrder;
+  onSort: (field: AdminLogsSortField) => void;
+}
+
+/** Заголовок сортируемого столбца: клик — выбрать поле, повторный — сменить порядок. */
+const SortHeader: React.FC<SortHeaderProps> = ({ label, field, activeField, order, onSort }) => (
+  <th className={styles.sortHeader} onClick={() => onSort(field)}>
+    {label}
+    <span className={styles.sortIndicator}>
+      {activeField === field ? (order === 'asc' ? '↑' : '↓') : '↕'}
+    </span>
+  </th>
 );
 
 export const Page: React.FC = () => {
@@ -131,7 +155,19 @@ export const Page: React.FC = () => {
   const [status, setStatus] = useAtom(logsStatusAtom);
   const [user, setUser] = useAtom(logsUserAtom);
   const [page, setPage] = useAtom(logsPageAtom);
+  const [sort, setSort] = useAtom(logsSortAtom);
+  const [sortOrder, setSortOrder] = useAtom(logsSortOrderAtom);
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+
+  const handleSort = (field: AdminLogsSortField) => {
+    if (field === sort) {
+      setSortOrder((current) => (current === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSort(field);
+      setSortOrder('desc');
+    }
+    setPage(1);
+  };
 
   const usersQuery = useAdminUsers();
   const userOptions = useMemo<VSelectOption[]>(
@@ -143,7 +179,13 @@ export const Page: React.FC = () => {
   );
 
   const metricsQuery = useAdminLogsMetrics(period as AdminLogsPeriod);
-  const logsQuery = useAdminLogs({ status: status as AdminLogsStatusFilter, userId: user, page });
+  const logsQuery = useAdminLogs({
+    status: status as AdminLogsStatusFilter,
+    userId: user,
+    page,
+    sort,
+    order: sortOrder,
+  });
 
   const toggleRow = (id: number) => {
     setExpandedIds((prev) => {
@@ -271,11 +313,23 @@ export const Page: React.FC = () => {
               <table className={styles.table}>
                 <thead>
                   <tr>
-                    <th>Время</th>
+                    <SortHeader
+                      label="Дата и время"
+                      field="date"
+                      activeField={sort}
+                      order={sortOrder}
+                      onSort={handleSort}
+                    />
                     <th>Метод</th>
                     <th>Путь</th>
                     <th>Статус</th>
-                    <th>Время</th>
+                    <SortHeader
+                      label="Выполнение"
+                      field="duration"
+                      activeField={sort}
+                      order={sortOrder}
+                      onSort={handleSort}
+                    />
                     <th>Пользователь</th>
                     <th>IP</th>
                   </tr>
@@ -290,10 +344,14 @@ export const Page: React.FC = () => {
                   ) : (
                     logs.items.map((row: AdminLogRow) => {
                       const isError = row.status >= 400;
-                      const isExpanded = expandedIds.has(row.id);
+                      const hasDetails = row.query !== null || row.error !== null;
+                      const isExpanded = hasDetails && expandedIds.has(row.id);
                       return (
                         <Fragment key={row.id}>
-                          <tr className={styles.rowClickable} onClick={() => toggleRow(row.id)}>
+                          <tr
+                            className={hasDetails ? styles.rowClickable : undefined}
+                            onClick={hasDetails ? () => toggleRow(row.id) : undefined}
+                          >
                             <td>{formatDateTime(row.createdAt)}</td>
                             <td>{row.method}</td>
                             <td>{row.path}</td>
@@ -315,13 +373,9 @@ export const Page: React.FC = () => {
                               <td colSpan={7} className={styles.detailsCell}>
                                 <div className={styles.detailsGrid}>
                                   <div className={styles.detailsBlock}>
-                                    <span className={styles.detailsTitle}>Тело запроса</span>
-                                    <pre className={styles.detailsCode}>{formatJson(row.body)}</pre>
-                                  </div>
-                                  <div className={styles.detailsBlock}>
-                                    <span className={styles.detailsTitle}>Ответ сервера</span>
+                                    <span className={styles.detailsTitle}>Параметры запроса</span>
                                     <pre className={styles.detailsCode}>
-                                      {formatJson(row.responseBody)}
+                                      {formatJson(row.query)}
                                     </pre>
                                   </div>
                                   {row.error && (

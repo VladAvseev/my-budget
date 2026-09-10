@@ -69,6 +69,12 @@
   color: var(--color-text-primary);
 }
 
+/* Длинные пути эндпоинтов не переносим — таблица скроллится горизонтально. */
+.endpointTable th,
+.endpointTable td {
+  white-space: nowrap;
+}
+
 .twoCol {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -77,6 +83,7 @@
 
 .tableWrapper {
   overflow-x: auto;
+  min-width: 0;
 }
 
 .table {
@@ -104,6 +111,19 @@
 .table tbody tr.rowClickable {
   cursor: pointer;
   transition: background-color 0.15s ease;
+}
+
+.sortHeader {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortHeader:hover {
+  color: var(--color-text-primary);
+}
+
+.sortIndicator {
+  margin-left: var(--space-xs);
 }
 
 .table tbody tr.rowClickable:hover {
@@ -136,6 +156,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
+  /* Позволяет grid-элементу сжиматься, чтобы .tableWrapper скроллился внутри карточки. */
+  min-width: 0;
 }
 
 .detailsTitle {
