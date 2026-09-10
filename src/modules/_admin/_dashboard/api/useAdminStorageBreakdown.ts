@@ -6,5 +6,6 @@ import { useQuery } from '@tanstack/react-query';
 export const useAdminStorageBreakdown = () =>
   useQuery<StorageBreakdown>({
     queryKey: ['admin', 'storageBreakdown'],
-    queryFn: () => api.get<StorageBreakdown>('/admin/dashboard/storage-breakdown'),
+    queryFn: ({ signal }) =>
+      api.get<StorageBreakdown>('/admin/dashboard/storage-breakdown', { signal }),
   });

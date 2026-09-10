@@ -6,5 +6,6 @@ import { useQuery } from '@tanstack/react-query';
 export const useAdminUsers = () =>
   useQuery<AdminUserRow[]>({
     queryKey: ['admin', 'users'],
-    queryFn: async () => (await api.get<AdminUserRow[]>('/admin/users')) ?? [],
+    queryFn: async ({ signal }) =>
+      (await api.get<AdminUserRow[]>('/admin/users', { signal })) ?? [],
   });

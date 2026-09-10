@@ -31,6 +31,6 @@ export const useProfile = () => {
     queryKey: ['profile', user?.id],
     enabled: Boolean(user?.id),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => toProfile(await api.get<ApiUser>('/users/me')),
+    queryFn: async ({ signal }) => toProfile(await api.get<ApiUser>('/users/me', { signal })),
   });
 };

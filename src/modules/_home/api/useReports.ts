@@ -7,5 +7,5 @@ export const useReports = () =>
   useQuery<Report[]>({
     queryKey: ['reports'],
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => (await api.get<Report[]>('/reports')) ?? [],
+    queryFn: async ({ signal }) => (await api.get<Report[]>('/reports', { signal })) ?? [],
   });

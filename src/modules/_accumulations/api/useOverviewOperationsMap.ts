@@ -16,9 +16,11 @@ export const useOverviewOperationsMap = (reportIds: string[]) =>
     queryKey: overviewOperationsQueryKey(reportIds),
     enabled: reportIds.length > 0,
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       const operations =
-        (await api.get<Operation[]>(`/operations?reportIds=${reportIds.join(',')}`)) ?? [];
+        (await api.get<Operation[]>(`/operations?reportIds=${reportIds.join(',')}`, {
+          signal,
+        })) ?? [];
       const map = new Map<string, Operation[]>();
       for (const operation of operations) {
         const list = map.get(operation.report_id) ?? [];

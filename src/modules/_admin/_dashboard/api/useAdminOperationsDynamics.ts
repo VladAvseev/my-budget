@@ -9,6 +9,6 @@ import type { DynamicsDailyRow } from '../utils/buildOperationsDynamicsData';
 export const useAdminOperationsDynamics = () =>
   useQuery<DynamicsDailyRow[]>({
     queryKey: ['admin', 'operationsDynamics'],
-    queryFn: async () =>
-      (await api.get<DynamicsDailyRow[]>('/admin/dashboard/operations-dynamics')) ?? [],
+    queryFn: async ({ signal }) =>
+      (await api.get<DynamicsDailyRow[]>('/admin/dashboard/operations-dynamics', { signal })) ?? [],
   });

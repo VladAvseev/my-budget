@@ -10,7 +10,8 @@ export const useAccumulations = (userId: string) =>
     queryKey: accumulationsQueryKey(userId),
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => (await api.get<Accumulation[]>('/accumulations')) ?? [],
+    queryFn: async ({ signal }) =>
+      (await api.get<Accumulation[]>('/accumulations', { signal })) ?? [],
   });
 
 export const useAccumulationsTotal = (userId: string) => {

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const API_BASE = 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies';
 
@@ -15,15 +16,16 @@ export const useExchangeRates = () =>
     queryKey: ['exchangeRates'],
     staleTime: 24 * 60 * 60 * 1000,
     gcTime: 24 * 60 * 60 * 1000,
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       const cached = localStorage.getItem(CACHE_KEY);
       if (cached) {
         const parsed: CachedRates = JSON.parse(cached);
         if (parsed.date === today()) return parsed.rates;
       }
 
-      const response = await fetch(`${API_BASE}/usd.json`);
-      const data = await response.json();
+      const { data } = await axios.get<{ usd?: Record<string, number> }>(`${API_BASE}/usd.json`, {
+        signal,
+      });
       const rates = data.usd ?? {};
       localStorage.setItem(CACHE_KEY, JSON.stringify({ date: today(), rates }));
       return rates;

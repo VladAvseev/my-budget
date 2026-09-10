@@ -22,11 +22,12 @@ const LIMIT = 50;
 export const useAdminLogs = ({ status, userId, page, sort, order }: UseAdminLogsParams) =>
   useQuery<AdminLogsPage>({
     queryKey: ['admin', 'logs', { status, userId, page, sort, order }],
-    queryFn: () =>
+    queryFn: ({ signal }) =>
       api.get<AdminLogsPage>(
         `/admin/logs?status=${status}&page=${page}&limit=${LIMIT}&sort=${sort}&order=${order}${
           userId ? `&userId=${encodeURIComponent(userId)}` : ''
         }`,
+        { signal },
       ),
     placeholderData: keepPreviousData,
   });

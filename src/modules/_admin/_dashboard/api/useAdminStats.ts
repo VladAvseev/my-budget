@@ -6,5 +6,5 @@ import { useQuery } from '@tanstack/react-query';
 export const useAdminStats = () =>
   useQuery<AdminDashboardStats>({
     queryKey: ['admin', 'stats'],
-    queryFn: () => api.get<AdminDashboardStats>('/admin/dashboard/stats'),
+    queryFn: ({ signal }) => api.get<AdminDashboardStats>('/admin/dashboard/stats', { signal }),
   });

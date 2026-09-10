@@ -10,5 +10,5 @@ export const useGoals = (userId: string) =>
     queryKey: goalsQueryKey(userId),
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => (await api.get<Goal[]>('/goals')) ?? [],
+    queryFn: async ({ signal }) => (await api.get<Goal[]>('/goals', { signal })) ?? [],
   });

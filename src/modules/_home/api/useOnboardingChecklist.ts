@@ -30,8 +30,8 @@ export const useOnboardingChecklist = () => {
     queryKey: ['onboardingCounts', userId],
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () =>
-      (await api.get<OnboardingState>('/users/me/onboarding')) ?? {
+    queryFn: async ({ signal }) =>
+      (await api.get<OnboardingState>('/users/me/onboarding', { signal })) ?? {
         categories: 0,
         reports: 0,
         operations: 0,

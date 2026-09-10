@@ -11,6 +11,6 @@ export const useCategoryLimits = (reportId: string) =>
     queryKey: categoryLimitsQueryKey(reportId),
     enabled: Boolean(reportId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () =>
-      (await api.get<CategoryLimit[]>(`/reports/${reportId}/category-limits`)) ?? [],
+    queryFn: async ({ signal }) =>
+      (await api.get<CategoryLimit[]>(`/reports/${reportId}/category-limits`, { signal })) ?? [],
   });

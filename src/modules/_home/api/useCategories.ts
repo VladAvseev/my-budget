@@ -11,5 +11,6 @@ export const useCategories = (userId: string, type: CategoryType = 'savings') =>
     queryKey: ['categories', userId, type],
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => (await api.get<Category[]>(`/categories?type=${type}`)) ?? [],
+    queryFn: async ({ signal }) =>
+      (await api.get<Category[]>(`/categories?type=${type}`, { signal })) ?? [],
   });

@@ -8,8 +8,8 @@ export const useSummary = (reportId: string) =>
     queryKey: ['reports', reportId, 'summary'],
     enabled: Boolean(reportId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () =>
-      (await api.get<OperationSummary>(`/reports/${reportId}/summary`)) ?? {
+    queryFn: async ({ signal }) =>
+      (await api.get<OperationSummary>(`/reports/${reportId}/summary`, { signal })) ?? {
         income: 0,
         expense: 0,
         savings: 0,

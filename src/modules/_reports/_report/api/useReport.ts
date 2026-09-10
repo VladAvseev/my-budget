@@ -10,9 +10,9 @@ export const useReport = (id: string) =>
   useQuery<Report | null>({
     queryKey: ['reports', id],
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       try {
-        return (await api.get<Report>(`/reports/${id}`)) ?? null;
+        return (await api.get<Report>(`/reports/${id}`, { signal })) ?? null;
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) return null;
         throw error;

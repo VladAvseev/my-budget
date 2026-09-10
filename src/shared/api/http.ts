@@ -2,8 +2,11 @@
  * HTTP-клиент REST-бэкенда my-budget (репозиторий `server/`, Express).
  *
  * Зоны ответственности:
- *   * обёртка над fetch с единым envelope ответа сервера:
+ *   * обёртка над axios с единым envelope ответа сервера:
  *     успех → { data }, ошибка → { error: { message, status } };
+ *   * поддержка AbortSignal в каждом методе — TanStack Query может отменить
+ *     запрос (сигнал гаснет, axios бросает CanceledError, наружу отдаём
+ *     signal.reason, чтобы Query корректно перевёл запрос в cancelled);
  *   * хранение пары токенов в localStorage и их автоочистка;
  *   * автообновление access-токена по истечении и при 401, с одно-полётной
  *     очередью: параллельные запросы во время refresh ждут один Promise,
@@ -14,6 +17,8 @@
  * проксирует /api/ на Express, в dev тот же прокси настроен в
  * rsbuild.config.ts (server.proxy). Секретов в бандле нет — только JWT.
  */
+
+import axios, { AxiosError, type GenericAbortSignal } from 'axios';
 
 export interface ApiUser {
   /** публичный профиль из ответа сервера (camelCase, см. _users/types.ts сервера). */
@@ -40,6 +45,12 @@ export interface ApiSession {
 /** То же + абсолютное время жизни access-токена в ms (Date.now()-эпоха). */
 export interface StoredSession extends ApiSession {
   expiresAt: number;
+}
+
+/** Опции запроса для потребителей api.* (передаются в queryFn/mutationFn). */
+export interface ApiRequestConfig {
+  /** AbortSignal из контекста TanStack Query ({ signal }) => api.get(path, { signal }). */
+  signal?: AbortSignal;
 }
 
 const STORAGE_KEY = '***';
@@ -131,7 +142,43 @@ export async function refreshSessionOnce(): Promise<boolean> {
   return refreshPromise;
 }
 
-// ── ядро fetch ──────────────────────────────────────────────────────────────
+// ── ядро axios ──────────────────────────────────────────────────────────────
+
+/** Причина отмены от TanStack Query / прочего AbortController, либо сам error. */
+function cancelReason(signal: GenericAbortSignal | undefined, fallback: unknown): unknown {
+  const aborted = signal as AbortSignal | undefined;
+  if (aborted && typeof aborted === 'object' && aborted.aborted) return aborted.reason ?? fallback;
+  return fallback;
+}
+
+const http = axios.create({
+  baseURL: '/api/v1',
+});
+
+// Успех: снимаем envelope { data }; 204 No Content (logout, DELETE) → null.
+http.interceptors.response.use((response) => {
+  if (response.status === 204) return null as never;
+  const envelope = response.data as { data?: unknown } | null | undefined;
+  return (envelope?.data ?? null) as never;
+});
+
+// Ошибка: AxiosError → ApiError (русский текст сервера + HTTP-статус),
+// отмена → reason сигнала, чтобы Query распознал отмену, а не ошибку.
+http.interceptors.response.use(undefined, (error: unknown) => {
+  if (error instanceof AxiosError) {
+    if (axios.isCancel(error)) {
+      return Promise.reject(cancelReason(error.config?.signal, error));
+    }
+    if (error.response) {
+      const message =
+        (error.response.data as { error?: { message?: string } })?.error?.message ??
+        `Ошибка запроса (${error.response.status})`;
+      return Promise.reject(new ApiError(message, error.response.status));
+    }
+    return Promise.reject(new ApiError('Нет связи с сервером', 0));
+  }
+  return Promise.reject(error);
+});
 
 interface RequestOpts {
   body?: unknown;
@@ -139,56 +186,37 @@ interface RequestOpts {
   auth?: boolean;
   /** внутренний флаг повтора после refresh — наружу не передаётся. */
   retry?: boolean;
+  signal?: AbortSignal;
 }
 
 async function rawRequest<T>(
   method: string,
   path: string,
-  { body, auth = true }: RequestOpts = {},
+  { body, auth = true, signal }: RequestOpts = {},
 ): Promise<T> {
   const stored = auth ? getStoredSession() : null;
   const headers: Record<string, string> = {};
-  if (body !== undefined) headers['Content-Type'] = 'application/json';
   if (auth && stored?.accessToken) headers['Authorization'] = `Bearer ${stored.accessToken}`;
 
-  const response = await fetch(`/api/v1${path}`, {
-    method,
-    headers,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
-
-  // 204 No Content (logout, DELETE-эндпоинты)
-  if (response.status === 204) {
-    return null as T;
-  }
-
-  let payload: unknown = null;
-  try {
-    payload = await response.json();
-  } catch {
-    /* не-JSON ответ (502 от nginx и т.п.) — обработаем ниже как ошибку */
-  }
-
-  if (!response.ok) {
-    const message =
-      (payload as { error?: { message?: string } })?.error?.message ??
-      `Ошибка запроса (${response.status})`;
-    throw new ApiError(message, response.status);
-  }
-
-  // Сервер всегда оборачивает успех в { data } — снимаем обёртку.
-  const envelope = payload as { data?: T };
-  return envelope?.data as T;
+  // Интерцептор выше разворачивает AxiosResponse в уже очищенные данные,
+  // поэтому типы ядра не отражают реальный возвращаемый результат.
+  const data = await http.request({ method, url: path, data: body, headers, signal });
+  return data as unknown as T;
 }
 
 /**
  * Запрос с авто-обновлением токена:
  *  * если access близок к истечению (< 60 c) — обновляем заранее;
- *  * на 401 (кроме самих /auth/*) — один refresh и точный повтор запроса;
+ *  * на 401 (кроме самих /auth/*) — один refresh и точный повтор запроса
+ *    с тем же signal;
  *  * не удалось обновиться — локальный logout (эмит события, провайдер
  *    переведёт приложение на /login).
  */
-async function request<T>(method: string, path: string, opts: RequestOpts = {}): Promise<T> {
+async function request<T>(
+  method: string,
+  path: string,
+  opts: RequestOpts & ApiRequestConfig = {},
+): Promise<T> {
   if (opts.auth !== false) {
     const stored = getStoredSession();
     if (stored && stored.expiresAt - Date.now() < 60_000) {
@@ -216,16 +244,17 @@ async function request<T>(method: string, path: string, opts: RequestOpts = {}):
 // ── Публичный API модуля ────────────────────────────────────────────────────
 
 export const api = {
-  get: <T>(path: string) => request<T>('GET', path),
-  post: <T>(path: string, body?: unknown) =>
-    request<T>('POST', path, body === undefined ? {} : { body }),
-  put: <T>(path: string, body?: unknown) =>
-    request<T>('PUT', path, body === undefined ? {} : { body }),
-  patch: <T>(path: string, body?: unknown) =>
-    request<T>('PATCH', path, body === undefined ? {} : { body }),
-  del: <T>(path: string) => request<T>('DELETE', path),
+  get: <T>(path: string, opts?: ApiRequestConfig) => request<T>('GET', path, opts),
+  post: <T>(path: string, body?: unknown, opts?: ApiRequestConfig) =>
+    request<T>('POST', path, { ...opts, body }),
+  put: <T>(path: string, body?: unknown, opts?: ApiRequestConfig) =>
+    request<T>('PUT', path, { ...opts, body }),
+  patch: <T>(path: string, body?: unknown, opts?: ApiRequestConfig) =>
+    request<T>('PATCH', path, { ...opts, body }),
+  del: <T>(path: string, opts?: ApiRequestConfig) => request<T>('DELETE', path, opts),
   /** запросы без Bearer/refresh: /auth/register, /auth/login, /auth/refresh. */
-  publicPost: <T>(path: string, body?: unknown) => request<T>('POST', path, { body, auth: false }),
-  publicPatch: <T>(path: string, body?: unknown) =>
-    request<T>('PATCH', path, { body, auth: false }),
+  publicPost: <T>(path: string, body?: unknown, opts?: ApiRequestConfig) =>
+    request<T>('POST', path, { ...opts, body, auth: false }),
+  publicPatch: <T>(path: string, body?: unknown, opts?: ApiRequestConfig) =>
+    request<T>('PATCH', path, { ...opts, body, auth: false }),
 };

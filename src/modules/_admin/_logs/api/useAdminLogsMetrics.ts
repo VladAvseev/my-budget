@@ -6,5 +6,6 @@ import { useQuery } from '@tanstack/react-query';
 export const useAdminLogsMetrics = (period: AdminLogsPeriod) =>
   useQuery<AdminLogsMetrics>({
     queryKey: ['admin', 'logs', 'metrics', period],
-    queryFn: () => api.get<AdminLogsMetrics>(`/admin/logs/metrics?period=${period}`),
+    queryFn: ({ signal }) =>
+      api.get<AdminLogsMetrics>(`/admin/logs/metrics?period=${period}`, { signal }),
   });

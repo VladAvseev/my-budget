@@ -14,5 +14,6 @@ export const useSavingsOperations = (userId: string) =>
     queryKey: ['savingsOperations', userId],
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () => (await api.get<SavingsOperation[]>('/operations/savings')) ?? [],
+    queryFn: async ({ signal }) =>
+      (await api.get<SavingsOperation[]>('/operations/savings', { signal })) ?? [],
   });

@@ -16,8 +16,8 @@ export const useUserSummary = (_userId: string) =>
     queryKey: userSummaryQueryKey(_userId),
     enabled: Boolean(_userId),
     staleTime: 5 * 60 * 1000,
-    queryFn: async () =>
-      (await api.get<OperationSummary>('/users/me/summary')) ?? {
+    queryFn: async ({ signal }) =>
+      (await api.get<OperationSummary>('/users/me/summary', { signal })) ?? {
         income: 0,
         expense: 0,
         savings: 0,
