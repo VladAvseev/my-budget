@@ -39,7 +39,7 @@ const mapLimitsToDraft = (limits: CategoryLimit[]): LimitDraft[] =>
   limits.map((limit) => ({
     id: limit.id,
     categoryId: limit.category_id,
-    amount: limit.amount,
+    amount: String(limit.amount ?? ''),
   }));
 
 export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
@@ -125,8 +125,10 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
       } else {
         seenCategories.add(limit.categoryId);
       }
-      const amountValue = Number(limit.amount);
-      if (!limit.amount || Number.isNaN(amountValue) || amountValue <= 0) {
+      const trimmedAmount = limit.amount.trim();
+      const amountValue = Number(trimmedAmount);
+      // Порог > 0, как на сервере (requireAmount strict в setCategoryLimits).
+      if (trimmedAmount === '' || !Number.isFinite(amountValue) || amountValue <= 0) {
         parts.push('укажите положительную сумму');
         isValid = false;
       }
@@ -164,7 +166,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
   const isDirty = useMemo(() => {
     const data = limitsQuery.data;
     if (!data) return false;
-    const signature = (limits: { categoryId: string; amount: string }[]) =>
+    const signature = (limits: { categoryId: string; amount: string | number }[]) =>
       limits
         .map((limit) => `${limit.categoryId}:${Number(limit.amount) || 0}`)
         .sort()

@@ -87,8 +87,10 @@ const StartBalanceForm = ({ initialBalance }: StartBalanceFormProps) => {
   const [isSaved, setIsSaved] = useState(false);
 
   const handleSubmit = () => {
-    const number = Number(value);
-    if (!value.trim() || Number.isNaN(number) || number < 0) {
+    const trimmedValue = value.trim();
+    const number = Number(trimmedValue);
+    // Порог >= 0, как на сервере (users/service.ts: start_balance не может быть < 0).
+    if (trimmedValue === '' || !Number.isFinite(number) || number < 0) {
       setBalanceError('Введите неотрицательное число');
       setIsSaved(false);
       return;

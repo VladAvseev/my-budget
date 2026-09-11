@@ -29,7 +29,7 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
 
   const category = categoriesQuery.data?.find((item) => item.id === goal.category_id) ?? null;
 
-  const [amount, setAmount] = useState(String(Number(goal.amount)));
+  const [amount, setAmount] = useState(String(goal.amount ?? ''));
   const [amountError, setAmountError] = useState<string>();
   const [targetDate, setTargetDate] = useState(goal.target_date ?? '');
   const [targetDateError, setTargetDateError] = useState<string>();
@@ -54,9 +54,11 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
 
   const handleSubmit = () => {
     setSubmitError(undefined);
-    const amountValue = Number(amount);
+    const trimmedAmount = amount.trim();
+    const amountValue = Number(trimmedAmount);
 
-    if (!amount || Number.isNaN(amountValue) || amountValue <= 0) {
+    // Порог > 0, как на сервере (requireAmount strict + check amount > 0 в goals).
+    if (trimmedAmount === '' || !Number.isFinite(amountValue) || amountValue <= 0) {
       setAmountError('Сумма должна быть больше нуля');
       return;
     }

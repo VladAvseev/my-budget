@@ -77,7 +77,7 @@ export const useUpdateOperation = (reportId: string) => {
             ? ({
                 ...item,
                 ...(input.type !== undefined ? { type: input.type } : {}),
-                ...(input.amount !== undefined ? { amount: String(input.amount) } : {}),
+                ...(input.amount !== undefined ? { amount: input.amount } : {}),
                 ...(input.categoryId !== undefined ? { category_id: input.categoryId } : {}),
                 ...(input.description !== undefined
                   ? { description: trimStrings(input.description) }

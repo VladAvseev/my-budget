@@ -12,7 +12,7 @@ import styles from './CategoryDistributionChart.module.css';
 interface CategoryDistributionChartProps {
   operationsByReport: Map<
     string,
-    Array<{ type: string; amount: string; category_id: string | null }>
+    Array<{ type: string; amount: number; category_id: string | null }>
   >;
 }
 

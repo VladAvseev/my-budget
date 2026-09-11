@@ -9,9 +9,9 @@
  * TanStack Query (`shared/api/hooks/*`, `modules/_<раздел>/api/*`) и
  * надстраиваются над этими типами.
  *
- * Поля amount/daily_budget/start_balance исторически типизированы строкой
- * (наследие прежнего бэкенда): UI везде оборачивает их Number(...), строку и
- * число это не ломает; серверный OperationDto отдаёт числа.
+ * Поля amount/daily_budget типизированы числом — как их отдаёт серверные DTO
+ * (numeric из pg приводится через toNumber в *_repository.ts). В формы-инпуты
+ * значения попадают через String(...) — useState для <input> держит строку.
  */
 
 export interface Operation {
@@ -19,7 +19,7 @@ export interface Operation {
   report_id: string;
   user_id: string;
   type: string;
-  amount: string;
+  amount: number;
   category_id: string | null;
   description: string | null;
   date: string | null;
@@ -33,7 +33,7 @@ export interface Report {
   name: string;
   code: string;
   has_daily_expenses: boolean;
-  daily_budget: string | null;
+  daily_budget: number | null;
   period_start: string;
   period_end: string;
   created_at: string;
@@ -55,7 +55,7 @@ export interface Accumulation {
   user_id: string;
   category_id: string | null;
   description: string;
-  amount: string;
+  amount: number;
   created_at: string;
   updated_at: string;
 }
@@ -64,7 +64,7 @@ export interface Goal {
   id: string;
   user_id: string;
   category_id: string;
-  amount: string;
+  amount: number;
   target_date: string | null;
   created_at: string;
   updated_at: string;
@@ -75,7 +75,7 @@ export interface CategoryLimit {
   report_id: string;
   category_id: string;
   user_id: string;
-  amount: string;
+  amount: number;
   created_at: string;
   updated_at: string;
 }

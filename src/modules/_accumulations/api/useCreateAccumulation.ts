@@ -53,7 +53,7 @@ export const useCreateAccumulation = (userId: string) => {
         user_id: userId,
         category_id: input.categoryId ?? null,
         description: input.description,
-        amount: String(input.amount),
+        amount: input.amount,
         created_at: now,
         updated_at: now,
         _optimistic: true,

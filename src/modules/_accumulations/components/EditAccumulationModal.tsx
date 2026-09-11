@@ -26,7 +26,7 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
   const removeAccumulation = useRemoveAccumulation(userId);
   const categoriesQuery = useCategories(userId);
 
-  const [amount, setAmount] = useState(accumulation.amount);
+  const [amount, setAmount] = useState(String(accumulation.amount ?? ''));
   const [categoryId, setCategoryId] = useState(accumulation.category_id ?? '');
   const [description, setDescription] = useState(accumulation.description);
   const [amountError, setAmountError] = useState<string>();
@@ -64,9 +64,12 @@ export const EditAccumulationModal = ({ accumulation, onClose }: EditAccumulatio
   const handleSubmit = () => {
     setSubmitError(undefined);
     const trimmedDescription = description.trim();
-    const amountValue = Number(amount);
+    const trimmedAmount = amount.trim();
+    const amountValue = Number(trimmedAmount);
 
-    if (!amount || Number.isNaN(amountValue) || amountValue < 0) {
+    // Порог как на сервере (requireAmount(..., false)): 0 допустим; пустоту
+    // проверяем строкой — !amount посчитал бы «пусто» для валидного нуля.
+    if (trimmedAmount === '' || !Number.isFinite(amountValue) || amountValue < 0) {
       setAmountError('Укажите неотрицательную сумму');
       return;
     }

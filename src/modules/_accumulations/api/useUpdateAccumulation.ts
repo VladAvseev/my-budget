@@ -59,7 +59,7 @@ export const useUpdateAccumulation = (userId: string) => {
           item.id === id
             ? ({
                 ...item,
-                ...(input.amount !== undefined ? { amount: String(input.amount) } : {}),
+                ...(input.amount !== undefined ? { amount: input.amount } : {}),
                 ...(input.description !== undefined
                   ? { description: trimStrings(input.description) }
                   : {}),

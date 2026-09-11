@@ -66,7 +66,7 @@ export const useCreateOperation = (reportId: string) => {
         report_id: reportId,
         user_id: user?.id ?? '',
         type: input.type,
-        amount: String(input.amount),
+        amount: input.amount,
         category_id: input.categoryId ?? null,
         description: trimStrings(input.description ?? null),
         date: input.date ?? null,

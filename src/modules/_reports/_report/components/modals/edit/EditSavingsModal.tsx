@@ -28,7 +28,7 @@ export const EditSavingsModal = ({ operation, report, onClose }: EditSavingsModa
   const removeOperation = useRemoveOperation(report.id);
 
   const initialType = operation.type as OperationType;
-  const [amount, setAmount] = useState(operation.amount ?? '');
+  const [amount, setAmount] = useState(String(operation.amount ?? ''));
   const [categoryId, setCategoryId] = useState(operation.category_id ?? '');
   const [description, setDescription] = useState(operation.description ?? '');
   const [date, setDate] = useState(operation.date ?? '');

@@ -23,7 +23,7 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
   const [isPendingEnabled, setIsPendingEnabled] = useState(false);
   const isEnabled = report.has_daily_expenses || isPendingEnabled;
 
-  const [dailyBudget, setDailyBudget] = useState(report.daily_budget ?? '');
+  const [dailyBudget, setDailyBudget] = useState(String(report.daily_budget ?? ''));
   const [isBudgetEnabled, setIsBudgetEnabled] = useState(report.daily_budget != null);
 
   const [budgetError, setBudgetError] = useState<string>();
@@ -43,8 +43,13 @@ export const DailyExpensesCard = ({ report }: DailyExpensesCardProps) => {
     setIsSaved(false);
     let isValid = true;
 
-    const budgetValue = Number(dailyBudget);
-    if (isBudgetEnabled && (!dailyBudget || Number.isNaN(budgetValue) || budgetValue <= 0)) {
+    const trimmedBudget = dailyBudget.trim();
+    const budgetValue = Number(trimmedBudget);
+    // Порог > 0, как на сервере (requireAmount strict для dailyBudget).
+    if (
+      isBudgetEnabled &&
+      (trimmedBudget === '' || !Number.isFinite(budgetValue) || budgetValue <= 0)
+    ) {
       setBudgetError('Укажите положительный ежедневный бюджет');
       isValid = false;
     } else {

@@ -52,7 +52,8 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
 
   const handleSubmit = () => {
     setSubmitError(undefined);
-    const amountValue = Number(amount);
+    const trimmedAmount = amount.trim();
+    const amountValue = Number(trimmedAmount);
 
     if (!categoryId) {
       setCategoryIdError('Выберите категорию накоплений');
@@ -60,7 +61,8 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
     }
     setCategoryIdError(undefined);
 
-    if (!amount || Number.isNaN(amountValue) || amountValue <= 0) {
+    // Порог > 0, как на сервере (requireAmount strict + check amount > 0 в goals).
+    if (trimmedAmount === '' || !Number.isFinite(amountValue) || amountValue <= 0) {
       setAmountError('Сумма должна быть больше нуля');
       return;
     }

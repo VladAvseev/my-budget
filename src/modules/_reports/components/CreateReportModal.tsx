@@ -115,9 +115,14 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
       return;
     }
 
-    const budgetValue = Number(dailyBudget);
+    const trimmedBudget = dailyBudget.trim();
+    const budgetValue = Number(trimmedBudget);
+    // Порог > 0, как на сервере (requireAmount strict для dailyBudget).
     if (hasDailyExpenses) {
-      if (hasDailyBudget && (!dailyBudget || Number.isNaN(budgetValue) || budgetValue <= 0)) {
+      if (
+        hasDailyBudget &&
+        (trimmedBudget === '' || !Number.isFinite(budgetValue) || budgetValue <= 0)
+      ) {
         setBudgetError('Укажите положительный ежедневный бюджет');
         isValid = false;
       } else {

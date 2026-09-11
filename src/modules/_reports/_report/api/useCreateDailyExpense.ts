@@ -71,7 +71,7 @@ export const useCreateDailyExpense = (reportId: string) => {
         report_id: reportId,
         user_id: user?.id ?? '',
         type: 'daily',
-        amount: String(input.amount),
+        amount: input.amount,
         category_id: null,
         description: trimStrings(input.description ?? null),
         date,

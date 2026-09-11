@@ -27,7 +27,7 @@ export const EditStandardModal = ({ operation, report, onClose }: EditStandardMo
   const updateOperation = useUpdateOperation(report.id);
   const removeOperation = useRemoveOperation(report.id);
 
-  const [amount, setAmount] = useState(operation.amount ?? '');
+  const [amount, setAmount] = useState(String(operation.amount ?? ''));
   const [categoryId, setCategoryId] = useState(operation.category_id ?? '');
   const [description, setDescription] = useState(operation.description ?? '');
   const [date, setDate] = useState(operation.date ?? '');

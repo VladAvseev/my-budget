@@ -46,7 +46,7 @@ export const useUpdateGoal = (userId: string) => {
           item.id === id
             ? ({
                 ...item,
-                amount: String(input.amount),
+                amount: input.amount,
                 target_date: input.targetDate ?? null,
                 _optimistic: true,
               } as Goal & OptimisticItem)

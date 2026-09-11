@@ -46,7 +46,7 @@ export const useCreateGoal = (userId: string) => {
         id: createOptimisticId(),
         user_id: userId,
         category_id: input.categoryId,
-        amount: String(input.amount),
+        amount: input.amount,
         target_date: input.targetDate ?? null,
         created_at: now,
         updated_at: now,

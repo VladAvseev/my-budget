@@ -29,7 +29,7 @@ export const EditDailyModal = ({
   const updateOperation = useUpdateOperation(report.id);
   const removeOperation = useRemoveOperation(report.id);
 
-  const [amount, setAmount] = useState(operation.amount ?? '');
+  const [amount, setAmount] = useState(String(operation.amount ?? ''));
   const [description, setDescription] = useState(operation.description ?? '');
   const [amountError, setAmountError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();

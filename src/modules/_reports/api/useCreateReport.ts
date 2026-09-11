@@ -62,8 +62,7 @@ export const useCreateReport = () => {
         name: input.name,
         code: input.code ?? '',
         has_daily_expenses: hasDailyExpenses,
-        daily_budget:
-          hasDailyExpenses && input.dailyBudget != null ? String(input.dailyBudget) : null,
+        daily_budget: hasDailyExpenses && input.dailyBudget != null ? input.dailyBudget : null,
         period_start: input.periodStart,
         period_end: input.periodEnd,
         created_at: now,
