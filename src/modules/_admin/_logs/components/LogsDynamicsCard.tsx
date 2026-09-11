@@ -17,13 +17,13 @@ import styles from './LogsDynamicsCard.module.css';
 // Фильтр по роли автора логов: всего (user + admin) / только пользователи.
 const audienceOptions: VButtonGroupOption[] = [
   { value: 'all', label: 'Все' },
-  { value: 'users', label: 'Пользователи' },
+  { value: 'users', label: 'Без админов' },
 ];
 
 // Метрика графика: количество логов или уникальные авторы.
 const metricOptions: VButtonGroupOption[] = [
-  { value: 'count', label: 'Количество' },
-  { value: 'unique_users', label: 'Уникальные' },
+  { value: 'count', label: 'Логи' },
+  { value: 'unique_users', label: 'Пользователи' },
 ];
 
 // Гранулярность точек графика: группировка логов за час или за день.

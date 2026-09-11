@@ -33,13 +33,13 @@ const aggregationOptions: VButtonGroupOption[] = [
 // Фильтр по роли автора операций: всего (user + admin) / только пользователи.
 const audienceOptions: VButtonGroupOption[] = [
   { value: 'all', label: 'Все' },
-  { value: 'users', label: 'Пользователи' },
+  { value: 'users', label: 'Без админов' },
 ];
 
 // Метрика графика: количество операций или уникальные авторы.
 const metricOptions: VButtonGroupOption[] = [
-  { value: 'count', label: 'Количество' },
-  { value: 'unique_users', label: 'Уникальные' },
+  { value: 'count', label: 'Операции' },
+  { value: 'unique_users', label: 'Пользователи' },
 ];
 
 const formatCount = (v: number): string => Math.round(v).toLocaleString('ru-RU');
