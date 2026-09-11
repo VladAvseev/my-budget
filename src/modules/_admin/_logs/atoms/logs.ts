@@ -1,9 +1,9 @@
+import type { AdminLogsPeriod } from '../api/useAdminLogsMetrics';
 import type {
-  AdminLogsPeriod,
   AdminLogsSortField,
   AdminLogsSortOrder,
   AdminLogsStatusFilter,
-} from '@/shared/api/types/domain';
+} from '../api/useAdminLogs';
 import { atom } from 'jotai';
 
 /** Фильтры вкладки «Логи»: персистировать не нужно — это сеансовый выбор. */

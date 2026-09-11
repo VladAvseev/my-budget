@@ -24,7 +24,7 @@ import { goalModalAtom } from '../atoms/accumulations';
 import { useAverageMonthlyGrowth } from '../hooks/useAverageMonthlyGrowth';
 import { useReports } from '../api/useReports';
 import { useCategories } from '../api/useCategories';
-import { useSavingsOperations } from '../api/useSavingsOperations';
+import { useSavingsOperations } from '@/shared/api/hooks';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './GoalsSection.module.css';
 

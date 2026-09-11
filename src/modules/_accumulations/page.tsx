@@ -21,7 +21,7 @@ import {
 } from './atoms/accumulations';
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
 import { useCategories } from './api/useCategories';
-import { useSavingsOperations } from './api/useSavingsOperations';
+import { useSavingsOperations } from '@/shared/api/hooks';
 import { AccumulationsList } from './components/AccumulationsList';
 import { AccumulationsStructure } from './components/AccumulationsStructure';
 import { CreateAccumulationModal } from './components/CreateAccumulationModal';

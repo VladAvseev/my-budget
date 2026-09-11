@@ -1,15 +1,29 @@
 import { api } from '@/shared/api/http';
+import type { ApiUser } from '@/shared/api/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
  * Завершение онбординга: PATCH /users/me { onboarded: true }.
  */
+
+/** Запроса нет — флаг захардкожен, Variables = undefined. */
+export type UseCompleteOnboardingRequest = void;
+
+/** Ответ PATCH /users/me — обновлённый публичный профиль (200). */
+export type UseCompleteOnboardingResponse = ApiUser;
+
+/** Тело на проводе (серверный UpdateProfileInput). */
+interface UpdateProfileBody {
+  onboarded: boolean;
+}
+
 export const useCompleteOnboarding = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async () => {
-      await api.patch('/users/me', { onboarded: true });
+      const body: UpdateProfileBody = { onboarded: true };
+      return api.patch<UseCompleteOnboardingResponse>('/users/me', body);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });

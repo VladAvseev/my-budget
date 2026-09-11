@@ -1,5 +1,5 @@
 import commonStyles from '@/shared/styles/common.module.css';
-import type { AdminDashboardStats } from '@/shared/api/types/domain';
+import type { AdminDashboardStats } from '../api/useAdminStats';
 import { VCard } from '@/shared/ui/VCard';
 import styles from './cards.module.css';
 

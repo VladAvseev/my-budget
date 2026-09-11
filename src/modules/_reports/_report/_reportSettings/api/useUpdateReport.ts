@@ -1,5 +1,5 @@
 import { api } from '@/shared/api/http';
-import type { ReportUpdateInput } from '@/shared/api/types/domain';
+import type { Report } from '@/shared/api/types/domain';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -9,18 +9,40 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
  * вкл/выкл ежедневных расходов. Отсылаются только переданные поля —
  * сервер обновляет ровно их.
  */
+
+/** Запрос PATCH /reports/:id — payload настроек (прежний ReportUpdateInput). */
+export interface UseUpdateReportRequest {
+  name?: string;
+  hasDailyExpenses?: boolean;
+  dailyBudget?: number | null;
+  periodStart?: string;
+  periodEnd?: string;
+}
+
+/** Ответ PATCH /reports/:id — обновлённый отчёт (200). */
+export type UseUpdateReportResponse = Report;
+
+/** Тело на проводе. */
+interface UpdateReportBody {
+  name?: string;
+  hasDailyExpenses?: boolean;
+  dailyBudget?: number | null;
+  periodStart?: string;
+  periodEnd?: string;
+}
+
 export const useUpdateReport = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (input: ReportUpdateInput) => {
-      const body: Record<string, unknown> = {};
+    mutationFn: async (input: UseUpdateReportRequest) => {
+      const body: UpdateReportBody = {};
       if (input.name !== undefined) body.name = trimStrings(input.name);
       if (input.hasDailyExpenses !== undefined) body.hasDailyExpenses = input.hasDailyExpenses;
       if (input.dailyBudget !== undefined) body.dailyBudget = input.dailyBudget;
       if (input.periodStart !== undefined) body.periodStart = input.periodStart;
       if (input.periodEnd !== undefined) body.periodEnd = input.periodEnd;
-      await api.patch(`/reports/${id}`, body);
+      return api.patch<UseUpdateReportResponse>(`/reports/${id}`, body);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reports', id] });

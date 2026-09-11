@@ -1,11 +1,4 @@
 import commonStyles from '@/shared/styles/common.module.css';
-import type {
-  AdminLogRow,
-  AdminLogsPeriod,
-  AdminLogsSortField,
-  AdminLogsSortOrder,
-  AdminLogsStatusFilter,
-} from '@/shared/api/types/domain';
 import { VButton } from '@/shared/ui/VButton';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
@@ -15,8 +8,15 @@ import { useAtom } from 'jotai';
 import { Fragment, useMemo, useState } from 'react';
 import { useAdminUsers } from '../_users/api/useAdminUsers';
 import { LogsDynamicsCard } from './components/LogsDynamicsCard';
-import { ADMIN_LOGS_LIMIT, useAdminLogs } from './api/useAdminLogs';
-import { useAdminLogsMetrics } from './api/useAdminLogsMetrics';
+import {
+  ADMIN_LOGS_LIMIT,
+  useAdminLogs,
+  type AdminLogRow,
+  type AdminLogsSortField,
+  type AdminLogsSortOrder,
+  type AdminLogsStatusFilter,
+} from './api/useAdminLogs';
+import { useAdminLogsMetrics, type AdminLogsPeriod } from './api/useAdminLogsMetrics';
 import {
   LOG_USER_ANONYMOUS,
   logsPageAtom,

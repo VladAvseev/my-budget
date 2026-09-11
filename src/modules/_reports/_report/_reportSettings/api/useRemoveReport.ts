@@ -5,6 +5,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 /** DELETE /reports/:id + оптимистичное удаление из списка. */
 const removeReportMutationKey = ['removeReport'] as const;
 
+/** Запроса нет (id — из хука). */
+export type UseRemoveReportRequest = void;
+
+/** Ответ DELETE /reports/:id — 204 без тела. */
+export type UseRemoveReportResponse = void;
+
 export const useRemoveReport = (id: string) => {
   const queryClient = useQueryClient();
 

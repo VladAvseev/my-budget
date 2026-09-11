@@ -1,5 +1,5 @@
 import { api } from '@/shared/api/http';
-import type { Accumulation, AccumulationInput } from '@/shared/api/types/domain';
+import type { Accumulation } from '@/shared/api/types/domain';
 import { accumulationsTotalQueryKey, type AccumulationsTotal } from '@/shared/api/hooks';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
@@ -7,17 +7,35 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const createAccumulationMutationKey = ['createAccumulation'] as const;
 
+/** Запрос POST /accumulations — payload модалки (прежний AccumulationInput). */
+export interface UseCreateAccumulationRequest {
+  amount: number;
+  description: string;
+  categoryId?: string | null;
+}
+
+/** Ответ POST /accumulations — созданное накопление (201). */
+export type UseCreateAccumulationResponse = Accumulation;
+
+/** Тело на проводе (серверный CreateAccumulationInput). */
+interface CreateAccumulationBody {
+  amount: number;
+  description: string;
+  categoryId: string | null;
+}
+
 export const useCreateAccumulation = (userId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: createAccumulationMutationKey,
-    mutationFn: async (input: AccumulationInput) => {
-      await api.post('/accumulations', {
+    mutationFn: async (input: UseCreateAccumulationRequest) => {
+      const body: CreateAccumulationBody = {
         amount: input.amount,
         description: trimStrings(input.description),
         categoryId: input.categoryId ?? null,
-      });
+      };
+      return api.post<UseCreateAccumulationResponse>('/accumulations', body);
     },
     onMutate: async (input) => {
       const key = ['accumulations', userId];

@@ -5,6 +5,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const removeAccumulationMutationKey = ['removeAccumulation'] as const;
 
+/** Запрос DELETE /accumulations/:id — id накопления. */
+export type UseRemoveAccumulationRequest = string;
+
+/** Ответ DELETE /accumulations/:id — 204 без тела. */
+export type UseRemoveAccumulationResponse = void;
+
 export const useRemoveAccumulation = (userId: string) => {
   const queryClient = useQueryClient();
   const key = ['accumulations', userId];
@@ -12,7 +18,7 @@ export const useRemoveAccumulation = (userId: string) => {
 
   return useMutation({
     mutationKey: removeAccumulationMutationKey,
-    mutationFn: async (id: string) => {
+    mutationFn: async (id: UseRemoveAccumulationRequest) => {
       await api.del(`/accumulations/${id}`);
     },
     onMutate: async (id) => {

@@ -1,5 +1,5 @@
 import { api } from '@/shared/api/http';
-import type { Category, CategoryCreateInput } from '@/shared/api/types/domain';
+import type { Category, CategoryType } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { categoriesQueryKey } from './keys';
@@ -11,17 +11,35 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
  */
 const createCategoryMutationKey = ['createCategory'] as const;
 
+/** Запрос POST /categories — payload модалки (прежний CategoryCreateInput). */
+export interface UseCreateCategoryRequest {
+  type: CategoryType;
+  name: string;
+  color?: string | null;
+}
+
+/** Ответ POST /categories — созданная категория (201). */
+export type UseCreateCategoryResponse = Category;
+
+/** Тело на проводе (серверный CreateCategoryInput). */
+interface CreateCategoryBody {
+  type: CategoryType;
+  name: string;
+  color: string | null;
+}
+
 export const useCreateCategory = (userId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: createCategoryMutationKey,
-    mutationFn: async (input: CategoryCreateInput) => {
-      await api.post('/categories', {
+    mutationFn: async (input: UseCreateCategoryRequest) => {
+      const body: CreateCategoryBody = {
         type: input.type,
         name: trimStrings(input.name),
         color: input.color ?? null,
-      });
+      };
+      return api.post<UseCreateCategoryResponse>('/categories', body);
     },
     onMutate: async (input) => {
       const allKey = categoriesQueryKey(userId);

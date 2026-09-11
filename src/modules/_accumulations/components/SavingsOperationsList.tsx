@@ -7,7 +7,7 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useCategories } from '../api/useCategories';
-import { useSavingsOperations } from '../api/useSavingsOperations';
+import { useSavingsOperations } from '@/shared/api/hooks';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import { groupItemsByCategory } from '../utils/groupByCategory';
 import { SavingsOperationCard } from './SavingsOperationCard';

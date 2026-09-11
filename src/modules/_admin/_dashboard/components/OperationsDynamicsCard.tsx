@@ -3,7 +3,7 @@ import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
-import type { AdminAudience } from '@/shared/api/types/domain';
+import type { AdminAudience } from '@/shared/api/types/admin';
 import { useAdminOperationsDynamics } from '../api/useAdminOperationsDynamics';
 import {
   buildOperationsDynamicsData,

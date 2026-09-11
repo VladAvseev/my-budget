@@ -1,11 +1,29 @@
 import { goalsQueryKey } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
-import type { Goal, GoalUpdateInput } from '@/shared/api/types/domain';
+import type { Goal } from '@/shared/api/types/domain';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /** PATCH /goals/:id: сумма и/или целевая дата. */
 const updateGoalMutationKey = ['updateGoal'] as const;
+
+/** Запрос PATCH /goals/:id — id + payload модалки (прежний GoalUpdateInput). */
+export interface UseUpdateGoalRequest {
+  id: string;
+  input: {
+    amount: number;
+    targetDate?: string | null;
+  };
+}
+
+/** Ответ PATCH /goals/:id — обновлённая цель (200). */
+export type UseUpdateGoalResponse = Goal;
+
+/** Тело на проводе (серверный UpdateGoalInput). */
+interface UpdateGoalBody {
+  amount?: number;
+  targetDate?: string | null;
+}
 
 export const useUpdateGoal = (userId: string) => {
   const queryClient = useQueryClient();
@@ -13,11 +31,12 @@ export const useUpdateGoal = (userId: string) => {
 
   return useMutation({
     mutationKey: updateGoalMutationKey,
-    mutationFn: async ({ id, input }: { id: string; input: GoalUpdateInput }) => {
-      await api.patch(`/goals/${id}`, {
+    mutationFn: async ({ id, input }: UseUpdateGoalRequest) => {
+      const body: UpdateGoalBody = {
         amount: input.amount,
         targetDate: input.targetDate ?? null,
-      });
+      };
+      return api.patch<UseUpdateGoalResponse>(`/goals/${id}`, body);
     },
     onMutate: async ({ id, input }) => {
       const previous = queryClient.getQueryData<Goal[]>(key) ?? [];

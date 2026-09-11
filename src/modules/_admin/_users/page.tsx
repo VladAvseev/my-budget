@@ -1,6 +1,6 @@
 import { useAuth } from '@/shared/api/authProvider';
 import commonStyles from '@/shared/styles/common.module.css';
-import type { AdminUserRow } from '@/shared/api/types/domain';
+import type { AdminUserRow } from './api/useAdminUsers';
 import { TrashIcon } from '@/shared/icons';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';

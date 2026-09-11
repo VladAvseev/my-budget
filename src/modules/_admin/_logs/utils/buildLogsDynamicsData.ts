@@ -1,4 +1,4 @@
-import type { AdminLogsDynamicsPoint } from '@/shared/api/types/domain';
+import type { AdminLogsDynamicsPoint } from '../api/useAdminLogsDynamics';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 
 /**

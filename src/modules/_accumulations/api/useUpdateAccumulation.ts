@@ -1,12 +1,31 @@
 import { api } from '@/shared/api/http';
-import type { Accumulation, AccumulationUpdateInput } from '@/shared/api/types/domain';
+import type { Accumulation } from '@/shared/api/types/domain';
 import { accumulationsTotalQueryKey, type AccumulationsTotal } from '@/shared/api/hooks';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-
 const updateAccumulationMutationKey = ['updateAccumulation'] as const;
+
+/** Запрос PATCH /accumulations/:id — id + payload модалки (прежний AccumulationUpdateInput). */
+export interface UseUpdateAccumulationRequest {
+  id: string;
+  input: {
+    amount?: number;
+    description?: string;
+    categoryId?: string | null;
+  };
+}
+
+/** Ответ PATCH /accumulations/:id — обновлённое накопление (200). */
+export type UseUpdateAccumulationResponse = Accumulation;
+
+/** Тело на проводе (серверный UpdateAccumulationInput). */
+interface UpdateAccumulationBody {
+  amount?: number;
+  description?: string;
+  categoryId?: string | null;
+}
 
 export const useUpdateAccumulation = (userId: string) => {
   const queryClient = useQueryClient();
@@ -15,12 +34,12 @@ export const useUpdateAccumulation = (userId: string) => {
 
   return useMutation({
     mutationKey: updateAccumulationMutationKey,
-    mutationFn: async ({ id, input }: { id: string; input: AccumulationUpdateInput }) => {
-      const body: Record<string, unknown> = {};
+    mutationFn: async ({ id, input }: UseUpdateAccumulationRequest) => {
+      const body: UpdateAccumulationBody = {};
       if (input.amount !== undefined) body.amount = input.amount;
       if (input.description !== undefined) body.description = trimStrings(input.description);
       if (input.categoryId !== undefined) body.categoryId = input.categoryId;
-      await api.patch(`/accumulations/${id}`, body);
+      return api.patch<UseUpdateAccumulationResponse>(`/accumulations/${id}`, body);
     },
     onMutate: async ({ id, input }) => {
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];

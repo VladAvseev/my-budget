@@ -5,12 +5,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 /** DELETE /categories/:id + оптимистичное удаление. */
 const removeCategoryMutationKey = ['removeCategory'] as const;
 
+/** Запрос DELETE /categories/:id — id категории. */
+export type UseRemoveCategoryRequest = string;
+
+/** Ответ DELETE /categories/:id — 204 без тела. */
+export type UseRemoveCategoryResponse = void;
+
 export const useRemoveCategory = (userId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: removeCategoryMutationKey,
-    mutationFn: async (id: string) => {
+    mutationFn: async (id: UseRemoveCategoryRequest) => {
       await api.del(`/categories/${id}`);
     },
     onMutate: async (id) => {

@@ -1,13 +1,8 @@
 import type { ChartPoint } from '@/shared/utils/chartPoints';
+import type { AdminOperationsDynamicsRow } from '../api/useAdminOperationsDynamics';
 
 export type DynamicsChartMode = 'cumulative' | 'period';
 export type DynamicsAggregation = 'D' | 'M' | 'Y';
-
-// Одна строка на московские сутки, возвращаемая админской функцией БД.
-export interface DynamicsDailyRow {
-  day: string; // 'YYYY-MM-DD' — календарный день по времени Москвы
-  operations_count: number;
-}
 
 // Метки времени приводятся к московскому календарному дню. МСК = UTC+3,
 // переход на летнее время отменён с 2014 года, поэтому смещение постоянно.
@@ -100,7 +95,7 @@ const getNext = (date: Date, aggregation: DynamicsAggregation): Date => {
 };
 
 export interface BuildDynamicsDataArgs {
-  daily: DynamicsDailyRow[];
+  daily: AdminOperationsDynamicsRow[];
   aggregation: DynamicsAggregation;
   mode: DynamicsChartMode;
 }

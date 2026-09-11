@@ -6,8 +6,15 @@ import { useQuery } from '@tanstack/react-query';
  * GET /reports/:id: сервер отвечает 404 на чужой или удалённый отчёт,
  * поэтому 404 здесь превращается в null (страница покажет «не найден»).
  */
-export const useReport = (id: string) =>
-  useQuery<Report | null>({
+
+/** Запрос — id отчёта из пути. */
+export type UseReportRequest = string;
+
+/** Данные хука: отчёт или null, если он удалён/чужой. */
+export type UseReportResponse = Report | null;
+
+export const useReport = (id: UseReportRequest) =>
+  useQuery<UseReportResponse>({
     queryKey: ['reports', id],
     staleTime: 5 * 60 * 1000,
     queryFn: async ({ signal }) => {

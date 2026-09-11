@@ -6,13 +6,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 /** DELETE /goals/:id + оптимистика. */
 const removeGoalMutationKey = ['removeGoal'] as const;
 
+/** Запрос DELETE /goals/:id — id цели. */
+export type UseRemoveGoalRequest = string;
+
+/** Ответ DELETE /goals/:id — 204 без тела. */
+export type UseRemoveGoalResponse = void;
+
 export const useRemoveGoal = (userId: string) => {
   const queryClient = useQueryClient();
   const key = goalsQueryKey(userId);
 
   return useMutation({
     mutationKey: removeGoalMutationKey,
-    mutationFn: async (id: string) => {
+    mutationFn: async (id: UseRemoveGoalRequest) => {
       await api.del(`/goals/${id}`);
     },
     onMutate: async (id) => {

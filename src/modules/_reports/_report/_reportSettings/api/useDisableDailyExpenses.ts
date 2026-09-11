@@ -5,10 +5,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
  * DELETE /reports/:id/daily-expenses:
  * сервер одной транзакцией удаляет daily-операции и сбрасывает настройки.
  */
+
+/** Запроса нет (id — из хука,variables = undefined). */
+export type UseDisableDailyExpensesRequest = void;
+
+/** Ответ DELETE /reports/:id/daily-expenses — 204 без тела. */
+export type UseDisableDailyExpensesResponse = void;
+
 export const useDisableDailyExpenses = (id: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<UseDisableDailyExpensesResponse, Error, UseDisableDailyExpensesRequest>({
     mutationFn: async () => {
       await api.del(`/reports/${id}/daily-expenses`);
     },

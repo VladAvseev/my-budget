@@ -3,12 +3,9 @@ import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
-import type { AdminAudience } from '@/shared/api/types/domain';
+import type { AdminAudience } from '@/shared/api/types/admin';
 import { useAdminLogsDynamics } from '../api/useAdminLogsDynamics';
-import {
-  buildLogsDynamics,
-  type LogsBucket,
-} from '../utils/buildLogsDynamicsData';
+import { buildLogsDynamics, type LogsBucket } from '../utils/buildLogsDynamicsData';
 import { buildLogsDynamicsStats } from '../utils/buildLogsDynamicsStats';
 import styles from './LogsDynamicsCard.module.css';
 
@@ -26,8 +23,7 @@ const bucketOptions: VButtonGroupOption[] = [
 
 const formatCount = (value: number): string => Math.round(value).toLocaleString('ru-RU');
 
-const formatMetric = (value: number | null): string =>
-  value === null ? '—' : formatCount(value);
+const formatMetric = (value: number | null): string => (value === null ? '—' : formatCount(value));
 
 interface StatProps {
   label: string;

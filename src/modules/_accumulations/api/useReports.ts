@@ -3,9 +3,12 @@ import type { Report } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 /** GET /reports — список периодов для графиков накоплений. */
+export type UseReportsResponse = Report[];
+
 export const useReports = () =>
-  useQuery<Report[]>({
+  useQuery<UseReportsResponse>({
     queryKey: ['reports'],
     staleTime: 5 * 60 * 1000,
-    queryFn: async ({ signal }) => (await api.get<Report[]>('/reports', { signal })) ?? [],
+    queryFn: async ({ signal }) =>
+      (await api.get<UseReportsResponse>('/reports', { signal })) ?? [],
   });

@@ -6,11 +6,20 @@ import { useQuery } from '@tanstack/react-query';
  * GET /categories?type= — сервер определяет пользователя по JWT;
  * userId остаётся только ключом кэша.
  */
+
+/** Фильтр запроса (userId — только ключ кэша, на сервер не уходит). */
+export interface UseCategoriesRequest {
+  type: CategoryType;
+}
+
+/** Ответ GET /categories?type=. */
+export type UseCategoriesResponse = Category[];
+
 export const useCategories = (userId: string, type: CategoryType = 'savings') =>
-  useQuery<Category[]>({
+  useQuery<UseCategoriesResponse>({
     queryKey: ['categories', userId, type],
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
     queryFn: async ({ signal }) =>
-      (await api.get<Category[]>(`/categories?type=${type}`, { signal })) ?? [],
+      (await api.get<UseCategoriesResponse>(`/categories?type=${type}`, { signal })) ?? [],
   });

@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
  * Профиль пользователя: GET /users/me.
  * Сервер отдаёт camelCase PublicUser; здесь он адаптируется к прежнему
  * snake_case формату Profile, чтобы компоненты (AccountCard, StartBalanceCard,
- * онбординг) не менялись.
+ * онбординг) не менялись. Request нет — пользователь определяется по токену.
  */
 const toProfile = (u: ApiUser): Profile => ({
   user_id: u.id,
@@ -24,10 +24,13 @@ const toProfile = (u: ApiUser): Profile => ({
   updated_at: u.updatedAt,
 });
 
+/** Данные хука: ответ GET /users/me, адаптированный к форме Profile. */
+export type UseProfileResponse = Profile | null;
+
 export const useProfile = () => {
   const { user } = useAuth();
 
-  return useQuery<Profile | null>({
+  return useQuery<UseProfileResponse>({
     queryKey: ['profile', user?.id],
     enabled: Boolean(user?.id),
     staleTime: 5 * 60 * 1000,

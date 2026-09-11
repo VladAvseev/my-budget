@@ -4,7 +4,7 @@ import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
 import { useNavigate } from 'react-router-dom';
-import type { SavingsOperation } from '../api/useSavingsOperations';
+import type { SavingsOperation } from '@/shared/api/hooks';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './SavingsOperationCard.module.css';
 

@@ -1,7 +1,6 @@
-import type { OperationSummary } from '@/shared/api/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
-import { useCurrency } from '@/shared/api/hooks';
+import { useCurrency, type OperationSummary } from '@/shared/api/hooks';
 import { useMemo } from 'react';
 import styles from './SummaryCards.module.css';
 

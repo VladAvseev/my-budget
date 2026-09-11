@@ -1,5 +1,5 @@
 import { api } from '@/shared/api/http';
-import type { Report, ReportInput } from '@/shared/api/types/domain';
+import type { Report } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -10,20 +10,44 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
  */
 const createReportMutationKey = ['createReport'] as const;
 
+/** Запрос POST /reports — payload модалки (прежний ReportInput). */
+export interface UseCreateReportRequest {
+  name: string;
+  code?: string;
+  hasDailyExpenses?: boolean;
+  dailyBudget?: number | null;
+  periodStart: string;
+  periodEnd: string;
+}
+
+/** Ответ POST /reports — созданный отчёт (201). */
+export type UseCreateReportResponse = Report;
+
+/** Тело на проводе (серверный CreateReportInput). */
+interface CreateReportBody {
+  name: string;
+  code: string;
+  hasDailyExpenses: boolean;
+  dailyBudget: number | null;
+  periodStart: string;
+  periodEnd: string;
+}
+
 export const useCreateReport = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: createReportMutationKey,
-    mutationFn: async (input: ReportInput) => {
-      await api.post('/reports', {
+    mutationFn: async (input: UseCreateReportRequest) => {
+      const body: CreateReportBody = {
         name: input.name.trim(),
         code: input.code ?? '',
         hasDailyExpenses: input.hasDailyExpenses ?? false,
         dailyBudget: input.dailyBudget ?? null,
         periodStart: input.periodStart,
         periodEnd: input.periodEnd,
-      });
+      };
+      return api.post<UseCreateReportResponse>('/reports', body);
     },
     onMutate: async (input) => {
       const key = ['reports'];

@@ -16,23 +16,38 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
  */
 const createDailyExpenseMutationKey = ['createDailyExpense'] as const;
 
+/** Payload модалки (прежний DailyExpenseInput без categoryId — он серверу не нужен). */
+export interface UseCreateDailyExpenseRequest {
+  input: {
+    amount: number;
+    description?: string | null;
+  };
+  /** Только для оптимистичной даты в кэше, на сервер не уходит. */
+  periodStart: string;
+  periodEnd: string;
+}
+
+/** Ответ POST /reports/:id/daily-expenses — созданная daily-операция (201). */
+export type UseCreateDailyExpenseResponse = Operation;
+
+/** Тело на проводе. */
+interface CreateDailyExpenseBody {
+  amount: number;
+  description: string | null;
+}
+
 export const useCreateDailyExpense = (reportId: string) => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
   return useMutation({
     mutationKey: createDailyExpenseMutationKey,
-    mutationFn: async ({
-      input,
-    }: {
-      input: { amount: number; description?: string | null };
-      periodStart: string;
-      periodEnd: string;
-    }) => {
-      await api.post(`/reports/${reportId}/daily-expenses`, {
+    mutationFn: async ({ input }: UseCreateDailyExpenseRequest) => {
+      const body: CreateDailyExpenseBody = {
         amount: input.amount,
         description: input.description ?? null,
-      });
+      };
+      return api.post<UseCreateDailyExpenseResponse>(`/reports/${reportId}/daily-expenses`, body);
     },
     onMutate: async ({ input, periodStart, periodEnd }) => {
       const key = operationsQueryKey(reportId, 'daily');

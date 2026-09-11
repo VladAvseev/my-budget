@@ -11,8 +11,14 @@ import { useQuery } from '@tanstack/react-query';
 const overviewOperationsQueryKey = (reportIds: string[]) =>
   ['overview', 'operations', [...reportIds].sort().join('|')] as const;
 
-export const useOverviewOperationsMap = (reportIds: string[]) =>
-  useQuery<Map<string, Operation[]>>({
+/** Фильтр запроса: id отчётов (уходят в query `reportIds`). */
+export type UseOverviewOperationsMapRequest = string[];
+
+/** Данные хука: карта report_id → операции выбранного отчёта. */
+export type UseOverviewOperationsMapResponse = Map<string, Operation[]>;
+
+export const useOverviewOperationsMap = (reportIds: UseOverviewOperationsMapRequest) =>
+  useQuery<UseOverviewOperationsMapResponse>({
     queryKey: overviewOperationsQueryKey(reportIds),
     enabled: reportIds.length > 0,
     staleTime: 5 * 60 * 1000,

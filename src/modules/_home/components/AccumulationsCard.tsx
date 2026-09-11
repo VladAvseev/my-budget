@@ -13,7 +13,7 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useCategories } from '../api/useCategories';
-import { useSavingsOperations } from '../api/useSavingsOperations';
+import { useSavingsOperations } from '@/shared/api/hooks';
 import { AccumulationsLegend } from './AccumulationsStructure';
 import styles from '../homeCard.module.css';
 

@@ -1,6 +1,11 @@
-export { userSummaryQueryKey, useUserSummary } from './useGlobalBalance';
+export {
+  userSummaryQueryKey,
+  useUserSummary,
+  type OperationSummary,
+  type UseUserSummaryResponse,
+} from './useGlobalBalance';
 export { useGlobalBalance } from './useGlobalBalance';
-export { useProfile } from './useProfile';
+export { useProfile, type UseProfileResponse } from './useProfile';
 export { useCurrency } from './useCurrency';
 export { useAdminStatus } from './useAdminStatus';
 export {
@@ -9,7 +14,15 @@ export {
   useAccumulations,
   useAccumulationsTotal,
   type AccumulationsTotal,
+  type UseAccumulationsResponse,
+  type UseAccumulationsTotalResponse,
 } from './useAccumulations';
-export { goalsQueryKey, useGoals } from './useGoals';
+export { goalsQueryKey, useGoals, type UseGoalsResponse } from './useGoals';
 export { useCapital } from './useCapital';
-export { useExchangeRates } from './useExchangeRates';
+export { useExchangeRates, type UseExchangeRatesResponse } from './useExchangeRates';
+export {
+  savingsOperationsQueryKey,
+  useSavingsOperations,
+  type SavingsOperation,
+  type UseSavingsOperationsResponse,
+} from './useSavingsOperations';

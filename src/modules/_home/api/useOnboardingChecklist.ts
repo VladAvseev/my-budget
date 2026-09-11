@@ -11,11 +11,15 @@ export interface OnboardingItem {
   done: boolean;
 }
 
+/** Ответ GET /users/me/onboarding — счётчики чек-листа (серверный OnboardingState). */
 export interface OnboardingState {
   categories: number;
   reports: number;
   operations: number;
 }
+
+/** Данные внутреннего запроса счётчиков (пользователь — из JWT). */
+export type UseOnboardingCountsResponse = OnboardingState;
 
 /**
  * Чек-лист онбординга: счётчики из GET /users/me/onboarding + профиль из useProfile.
@@ -26,12 +30,12 @@ export const useOnboardingChecklist = () => {
 
   const profileQuery = useProfile();
 
-  const countsQuery = useQuery<OnboardingState>({
+  const countsQuery = useQuery<UseOnboardingCountsResponse>({
     queryKey: ['onboardingCounts', userId],
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
     queryFn: async ({ signal }) =>
-      (await api.get<OnboardingState>('/users/me/onboarding', { signal })) ?? {
+      (await api.get<UseOnboardingCountsResponse>('/users/me/onboarding', { signal })) ?? {
         categories: 0,
         reports: 0,
         operations: 0,

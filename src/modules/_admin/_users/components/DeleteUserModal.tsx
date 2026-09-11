@@ -1,5 +1,5 @@
 import commonStyles from '@/shared/styles/common.module.css';
-import type { AdminUserRow } from '@/shared/api/types/domain';
+import type { AdminUserRow } from '../api/useAdminUsers';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
