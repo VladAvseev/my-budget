@@ -40,11 +40,13 @@ export interface AdminLogsPage {
 
 const LIMIT = 50;
 
-/** Параметры GET /admin/logs (фильтр, сортировка, пагинация). */
+/** Параметры GET /admin/logs (фильтры, сортировка, пагинация). */
 export interface UseAdminLogsRequest {
   status: AdminLogsStatusFilter;
   /** '' — все авторы, 'anonymous' — без авторизации, иначе uuid пользователя. */
   userId: string;
+  /** Выбранные HTTP-методы ('GET', 'POST', ...); пусто — все методы. */
+  methods: string[];
   page: number;
   sort: AdminLogsSortField;
   order: AdminLogsSortOrder;
@@ -54,14 +56,21 @@ export interface UseAdminLogsRequest {
 export type UseAdminLogsResponse = AdminLogsPage;
 
 /** GET /admin/logs: страница логов запросов с фильтром, сортировкой и пагинацией. */
-export const useAdminLogs = ({ status, userId, page, sort, order }: UseAdminLogsRequest) =>
+export const useAdminLogs = ({
+  status,
+  userId,
+  methods,
+  page,
+  sort,
+  order,
+}: UseAdminLogsRequest) =>
   useQuery<UseAdminLogsResponse>({
-    queryKey: ['admin', 'logs', { status, userId, page, sort, order }],
+    queryKey: ['admin', 'logs', { status, userId, methods, page, sort, order }],
     queryFn: ({ signal }) =>
       api.get<UseAdminLogsResponse>(
         `/admin/logs?status=${status}&page=${page}&limit=${LIMIT}&sort=${sort}&order=${order}${
           userId ? `&userId=${encodeURIComponent(userId)}` : ''
-        }`,
+        }${methods.length > 0 ? `&methods=${encodeURIComponent(methods.join(','))}` : ''}`,
         { signal },
       ),
     placeholderData: keepPreviousData,

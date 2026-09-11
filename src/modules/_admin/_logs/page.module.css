@@ -41,6 +41,11 @@
   max-width: 360px;
 }
 
+.methodSelect {
+  flex: 0 1 200px;
+  min-width: 170px;
+}
+
 .userAnonymous {
   color: var(--color-text-secondary);
   font-style: italic;

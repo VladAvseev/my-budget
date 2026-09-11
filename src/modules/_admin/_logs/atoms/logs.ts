@@ -21,3 +21,9 @@ export const logsSortOrderAtom = atom<AdminLogsSortOrder>('desc');
  */
 export const LOG_USER_ANONYMOUS = 'anonymous';
 export const logsUserAtom = atom('');
+
+/**
+ * Фильтр логов по HTTP-методам: выбранные методы ('GET', 'POST', ...);
+ * пустой список — запросы любыми методами.
+ */
+export const logsMethodsAtom = atom<string[]>([]);

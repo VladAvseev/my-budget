@@ -5,6 +5,7 @@ import { VCard } from '@/shared/ui/VCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
+import { VMultiSelect, type VMultiSelectOption } from '@/shared/ui/VMultiSelect';
 import { useAtom } from 'jotai';
 import { Fragment, useMemo, useState } from 'react';
 import { useAdminUsers } from '../_users/api/useAdminUsers';
@@ -20,6 +21,7 @@ import {
 import { useAdminLogsMetrics, type AdminLogsPeriod } from './api/useAdminLogsMetrics';
 import {
   LOG_USER_ANONYMOUS,
+  logsMethodsAtom,
   logsPageAtom,
   logsPeriodAtom,
   logsSortAtom,
@@ -38,7 +40,17 @@ const PERIOD_OPTIONS: VButtonGroupOption[] = [
 
 const STATUS_OPTIONS: VButtonGroupOption[] = [
   { value: 'all', label: 'Все' },
+  { value: 'success', label: 'Успешные' },
   { value: 'error', label: 'С ошибкой' },
+];
+
+/** Статический список методов для фильтра: сервер логирует только эти. */
+const METHOD_OPTIONS: VMultiSelectOption[] = [
+  { value: 'GET', label: 'GET' },
+  { value: 'POST', label: 'POST' },
+  { value: 'PUT', label: 'PUT' },
+  { value: 'PATCH', label: 'PATCH' },
+  { value: 'DELETE', label: 'DELETE' },
 ];
 
 const dateTimeFormatter = new Intl.DateTimeFormat('ru-RU', {
@@ -144,6 +156,7 @@ export const Page: React.FC = () => {
   const [period, setPeriod] = useAtom(logsPeriodAtom);
   const [status, setStatus] = useAtom(logsStatusAtom);
   const [user, setUser] = useAtom(logsUserAtom);
+  const [methods, setMethods] = useAtom(logsMethodsAtom);
   const [page, setPage] = useAtom(logsPageAtom);
   const [sort, setSort] = useAtom(logsSortAtom);
   const [sortOrder, setSortOrder] = useAtom(logsSortOrderAtom);
@@ -172,6 +185,7 @@ export const Page: React.FC = () => {
   const logsQuery = useAdminLogs({
     status: status as AdminLogsStatusFilter,
     userId: user,
+    methods,
     page,
     sort,
     order: sortOrder,
@@ -331,6 +345,17 @@ export const Page: React.FC = () => {
             emptyText="Все пользователи"
             onChange={(value) => {
               setUser(value);
+              setPage(1);
+            }}
+          />
+          <VMultiSelect
+            className={styles.methodSelect}
+            label="Метод"
+            options={METHOD_OPTIONS}
+            value={methods}
+            emptyText="Все методы"
+            onChange={(value) => {
+              setMethods(value);
               setPage(1);
             }}
           />
