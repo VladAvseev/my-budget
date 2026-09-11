@@ -4,7 +4,7 @@ import {
   formatAmount,
   type GoalProgress,
 } from '@/shared/utils';
-import { useAccumulationsTotal, useCurrency, useGoals } from '@/shared/hooks';
+import { useAccumulations, useCurrency, useGoals } from '@/shared/hooks';
 import { ChevronRightIcon, SavingsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/api/authProvider';
 import { signedOperationAmount, type OperationType } from '@/shared/api/types/domain';
@@ -17,16 +17,18 @@ import { useSavingsOperations } from '../api/useSavingsOperations';
 import { AccumulationsLegend } from './AccumulationsStructure';
 import styles from '../homeCard.module.css';
 
+const EMPTY_ARRAY: never[] = [];
+
 export const AccumulationsCard = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
-  const accumulationsQuery = useAccumulationsTotal(userId);
+  const accumulationsQuery = useAccumulations(userId);
   const savingsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
   const goalsQuery = useGoals(userId);
   const currency = useCurrency();
 
-  const accumulations = accumulationsQuery.accumulations;
+  const accumulations = accumulationsQuery.data ?? EMPTY_ARRAY;
   const categories = categoriesQuery.data ?? [];
 
   const structureItems = useMemo(

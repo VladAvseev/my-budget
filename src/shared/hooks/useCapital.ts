@@ -1,26 +1,18 @@
 import { useAuth } from '@/shared/api/authProvider';
-import { useGlobalBalance, useUserSummary } from './useGlobalBalance';
+import { computeGlobalTotals } from '@/shared/utils';
 import { useAccumulationsTotal } from './useAccumulations';
+import { useProfile } from './useProfile';
+import { useUserSummary } from './useGlobalBalance';
 
 export const useCapital = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
-  const { balance, isLoading: isBalanceLoading } = useGlobalBalance();
+  const profileQuery = useProfile();
   const summaryQuery = useUserSummary(userId);
-  const accumulationsQuery = useAccumulationsTotal(userId);
+  const { total: initialSavings } = useAccumulationsTotal(userId);
 
-  const accumulations = accumulationsQuery.accumulations;
-  const totalAccumulations = accumulationsQuery.total;
-  const summary = summaryQuery.data ?? { income: 0, expense: 0, savings: 0, daily: 0 };
-  const totalSavings = summary.savings;
-  const capital = balance + totalSavings + totalAccumulations;
+  const startBalance = Number(profileQuery.data?.start_balance ?? 0) || 0;
+  const { capital } = computeGlobalTotals(startBalance, summaryQuery.data, initialSavings);
 
-  return {
-    capital,
-    balance,
-    totalSavings,
-    totalAccumulations,
-    accumulations,
-    isLoading: isBalanceLoading || summaryQuery.isLoading || accumulationsQuery.isLoading,
-  };
+  return { capital };
 };

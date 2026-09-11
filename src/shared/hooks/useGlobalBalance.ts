@@ -1,13 +1,9 @@
 import { api } from '@/shared/api/http';
 import { useAuth } from '@/shared/api/authProvider';
 import type { OperationSummary } from '@/shared/api/types/domain';
+import { computeGlobalTotals } from '@/shared/utils';
 import { useQuery } from '@tanstack/react-query';
 import { useProfile } from './useProfile';
-
-/**
- * Глобальный баланс: GET /users/me/summary.
- * p_user_id не передаётся — сервер берёт пользователя из JWT.
- */
 
 export const userSummaryQueryKey = (userId: string) => ['userSummary', userId] as const;
 
@@ -33,8 +29,7 @@ export const useGlobalBalance = () => {
   const summaryQuery = useUserSummary(userId);
 
   const startBalance = Number(profileQuery.data?.start_balance ?? 0) || 0;
-  const summary = summaryQuery.data ?? { income: 0, expense: 0, savings: 0, daily: 0 };
-  const balance = startBalance + summary.income - summary.expense - summary.savings - summary.daily;
+  const { balance } = computeGlobalTotals(startBalance, summaryQuery.data, 0);
 
   return {
     balance,

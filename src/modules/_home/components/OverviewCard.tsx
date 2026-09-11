@@ -4,7 +4,7 @@ import { useAuth } from '@/shared/api/authProvider';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
-import { formatAmount } from '@/shared/utils';
+import { computeGlobalTotals, formatAmount } from '@/shared/utils';
 import { Link } from 'react-router-dom';
 import styles from '../homeCard.module.css';
 
@@ -12,7 +12,6 @@ export const OverviewCard = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const { data: summaryData, isFetched: summaryFetched } = useUserSummary(userId);
-  const summary = summaryData ?? { income: 0, expense: 0, savings: 0, daily: 0 };
   const accumulationsQuery = useAccumulationsTotal(userId);
   const profileQuery = useProfile();
   const currency = useCurrency();
@@ -30,9 +29,11 @@ export const OverviewCard = () => {
 
   const startBalance = Number(profileQuery.data?.start_balance ?? 0) || 0;
   const initialSavings = accumulationsQuery.total;
-  const income = summary.income + startBalance + initialSavings;
-  const savingsTotal = summary.savings + initialSavings;
-  const balance = income - summary.expense - summary.daily - savingsTotal;
+  const { income, expense, savings: savingsTotal, balance } = computeGlobalTotals(
+    startBalance,
+    summaryData,
+    initialSavings,
+  );
   const percentOfIncome = (value: number) =>
     income > 0 ? Math.max(0, Math.round((value / income) * 100)) : null;
 
@@ -45,8 +46,8 @@ export const OverviewCard = () => {
     },
     {
       label: 'Расходы',
-      value: formatAmount(summary.expense + summary.daily, currency?.symbol),
-      percent: percentOfIncome(summary.expense + summary.daily),
+      value: formatAmount(expense, currency?.symbol),
+      percent: percentOfIncome(expense),
       color: 'var(--color-error)',
     },
     {

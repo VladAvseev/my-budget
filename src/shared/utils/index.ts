@@ -50,3 +50,4 @@ export {
   aggregatePoints,
 } from './chartPoints';
 export { getOtherCurrencyRates, formatCurrencyRate, type CurrencyRateItem } from './currencyRates';
+export { computeGlobalTotals, type GlobalTotals } from './globalTotals';

@@ -1,18 +1,17 @@
 import { api } from '@/shared/api/http';
 import type { Accumulation, AccumulationUpdateInput } from '@/shared/api/types/domain';
+import { accumulationsTotalQueryKey, type AccumulationsTotal } from '@/shared/hooks';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/**
- * PATCH /accumulations/:id. Отсылаем только
- * переданные поля — null в amount сервер не примет, и это правильно.
- */
+
 const updateAccumulationMutationKey = ['updateAccumulation'] as const;
 
 export const useUpdateAccumulation = (userId: string) => {
   const queryClient = useQueryClient();
   const key = ['accumulations', userId];
+  const totalKey = accumulationsTotalQueryKey(userId);
 
   return useMutation({
     mutationKey: updateAccumulationMutationKey,
@@ -25,6 +24,12 @@ export const useUpdateAccumulation = (userId: string) => {
     },
     onMutate: async ({ id, input }) => {
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];
+      const previousTotal = queryClient.getQueryData<AccumulationsTotal>(totalKey);
+      const delta =
+        input.amount !== undefined
+          ? (Number(input.amount) || 0) -
+            (Number(previous.find((item) => item.id === id)?.amount) || 0)
+          : 0;
 
       queryClient.setQueryData<Accumulation[]>(key, (items = []) =>
         items.map((item) =>
@@ -42,11 +47,23 @@ export const useUpdateAccumulation = (userId: string) => {
         ),
       );
 
-      return { previous };
+      if (delta !== 0) {
+        queryClient.setQueryData<AccumulationsTotal>(totalKey, (prev) => ({
+          total: (prev?.total ?? 0) + delta,
+        }));
+      }
+
+      return { previous, previousTotal, patchedTotal: delta !== 0 };
     },
     onError: (_error, _input, context) => {
       if (!context) return;
       queryClient.setQueryData(key, context.previous);
+      if (!context.patchedTotal) return;
+      if (context.previousTotal === undefined) {
+        queryClient.removeQueries({ queryKey: totalKey, exact: true });
+      } else {
+        queryClient.setQueryData(totalKey, context.previousTotal);
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['accumulations', userId] });

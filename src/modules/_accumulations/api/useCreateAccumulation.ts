@@ -1,10 +1,10 @@
 import { api } from '@/shared/api/http';
 import type { Accumulation, AccumulationInput } from '@/shared/api/types/domain';
+import { accumulationsTotalQueryKey, type AccumulationsTotal } from '@/shared/hooks';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** POST /accumulations + прежняя оптимистика. */
 const createAccumulationMutationKey = ['createAccumulation'] as const;
 
 export const useCreateAccumulation = (userId: string) => {
@@ -21,7 +21,9 @@ export const useCreateAccumulation = (userId: string) => {
     },
     onMutate: async (input) => {
       const key = ['accumulations', userId];
+      const totalKey = accumulationsTotalQueryKey(userId);
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];
+      const previousTotal = queryClient.getQueryData<AccumulationsTotal>(totalKey);
 
       const now = new Date().toISOString();
       const optimistic: (typeof previous)[number] & OptimisticItem = {
@@ -36,12 +38,26 @@ export const useCreateAccumulation = (userId: string) => {
       };
 
       queryClient.setQueryData(key, [optimistic, ...previous]);
+      // Дельта и на кэшированную сумму: capital сайдбара берётся из total-ключа.
+      const delta = Number(input.amount) || 0;
+      if (delta !== 0) {
+        queryClient.setQueryData<AccumulationsTotal>(totalKey, (prev) => ({
+          total: (prev?.total ?? 0) + delta,
+        }));
+      }
 
-      return { previous };
+      return { previous, previousTotal, patchedTotal: delta !== 0 };
     },
     onError: (_error, _input, context) => {
       if (!context) return;
+      const totalKey = accumulationsTotalQueryKey(userId);
       queryClient.setQueryData(['accumulations', userId], context.previous);
+      if (!context.patchedTotal) return;
+      if (context.previousTotal === undefined) {
+        queryClient.removeQueries({ queryKey: totalKey, exact: true });
+      } else {
+        queryClient.setQueryData(totalKey, context.previousTotal);
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['accumulations', userId] });
