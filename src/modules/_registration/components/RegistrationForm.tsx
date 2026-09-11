@@ -33,8 +33,8 @@ export const RegistrationForm = () => {
       setEmailError(undefined);
     }
 
-    if (password.length < 6) {
-      setPasswordError('Пароль должен содержать не менее 6 символов');
+    if (password.length < 8) {
+      setPasswordError('Пароль должен содержать не менее 8 символов');
       isValid = false;
     } else {
       setPasswordError(undefined);

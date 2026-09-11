@@ -35,8 +35,8 @@ export const ChangePasswordModal = ({ visible, onClose }: ChangePasswordModalPro
     setSubmitError(undefined);
     let isValid = true;
 
-    if (newPassword.length < 6) {
-      setNewPasswordError('Пароль должен содержать не менее 6 символов');
+    if (newPassword.length < 8) {
+      setNewPasswordError('Пароль должен содержать не менее 8 символов');
       isValid = false;
     } else {
       setNewPasswordError(undefined);
