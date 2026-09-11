@@ -1,15 +1,15 @@
-import { useMemo } from 'react';
-import { useAtom } from 'jotai';
-import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
-import { VSkeleton } from '@/shared/ui/VSkeleton';
+import { VCard } from '@/shared/ui/VCard';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
+import { VSkeleton } from '@/shared/ui/VSkeleton';
+import { useAtom } from 'jotai';
+import { useMemo } from 'react';
+import { useAdminLogsDynamics } from '../api/useAdminLogsDynamics';
 import {
   logsDynamicsAudienceAtom,
   logsDynamicsBucketAtom,
   logsDynamicsMetricAtom,
 } from '../atoms/logs';
-import { useAdminLogsDynamics } from '../api/useAdminLogsDynamics';
 import { buildLogsDynamics } from '../utils/buildLogsDynamicsData';
 import { buildLogsDynamicsStats } from '../utils/buildLogsDynamicsStats';
 import styles from './LogsDynamicsCard.module.css';
@@ -72,10 +72,9 @@ export const LogsDynamicsCard = () => {
   const stats = useMemo(() => buildLogsDynamicsStats(built), [built]);
 
   const bucketLabel = bucket === 'hour' ? 'час' : 'сутки';
-  const uniquePrefix = metric === 'unique_users' ? 'Уникальных ' : '';
-  const avgLabel = `В среднем ${uniquePrefix}за ${bucketLabel}`;
-  const lastLabel = `${uniquePrefix}за последний ${bucket === 'hour' ? 'час' : 'день'}`;
-  const title = metric === 'unique_users' ? 'Динамика уникальных авторов' : 'Количество логов';
+  const avgLabel = `В среднем за ${bucketLabel}`;
+  const lastLabel = `за последний ${bucket === 'hour' ? 'час' : 'день'}`;
+  const title = metric === 'unique_users' ? 'Активность уникальных пользователей' : 'Количество логов';
 
   return (
     <VCard className={styles.card}>
@@ -104,7 +103,11 @@ export const LogsDynamicsCard = () => {
             <Stat label={avgLabel} value={formatMetric(stats.avgPerBucket)} />
             <Stat label={lastLabel} value={formatMetric(stats.lastBucket)} />
           </div>
-          <VGrowthChart data={built.chartData} color="var(--color-accent)" formatValue={formatCount} />
+          <VGrowthChart
+            data={built.chartData}
+            color="var(--color-accent)"
+            formatValue={formatCount}
+          />
         </div>
       )}
     </VCard>

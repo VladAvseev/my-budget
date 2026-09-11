@@ -22,9 +22,9 @@ const AGGREGATION_LABELS: Record<AdminChartMetric, Record<DynamicsAggregation, s
     Y: 'В год',
   },
   unique_users: {
-    D: 'Уникальных в день',
-    M: 'Уникальных в месяц',
-    Y: 'Уникальных в год',
+    D: 'В день',
+    M: 'В месяц',
+    Y: 'В год',
   },
 };
 
@@ -34,10 +34,9 @@ const LAST_PERIOD_LABELS: Record<AdminChartMetric, Record<DynamicsAggregation, s
     M: 'За текущий месяц',
     Y: 'За текущий год',
   },
-  unique_users: {
-    D: 'Уникальных за сегодня',
-    M: 'Уникальных за текущий месяц',
-    Y: 'Уникальных за текущий год',
+  unique_users: {D: 'За сегодня',
+    M: 'За текущий месяц',
+    Y: 'За текущий год',
   },
 };
 

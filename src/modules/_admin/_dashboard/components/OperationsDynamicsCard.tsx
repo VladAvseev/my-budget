@@ -81,7 +81,7 @@ export const OperationsDynamicsCard = () => {
   );
 
   const title =
-    metric === 'unique_users' ? 'Рост уникальных пользователей' : 'Рост количества операций';
+    metric === 'unique_users' ? 'Активность уникальных пользователей' : 'Рост количества операций';
 
   return (
     <VCard className={styles.card}>
