@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
 import type { AdminAudience } from '@/shared/api/types/admin';
 import { useAdminLogsDynamics } from '../api/useAdminLogsDynamics';
@@ -65,8 +65,13 @@ export const LogsDynamicsCard = () => {
       </div>
 
       {isLoading ? (
-        <div className={styles.loaderWrap}>
-          <VLoader />
+        <div className={styles.skeletonWrap}>
+          <div className={styles.skeletonStats}>
+            {[0, 1, 2, 3].map((i) => (
+              <VSkeleton key={i} width={180} height={18} />
+            ))}
+          </div>
+          <VSkeleton width="100%" height={240} radius="var(--radius-m)" />
         </div>
       ) : (
         <>

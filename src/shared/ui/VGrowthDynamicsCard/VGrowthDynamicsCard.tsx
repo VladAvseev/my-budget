@@ -1,7 +1,6 @@
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
-import { VLoader } from '@/shared/ui/VLoader';
-import commonStyles from '@/shared/styles/common.module.css';
+import { VSkeleton } from '@/shared/ui/VSkeleton';
 import type { ChartPoint, GrowthAggregation } from '@/shared/utils/chartPoints';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
 import { GrowthStats } from './GrowthStats';
@@ -67,9 +66,7 @@ export const VGrowthDynamicsCard = ({
     <GrowthStats stats={stats} displaySymbol={displaySymbol} />
 
     {isLoading ? (
-      <div className={commonStyles.loaderContainer}>
-        <VLoader />
-      </div>
+      <VSkeleton width="100%" height={200} radius="var(--radius-m)" />
     ) : (
       <VGrowthChart
         data={chartData}

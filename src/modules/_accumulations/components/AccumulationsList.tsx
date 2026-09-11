@@ -3,7 +3,8 @@ import { useAccumulations } from '@/shared/api/hooks';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
+import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useCategories } from '../api/useCategories';
@@ -35,14 +36,21 @@ export const AccumulationsList = () => {
 
   return (
     <div className={styles.root}>
-      {accumulationsQuery.error && (
+      {accumulationsQuery.error && accumulationsQuery.data == null && (
+        <VErrorCard
+          title="Не удалось загрузить начальные накопления"
+          error={accumulationsQuery.error}
+          onRetry={() => void accumulationsQuery.refetch()}
+          isRetrying={accumulationsQuery.isFetching}
+        />
+      )}
+
+      {accumulationsQuery.error && accumulationsQuery.data != null && (
         <VBanner type="error" visible message="Не удалось загрузить начальные накопления" />
       )}
 
       {accumulationsQuery.isLoading && (
-        <div className={styles.loaderWrap}>
-          <VLoader size={28} />
-        </div>
+        <VSkeletonList count={3} cardProps={{ compact: true, title: false, lines: 2 }} />
       )}
 
       {!accumulationsQuery.isLoading && !accumulationsQuery.error && accumulations.length === 0 && (

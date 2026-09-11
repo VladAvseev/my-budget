@@ -11,12 +11,6 @@
   gap: var(--space-m);
 }
 
-.loaderWrap {
-  display: flex;
-  justify-content: center;
-  padding: var(--space-xl);
-}
-
 .empty {
   color: var(--color-text-secondary);
 }

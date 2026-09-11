@@ -3,8 +3,9 @@ import { VBanner } from '@/shared/ui/VBanner';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
 import { VCurrencyRates } from '@/shared/ui/VCurrencyRates';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VHint } from '@/shared/ui/VHint';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useAuth } from '@/shared/api/authProvider';
 import { useBreakpoint } from '@/shared/hooks';
@@ -61,6 +62,8 @@ export const Page: React.FC = () => {
     data: operationsMap,
     isLoading: operationsLoading,
     error: operationsError,
+    refetch: refetchOperations,
+    isFetching: operationsFetching,
   } = useOverviewOperationsMap(selectedReports.map((report) => report.id));
 
   const operationsByReport = useMemo(
@@ -152,14 +155,15 @@ export const Page: React.FC = () => {
         <ReportsFilter reports={reports} />
       </div>
 
-      {reportsQuery.isLoading && (
-        <div className={commonStyles.loaderContainer}>
-          <VLoader size={28} />
-        </div>
-      )}
+      {reportsQuery.isLoading && <VSkeletonCard compact title={false} lines={1} />}
 
       {reportsQuery.error && (
-        <VBanner type="error" visible message="Не удалось загрузить периоды" />
+        <VErrorCard
+          title="Не удалось загрузить периоды"
+          error={reportsQuery.error}
+          onRetry={() => void reportsQuery.refetch()}
+          isRetrying={reportsQuery.isFetching}
+        />
       )}
 
       {!reportsQuery.isLoading && !reportsQuery.error && reports.length === 0 && (
@@ -187,14 +191,36 @@ export const Page: React.FC = () => {
 
           {selectedReports.length > 0 && (
             <>
-              {operationsError && (
+              {operationsError && operationsMap == null && (
+                <VErrorCard
+                  title="Не удалось загрузить операции"
+                  error={operationsError}
+                  onRetry={() => void refetchOperations()}
+                  isRetrying={operationsFetching}
+                />
+              )}
+
+              {operationsError && operationsMap != null && (
                 <VBanner type="error" visible message="Не удалось загрузить операции" />
               )}
 
               {operationsLoading ? (
-                <div className={commonStyles.loaderContainer}>
-                  <VLoader size={28} />
-                </div>
+                <>
+                  <div className={styles.summaryGrid}>
+                    {[0, 1, 2, 3].map((i) => (
+                      <VSkeletonCard
+                        key={i}
+                        compact
+                        title={false}
+                        lines={2}
+                        delay={`${i * 0.05}s`}
+                      />
+                    ))}
+                  </div>
+                  <VSkeletonCard compact lines={4} />
+                  <VSkeletonCard compact title={false} lines={1} />
+                  <VSkeletonCard compact lines={5} />
+                </>
               ) : (
                 <>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>

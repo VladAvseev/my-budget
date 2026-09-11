@@ -15,8 +15,9 @@ import { VBadge } from '@/shared/ui/VBadge';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useSetAtom } from 'jotai';
 import { useMemo } from 'react';
@@ -176,12 +177,21 @@ export const GoalsSection = () => {
         </VIconButton>
       </div>
 
-      {goalsQuery.error && <VBanner type="error" visible message="Не удалось загрузить цели" />}
+      {goalsQuery.error && goalsQuery.data == null && (
+        <VErrorCard
+          title="Не удалось загрузить цели"
+          error={goalsQuery.error}
+          onRetry={() => void goalsQuery.refetch()}
+          isRetrying={goalsQuery.isFetching}
+        />
+      )}
+
+      {goalsQuery.error && goalsQuery.data != null && (
+        <VBanner type="error" visible message="Не удалось загрузить цели" />
+      )}
 
       {isLoading && (
-        <div className={styles.loaderWrap}>
-          <VLoader size={28} />
-        </div>
+        <VSkeletonList count={2} cardProps={{ compact: true, title: false, lines: 2 }} />
       )}
 
       {!isLoading && !goalsQuery.error && goals.length === 0 && (

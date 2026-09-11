@@ -2,7 +2,7 @@ import type { Operation, OperationType } from '@/shared/api/types/domain';
 import type { Report } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { Link } from 'react-router-dom';
@@ -183,11 +183,7 @@ export const CategoryBreakdown = ({
     lowerIsBetter: boolean,
   ) => {
     if (loading && hasOperations(operationsByReport, typeFilter)) {
-      return (
-        <div className={styles.loaderWrap}>
-          <VLoader size={24} />
-        </div>
-      );
+      return <VSkeletonList count={3} cardProps={{ compact: true, title: false, lines: 1 }} />;
     }
     if (groups.length === 0) {
       return null;

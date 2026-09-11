@@ -4,12 +4,6 @@
   gap: var(--space-l);
 }
 
-.loaderWrap {
-  display: flex;
-  justify-content: center;
-  padding: var(--space-xl);
-}
-
 .emptyState {
   display: flex;
   flex-direction: column;

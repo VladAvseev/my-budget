@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
 import type { AdminAudience } from '@/shared/api/types/admin';
 import { useAdminOperationsDynamics } from '../api/useAdminOperationsDynamics';
@@ -78,9 +78,7 @@ export const OperationsDynamicsCard = () => {
       <OperationsDynamicsStats stats={stats} />
 
       {isLoading ? (
-        <div className={styles.loaderWrap}>
-          <VLoader />
-        </div>
+        <VSkeleton width="100%" height={280} radius="var(--radius-m)" />
       ) : (
         <VGrowthChart
           data={chartData}

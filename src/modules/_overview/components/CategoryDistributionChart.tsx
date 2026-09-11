@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { formatAmount, convertAmount } from '@/shared/utils';
@@ -79,9 +79,16 @@ export const CategoryDistributionChart = ({
 
   if (loading) {
     return (
-      <VCard className={styles.content}>
-        <div className={styles.loaderWrap}>
-          <VLoader size={28} />
+      <VCard className={styles.content} aria-busy="true">
+        <VSkeleton width={220} height={24} />
+        <VSkeleton width="60%" height={38} />
+        <div className={styles.skeletonChart}>
+          <VSkeleton circle width={220} height={220} />
+          <div className={styles.skeletonLegend}>
+            {[0, 1, 2, 3].map((i) => (
+              <VSkeleton key={i} height={18} />
+            ))}
+          </div>
         </div>
       </VCard>
     );

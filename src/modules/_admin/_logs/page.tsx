@@ -2,7 +2,8 @@ import commonStyles from '@/shared/styles/common.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
+import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { useAtom } from 'jotai';
 import { Fragment, useMemo, useState } from 'react';
@@ -194,8 +195,42 @@ export const Page: React.FC = () => {
 
   if (metricsQuery.isLoading || logsQuery.isLoading) {
     return (
-      <div className={commonStyles.loaderContainer}>
-        <VLoader size={28} />
+      <div className={commonStyles.page}>
+        <LogsDynamicsCard />
+        <div className={styles.metricsGrid} aria-busy="true">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <VCard key={i} className={styles.metricCard}>
+              <VSkeleton width={90} height={14} />
+              <VSkeleton width={56} height={24} />
+            </VCard>
+          ))}
+        </div>
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Дата и время</th>
+                <th>Метод</th>
+                <th>Путь</th>
+                <th>Статус</th>
+                <th>Выполнение</th>
+                <th>Пользователь</th>
+                <th>IP</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 10 }, (_, rowIndex) => (
+                <tr key={rowIndex}>
+                  {Array.from({ length: 7 }, (_, cellIndex) => (
+                    <td key={cellIndex}>
+                      <VSkeleton height={14} width={cellIndex === 2 ? 220 : 70} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
@@ -203,7 +238,12 @@ export const Page: React.FC = () => {
   if (metricsQuery.isError || !metrics) {
     return (
       <div className={commonStyles.page}>
-        <div className={commonStyles.textSecondary}>Не удалось загрузить метрики логов</div>
+        <VErrorCard
+          title="Не удалось загрузить метрики логов"
+          error={metricsQuery.error}
+          onRetry={() => void metricsQuery.refetch()}
+          isRetrying={metricsQuery.isFetching}
+        />
       </div>
     );
   }
@@ -297,7 +337,12 @@ export const Page: React.FC = () => {
         </div>
 
         {logsQuery.isError || !logs ? (
-          <div className={commonStyles.textSecondary}>Не удалось загрузить логи</div>
+          <VErrorCard
+            title="Не удалось загрузить логи"
+            error={logsQuery.error}
+            onRetry={() => void logsQuery.refetch()}
+            isRetrying={logsQuery.isFetching}
+          />
         ) : (
           <>
             <div className={styles.tableWrapper}>

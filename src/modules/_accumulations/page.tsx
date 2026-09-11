@@ -8,7 +8,8 @@ import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup'
 import { VCurrencyRates } from '@/shared/ui/VCurrencyRates';
 import { VHint } from '@/shared/ui/VHint';
 import { VIconButton } from '@/shared/ui/VIconButton';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
+import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import commonStyles from '@/shared/styles/common.module.css';
 import styles from './page.module.css';
 import { useAtom, useSetAtom } from 'jotai';
@@ -70,6 +71,18 @@ export const Page: React.FC = () => {
 
   const structureLoading =
     accumulationsQuery.isLoading || savingsQuery.isLoading || categoriesQuery.isLoading;
+
+  // Ошибку показываем только при первичной загрузке (данных ещё нет);
+  // при сбое фонового refetch оставляем уже отрисованную структуру.
+  const initialError = (query: { error: Error | null; data: unknown }) =>
+    query.error && query.data == null ? query.error : null;
+  const structureError =
+    initialError(accumulationsQuery) ?? initialError(savingsQuery) ?? initialError(categoriesQuery);
+  const refetchStructure = () => {
+    if (accumulationsQuery.error) void accumulationsQuery.refetch();
+    if (savingsQuery.error) void savingsQuery.refetch();
+    if (categoriesQuery.error) void categoriesQuery.refetch();
+  };
 
   const structureItems = [
     ...accumulations.map((accumulation) => ({
@@ -134,9 +147,13 @@ export const Page: React.FC = () => {
       />
 
       {structureLoading ? (
-        <div className={commonStyles.loaderContainer}>
-          <VLoader />
-        </div>
+        <VSkeletonCard compact lines={4} />
+      ) : structureError ? (
+        <VErrorCard
+          title="Не удалось загрузить структуру накоплений"
+          error={structureError}
+          onRetry={refetchStructure}
+        />
       ) : (
         <AccumulationsStructure items={structureItems} categories={categories} />
       )}

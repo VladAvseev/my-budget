@@ -1,5 +1,6 @@
 import commonStyles from '@/shared/styles/common.module.css';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
+import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import { useAdminStats } from './api/useAdminStats';
 import { OperationsDynamicsCard } from './components/OperationsDynamicsCard';
 import { ReportsOperationsCard } from './components/ReportsOperationsCard';
@@ -12,8 +13,13 @@ export const Page: React.FC = () => {
 
   if (statsQuery.isLoading) {
     return (
-      <div className={commonStyles.loaderContainer}>
-        <VLoader size={28} />
+      <div className={commonStyles.page}>
+        <div className={styles.grid}>
+          <VSkeletonCard compact className={styles.fullWidth} lines={4} />
+          <VSkeletonCard compact lines={3} delay="0.05s" />
+          <VSkeletonCard compact lines={3} delay="0.1s" />
+          <VSkeletonCard compact className={styles.fullWidth} lines={2} delay="0.15s" />
+        </div>
       </div>
     );
   }
@@ -21,7 +27,12 @@ export const Page: React.FC = () => {
   if (statsQuery.isError || !statsQuery.data) {
     return (
       <div className={commonStyles.page}>
-        <div className={commonStyles.textSecondary}>Не удалось загрузить статистику</div>
+        <VErrorCard
+          title="Не удалось загрузить статистику"
+          error={statsQuery.error}
+          onRetry={() => void statsQuery.refetch()}
+          isRetrying={statsQuery.isFetching}
+        />
       </div>
     );
   }

@@ -2,8 +2,9 @@ import { useAuth } from '@/shared/api/authProvider';
 import commonStyles from '@/shared/styles/common.module.css';
 import type { AdminUserRow } from './api/useAdminUsers';
 import { TrashIcon } from '@/shared/icons';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils/date';
 import { useMemo, useState } from 'react';
@@ -124,8 +125,31 @@ export const Page: React.FC = () => {
 
   if (usersQuery.isLoading) {
     return (
-      <div className={commonStyles.loaderContainer}>
-        <VLoader size={28} />
+      <div className={commonStyles.page}>
+        <VSkeleton width={360} height={38} radius="var(--radius-m)" />
+        <div className={styles.tableWrapper}>
+          <table className={styles.table} aria-busy="true">
+            <thead>
+              <tr>
+                {COLUMNS.map(({ key, label }) => (
+                  <th key={key}>{label}</th>
+                ))}
+                <th>Действие</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 8 }, (_, rowIndex) => (
+                <tr key={rowIndex}>
+                  {Array.from({ length: COLUMNS.length + 1 }, (_, cellIndex) => (
+                    <td key={cellIndex}>
+                      <VSkeleton height={16} width={cellIndex === 0 ? 140 : 48} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
@@ -133,7 +157,12 @@ export const Page: React.FC = () => {
   if (usersQuery.isError) {
     return (
       <div className={commonStyles.page}>
-        <div className={commonStyles.textSecondary}>Не удалось загрузить пользователей</div>
+        <VErrorCard
+          title="Не удалось загрузить пользователей"
+          error={usersQuery.error}
+          onRetry={() => void usersQuery.refetch()}
+          isRetrying={usersQuery.isFetching}
+        />
       </div>
     );
   }

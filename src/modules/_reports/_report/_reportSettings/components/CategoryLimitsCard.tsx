@@ -8,7 +8,7 @@ import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VIconButton } from '@/shared/ui/VIconButton';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { useMemo, useState } from 'react';
@@ -202,8 +202,9 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
         {isSaved && !submitError && <VBanner type="success" visible message="Бюджет сохранён" />}
 
         {isLoading && (
-          <div className={styles.loaderWrap}>
-            <VLoader size={28} />
+          <div className={styles.skeletonRows}>
+            <VSkeleton height={38} />
+            <VSkeleton height={38} />
           </div>
         )}
 

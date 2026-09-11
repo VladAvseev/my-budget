@@ -1,9 +1,10 @@
 import { ChevronRightIcon, PlusIcon } from '@/shared/icons';
 import commonStyles from '@/shared/styles/common.module.css';
-import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils';
 import { useAtom } from 'jotai';
@@ -15,7 +16,7 @@ import styles from './ReportsList.module.css';
 export const ReportsList = () => {
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
   const [, setIsCreateOpen] = useAtom(createModalOpenAtom);
-  const { data, isLoading, error } = useReports();
+  const { data, isLoading, error, refetch, isFetching } = useReports();
 
   const reports = data ?? [];
   const filtered = searchQuery.trim()
@@ -55,12 +56,21 @@ export const ReportsList = () => {
         </VIconButton>
       </div>
 
-      {error && <VBanner type="error" visible message="Не удалось загрузить периоды" />}
+      {error && !isLoading && (
+        <VErrorCard
+          title="Не удалось загрузить периоды"
+          error={error}
+          onRetry={() => void refetch()}
+          isRetrying={isFetching}
+        />
+      )}
 
       {isLoading && (
-        <div className={styles.loaderWrap}>
-          <VLoader size={28} />
-        </div>
+        <VSkeletonList
+          count={4}
+          cardProps={{ compact: true, title: false, lines: 2 }}
+          style={{ gap: 'var(--space-l)' }}
+        />
       )}
 
       {!isLoading && !error && filtered.length === 0 && (

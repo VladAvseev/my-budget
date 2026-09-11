@@ -5,8 +5,9 @@ import type { Operation, OperationType } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { VToggle } from '@/shared/ui/VToggle';
 import { formatAmount } from '@/shared/utils';
 import { useCurrency } from '@/shared/api/hooks';
@@ -57,6 +58,9 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const categories = categoriesQuery.data ?? [];
   const limits = limitsQuery.data ?? [];
   const isGrouped = groupedByType[type] ?? false;
+  const hasOperationsData = isSavings
+    ? savingsQueries.some((query) => query.data != null)
+    : operationsQuery.data != null;
 
   const toggleGrouping = (next: boolean) => {
     setGroupedByType((prev) => ({ ...prev, [type]: next }));
@@ -126,15 +130,32 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
         </VIconButton>
       </div>
 
-      {operationsError && <VBanner type="error" visible message="Не удалось загрузить операции" />}
-
-      {operationsLoading && (
-        <div className={styles.loaderWrap}>
-          <VLoader size={28} />
-        </div>
+      {operationsError && !hasOperationsData && (
+        <VErrorCard
+          title="Не удалось загрузить операции"
+          error={operationsError}
+          onRetry={() =>
+            isSavings
+              ? savingsQueries.forEach((query) => void query.refetch())
+              : void operationsQuery.refetch()
+          }
+          isRetrying={
+            isSavings
+              ? savingsQueries.some((query) => query.isFetching)
+              : operationsQuery.isFetching
+          }
+        />
       )}
 
-      {!operationsLoading && operations.length === 0 && (
+      {operationsError && hasOperationsData && (
+        <VBanner type="error" visible message="Не удалось загрузить операции" />
+      )}
+
+      {operationsLoading && (
+        <VSkeletonList count={5} cardProps={{ compact: true, title: false, lines: 2 }} />
+      )}
+
+      {!operationsLoading && !operationsError && operations.length === 0 && (
         <VCard>
           <div className={styles.emptyState}>
             <div className={styles.emptyTitle}>

@@ -1,6 +1,6 @@
 import commonStyles from '@/shared/styles/common.module.css';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReport } from '../api/useReport';
@@ -22,9 +22,11 @@ export const Page: React.FC = () => {
       />
 
       {isLoading && (
-        <div className={commonStyles.loaderContainer}>
-          <VLoader size={28} />
-        </div>
+        <>
+          <VSkeletonCard compact delay="0s" />
+          <VSkeletonCard compact delay="0.06s" />
+          <VSkeletonCard compact delay="0.12s" lines={2} />
+        </>
       )}
 
       {!isLoading && (error || !report) && (

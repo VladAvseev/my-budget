@@ -3,7 +3,8 @@ import { signedOperationAmount, type OperationType } from '@/shared/api/types/do
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
+import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useCategories } from '../api/useCategories';
@@ -52,14 +53,21 @@ export const SavingsOperationsList = () => {
 
   return (
     <div className={styles.root}>
-      {operationsQuery.error && (
+      {operationsQuery.error && operationsQuery.data == null && (
+        <VErrorCard
+          title="Не удалось загрузить накопления"
+          error={operationsQuery.error}
+          onRetry={() => void operationsQuery.refetch()}
+          isRetrying={operationsQuery.isFetching}
+        />
+      )}
+
+      {operationsQuery.error && operationsQuery.data != null && (
         <VBanner type="error" visible message="Не удалось загрузить накопления" />
       )}
 
       {operationsQuery.isLoading && (
-        <div className={styles.loaderWrap}>
-          <VLoader size={28} />
-        </div>
+        <VSkeletonList count={3} cardProps={{ compact: true, title: false, lines: 2 }} />
       )}
 
       {!operationsQuery.isLoading && !operationsQuery.error && operations.length === 0 && (

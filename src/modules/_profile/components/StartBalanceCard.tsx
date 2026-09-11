@@ -3,7 +3,8 @@ import { CURRENCIES, QUICK_CURRENCIES } from '@/shared/constants/currencies';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
+import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VSelect } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import commonStyles from '@/shared/styles/common.module.css';
@@ -13,7 +14,7 @@ import { useUpdateCurrency } from '../api/useUpdateCurrency';
 import { useUpdateStartBalance } from '../api/useUpdateStartBalance';
 
 export const StartBalanceCard = () => {
-  const { data: profile, isLoading } = useProfile();
+  const { data: profile, isLoading, error, refetch, isFetching } = useProfile();
   const updateCurrency = useUpdateCurrency();
 
   const currencyOptions = CURRENCIES.filter((c) =>
@@ -37,9 +38,26 @@ export const StartBalanceCard = () => {
         />
 
         {isLoading && (
-          <div className={commonStyles.loaderContainer}>
-            <VLoader size={28} />
+          <div className={commonStyles.formRow} aria-busy="true">
+            <div className={commonStyles.flex1}>
+              <VSkeleton width={120} height={14} />
+              <VSkeleton
+                height={38}
+                radius="var(--radius-m)"
+                style={{ marginTop: 'var(--space-xs)' }}
+              />
+            </div>
+            <VSkeleton width={120} height={38} radius="var(--radius-m)" />
           </div>
+        )}
+
+        {error && profile == null && (
+          <VErrorCard
+            title="Не удалось загрузить профиль"
+            error={error}
+            onRetry={() => void refetch()}
+            isRetrying={isFetching}
+          />
         )}
 
         {!isLoading && profile && (

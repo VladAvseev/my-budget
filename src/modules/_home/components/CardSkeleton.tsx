@@ -1,19 +1,10 @@
-import { VCard } from '@/shared/ui/VCard';
+import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import styles from '../homeCard.module.css';
 
 /**
- * Скелетон карточки главной: те же габариты, что у loadingCard, —
+ * Скелетон карточки главной: те же габариты, что у обычных карточек, —
  * при приходе данных карточки не «прыгают».
  */
 export const CardSkeleton = ({ delay }: { delay?: string }) => (
-  <VCard
-    className={`${styles.skeletonCard} ${styles.animateCard}`}
-    style={delay ? { animationDelay: delay } : undefined}
-    aria-busy="true"
-  >
-    <span className={`${styles.skeletonLine} ${styles.skeletonLineTitle}`} />
-    <span className={styles.skeletonLine} />
-    <span className={styles.skeletonLine} />
-    <span className={`${styles.skeletonLine} ${styles.skeletonLineShort}`} />
-  </VCard>
+  <VSkeletonCard delay={delay} className={styles.skeletonCard} />
 );

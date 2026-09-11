@@ -82,6 +82,12 @@
   padding: var(--space-xl);
 }
 
+.skeletonRows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
 .dangerZone {
   border: 1px solid var(--color-error);
   background-color: var(--color-error-bg);

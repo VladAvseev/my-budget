@@ -1,7 +1,7 @@
 import { SettingsIcon } from '@/shared/icons';
 import commonStyles from '@/shared/styles/common.module.css';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeletonCard, VSkeletonList } from '@/shared/ui/VSkeleton';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { useAtom } from 'jotai';
@@ -13,6 +13,7 @@ import { SummaryCards } from './components/SummaryCards';
 import { OperationsTabs } from './components/OperationsTabs';
 import { CreateOperationModal } from './components/CreateOperationModal';
 import { EditOperationModal } from './components/EditOperationModal';
+import styles from './pageSkeleton.module.css';
 
 export const Page: React.FC = () => {
   const navigate = useNavigate();
@@ -41,9 +42,14 @@ export const Page: React.FC = () => {
       </div>
 
       {isLoading && (
-        <div className={commonStyles.loaderContainer}>
-          <VLoader size={28} />
-        </div>
+        <>
+          <div className={styles.summaryGrid}>
+            {[0, 1, 2, 3].map((i) => (
+              <VSkeletonCard key={i} compact title={false} lines={2} delay={`${i * 0.05}s`} />
+            ))}
+          </div>
+          <VSkeletonList count={4} cardProps={{ compact: true, title: false, lines: 1 }} />
+        </>
       )}
 
       {!isLoading && (error || !report) && (

@@ -2,9 +2,10 @@ import { PlusIcon } from '@/shared/icons';
 import type { Report } from '@/shared/api/types/domain';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VHint } from '@/shared/ui/VHint';
 import { VIconButton } from '@/shared/ui/VIconButton';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { formatAmount, parseISO } from '@/shared/utils';
 import { useCurrency } from '@/shared/api/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
@@ -104,17 +105,24 @@ export const DailyOperationsTab = ({ report }: DailyOperationsTabProps) => {
         )}
       </div>
 
-      {operationsQuery.error && (
+      {operationsQuery.error && operationsQuery.data == null && (
+        <VErrorCard
+          title="Не удалось загрузить операции"
+          error={operationsQuery.error}
+          onRetry={() => void operationsQuery.refetch()}
+          isRetrying={operationsQuery.isFetching}
+        />
+      )}
+
+      {operationsQuery.error && operationsQuery.data != null && (
         <VBanner type="error" visible message="Не удалось загрузить операции" />
       )}
 
       {operationsQuery.isLoading && (
-        <div className={styles.loaderWrap}>
-          <VLoader size={28} />
-        </div>
+        <VSkeletonList count={5} cardProps={{ compact: true, title: false, lines: 2 }} />
       )}
 
-      {!operationsQuery.isLoading && operations.length === 0 && (
+      {!operationsQuery.isLoading && !operationsQuery.error && operations.length === 0 && (
         <VCard>
           <div className={styles.emptyState}>
             <div className={styles.emptyTitle}>

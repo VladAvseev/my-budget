@@ -6,8 +6,9 @@ import { VBanner } from '@/shared/ui/VBanner';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useState } from 'react';
 import { useCategories } from '../api/useCategories';
@@ -66,14 +67,21 @@ export const CategorySection = () => {
         </VIconButton>
       </div>
 
-      {categoriesQuery.error && (
+      {categoriesQuery.error && categoriesQuery.data == null && (
+        <VErrorCard
+          title="Не удалось загрузить категории"
+          error={categoriesQuery.error}
+          onRetry={() => void categoriesQuery.refetch()}
+          isRetrying={categoriesQuery.isFetching}
+        />
+      )}
+
+      {categoriesQuery.error && categoriesQuery.data != null && (
         <VBanner type="error" visible message="Не удалось загрузить категории" />
       )}
 
       {categoriesQuery.isLoading && (
-        <div className={commonStyles.loaderContainer}>
-          <VLoader size={28} />
-        </div>
+        <VSkeletonList count={5} cardProps={{ compact: true, title: false, lines: 1 }} />
       )}
 
       {!categoriesQuery.isLoading && !categoriesQuery.error && categories.length === 0 && (
