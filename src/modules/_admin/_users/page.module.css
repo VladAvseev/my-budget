@@ -63,6 +63,12 @@
   text-align: center;
 }
 
+/* VIconButton по умолчанию display: flex (блочный) и растягивается на всю ячейку,
+   из-за чего text-align не центрирует его. Возвращаем строчный уровень. */
+.actionCell > * {
+  display: inline-flex;
+}
+
 .empty {
   padding: var(--space-xl) var(--space-m);
   text-align: center;

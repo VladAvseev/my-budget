@@ -229,8 +229,12 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   const location = useLocation();
 
   useEffect(() => {
-    mainRef.current?.scrollTo(0, 0);
-  }, [location.pathname]);
+    if (isDesktop) {
+      mainRef.current?.scrollTo(0, 0);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [location.pathname, isDesktop]);
 
   const showCapital =
     formatAmount(capital, currency?.symbol) !== formatAmount(balance, currency?.symbol);
