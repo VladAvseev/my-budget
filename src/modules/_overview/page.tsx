@@ -1,4 +1,3 @@
-import type { Operation } from '@/shared/api/types/domain';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
@@ -14,7 +13,7 @@ import styles from './page.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useOverviewOperationsMap } from './api/useOverviewOperationsMap';
+import { useOverviewCategorySummary, type CategorySummaryRow } from './api/useOverviewCategorySummary';
 import { useReports } from './api/useReports';
 import {
   comparedReportIdAtom,
@@ -28,7 +27,7 @@ import { GrowthDynamicsCard } from './components/GrowthDynamicsCard';
 import { PeriodCompareSelect } from './components/PeriodCompareSelect';
 import { ReportsFilter } from './components/ReportsFilter';
 import { SummaryCard } from './components/SummaryCard';
-import { emptyAmounts, sumOperations } from '@/shared/utils';
+import { sumCategorySummary } from './utils/overview';
 
 const CURRENCY_OPTIONS: VButtonGroupOption[] = [
   { value: 'BYN', label: 'BYN' },
@@ -59,16 +58,16 @@ export const Page: React.FC = () => {
   const selectedReports = reports.filter((report) => selectedIds.includes(report.id));
 
   const {
-    data: operationsMap,
-    isLoading: operationsLoading,
-    error: operationsError,
-    refetch: refetchOperations,
-    isFetching: operationsFetching,
-  } = useOverviewOperationsMap(selectedReports.map((report) => report.id));
+    data: summaryMap,
+    isLoading: summaryLoading,
+    error: summaryError,
+    refetch: refetchSummary,
+    isFetching: summaryFetching,
+  } = useOverviewCategorySummary(selectedReports.map((report) => report.id));
 
-  const operationsByReport = useMemo(
-    () => operationsMap ?? new Map<string, Operation[]>(),
-    [operationsMap],
+  const summaryByReport = useMemo(
+    () => summaryMap ?? new Map<string, CategorySummaryRow[]>(),
+    [summaryMap],
   );
 
   const comparedReport = useMemo(
@@ -76,25 +75,15 @@ export const Page: React.FC = () => {
     [reports, comparedId],
   );
 
-  const { data: comparedOperationsMap, isLoading: comparedOperationsLoading } =
-    useOverviewOperationsMap(comparedReport ? [comparedReport.id] : []);
+  const { data: comparedSummaryMap, isLoading: comparedSummaryLoading } =
+    useOverviewCategorySummary(comparedReport ? [comparedReport.id] : []);
 
-  const comparedOperationsByReport = useMemo(
-    () => comparedOperationsMap ?? new Map<string, Operation[]>(),
-    [comparedOperationsMap],
+  const comparedSummaryByReport = useMemo(
+    () => comparedSummaryMap ?? new Map<string, CategorySummaryRow[]>(),
+    [comparedSummaryMap],
   );
 
-  const totals = useMemo(() => {
-    const total = { ...emptyAmounts };
-    for (const operations of operationsByReport.values()) {
-      const partial = sumOperations(operations);
-      total.income += partial.income;
-      total.expense += partial.expense;
-      total.savings += partial.savings;
-      total.daily += partial.daily;
-    }
-    return total;
-  }, [operationsByReport]);
+  const totals = useMemo(() => sumCategorySummary(summaryByReport), [summaryByReport]);
 
   const currencySwitcher = isCurrencyDisabled ? (
     <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
@@ -191,20 +180,20 @@ export const Page: React.FC = () => {
 
           {selectedReports.length > 0 && (
             <>
-              {operationsError && operationsMap == null && (
+              {summaryError && summaryMap == null && (
                 <VErrorCard
                   title="Не удалось загрузить операции"
-                  error={operationsError}
-                  onRetry={() => void refetchOperations()}
-                  isRetrying={operationsFetching}
+                  error={summaryError}
+                  onRetry={() => void refetchSummary()}
+                  isRetrying={summaryFetching}
                 />
               )}
 
-              {operationsError && operationsMap != null && (
+              {summaryError && summaryMap != null && (
                 <VBanner type="error" visible message="Не удалось загрузить операции" />
               )}
 
-              {operationsLoading ? (
+              {summaryLoading ? (
                 <>
                   <div className={styles.summaryGrid}>
                     {[0, 1, 2, 3].map((i) => (
@@ -231,17 +220,17 @@ export const Page: React.FC = () => {
                     />
                   </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
-                    <CategoryDistributionChart operationsByReport={operationsByReport} />
+                    <CategoryDistributionChart summaryByReport={summaryByReport} />
                   </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.15s' }}>
-                    <PeriodCompareSelect reports={reports} isLoading={comparedOperationsLoading} />
+                    <PeriodCompareSelect reports={reports} isLoading={comparedSummaryLoading} />
                   </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.18s' }}>
                     <CategoryBreakdown
                       reports={selectedReports}
-                      operationsByReport={operationsByReport}
-                      comparedReport={comparedOperationsMap ? comparedReport : null}
-                      comparedOperationsByReport={comparedOperationsByReport}
+                      summaryByReport={summaryByReport}
+                      comparedReport={comparedSummaryMap ? comparedReport : null}
+                      comparedSummaryByReport={comparedSummaryByReport}
                     />
                   </div>
                 </>

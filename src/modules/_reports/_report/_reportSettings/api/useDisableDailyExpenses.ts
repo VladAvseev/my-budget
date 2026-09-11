@@ -1,4 +1,4 @@
-import { invalidateHomeCaches } from '@/shared/api/hooks';
+import { capitalDynamicsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -28,7 +28,9 @@ export const useDisableDailyExpenses = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ['reports', id, 'summary'] });
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
       queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
-      queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
+      queryClient.invalidateQueries({ queryKey: ['overview', 'category-summary'] });
+      // удаление daily-операций меняет помесячную дельту капитала
+      queryClient.invalidateQueries({ queryKey: capitalDynamicsQueryKey, exact: true });
       invalidateHomeCaches(queryClient);
     },
   });

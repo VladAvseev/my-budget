@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useAccumulations, useProfile } from '@/shared/api/hooks';
+import { useAccumulationsTotal, useCapitalDynamics, useProfile } from '@/shared/api/hooks';
 import { convertAmount } from '@/shared/utils';
 import {
   aggregatePoints,
@@ -9,8 +9,6 @@ import {
 } from '@/shared/utils/chartPoints';
 import { VGrowthDynamicsCard } from '@/shared/ui/VGrowthDynamicsCard';
 import commonStyles from '@/shared/styles/common.module.css';
-import { useReports } from '../api/useReports';
-import { useOverviewOperationsMap } from '../api/useOverviewOperationsMap';
 import { buildCapitalChartData, type GrowthChartMode } from '../utils/buildCapitalChartData';
 import { buildGrowthStats } from '../utils/buildGrowthStats';
 
@@ -35,13 +33,9 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
 
   const { displayCurrency, defaultCurrency, rates, displaySymbol } = currency;
 
-  const reportsQuery = useReports(userId);
-  const accumulationsQuery = useAccumulations(userId);
+  const dynamicsQuery = useCapitalDynamics();
+  const accumulationsQuery = useAccumulationsTotal(userId);
   const profileQuery = useProfile();
-
-  const reports = reportsQuery.data ?? EMPTY_ARRAY;
-  const reportIds = useMemo(() => reports.map((r) => r.id), [reports]);
-  const operationsQuery = useOverviewOperationsMap(reportIds);
 
   const startBalance = useMemo(
     () => Number(profileQuery.data?.start_balance ?? 0) || 0,
@@ -49,22 +43,18 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
   );
 
   const isLoading =
-    reportsQuery.isLoading ||
-    accumulationsQuery.isLoading ||
-    profileQuery.isLoading ||
-    operationsQuery.isLoading;
+    dynamicsQuery.isLoading || accumulationsQuery.isLoading || profileQuery.isLoading;
 
   const rawChartData = useMemo(
     () =>
       isLoading
         ? []
         : buildCapitalChartData({
-            reports,
-            operationsByReport: operationsQuery.data ?? new Map(),
-            accumulations: accumulationsQuery.data ?? EMPTY_ARRAY,
+            months: dynamicsQuery.data ?? EMPTY_ARRAY,
+            accumulationsTotal: accumulationsQuery.total,
             startBalance,
           }),
-    [reports, operationsQuery.data, accumulationsQuery.data, startBalance, isLoading],
+    [dynamicsQuery.data, accumulationsQuery.total, startBalance, isLoading],
   );
 
   const convertedChartData = useMemo(() => {
@@ -75,13 +65,10 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
     }));
   }, [rawChartData, displayCurrency, rates, defaultCurrency]);
 
-  const rawBase = useMemo(() => {
-    const directTotal = (accumulationsQuery.data ?? EMPTY_ARRAY).reduce(
-      (sum, accumulation) => sum + (Number(accumulation.amount) || 0),
-      0,
-    );
-    return startBalance + directTotal;
-  }, [startBalance, accumulationsQuery.data]);
+  const rawBase = useMemo(
+    () => startBalance + accumulationsQuery.total,
+    [startBalance, accumulationsQuery.total],
+  );
 
   const base = useMemo(() => {
     if (!displayCurrency || !rates || !defaultCurrency) return rawBase;

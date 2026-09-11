@@ -1,10 +1,11 @@
 import type { Category } from '@/shared/api/types/domain';
 import {
   signedOperationAmount,
-  type Operation,
   type OperationType,
 } from '@/shared/api/types/domain';
 import type { Report } from '@/shared/api/types/domain';
+import { emptyAmounts, type OperationAmounts } from '@/shared/utils';
+import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
 
 export interface ChartSegment {
   key: string;
@@ -41,19 +42,38 @@ export interface CategoryGroup {
 
 const emptyReportBreakdown = new Map<string, number>();
 
+const signedSummaryAmount = (row: CategorySummaryRow): number =>
+  signedOperationAmount(row.type as OperationType, Number(row.amount) || 0);
+
+export const sumCategorySummary = (
+  summaryByReport: Map<string, CategorySummaryRow[]>,
+): OperationAmounts => {
+  const total = { ...emptyAmounts };
+  for (const rows of summaryByReport.values()) {
+    for (const row of rows) {
+      const type = row.type as OperationType;
+      const amount = Number(row.amount) || 0;
+      if (type === 'savings_out') {
+        total.savings -= amount;
+      } else if (type in total) {
+        total[type as keyof OperationAmounts] += amount;
+      }
+    }
+  }
+  return total;
+};
+
 export const buildReportGroups = (
   reports: Report[],
-  operationsByReport: Map<string, Operation[]>,
+  summaryByReport: Map<string, CategorySummaryRow[]>,
   typeFilter: OperationType[],
 ): ReportAmount[] => {
   const result: ReportAmount[] = [];
   for (const report of reports) {
-    const operations = operationsByReport.get(report.id) ?? [];
-    const amount = operations.reduce((sum, operation) => {
-      if (!typeFilter.includes(operation.type as OperationType)) return sum;
-      return (
-        sum + signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0)
-      );
+    const rows = summaryByReport.get(report.id) ?? [];
+    const amount = rows.reduce((sum, row) => {
+      if (!typeFilter.includes(row.type as OperationType)) return sum;
+      return sum + signedSummaryAmount(row);
     }, 0);
     if (amount !== 0) {
       result.push({ report, amount });
@@ -64,7 +84,7 @@ export const buildReportGroups = (
 
 export const buildCategoryGroups = (
   reports: Report[],
-  operationsByReport: Map<string, Operation[]>,
+  summaryByReport: Map<string, CategorySummaryRow[]>,
   categories: Category[],
   typeFilter: OperationType[],
 ): CategoryGroup[] => {
@@ -80,14 +100,10 @@ export const buildCategoryGroups = (
     byReportByKey.set(key, reportMap);
   };
 
-  for (const [reportId, operations] of operationsByReport) {
-    for (const operation of operations) {
-      if (!typeFilter.includes(operation.type as OperationType)) continue;
-      const amount = signedOperationAmount(
-        operation.type as OperationType,
-        Number(operation.amount) || 0,
-      );
-      add(operation.category_id ?? 'none', reportId, amount);
+  for (const [reportId, rows] of summaryByReport) {
+    for (const row of rows) {
+      if (!typeFilter.includes(row.type as OperationType)) continue;
+      add(row.category_id ?? 'none', reportId, signedSummaryAmount(row));
     }
   }
 
@@ -130,7 +146,7 @@ export const buildCategoryGroups = (
 };
 
 export const buildChartData = (
-  operationsByReport: Map<string, Operation[]>,
+  summaryByReport: Map<string, CategorySummaryRow[]>,
   typeFilter: OperationType[],
   categories: Category[],
   includeDailyAsSeparate: boolean,
@@ -143,26 +159,18 @@ export const buildChartData = (
     totalsByKey.set(key, (totalsByKey.get(key) ?? 0) + amount);
   };
 
-  for (const operations of operationsByReport.values()) {
-    for (const operation of operations) {
-      if (!typeFilter.includes(operation.type as OperationType)) continue;
-      const amount = signedOperationAmount(
-        operation.type as OperationType,
-        Number(operation.amount) || 0,
-      );
-      add(operation.category_id ?? 'none', amount);
+  for (const rows of summaryByReport.values()) {
+    for (const row of rows) {
+      if (!typeFilter.includes(row.type as OperationType)) continue;
+      add(row.category_id ?? 'none', signedSummaryAmount(row));
     }
   }
 
   if (includeDailyAsSeparate) {
-    for (const operations of operationsByReport.values()) {
-      for (const operation of operations) {
-        if (operation.type !== 'daily') continue;
-        const amount = signedOperationAmount(
-          operation.type as OperationType,
-          Number(operation.amount) || 0,
-        );
-        add('daily', amount);
+    for (const rows of summaryByReport.values()) {
+      for (const row of rows) {
+        if (row.type !== 'daily') continue;
+        add('daily', signedSummaryAmount(row));
       }
     }
   }

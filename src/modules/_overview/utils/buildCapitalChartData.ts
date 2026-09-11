@@ -1,5 +1,4 @@
-import type { Accumulation, Operation, Report } from '@/shared/api/types/domain';
-import { sumOperations } from '@/shared/utils/operations';
+import type { CapitalMonth } from '@/shared/api/hooks';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 
 export type GrowthChartMode = 'total' | 'period';
@@ -19,79 +18,51 @@ const MONTH_LABELS = [
   'Дек',
 ];
 
-const monthKey = (date: Date): string =>
-  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-
 const formatLabel = (date: Date): string =>
   `${MONTH_LABELS[date.getMonth()]} ${date.getFullYear()}`;
 
 const startOfMonth = (date: Date): Date => new Date(date.getFullYear(), date.getMonth(), 1);
 
-const addMonths = (date: Date, n: number): Date =>
-  new Date(date.getFullYear(), date.getMonth() + n, 1);
-
-const totalAccumulations = (accumulations: Accumulation[]): number =>
-  accumulations.reduce((sum, a) => sum + (Number(a.amount) || 0), 0);
+/** 'YYYY-MM' → первое число месяца в ЛОКАЛЬНОЙ зоне (без UTC-сдвига парсинга ISO). */
+const parseMonth = (month: string): Date | null => {
+  const [year, m] = month.split('-').map(Number);
+  if (!year || !m || m < 1 || m > 12) return null;
+  return new Date(year, m - 1, 1);
+};
 
 export interface BuildCapitalChartDataArgs {
-  reports: Report[];
-  operationsByReport: Map<string, Operation[]>;
-  accumulations: Accumulation[];
+  /** Помесячная дельта капитала из GET /reports/capital-dynamics (отсортирована по месяцам). */
+  months: CapitalMonth[];
+  accumulationsTotal: number;
   startBalance: number;
 }
 
 /**
- * Помесячная серия капитала: стартовый баланс + прямые накопления, далее
- * накопительный итог по доходам/расходам отчётов (за вычетом daily).
+ * Кумулятивный график капитала: база (стартовый баланс + прямые накопления) +
+ * нарастающий итог помесячной дельты (income - expense - daily). Месяцы-
+ * заполнители приходят с сервера, здесь остаётся только кумуляция и подписи.
  */
 export const buildCapitalChartData = ({
-  reports,
-  operationsByReport,
-  accumulations,
+  months,
+  accumulationsTotal,
   startBalance,
 }: BuildCapitalChartDataArgs): ChartPoint[] => {
-  if (reports.length === 0) return [];
-
-  const reportsAsc = [...reports].sort(
-    (a, b) => new Date(a.period_start).getTime() - new Date(b.period_start).getTime(),
-  );
-
   const now = startOfMonth(new Date());
-  const firstMonth = startOfMonth(new Date(reportsAsc[0].period_start));
-
-  const reportSummaries = new Map<string, ReturnType<typeof sumOperations>>();
-  for (const report of reportsAsc) {
-    const operations = operationsByReport.get(report.id) ?? [];
-    reportSummaries.set(monthKey(new Date(report.period_start)), sumOperations(operations));
-  }
+  const base = startBalance + accumulationsTotal;
 
   const points: ChartPoint[] = [];
   let cumulativeValue = 0;
-  const directTotal = totalAccumulations(accumulations);
 
-  let firstReportFound = false;
-  let cursor = firstMonth;
-  while (cursor <= now) {
-    const key = monthKey(cursor);
-    const summary = reportSummaries.get(key);
+  for (const entry of months) {
+    const cursor = parseMonth(entry.month);
+    if (!cursor || cursor > now) continue;
 
-    if (summary) {
-      if (!firstReportFound) {
-        cumulativeValue =
-          startBalance + directTotal + summary.income - summary.expense - summary.daily;
-        firstReportFound = true;
-      } else {
-        cumulativeValue += summary.income - summary.expense - summary.daily;
-      }
-    }
-
+    cumulativeValue += entry.delta;
     points.push({
-      month: new Date(cursor),
+      month: cursor,
       label: formatLabel(cursor),
-      value: firstReportFound ? cumulativeValue : startBalance + directTotal,
+      value: base + cumulativeValue,
     });
-
-    cursor = addMonths(cursor, 1);
   }
 
   return points;

@@ -1,4 +1,8 @@
-import { growthDynamicsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
+import {
+  capitalDynamicsQueryKey,
+  growthDynamicsQueryKey,
+  invalidateHomeCaches,
+} from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Report } from '@/shared/api/types/domain';
 import { trimStrings } from '@/shared/utils';
@@ -50,9 +54,10 @@ export const useUpdateReport = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
       queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
-      queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
+      queryClient.invalidateQueries({ queryKey: ['overview', 'category-summary'] });
       // сдвиг period_start перекладывает savings-операции между месяцами графика
       queryClient.invalidateQueries({ queryKey: growthDynamicsQueryKey, exact: true });
+      queryClient.invalidateQueries({ queryKey: capitalDynamicsQueryKey, exact: true });
       invalidateHomeCaches(queryClient);
     },
   });

@@ -24,6 +24,12 @@ export {
   type GrowthMonth,
   type UseGrowthDynamicsResponse,
 } from './useGrowthDynamics';
+export {
+  capitalDynamicsQueryKey,
+  useCapitalDynamics,
+  type CapitalMonth,
+  type UseCapitalDynamicsResponse,
+} from './useCapitalDynamics';
 export { useCapital } from './useCapital';
 export { useExchangeRates, type UseExchangeRatesResponse } from './useExchangeRates';
 export {

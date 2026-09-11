@@ -4,16 +4,14 @@ import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { formatAmount, convertAmount } from '@/shared/utils';
+import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
 import { useOverviewCategories } from '../api/useOverviewCategories';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import { buildChartData, type ChartData } from '../utils/overview';
 import styles from './CategoryDistributionChart.module.css';
 
 interface CategoryDistributionChartProps {
-  operationsByReport: Map<
-    string,
-    Array<{ type: string; amount: number; category_id: string | null }>
-  >;
+  summaryByReport: Map<string, CategorySummaryRow[]>;
 }
 
 const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: string }> = [
@@ -23,7 +21,7 @@ const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: strin
 ];
 
 export const CategoryDistributionChart = ({
-  operationsByReport,
+  summaryByReport,
 }: CategoryDistributionChartProps) => {
   const [selectedType, setSelectedType] = useState<'expense' | 'income' | 'savings'>('expense');
   const { displaySymbol, convertOptions } = useDisplayCurrency();
@@ -74,8 +72,8 @@ export const CategoryDistributionChart = ({
         break;
     }
 
-    return buildChartData(operationsByReport as any, typeFilter, categories, includeDaily);
-  }, [selectedType, operationsByReport, categories]);
+    return buildChartData(summaryByReport, typeFilter, categories, includeDaily);
+  }, [selectedType, summaryByReport, categories]);
 
   if (loading) {
     return (

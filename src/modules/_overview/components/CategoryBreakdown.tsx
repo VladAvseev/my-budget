@@ -1,4 +1,4 @@
-import type { Operation, OperationType } from '@/shared/api/types/domain';
+import type { OperationType } from '@/shared/api/types/domain';
 import type { Report } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VCard } from '@/shared/ui/VCard';
@@ -6,6 +6,7 @@ import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { Link } from 'react-router-dom';
+import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
 import { useOverviewCategories } from '../api/useOverviewCategories';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import { buildCategoryGroups, buildReportGroups, type ReportAmount } from '../utils/overview';
@@ -13,9 +14,9 @@ import styles from './CategoryBreakdown.module.css';
 
 interface CategoryBreakdownProps {
   reports: Report[];
-  operationsByReport: Map<string, Operation[]>;
+  summaryByReport: Map<string, CategorySummaryRow[]>;
   comparedReport: Report | null;
-  comparedOperationsByReport: Map<string, Operation[]>;
+  comparedSummaryByReport: Map<string, CategorySummaryRow[]>;
 }
 
 const EPSILON = 0.005;
@@ -35,9 +36,12 @@ const ReportLinkRow = ({ report, amount }: ReportAmount) => {
   );
 };
 
-const hasOperations = (operationsByReport: Map<string, Operation[]>, typeFilter: OperationType[]) =>
-  [...operationsByReport.values()].some((operations) =>
-    operations.some((operation) => typeFilter.includes(operation.type as OperationType)),
+const hasOperations = (
+  summaryByReport: Map<string, CategorySummaryRow[]>,
+  typeFilter: OperationType[],
+) =>
+  [...summaryByReport.values()].some((rows) =>
+    rows.some((row) => typeFilter.includes(row.type as OperationType)),
   );
 
 interface PeriodInfo {
@@ -97,9 +101,9 @@ const AccordionSummary = ({
 
 export const CategoryBreakdown = ({
   reports,
-  operationsByReport,
+  summaryByReport,
   comparedReport,
-  comparedOperationsByReport,
+  comparedSummaryByReport,
 }: CategoryBreakdownProps) => {
   const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
   const { displaySymbol, convertOptions } = useDisplayCurrency();
@@ -108,43 +112,43 @@ export const CategoryBreakdown = ({
   const incomesLoading = incomeCategories.isLoading;
   const savingsLoading = savingsCategories.isLoading;
 
-  const dailyGroups = buildReportGroups(reports, operationsByReport, ['daily']);
+  const dailyGroups = buildReportGroups(reports, summaryByReport, ['daily']);
   const expenseGroups = buildCategoryGroups(
     reports,
-    operationsByReport,
+    summaryByReport,
     expenseCategories.data ?? [],
     ['expense'],
   );
   const incomeGroups = buildCategoryGroups(
     reports,
-    operationsByReport,
+    summaryByReport,
     incomeCategories.data ?? [],
     ['income'],
   );
   const savingsGroups = buildCategoryGroups(
     reports,
-    operationsByReport,
+    summaryByReport,
     savingsCategories.data ?? [],
     ['savings', 'savings_out'],
   );
 
   const comparedReports = comparedReport ? [comparedReport] : [];
-  const comparedDaily = buildReportGroups(comparedReports, comparedOperationsByReport, ['daily']);
+  const comparedDaily = buildReportGroups(comparedReports, comparedSummaryByReport, ['daily']);
   const comparedExpenseGroups = buildCategoryGroups(
     comparedReports,
-    comparedOperationsByReport,
+    comparedSummaryByReport,
     expenseCategories.data ?? [],
     ['expense'],
   );
   const comparedIncomeGroups = buildCategoryGroups(
     comparedReports,
-    comparedOperationsByReport,
+    comparedSummaryByReport,
     incomeCategories.data ?? [],
     ['income'],
   );
   const comparedSavingsGroups = buildCategoryGroups(
     comparedReports,
-    comparedOperationsByReport,
+    comparedSummaryByReport,
     savingsCategories.data ?? [],
     ['savings', 'savings_out'],
   );
@@ -182,7 +186,7 @@ export const CategoryBreakdown = ({
     typeFilter: OperationType[],
     lowerIsBetter: boolean,
   ) => {
-    if (loading && hasOperations(operationsByReport, typeFilter)) {
+    if (loading && hasOperations(summaryByReport, typeFilter)) {
       return <VSkeletonList count={3} cardProps={{ compact: true, title: false, lines: 1 }} />;
     }
     if (groups.length === 0) {
@@ -236,7 +240,7 @@ export const CategoryBreakdown = ({
   const hasExpenseOrDaily =
     expenseGroups.length > 0 ||
     dailyGroups.length > 0 ||
-    hasOperations(operationsByReport, ['expense']);
+    hasOperations(summaryByReport, ['expense']);
 
   return (
     <div className={styles.root}>
@@ -281,7 +285,7 @@ export const CategoryBreakdown = ({
         </div>
       )}
 
-      {(incomeGroups.length > 0 || hasOperations(operationsByReport, ['income'])) && (
+      {(incomeGroups.length > 0 || hasOperations(summaryByReport, ['income'])) && (
         <div className={styles.section}>
           {sectionTitle(
             'Доходы',
@@ -299,7 +303,7 @@ export const CategoryBreakdown = ({
       )}
 
       {(savingsGroups.length > 0 ||
-        hasOperations(operationsByReport, ['savings', 'savings_out'])) && (
+        hasOperations(summaryByReport, ['savings', 'savings_out'])) && (
         <div className={styles.section}>
           {sectionTitle(
             'Накопления',

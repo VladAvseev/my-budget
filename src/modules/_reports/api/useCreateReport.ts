@@ -1,4 +1,8 @@
-import { growthDynamicsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
+import {
+  capitalDynamicsQueryKey,
+  growthDynamicsQueryKey,
+  invalidateHomeCaches,
+} from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Report } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
@@ -83,6 +87,7 @@ export const useCreateReport = () => {
       queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
       // новый более ранний период удлиняет ряд помесячной динамики роста
       queryClient.invalidateQueries({ queryKey: growthDynamicsQueryKey, exact: true });
+      queryClient.invalidateQueries({ queryKey: capitalDynamicsQueryKey, exact: true });
       invalidateHomeCaches(queryClient);
     },
   });
