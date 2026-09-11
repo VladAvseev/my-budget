@@ -28,4 +28,5 @@ export const useAdminStorageBreakdown = () =>
       api.get<UseAdminStorageBreakdownResponse>('/admin/dashboard/storage-breakdown', {
         signal,
       }),
+    staleTime: 5 * 60_000,
   });

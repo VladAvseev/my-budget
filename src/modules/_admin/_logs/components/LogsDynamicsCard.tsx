@@ -1,9 +1,14 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useAtom } from 'jotai';
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
-import type { AdminAudience, AdminChartMetric, AdminLogsBucket } from '@/shared/api/types/admin';
+import {
+  logsDynamicsAudienceAtom,
+  logsDynamicsBucketAtom,
+  logsDynamicsMetricAtom,
+} from '../atoms/logs';
 import { useAdminLogsDynamics } from '../api/useAdminLogsDynamics';
 import { buildLogsDynamics } from '../utils/buildLogsDynamicsData';
 import { buildLogsDynamicsStats } from '../utils/buildLogsDynamicsStats';
@@ -43,18 +48,24 @@ const Stat: React.FC<StatProps> = ({ label, value }) => (
 );
 
 export const LogsDynamicsCard = () => {
-  const [audience, setAudience] = useState<AdminAudience>('all');
-  const [metric, setMetric] = useState<AdminChartMetric>('count');
-  const [bucket, setBucket] = useState<AdminLogsBucket>('hour');
+  const [audience, setAudience] = useAtom(logsDynamicsAudienceAtom);
+  const [metric, setMetric] = useAtom(logsDynamicsMetricAtom);
+  const [bucket, setBucket] = useAtom(logsDynamicsBucketAtom);
   const dynamicsQuery = useAdminLogsDynamics({ audience, metric, bucket });
 
   const isLoading = dynamicsQuery.isLoading;
+  // keepPreviousData: на смене фильтра держим прошлый график приглушённым.
+  const isStale = dynamicsQuery.isPlaceholderData;
 
   const built = useMemo(
     () =>
       isLoading
         ? { chartData: [], total: 0 }
-        : buildLogsDynamics(dynamicsQuery.data?.points ?? [], bucket, dynamicsQuery.data?.total ?? 0),
+        : buildLogsDynamics(
+            dynamicsQuery.data?.points ?? [],
+            bucket,
+            dynamicsQuery.data?.total ?? 0,
+          ),
     [dynamicsQuery.data, bucket, isLoading],
   );
 
@@ -88,17 +99,13 @@ export const LogsDynamicsCard = () => {
           <VSkeleton width="100%" height={240} radius="var(--radius-m)" />
         </div>
       ) : (
-        <>
+        <div className={isStale ? styles.stale : undefined}>
           <div className={styles.stats}>
             <Stat label={avgLabel} value={formatMetric(stats.avgPerBucket)} />
             <Stat label={lastLabel} value={formatMetric(stats.lastBucket)} />
           </div>
-          <VGrowthChart
-            data={built.chartData}
-            color="var(--color-accent)"
-            formatValue={formatCount}
-          />
-        </>
+          <VGrowthChart data={built.chartData} color="var(--color-accent)" formatValue={formatCount} />
+        </div>
       )}
     </VCard>
   );

@@ -47,4 +47,5 @@ export const useAdminLogsMetrics = (period: UseAdminLogsMetricsRequest) =>
     queryKey: ['admin', 'logs', 'metrics', period],
     queryFn: ({ signal }) =>
       api.get<UseAdminLogsMetricsResponse>(`/admin/logs/metrics?period=${period}`, { signal }),
+    staleTime: 5 * 60_000,
   });

@@ -17,10 +17,10 @@ export const useDeleteAdminUser = () => {
       await api.del(`/admin/users/${userId}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
-      queryClient.invalidateQueries({ queryKey: ['admin', 'stats'] });
-      queryClient.invalidateQueries({ queryKey: ['admin', 'operationsDynamics'] });
-      queryClient.invalidateQueries({ queryKey: ['admin', 'storageBreakdown'] });
+      // Удаление пользователя меняет сводку дашборда, динамику операций,
+      // разбивку хранилища, таблицу пользователей и опции авторов в логах —
+      // инвалидируем всё дерево ['admin'] одним вызовом.
+      queryClient.invalidateQueries({ queryKey: ['admin'] });
     },
   });
 };

@@ -35,4 +35,5 @@ export const useAdminUsers = () =>
     queryKey: ['admin', 'users'],
     queryFn: async ({ signal }) =>
       (await api.get<UseAdminUsersResponse>('/admin/users', { signal })) ?? [],
+    staleTime: 5 * 60_000,
   });

@@ -1,14 +1,16 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useAtom } from 'jotai';
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
-import type {
-  AdminAudience,
-  AdminChartMetric,
-  AdminOperationsAggregation,
-} from '@/shared/api/types/admin';
 import { useAdminOperationsDynamics } from '../api/useAdminOperationsDynamics';
+import {
+  operationsAggregationAtom,
+  operationsAudienceAtom,
+  operationsMetricAtom,
+  operationsModeAtom,
+} from '../atoms/dynamics';
 import {
   buildOperationsDynamicsData,
   type DynamicsChartMode,
@@ -43,10 +45,10 @@ const metricOptions: VButtonGroupOption[] = [
 const formatCount = (v: number): string => Math.round(v).toLocaleString('ru-RU');
 
 export const OperationsDynamicsCard = () => {
-  const [mode, setMode] = useState<DynamicsChartMode>('cumulative');
-  const [aggregation, setAggregation] = useState<AdminOperationsAggregation>('D');
-  const [audience, setAudience] = useState<AdminAudience>('all');
-  const [metric, setMetric] = useState<AdminChartMetric>('count');
+  const [mode, setMode] = useAtom(operationsModeAtom);
+  const [aggregation, setAggregation] = useAtom(operationsAggregationAtom);
+  const [audience, setAudience] = useAtom(operationsAudienceAtom);
+  const [metric, setMetric] = useAtom(operationsMetricAtom);
 
   // Уникальных пользователей нельзя накопить суммой периодов, поэтому в этом
   // режиме график всегда показывает значения за период.
@@ -54,6 +56,9 @@ export const OperationsDynamicsCard = () => {
 
   const operationsQuery = useAdminOperationsDynamics({ audience, metric, aggregation });
   const isLoading = operationsQuery.isLoading;
+  // keepPreviousData: на смене фильтра показываем прошлый график, приглушая его
+  // до прихода нового, вместо мигания скелетоном.
+  const isStale = operationsQuery.isPlaceholderData;
 
   const chartData = useMemo(
     () =>
@@ -87,7 +92,9 @@ export const OperationsDynamicsCard = () => {
       <div className={styles.controls}>
         <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
         <VButtonGroup options={metricOptions} value={metric} onChange={setMetric} />
-        {metric === 'count' && <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />}
+        {metric === 'count' && (
+          <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />
+        )}
         <VButtonGroup
           options={aggregationOptions}
           value={aggregation}
@@ -95,18 +102,20 @@ export const OperationsDynamicsCard = () => {
         />
       </div>
 
-      <OperationsDynamicsStats stats={stats} />
+      <div className={isStale ? styles.stale : undefined}>
+        <OperationsDynamicsStats stats={stats} />
 
-      {isLoading ? (
-        <VSkeleton width="100%" height={280} radius="var(--radius-m)" />
-      ) : (
-        <VGrowthChart
-          data={chartData}
-          color={effectiveMode === 'cumulative' ? 'var(--color-success)' : 'var(--color-accent)'}
-          formatValue={formatCount}
-          showChange={effectiveMode === 'cumulative'}
-        />
-      )}
+        {isLoading ? (
+          <VSkeleton width="100%" height={280} radius="var(--radius-m)" />
+        ) : (
+          <VGrowthChart
+            data={chartData}
+            color={effectiveMode === 'cumulative' ? 'var(--color-success)' : 'var(--color-accent)'}
+            formatValue={formatCount}
+            showChange={effectiveMode === 'cumulative'}
+          />
+        )}
+      </div>
     </VCard>
   );
 };

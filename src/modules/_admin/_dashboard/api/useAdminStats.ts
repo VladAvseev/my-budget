@@ -54,4 +54,5 @@ export const useAdminStats = () =>
   useQuery<UseAdminStatsResponse>({
     queryKey: ['admin', 'stats'],
     queryFn: ({ signal }) => api.get<UseAdminStatsResponse>('/admin/dashboard/stats', { signal }),
+    staleTime: 5 * 60_000,
   });

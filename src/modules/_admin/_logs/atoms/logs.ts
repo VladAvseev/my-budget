@@ -4,10 +4,11 @@ import type {
   AdminLogsSortOrder,
   AdminLogsStatusFilter,
 } from '../api/useAdminLogs';
+import type { AdminAudience, AdminChartMetric, AdminLogsBucket } from '@/shared/api/types/admin';
 import { atom } from 'jotai';
 
 /** Фильтры вкладки «Логи»: персистировать не нужно — это сеансовый выбор. */
-export const logsPeriodAtom = atom<AdminLogsPeriod>('all');
+export const logsPeriodAtom = atom<AdminLogsPeriod>('30d');
 export const logsStatusAtom = atom<AdminLogsStatusFilter>('all');
 export const logsPageAtom = atom(1);
 
@@ -27,3 +28,11 @@ export const logsUserAtom = atom('');
  * пустой список — запросы любыми методами.
  */
 export const logsMethodsAtom = atom<string[]>([]);
+
+/**
+ * Фильтры графика динамики логов (карточка LogsDynamicsCard): в атомах, чтобы
+ * выбор переживал переход на другую вкладку и обратно.
+ */
+export const logsDynamicsAudienceAtom = atom<AdminAudience>('all');
+export const logsDynamicsMetricAtom = atom<AdminChartMetric>('count');
+export const logsDynamicsBucketAtom = atom<AdminLogsBucket>('hour');

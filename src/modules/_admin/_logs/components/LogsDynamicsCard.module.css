@@ -58,3 +58,9 @@
   flex-wrap: wrap;
   gap: var(--space-s) var(--space-l);
 }
+
+/* Прошлый график под keepPreviousData: приглушаем до прихода новых данных. */
+.stale {
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}

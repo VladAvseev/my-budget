@@ -8,7 +8,7 @@ import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { VMultiSelect, type VMultiSelectOption } from '@/shared/ui/VMultiSelect';
 import { useAtom } from 'jotai';
 import { Fragment, useMemo, useState } from 'react';
-import { useAdminUsers } from '../_users/api/useAdminUsers';
+import { useAdminUserOptions } from '../_users/api/useAdminUserOptions';
 import { LogsDynamicsCard } from './components/LogsDynamicsCard';
 import {
   ADMIN_LOGS_LIMIT,
@@ -152,6 +152,36 @@ const SortHeader: React.FC<SortHeaderProps> = ({ label, field, activeField, orde
   </th>
 );
 
+/** Скелетон таблицы логов: те же 7 колонок, что у реальной таблицы. */
+const LogsTableSkeleton: React.FC = () => (
+  <div className={styles.tableWrapper}>
+    <table className={styles.table}>
+      <thead>
+        <tr>
+          <th>Дата и время</th>
+          <th>Метод</th>
+          <th>Путь</th>
+          <th>Статус</th>
+          <th>Выполнение</th>
+          <th>Пользователь</th>
+          <th>IP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Array.from({ length: 10 }, (_, rowIndex) => (
+          <tr key={rowIndex}>
+            {Array.from({ length: 7 }, (_, cellIndex) => (
+              <td key={cellIndex}>
+                <VSkeleton height={14} width={cellIndex === 2 ? 220 : 70} />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
 export const Page: React.FC = () => {
   const [period, setPeriod] = useAtom(logsPeriodAtom);
   const [status, setStatus] = useAtom(logsStatusAtom);
@@ -172,13 +202,17 @@ export const Page: React.FC = () => {
     setPage(1);
   };
 
-  const usersQuery = useAdminUsers();
+  // Лёгкие id+email для селекта автора — без тяжёлых агрегатов GET /admin/users.
+  const optionsQuery = useAdminUserOptions();
   const userOptions = useMemo<VSelectOption[]>(
     () => [
       { value: LOG_USER_ANONYMOUS, label: 'Без авторизации' },
-      ...(usersQuery.data ?? []).map((row) => ({ value: row.user_id, label: row.email })),
+      ...(optionsQuery.data ?? []).map((option) => ({
+        value: option.userId,
+        label: option.email,
+      })),
     ],
-    [usersQuery.data],
+    [optionsQuery.data],
   );
 
   const metricsQuery = useAdminLogsMetrics(period as AdminLogsPeriod);
@@ -207,61 +241,6 @@ export const Page: React.FC = () => {
   const logs = logsQuery.data;
   const totalPages = logs ? Math.max(1, Math.ceil(logs.total / ADMIN_LOGS_LIMIT)) : 1;
 
-  if (metricsQuery.isLoading || logsQuery.isLoading) {
-    return (
-      <div className={commonStyles.page}>
-        <LogsDynamicsCard />
-        <div className={styles.metricsGrid} aria-busy="true">
-          {[0, 1, 2, 3, 4, 5].map((i) => (
-            <VCard key={i} className={styles.metricCard}>
-              <VSkeleton width={90} height={14} />
-              <VSkeleton width={56} height={24} />
-            </VCard>
-          ))}
-        </div>
-        <div className={styles.tableWrapper}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Дата и время</th>
-                <th>Метод</th>
-                <th>Путь</th>
-                <th>Статус</th>
-                <th>Выполнение</th>
-                <th>Пользователь</th>
-                <th>IP</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: 10 }, (_, rowIndex) => (
-                <tr key={rowIndex}>
-                  {Array.from({ length: 7 }, (_, cellIndex) => (
-                    <td key={cellIndex}>
-                      <VSkeleton height={14} width={cellIndex === 2 ? 220 : 70} />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
-  }
-
-  if (metricsQuery.isError || !metrics) {
-    return (
-      <div className={commonStyles.page}>
-        <VErrorCard
-          title="Не удалось загрузить метрики логов"
-          error={metricsQuery.error}
-          onRetry={() => void metricsQuery.refetch()}
-          isRetrying={metricsQuery.isFetching}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className={commonStyles.page}>
       <LogsDynamicsCard />
@@ -275,56 +254,76 @@ export const Page: React.FC = () => {
         />
       </div>
 
-      <div className={styles.metricsGrid}>
-        <MetricCard label="Запросов" value={formatNumber(metrics.total)} />
-        <MetricCard label="Успешных" value={formatNumber(metrics.successCount)} />
-        <MetricCard
-          label="Ошибок"
-          value={formatNumber(metrics.errorCount)}
-          isError={metrics.errorCount > 0}
+      {metricsQuery.isLoading ? (
+        <div className={styles.metricsGrid} aria-busy="true">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <VCard key={i} className={styles.metricCard}>
+              <VSkeleton width={90} height={14} />
+              <VSkeleton width={56} height={24} />
+            </VCard>
+          ))}
+        </div>
+      ) : metricsQuery.isError || !metrics ? (
+        <VErrorCard
+          title="Не удалось загрузить метрики логов"
+          error={metricsQuery.error}
+          onRetry={() => void metricsQuery.refetch()}
+          isRetrying={metricsQuery.isFetching}
         />
-        <MetricCard
-          label="Доля ошибок"
-          value={metrics.errorRate === null ? '—' : `${Math.round(metrics.errorRate * 100)}%`}
-        />
-        <MetricCard label="Ср. время" value={formatMetric(metrics.avgDurationMs, ' мс')} />
-        <MetricCard label="p95" value={formatMetric(metrics.p95DurationMs, ' мс')} />
-      </div>
-
-      {metrics.perPoint.length > 0 && (
-        <VCard className={styles.detailsBlock}>
-          <span className={styles.detailsTitle}>
-            Динамика {period === '24h' ? 'по часам' : 'по дням'} (всего / ошибок)
-          </span>
-          <div className={styles.tableWrapper}>
-            <table className={styles.seriesTable}>
-              <thead>
-                <tr>
-                  <th>Период</th>
-                  <th>Запросов</th>
-                  <th>Ошибок</th>
-                </tr>
-              </thead>
-              <tbody>
-                {metrics.perPoint.map((point) => (
-                  <tr key={point.point}>
-                    <td>{formatSeriesPoint(point.point, period === '24h')}</td>
-                    <td>{formatNumber(point.total)}</td>
-                    <td className={point.errors > 0 ? styles.errorText : undefined}>
-                      {formatNumber(point.errors)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      ) : (
+        <>
+          <div className={styles.metricsGrid}>
+            <MetricCard label="Запросов" value={formatNumber(metrics.total)} />
+            <MetricCard label="Успешных" value={formatNumber(metrics.successCount)} />
+            <MetricCard
+              label="Ошибок"
+              value={formatNumber(metrics.errorCount)}
+              isError={metrics.errorCount > 0}
+            />
+            <MetricCard
+              label="Доля ошибок"
+              value={metrics.errorRate === null ? '—' : `${Math.round(metrics.errorRate * 100)}%`}
+            />
+            <MetricCard label="Ср. время" value={formatMetric(metrics.avgDurationMs, ' мс')} />
+            <MetricCard label="p95" value={formatMetric(metrics.p95DurationMs, ' мс')} />
           </div>
-        </VCard>
-      )}
 
-      <div className={styles.twoCol}>
-        <EndpointList title="Самые медленные эндпоинты" items={metrics.topSlowestEndpoints} />
-        <EndpointList title="Больше всего ошибок" items={metrics.topErrorEndpoints} />
-      </div>
+          {metrics.perPoint.length > 0 && (
+            <VCard className={styles.detailsBlock}>
+              <span className={styles.detailsTitle}>
+                Динамика {period === '24h' ? 'по часам' : 'по дням'} (всего / ошибок)
+              </span>
+              <div className={styles.tableWrapper}>
+                <table className={styles.seriesTable}>
+                  <thead>
+                    <tr>
+                      <th>Период</th>
+                      <th>Запросов</th>
+                      <th>Ошибок</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {metrics.perPoint.map((point) => (
+                      <tr key={point.point}>
+                        <td>{formatSeriesPoint(point.point, period === '24h')}</td>
+                        <td>{formatNumber(point.total)}</td>
+                        <td className={point.errors > 0 ? styles.errorText : undefined}>
+                          {formatNumber(point.errors)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </VCard>
+          )}
+
+          <div className={styles.twoCol}>
+            <EndpointList title="Самые медленные эндпоинты" items={metrics.topSlowestEndpoints} />
+            <EndpointList title="Больше всего ошибок" items={metrics.topErrorEndpoints} />
+          </div>
+        </>
+      )}
 
       <div className={commonStyles.columnL}>
         <div className={styles.toolbar}>
@@ -361,7 +360,9 @@ export const Page: React.FC = () => {
           />
         </div>
 
-        {logsQuery.isError || !logs ? (
+        {logsQuery.isLoading ? (
+          <LogsTableSkeleton />
+        ) : logsQuery.isError || !logs ? (
           <VErrorCard
             title="Не удалось загрузить логи"
             error={logsQuery.error}

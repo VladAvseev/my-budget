@@ -74,6 +74,7 @@ export const useAdminLogs = ({
         { signal },
       ),
     placeholderData: keepPreviousData,
+    staleTime: 5 * 60_000,
   });
 
 export const ADMIN_LOGS_LIMIT = LIMIT;
