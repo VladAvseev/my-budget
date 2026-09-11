@@ -1,35 +1,47 @@
 import { api } from '@/shared/api/http';
-import type { AdminAudience } from '@/shared/api/types/admin';
+import type {
+  AdminAudience,
+  AdminChartMetric,
+  AdminChartPoint,
+  AdminLogsBucket,
+} from '@/shared/api/types/admin';
 import { useQuery } from '@tanstack/react-query';
-
-/** Одна точка графика динамики логов: непустой МСК-час. */
-export interface AdminLogsDynamicsPoint {
-  /** Начало МСК-часа как 'YYYY-MM-DDTHH:00:00' (wall-clock Москвы). */
-  hour: string;
-  count: number;
-}
 
 /** Ответ GET /admin/logs/dynamics. */
 export interface AdminLogsDynamics {
   audience: AdminAudience;
-  points: AdminLogsDynamicsPoint[];
+  metric: AdminChartMetric;
+  bucket: AdminLogsBucket;
+  points: AdminChartPoint[];
+  total: number;
 }
 
-/** Параметры GET /admin/logs/dynamics — query `audience`. */
-export type UseAdminLogsDynamicsRequest = AdminAudience;
+/** Параметры GET /admin/logs/dynamics. */
+export interface UseAdminLogsDynamicsRequest {
+  audience: AdminAudience;
+  metric: AdminChartMetric;
+  bucket: AdminLogsBucket;
+}
 
 /** Ответ GET /admin/logs/dynamics. */
 export type UseAdminLogsDynamicsResponse = AdminLogsDynamics;
 
 /**
- * GET /admin/logs/dynamics?audience=: непустые МСК-часы количества логов.
- * audience: 'all' — все авторы, 'users' — только роль 'user' (без админов).
+ * GET /admin/logs/dynamics?audience=&metric=&bucket=: непустые МСК-часы/сутки
+ * количества логов или уникальных авторов. Сервер считает выбранную метрику на
+ * выбранном бакете, поэтому уникальных пользователей нельзя агрегировать из
+ * часов на клиенте.
  */
-export const useAdminLogsDynamics = (audience: UseAdminLogsDynamicsRequest) =>
+export const useAdminLogsDynamics = ({
+  audience,
+  metric,
+  bucket,
+}: UseAdminLogsDynamicsRequest) =>
   useQuery<UseAdminLogsDynamicsResponse>({
-    queryKey: ['admin', 'logs', 'dynamics', audience],
+    queryKey: ['admin', 'logs', 'dynamics', audience, metric, bucket],
     queryFn: ({ signal }) =>
-      api.get<UseAdminLogsDynamicsResponse>(`/admin/logs/dynamics?audience=${audience}`, {
-        signal,
-      }),
+      api.get<UseAdminLogsDynamicsResponse>(
+        `/admin/logs/dynamics?${new URLSearchParams({ audience, metric, bucket })}`,
+        { signal },
+      ),
   });

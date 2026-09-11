@@ -3,12 +3,15 @@ import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
-import type { AdminAudience } from '@/shared/api/types/admin';
+import type {
+  AdminAudience,
+  AdminChartMetric,
+  AdminOperationsAggregation,
+} from '@/shared/api/types/admin';
 import { useAdminOperationsDynamics } from '../api/useAdminOperationsDynamics';
 import {
   buildOperationsDynamicsData,
   type DynamicsChartMode,
-  type DynamicsAggregation,
 } from '../utils/buildOperationsDynamicsData';
 import { buildOperationsDynamicsStats } from '../utils/buildOperationsDynamicsStats';
 import { OperationsDynamicsStats } from './OperationsDynamicsStats';
@@ -31,14 +34,25 @@ const audienceOptions: VButtonGroupOption[] = [
   { value: 'users', label: 'Пользователи' },
 ];
 
+// Метрика графика: количество операций или уникальные авторы.
+const metricOptions: VButtonGroupOption[] = [
+  { value: 'count', label: 'Количество' },
+  { value: 'unique_users', label: 'Уникальные' },
+];
+
 const formatCount = (v: number): string => Math.round(v).toLocaleString('ru-RU');
 
 export const OperationsDynamicsCard = () => {
   const [mode, setMode] = useState<DynamicsChartMode>('cumulative');
-  const [aggregation, setAggregation] = useState<DynamicsAggregation>('D');
+  const [aggregation, setAggregation] = useState<AdminOperationsAggregation>('D');
   const [audience, setAudience] = useState<AdminAudience>('all');
-  const operationsQuery = useAdminOperationsDynamics(audience);
+  const [metric, setMetric] = useState<AdminChartMetric>('count');
 
+  // Уникальных пользователей нельзя накопить суммой периодов, поэтому в этом
+  // режиме график всегда показывает значения за период.
+  const effectiveMode: DynamicsChartMode = metric === 'unique_users' ? 'period' : mode;
+
+  const operationsQuery = useAdminOperationsDynamics({ audience, metric, aggregation });
   const isLoading = operationsQuery.isLoading;
 
   const chartData = useMemo(
@@ -46,33 +60,39 @@ export const OperationsDynamicsCard = () => {
       isLoading
         ? []
         : buildOperationsDynamicsData({
-            daily: operationsQuery.data ?? [],
+            points: operationsQuery.data?.points ?? [],
             aggregation,
-            mode,
+            mode: effectiveMode,
+            metric,
           }),
-    [operationsQuery.data, aggregation, mode, isLoading],
+    [operationsQuery.data, aggregation, effectiveMode, metric, isLoading],
   );
 
-  const totalOperations = useMemo(
-    () => (operationsQuery.data ?? []).reduce((sum, row) => sum + row.operations_count, 0),
-    [operationsQuery.data],
-  );
+  const totalOperations = operationsQuery.data?.total ?? 0;
 
   const stats = useMemo(
-    () => buildOperationsDynamicsStats(chartData, aggregation, mode),
-    [chartData, aggregation, mode],
+    () => buildOperationsDynamicsStats(chartData, aggregation, effectiveMode, metric),
+    [chartData, aggregation, effectiveMode, metric],
   );
+
+  const title =
+    metric === 'unique_users' ? 'Рост уникальных пользователей' : 'Рост количества операций';
 
   return (
     <VCard className={styles.card}>
       <div className={styles.header}>
-        <div className={styles.title}>Рост количества операций</div>
+        <div className={styles.title}>{title}</div>
         {!isLoading && <span className={styles.total}>Всего: {totalOperations}</span>}
       </div>
       <div className={styles.controls}>
         <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
-        <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />
-        <VButtonGroup options={aggregationOptions} value={aggregation} onChange={setAggregation} />
+        <VButtonGroup options={metricOptions} value={metric} onChange={setMetric} />
+        {metric === 'count' && <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />}
+        <VButtonGroup
+          options={aggregationOptions}
+          value={aggregation}
+          onChange={setAggregation}
+        />
       </div>
 
       <OperationsDynamicsStats stats={stats} />
@@ -82,9 +102,9 @@ export const OperationsDynamicsCard = () => {
       ) : (
         <VGrowthChart
           data={chartData}
-          color={mode === 'cumulative' ? 'var(--color-success)' : 'var(--color-accent)'}
+          color={effectiveMode === 'cumulative' ? 'var(--color-success)' : 'var(--color-accent)'}
           formatValue={formatCount}
-          showChange={mode === 'cumulative'}
+          showChange={effectiveMode === 'cumulative'}
         />
       )}
     </VCard>

@@ -1,31 +1,52 @@
 import { api } from '@/shared/api/http';
-import type { AdminAudience } from '@/shared/api/types/admin';
+import type {
+  AdminAudience,
+  AdminChartMetric,
+  AdminChartPoint,
+  AdminOperationsAggregation,
+} from '@/shared/api/types/admin';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- * GET /admin/dashboard/operations-dynamics?audience=:
- * [{ day, operations_count }] — сутки по московскому времени.
+ * GET /admin/dashboard/operations-dynamics?audience=&metric=&aggregation=:
+ * сервер группирует операции по МСК-периодам и считает выбранную метрику.
  * audience: 'all' — все операции, 'users' — только пользователей (без админов).
+ * metric: 'count' — количество операций, 'unique_users' — уникальные авторы.
  */
 
-/** Одна строка ответа (имена колонок SQL-запроса, серверный AdminDynamicsRow). */
-export interface AdminOperationsDynamicsRow {
-  day: string;
-  operations_count: number;
+/** Ответ GET /admin/dashboard/operations-dynamics. */
+export interface AdminOperationsDynamics {
+  audience: AdminAudience;
+  metric: AdminChartMetric;
+  aggregation: AdminOperationsAggregation;
+  points: AdminChartPoint[];
+  total: number;
 }
 
-/** Фильтр запроса — query `audience`. */
-export type UseAdminOperationsDynamicsRequest = AdminAudience;
+/** Параметры GET /admin/dashboard/operations-dynamics. */
+export interface UseAdminOperationsDynamicsRequest {
+  audience: AdminAudience;
+  metric: AdminChartMetric;
+  aggregation: AdminOperationsAggregation;
+}
 
 /** Ответ GET /admin/dashboard/operations-dynamics. */
-export type UseAdminOperationsDynamicsResponse = AdminOperationsDynamicsRow[];
+export type UseAdminOperationsDynamicsResponse = AdminOperationsDynamics;
 
-export const useAdminOperationsDynamics = (audience: AdminAudience = 'all') =>
+export const useAdminOperationsDynamics = ({
+  audience,
+  metric,
+  aggregation,
+}: UseAdminOperationsDynamicsRequest) =>
   useQuery<UseAdminOperationsDynamicsResponse>({
-    queryKey: ['admin', 'operationsDynamics', audience],
+    queryKey: ['admin', 'operationsDynamics', audience, metric, aggregation],
     queryFn: async ({ signal }) =>
       (await api.get<UseAdminOperationsDynamicsResponse>(
-        `/admin/dashboard/operations-dynamics?audience=${audience}`,
+        `/admin/dashboard/operations-dynamics?${new URLSearchParams({
+          audience,
+          metric,
+          aggregation,
+        })}`,
         { signal },
-      )) ?? [],
+      )) ?? { audience, metric, aggregation, points: [], total: 0 },
   });

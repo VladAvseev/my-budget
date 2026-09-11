@@ -3,9 +3,9 @@ import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
-import type { AdminAudience } from '@/shared/api/types/admin';
+import type { AdminAudience, AdminChartMetric, AdminLogsBucket } from '@/shared/api/types/admin';
 import { useAdminLogsDynamics } from '../api/useAdminLogsDynamics';
-import { buildLogsDynamics, type LogsBucket } from '../utils/buildLogsDynamicsData';
+import { buildLogsDynamics } from '../utils/buildLogsDynamicsData';
 import { buildLogsDynamicsStats } from '../utils/buildLogsDynamicsStats';
 import styles from './LogsDynamicsCard.module.css';
 
@@ -13,6 +13,12 @@ import styles from './LogsDynamicsCard.module.css';
 const audienceOptions: VButtonGroupOption[] = [
   { value: 'all', label: 'Все' },
   { value: 'users', label: 'Пользователи' },
+];
+
+// Метрика графика: количество логов или уникальные авторы.
+const metricOptions: VButtonGroupOption[] = [
+  { value: 'count', label: 'Количество' },
+  { value: 'unique_users', label: 'Уникальные' },
 ];
 
 // Гранулярность точек графика: группировка логов за час или за день.
@@ -38,36 +44,44 @@ const Stat: React.FC<StatProps> = ({ label, value }) => (
 
 export const LogsDynamicsCard = () => {
   const [audience, setAudience] = useState<AdminAudience>('all');
-  const [bucket, setBucket] = useState<LogsBucket>('hour');
-  const dynamicsQuery = useAdminLogsDynamics(audience);
+  const [metric, setMetric] = useState<AdminChartMetric>('count');
+  const [bucket, setBucket] = useState<AdminLogsBucket>('hour');
+  const dynamicsQuery = useAdminLogsDynamics({ audience, metric, bucket });
 
   const isLoading = dynamicsQuery.isLoading;
 
   const built = useMemo(
     () =>
       isLoading
-        ? { chartData: [], hourSeries: [], daySeries: [], total: 0 }
-        : buildLogsDynamics(dynamicsQuery.data?.points ?? [], bucket),
+        ? { chartData: [], total: 0 }
+        : buildLogsDynamics(dynamicsQuery.data?.points ?? [], bucket, dynamicsQuery.data?.total ?? 0),
     [dynamicsQuery.data, bucket, isLoading],
   );
 
   const stats = useMemo(() => buildLogsDynamicsStats(built), [built]);
 
+  const bucketLabel = bucket === 'hour' ? 'час' : 'сутки';
+  const uniquePrefix = metric === 'unique_users' ? 'Уникальных ' : '';
+  const avgLabel = `В среднем ${uniquePrefix}за ${bucketLabel}`;
+  const lastLabel = `${uniquePrefix}за последний ${bucket === 'hour' ? 'час' : 'день'}`;
+  const title = metric === 'unique_users' ? 'Динамика уникальных авторов' : 'Количество логов';
+
   return (
     <VCard className={styles.card}>
       <div className={styles.header}>
-        <div className={styles.title}>Количество логов</div>
+        <div className={styles.title}>{title}</div>
         {!isLoading && <span className={styles.total}>Всего: {formatCount(built.total)}</span>}
       </div>
       <div className={styles.controls}>
         <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
+        <VButtonGroup options={metricOptions} value={metric} onChange={setMetric} />
         <VButtonGroup options={bucketOptions} value={bucket} onChange={setBucket} />
       </div>
 
       {isLoading ? (
         <div className={styles.skeletonWrap}>
           <div className={styles.skeletonStats}>
-            {[0, 1, 2, 3].map((i) => (
+            {[0, 1].map((i) => (
               <VSkeleton key={i} width={180} height={18} />
             ))}
           </div>
@@ -76,10 +90,8 @@ export const LogsDynamicsCard = () => {
       ) : (
         <>
           <div className={styles.stats}>
-            <Stat label="В среднем за час" value={formatMetric(stats.avgPerHour)} />
-            <Stat label="В среднем за день" value={formatMetric(stats.avgPerDay)} />
-            <Stat label="За последний час" value={formatMetric(stats.lastHour)} />
-            <Stat label="За последний день" value={formatMetric(stats.lastDay)} />
+            <Stat label={avgLabel} value={formatMetric(stats.avgPerBucket)} />
+            <Stat label={lastLabel} value={formatMetric(stats.lastBucket)} />
           </div>
           <VGrowthChart
             data={built.chartData}

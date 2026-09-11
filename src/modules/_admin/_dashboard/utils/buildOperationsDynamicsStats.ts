@@ -1,3 +1,4 @@
+import type { AdminChartMetric } from '@/shared/api/types/admin';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 import { trimIncompletePeriod } from '@/shared/utils/chartPoints';
 import type { DynamicsAggregation, DynamicsChartMode } from './buildOperationsDynamicsData';
@@ -14,16 +15,30 @@ export interface DynamicsStats {
   lastPeriodLabel: string;
 }
 
-const AGGREGATION_LABELS: Record<DynamicsAggregation, string> = {
-  D: 'В день',
-  M: 'В месяц',
-  Y: 'В год',
+const AGGREGATION_LABELS: Record<AdminChartMetric, Record<DynamicsAggregation, string>> = {
+  count: {
+    D: 'В день',
+    M: 'В месяц',
+    Y: 'В год',
+  },
+  unique_users: {
+    D: 'Уникальных в день',
+    M: 'Уникальных в месяц',
+    Y: 'Уникальных в год',
+  },
 };
 
-const LAST_PERIOD_LABELS: Record<DynamicsAggregation, string> = {
-  D: 'За сегодня',
-  M: 'За текущий месяц',
-  Y: 'За текущий год',
+const LAST_PERIOD_LABELS: Record<AdminChartMetric, Record<DynamicsAggregation, string>> = {
+  count: {
+    D: 'За сегодня',
+    M: 'За текущий месяц',
+    Y: 'За текущий год',
+  },
+  unique_users: {
+    D: 'Уникальных за сегодня',
+    M: 'Уникальных за текущий месяц',
+    Y: 'Уникальных за текущий год',
+  },
 };
 
 const buildPeriodRate = (
@@ -73,6 +88,7 @@ export const buildOperationsDynamicsStats = (
   data: ChartPoint[],
   aggregation: DynamicsAggregation,
   mode: DynamicsChartMode,
+  metric: AdminChartMetric,
 ): DynamicsStats => {
   // Единственная точка — текущий незавершённый период: после обрезки серия
   // пуста, поэтому в качестве среднего показываем значение этой точки.
@@ -87,7 +103,7 @@ export const buildOperationsDynamicsStats = (
   return {
     periodRate,
     lastPeriod: buildLastPeriod(data, mode),
-    periodLabel: AGGREGATION_LABELS[aggregation],
-    lastPeriodLabel: LAST_PERIOD_LABELS[aggregation],
+    periodLabel: AGGREGATION_LABELS[metric][aggregation],
+    lastPeriodLabel: LAST_PERIOD_LABELS[metric][aggregation],
   };
 };

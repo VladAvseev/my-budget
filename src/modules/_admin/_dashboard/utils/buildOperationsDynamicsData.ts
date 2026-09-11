@@ -1,8 +1,12 @@
+import type {
+  AdminChartMetric,
+  AdminChartPoint,
+  AdminOperationsAggregation,
+} from '@/shared/api/types/admin';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
-import type { AdminOperationsDynamicsRow } from '../api/useAdminOperationsDynamics';
 
 export type DynamicsChartMode = 'cumulative' | 'period';
-export type DynamicsAggregation = 'D' | 'M' | 'Y';
+export type DynamicsAggregation = AdminOperationsAggregation;
 
 // Метки времени приводятся к московскому календарному дню. МСК = UTC+3,
 // переход на летнее время отменён с 2014 года, поэтому смещение постоянно.
@@ -22,14 +26,29 @@ export const moscowToday = (): Date => {
 const toSyntheticDay = (date: Date): Date =>
   new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
 
-// 'YYYY-MM-DD' разбирается напрямую в синтетическую дату, без привязки к
-// таймзоне браузера (SQL уже отдал московский календарный день).
-const parseDay = (day: string): Date | null => {
-  const parts = day.split('-');
-  if (parts.length !== 3) return null;
-  const [year, month, date] = parts.map(Number);
-  if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(date)) return null;
-  return new Date(Date.UTC(year, month - 1, date));
+const parseNumbers = (parts: string[], expected: number): number[] | null => {
+  if (parts.length !== expected) return null;
+  const numbers = parts.map(Number);
+  return numbers.every(Number.isFinite) ? numbers : null;
+};
+
+// Сервер отдаёт ключ периода в зависимости от aggregation: 'YYYY-MM-DD',
+// 'YYYY-MM' или 'YYYY'. Разбираем напрямую в синтетическую дату, без привязки
+// к таймзоне браузера (SQL уже считает границы в московском времени).
+const parsePeriod = (period: string, aggregation: DynamicsAggregation): Date | null => {
+  const parts = period.split('-');
+  if (aggregation === 'D') {
+    const [year, month, date] = parseNumbers(parts, 3) ?? [];
+    return year === undefined || month === undefined || date === undefined
+      ? null
+      : new Date(Date.UTC(year, month - 1, date));
+  }
+  if (aggregation === 'M') {
+    const [year, month] = parseNumbers(parts, 2) ?? [];
+    return year === undefined || month === undefined ? null : new Date(Date.UTC(year, month - 1, 1));
+  }
+  const [year] = parseNumbers(parts, 1) ?? [];
+  return year === undefined ? null : new Date(Date.UTC(year, 0, 1));
 };
 
 const MONTH_LABELS = [
@@ -95,44 +114,51 @@ const getNext = (date: Date, aggregation: DynamicsAggregation): Date => {
 };
 
 export interface BuildDynamicsDataArgs {
-  daily: AdminOperationsDynamicsRow[];
+  points: AdminChartPoint[];
   aggregation: DynamicsAggregation;
   mode: DynamicsChartMode;
+  metric: AdminChartMetric;
 }
 
 export const buildOperationsDynamicsData = ({
-  daily,
+  points,
   aggregation,
   mode,
+  metric,
 }: BuildDynamicsDataArgs): ChartPoint[] => {
-  if (daily.length === 0) return [];
+  if (points.length === 0) return [];
 
   const counts = new Map<string, number>();
-  let lastDay: Date | null = null;
+  let lastDate: Date | null = null;
 
-  for (const row of daily) {
-    const date = parseDay(row.day);
+  for (const row of points) {
+    const date = parsePeriod(row.period, aggregation);
     if (!date) continue;
     const key = getKey(date, aggregation);
-    counts.set(key, (counts.get(key) ?? 0) + row.operations_count);
-    if (!lastDay || date > lastDay) lastDay = date;
+    counts.set(key, (counts.get(key) ?? 0) + row.value);
+    if (!lastDate || date > lastDate) lastDate = date;
   }
 
-  if (!lastDay) return [];
+  if (!lastDate) return [];
 
   // Правый край доводим до сегодняшнего дня (или до последней даты, если данные
   // опережают «сегодня»): иначе накопительный итог расходится с общим
   // количеством операций в таблице.
   const today = moscowToday();
-  const now = lastDay > today ? lastDay : today;
+  const now = lastDate > today ? lastDate : today;
   // Левый край фиксирован — дата запуска: график и среднее роста всегда
   // считаются с 31.07.2026, даже если первые операции приходят позже (до
   // них серия идёт нулями). В будущее не уходим: если сегодня раньше
   // запуска, отсчитываем от сегодняшнего дня.
-  const launch = parseDay(DYNAMICS_START_DATE);
+  const launch = parsePeriod(DYNAMICS_START_DATE, 'D');
   const startDate = launch && launch < now ? launch : now;
 
-  const points: ChartPoint[] = [];
+  // Накопление имеет смысл только для count: уникальных пользователей за
+  // несколько периодов нельзя получить суммой точек, поэтому режим unique_users
+  // всегда остаётся «За период».
+  const cumulativeMode = mode === 'cumulative' && metric === 'count';
+
+  const chartPoints: ChartPoint[] = [];
   let cumulative = 0;
   let cursor = startDate;
 
@@ -141,14 +167,14 @@ export const buildOperationsDynamicsData = ({
     const count = counts.get(key) ?? 0;
     cumulative += count;
 
-    points.push({
+    chartPoints.push({
       month: toSyntheticDay(cursor),
       label: getLabel(cursor, aggregation),
-      value: mode === 'cumulative' ? cumulative : count,
+      value: cumulativeMode ? cumulative : count,
     });
 
     cursor = getNext(cursor, aggregation);
   }
 
-  return points;
+  return chartPoints;
 };
