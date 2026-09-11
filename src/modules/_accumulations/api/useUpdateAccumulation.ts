@@ -1,13 +1,14 @@
 import { api } from '@/shared/api/http';
 import type { Accumulation } from '@/shared/api/types/domain';
 import {
+  accumulationsQueryKey,
   accumulationsTotalQueryKey,
-  invalidateHomeCaches,
   type AccumulationsTotal,
 } from '@/shared/api/hooks';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { settleAccumulationMutation } from './cachePatches';
 
 const updateAccumulationMutationKey = ['updateAccumulation'] as const;
 
@@ -33,7 +34,7 @@ interface UpdateAccumulationBody {
 
 export const useUpdateAccumulation = (userId: string) => {
   const queryClient = useQueryClient();
-  const key = ['accumulations', userId];
+  const key = accumulationsQueryKey(userId);
   const totalKey = accumulationsTotalQueryKey(userId);
 
   return useMutation({
@@ -48,10 +49,10 @@ export const useUpdateAccumulation = (userId: string) => {
     onMutate: async ({ id, input }) => {
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];
       const previousTotal = queryClient.getQueryData<AccumulationsTotal>(totalKey);
+      const target = previous.find((item) => item.id === id) ?? null;
       const delta =
         input.amount !== undefined
-          ? (Number(input.amount) || 0) -
-            (Number(previous.find((item) => item.id === id)?.amount) || 0)
+          ? (Number(input.amount) || 0) - (Number(target?.amount) || 0)
           : 0;
 
       queryClient.setQueryData<Accumulation[]>(key, (items = []) =>
@@ -76,7 +77,7 @@ export const useUpdateAccumulation = (userId: string) => {
         }));
       }
 
-      return { previous, previousTotal, patchedTotal: delta !== 0 };
+      return { previous, previousTotal, patchedTotal: delta !== 0, target };
     },
     onError: (_error, _input, context) => {
       if (!context) return;
@@ -88,10 +89,13 @@ export const useUpdateAccumulation = (userId: string) => {
         queryClient.setQueryData(totalKey, context.previousTotal);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['accumulations', userId] });
-      queryClient.invalidateQueries({ queryKey: ['userSummary', userId] });
-      invalidateHomeCaches(queryClient);
+    // Тихий settle: серверная строка замещает оптимистичную правку; bootstrap — дельта
+    // previous → next (сумма/категория могли измениться).
+    onSuccess: (updated, _input, context) => {
+      settleAccumulationMutation(queryClient, userId, {
+        previous: context?.target ?? null,
+        next: updated,
+      });
     },
   });
 };

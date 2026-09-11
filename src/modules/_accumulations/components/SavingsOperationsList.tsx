@@ -1,5 +1,6 @@
 import { useAuth } from '@/shared/api/authProvider';
 import { signedOperationAmount, type OperationType } from '@/shared/api/types/domain';
+import { useMemo } from 'react';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -14,6 +15,8 @@ import { groupItemsByCategory } from '../utils/groupByCategory';
 import { SavingsOperationCard } from './SavingsOperationCard';
 import styles from './AccumulationsList.module.css';
 
+const EMPTY_ARRAY: never[] = [];
+
 export const SavingsOperationsList = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
@@ -21,23 +24,30 @@ export const SavingsOperationsList = () => {
   const categoriesQuery = useCategories(userId);
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 
-  const operations = operationsQuery.data ?? [];
-  const categories = categoriesQuery.data ?? [];
+  const operations = operationsQuery.data ?? EMPTY_ARRAY;
+  const categories = categoriesQuery.data ?? EMPTY_ARRAY;
 
-  const groups = groupItemsByCategory(operations, categories, (operation) => operation.category_id);
-  groups.sort((a, b) => {
-    const totalA = a.items.reduce(
-      (_sum, op) =>
-        _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
-      0,
+  const groups = useMemo(() => {
+    const result = groupItemsByCategory(
+      operations,
+      categories,
+      (operation) => operation.category_id,
     );
-    const totalB = b.items.reduce(
-      (_sum, op) =>
-        _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
-      0,
-    );
-    return totalB - totalA;
-  });
+    result.sort((a, b) => {
+      const totalA = a.items.reduce(
+        (_sum, op) =>
+          _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+        0,
+      );
+      const totalB = b.items.reduce(
+        (_sum, op) =>
+          _sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
+        0,
+      );
+      return totalB - totalA;
+    });
+    return result;
+  }, [operations, categories]);
 
   const renderCard = (operation: (typeof operations)[number]) => (
     <SavingsOperationCard

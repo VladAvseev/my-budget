@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
-import { useAccumulations, useProfile } from '@/shared/api/hooks';
-import { useReports } from '../api/useReports';
-import { useOverviewOperationsMap } from '../api/useOverviewOperationsMap';
+import { useAccumulations, useGrowthDynamics } from '@/shared/api/hooks';
 import { getPeriodEnd, trimIncompletePeriod } from '@/shared/utils/chartPoints';
 import { buildGrowthChartData } from '../utils/buildGrowthChartData';
 import {
@@ -16,29 +14,19 @@ const EMPTY_ARRAY: never[] = [];
  * Средний прирост накоплений в месяц — по последним 12 завершённым месяцам
  * (то же значение, что строка «В месяц (за последний год)» графика роста
  * накоплений); если завершённых месяцев не больше 12 — общее среднее.
- * Использует общие query-ключи с карточкой графика: данные берутся из кэша.
+ * Данные — из кэша общих ключей карточки графика (динамика + накопления).
  */
 export const useAverageMonthlyGrowth = (userId: string): number | null => {
-  const reportsQuery = useReports();
+  const dynamicsQuery = useGrowthDynamics();
   const accumulationsQuery = useAccumulations(userId);
-  const profileQuery = useProfile();
 
-  const reports = reportsQuery.data ?? EMPTY_ARRAY;
-  const reportIds = useMemo(() => reports.map((r) => r.id), [reports]);
-  const operationsQuery = useOverviewOperationsMap(reportIds);
-
-  const isLoading =
-    reportsQuery.isLoading ||
-    accumulationsQuery.isLoading ||
-    profileQuery.isLoading ||
-    operationsQuery.isLoading;
+  const isLoading = dynamicsQuery.isLoading || accumulationsQuery.isLoading;
 
   return useMemo(() => {
     if (isLoading) return null;
 
     const rawChartData = buildGrowthChartData({
-      reports,
-      operationsByReport: operationsQuery.data ?? new Map(),
+      months: dynamicsQuery.data ?? EMPTY_ARRAY,
       accumulations: accumulationsQuery.data ?? EMPTY_ARRAY,
       period: 'all',
     });
@@ -46,5 +34,5 @@ export const useAverageMonthlyGrowth = (userId: string): number | null => {
     const completed = trimIncompletePeriod(rawChartData, getPeriodEnd('M'), new Date());
     const windowed = buildWindowedMonthlyStats(completed, RECENT_WINDOW_MONTHS);
     return (windowed ?? buildMonthlyStats(completed))?.abs ?? null;
-  }, [isLoading, reports, operationsQuery.data, accumulationsQuery.data]);
+  }, [isLoading, dynamicsQuery.data, accumulationsQuery.data]);
 };

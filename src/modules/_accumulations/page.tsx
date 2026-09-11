@@ -13,7 +13,7 @@ import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import commonStyles from '@/shared/styles/common.module.css';
 import styles from './page.module.css';
 import { useAtom, useSetAtom } from 'jotai';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   accumulationModalAtom,
@@ -38,6 +38,9 @@ const CURRENCY_OPTIONS: VButtonGroupOption[] = [
   { value: 'RUB', label: 'RUB' },
   { value: 'USD', label: 'USD' },
 ];
+
+// Стабильная пустая ссылка: без неё data-выражения меняли бы identity каждый рендер.
+const EMPTY_ARRAY: never[] = [];
 
 export const Page: React.FC = () => {
   const navigate = useNavigate();
@@ -65,9 +68,9 @@ export const Page: React.FC = () => {
     }
   }, [defaultCurrency, setSelectedCurrency]);
 
-  const accumulations = accumulationsQuery.data ?? [];
-  const savings = savingsQuery.data ?? [];
-  const categories = categoriesQuery.data ?? [];
+  const accumulations = accumulationsQuery.data ?? EMPTY_ARRAY;
+  const savings = savingsQuery.data ?? EMPTY_ARRAY;
+  const categories = categoriesQuery.data ?? EMPTY_ARRAY;
 
   const structureLoading =
     accumulationsQuery.isLoading || savingsQuery.isLoading || categoriesQuery.isLoading;
@@ -84,16 +87,22 @@ export const Page: React.FC = () => {
     if (categoriesQuery.error) void categoriesQuery.refetch();
   };
 
-  const structureItems = [
-    ...accumulations.map((accumulation) => ({
-      categoryId: accumulation.category_id,
-      amount: Number(accumulation.amount) || 0,
-    })),
-    ...savings.map((operation) => ({
-      categoryId: operation.category_id,
-      amount: signedOperationAmount(operation.type as OperationType, Number(operation.amount) || 0),
-    })),
-  ];
+  const structureItems = useMemo(
+    () => [
+      ...accumulations.map((accumulation) => ({
+        categoryId: accumulation.category_id,
+        amount: Number(accumulation.amount) || 0,
+      })),
+      ...savings.map((operation) => ({
+        categoryId: operation.category_id,
+        amount: signedOperationAmount(
+          operation.type as OperationType,
+          Number(operation.amount) || 0,
+        ),
+      })),
+    ],
+    [accumulations, savings],
+  );
 
   const currencySwitcher = isCurrencyDisabled ? (
     <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">

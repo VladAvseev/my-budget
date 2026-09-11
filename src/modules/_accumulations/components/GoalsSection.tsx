@@ -29,6 +29,8 @@ import { useSavingsOperations } from '@/shared/api/hooks';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './GoalsSection.module.css';
 
+const EMPTY_ARRAY: never[] = [];
+
 const pluralYears = (years: number): string => {
   const mod10 = years % 10;
   const mod100 = years % 100;
@@ -76,13 +78,13 @@ export const GoalsSection = () => {
   const accumulationsQuery = useAccumulations(userId);
   const savingsQuery = useSavingsOperations(userId);
   const categoriesQuery = useCategories(userId);
-  const reportsQuery = useReports();
+  const reportsQuery = useReports(userId);
   const setGoalModal = useSetAtom(goalModalAtom);
   const { displaySymbol, convertOptions } = useDisplayCurrency();
   const avgMonthlyGrowth = useAverageMonthlyGrowth(userId);
 
   const goals = useMemo(() => goalsQuery.data ?? [], [goalsQuery.data]);
-  const categories = categoriesQuery.data ?? [];
+  const categories = useMemo(() => categoriesQuery.data ?? EMPTY_ARRAY, [categoriesQuery.data]);
 
   const progressList = useMemo(
     () =>
@@ -161,7 +163,10 @@ export const GoalsSection = () => {
     accumulationsQuery.isLoading ||
     savingsQuery.isLoading ||
     categoriesQuery.isLoading;
-  const categoryById = new Map(categories.map((category) => [category.id, category]));
+  const categoryById = useMemo(
+    () => new Map(categories.map((category) => [category.id, category])),
+    [categories],
+  );
 
   return (
     <div className={styles.root}>

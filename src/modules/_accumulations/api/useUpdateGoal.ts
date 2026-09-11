@@ -1,8 +1,9 @@
-import { goalsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
+import { goalsQueryKey } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Goal } from '@/shared/api/types/domain';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { settleGoalMutation } from './cachePatches';
 
 /** PATCH /goals/:id: сумма и/или целевая дата. */
 const updateGoalMutationKey = ['updateGoal'] as const;
@@ -40,6 +41,7 @@ export const useUpdateGoal = (userId: string) => {
     },
     onMutate: async ({ id, input }) => {
       const previous = queryClient.getQueryData<Goal[]>(key) ?? [];
+      const target = previous.find((item) => item.id === id) ?? null;
 
       queryClient.setQueryData<Goal[]>(key, (items = []) =>
         items.map((item) =>
@@ -54,15 +56,19 @@ export const useUpdateGoal = (userId: string) => {
         ),
       );
 
-      return { previous };
+      return { previous, target };
     },
     onError: (_error, _input, context) => {
       if (!context) return;
       queryClient.setQueryData(key, context.previous);
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['goals', userId] });
-      invalidateHomeCaches(queryClient);
+    // Тихий settle: серверная цель замещает оптимистичную правку, bootstrap.goals —
+    // upsert по categoryId. Refetch списка и bootstrap не нужен.
+    onSuccess: (goal, _input, context) => {
+      settleGoalMutation(queryClient, userId, {
+        previous: context?.target ?? null,
+        next: goal,
+      });
     },
   });
 };

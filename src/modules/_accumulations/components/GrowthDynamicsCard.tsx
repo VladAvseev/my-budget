@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useAccumulations, useProfile } from '@/shared/api/hooks';
+import { useAccumulations, useGrowthDynamics } from '@/shared/api/hooks';
 import { convertAmount } from '@/shared/utils';
 import {
   aggregatePoints,
@@ -8,8 +8,6 @@ import {
 } from '@/shared/utils/chartPoints';
 import { VGrowthDynamicsCard } from '@/shared/ui/VGrowthDynamicsCard';
 import commonStyles from '@/shared/styles/common.module.css';
-import { useReports } from '../api/useReports';
-import { useOverviewOperationsMap } from '../api/useOverviewOperationsMap';
 import { buildGrowthChartData, type GrowthChartMode } from '../utils/buildGrowthChartData';
 import { buildGrowthStats } from '../utils/buildGrowthStats';
 
@@ -34,31 +32,21 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
 
   const { displayCurrency, defaultCurrency, rates, displaySymbol } = currency;
 
-  const reportsQuery = useReports();
+  const dynamicsQuery = useGrowthDynamics();
   const accumulationsQuery = useAccumulations(userId);
-  const profileQuery = useProfile();
 
-  const reports = reportsQuery.data ?? EMPTY_ARRAY;
-  const reportIds = useMemo(() => reports.map((r) => r.id), [reports]);
-  const operationsQuery = useOverviewOperationsMap(reportIds);
-
-  const isLoading =
-    reportsQuery.isLoading ||
-    accumulationsQuery.isLoading ||
-    profileQuery.isLoading ||
-    operationsQuery.isLoading;
+  const isLoading = dynamicsQuery.isLoading || accumulationsQuery.isLoading;
 
   const rawChartData = useMemo(
     () =>
       isLoading
         ? []
         : buildGrowthChartData({
-            reports,
-            operationsByReport: operationsQuery.data ?? new Map(),
+            months: dynamicsQuery.data ?? EMPTY_ARRAY,
             accumulations: accumulationsQuery.data ?? EMPTY_ARRAY,
             period: 'all',
           }),
-    [reports, operationsQuery.data, accumulationsQuery.data, isLoading],
+    [dynamicsQuery.data, accumulationsQuery.data, isLoading],
   );
 
   const convertedChartData = useMemo(() => {

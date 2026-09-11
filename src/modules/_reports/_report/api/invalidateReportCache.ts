@@ -1,4 +1,4 @@
-import { invalidateHomeCaches } from '@/shared/api/hooks';
+import { growthDynamicsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
 import type { useQueryClient } from '@tanstack/react-query';
 
 export const invalidateReportCache = (
@@ -12,5 +12,8 @@ export const invalidateReportCache = (
   queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
   queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
   queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
+  // Помесячная динамика роста на странице накоплений считается сервером из
+  // savings/savings_out-операций отчётов — любые правки операций её двигают.
+  queryClient.invalidateQueries({ queryKey: growthDynamicsQueryKey, exact: true });
   invalidateHomeCaches(queryClient);
 };

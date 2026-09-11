@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai';
 import React, { useMemo } from 'react';
+import { useAuth } from '@/shared/api/authProvider';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { getErrorMessage } from '@/shared/utils';
 import {
@@ -45,6 +46,8 @@ const YEAR_OPTIONS: VSelectOption[] = Array.from({ length: MAX_YEAR - MIN_YEAR +
 });
 
 export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) => {
+  const { user } = useAuth();
+  const userId = user?.id ?? '';
   const [selectedMonth, setSelectedMonth] = useAtom(selectedMonthAtom);
   const [selectedYear, setSelectedYear] = useAtom(selectedYearAtom);
   const [hasDailyExpenses, setHasDailyExpenses] = useAtom(hasDailyExpensesAtom);
@@ -55,7 +58,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
   const [submitError, setSubmitError] = React.useState<string>();
 
   const create = useCreateReport();
-  const reportsQuery = useReports();
+  const reportsQuery = useReports(userId);
 
   const code = useMemo(() => buildCode(selectedMonth, selectedYear), [selectedMonth, selectedYear]);
   const name = useMemo(() => buildName(selectedMonth, selectedYear), [selectedMonth, selectedYear]);

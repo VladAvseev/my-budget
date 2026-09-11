@@ -18,6 +18,12 @@ export {
   type UseAccumulationsTotalResponse,
 } from './useAccumulations';
 export { goalsQueryKey, useGoals, type UseGoalsResponse } from './useGoals';
+export {
+  growthDynamicsQueryKey,
+  useGrowthDynamics,
+  type GrowthMonth,
+  type UseGrowthDynamicsResponse,
+} from './useGrowthDynamics';
 export { useCapital } from './useCapital';
 export { useExchangeRates, type UseExchangeRatesResponse } from './useExchangeRates';
 export {

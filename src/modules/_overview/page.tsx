@@ -41,7 +41,7 @@ export const Page: React.FC = () => {
   const { user } = useAuth();
   const { isDesktop } = useBreakpoint();
   const userId = user?.id ?? '';
-  const reportsQuery = useReports();
+  const reportsQuery = useReports(userId);
   const [selectedIds] = useAtom(selectedReportIdsAtom);
   const [comparedId] = useAtom(comparedReportIdAtom);
   const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);

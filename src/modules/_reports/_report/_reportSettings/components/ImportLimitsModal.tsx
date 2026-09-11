@@ -26,7 +26,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
   const userId = user?.id ?? '';
   const currency = useCurrency();
 
-  const reportsQuery = useReports();
+  const reportsQuery = useReports(userId);
   const categoriesQuery = useCategoriesByType(userId, 'expense');
   const setLimits = useSetCategoryLimits(report.id);
 

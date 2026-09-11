@@ -1,11 +1,12 @@
 import { api } from '@/shared/api/http';
 import type { Accumulation } from '@/shared/api/types/domain';
 import {
+  accumulationsQueryKey,
   accumulationsTotalQueryKey,
-  invalidateHomeCaches,
   type AccumulationsTotal,
 } from '@/shared/api/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { settleAccumulationMutation } from './cachePatches';
 
 const removeAccumulationMutationKey = ['removeAccumulation'] as const;
 
@@ -17,7 +18,7 @@ export type UseRemoveAccumulationResponse = void;
 
 export const useRemoveAccumulation = (userId: string) => {
   const queryClient = useQueryClient();
-  const key = ['accumulations', userId];
+  const key = accumulationsQueryKey(userId);
   const totalKey = accumulationsTotalQueryKey(userId);
 
   return useMutation({
@@ -28,7 +29,8 @@ export const useRemoveAccumulation = (userId: string) => {
     onMutate: async (id) => {
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];
       const previousTotal = queryClient.getQueryData<AccumulationsTotal>(totalKey);
-      const delta = -(Number(previous.find((item) => item.id === id)?.amount) || 0);
+      const target = previous.find((item) => item.id === id) ?? null;
+      const delta = -(Number(target?.amount) || 0);
 
       queryClient.setQueryData<Accumulation[]>(key, (items = []) =>
         items.filter((item) => item.id !== id),
@@ -40,7 +42,7 @@ export const useRemoveAccumulation = (userId: string) => {
         }));
       }
 
-      return { previous, previousTotal, patchedTotal: delta !== 0 };
+      return { previous, previousTotal, patchedTotal: delta !== 0, target };
     },
     onError: (_error, _id, context) => {
       if (!context) return;
@@ -52,10 +54,13 @@ export const useRemoveAccumulation = (userId: string) => {
         queryClient.setQueryData(totalKey, context.previousTotal);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['accumulations', userId] });
-      queryClient.invalidateQueries({ queryKey: ['userSummary', userId] });
-      invalidateHomeCaches(queryClient);
+    // Тихий settle: удаление уже отражено в оптимистике — остаётся убрать
+    // строку из bootstrap-дельты (onMutate bootstrap не трогает, только total).
+    onSuccess: (_data, _id, context) => {
+      settleAccumulationMutation(queryClient, userId, {
+        previous: context?.target ?? null,
+        next: null,
+      });
     },
   });
 };

@@ -1,5 +1,6 @@
 import { useAuth } from '@/shared/api/authProvider';
 import { useAccumulations } from '@/shared/api/hooks';
+import { useMemo } from 'react';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -13,6 +14,8 @@ import { groupItemsByCategory } from '../utils/groupByCategory';
 import { AccumulationCard } from './AccumulationCard';
 import styles from './AccumulationsList.module.css';
 
+const EMPTY_ARRAY: never[] = [];
+
 export const AccumulationsList = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
@@ -20,19 +23,22 @@ export const AccumulationsList = () => {
   const categoriesQuery = useCategories(userId);
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 
-  const accumulations = accumulationsQuery.data ?? [];
-  const categories = categoriesQuery.data ?? [];
+  const accumulations = accumulationsQuery.data ?? EMPTY_ARRAY;
+  const categories = categoriesQuery.data ?? EMPTY_ARRAY;
 
-  const groups = groupItemsByCategory(
-    accumulations,
-    categories,
-    (accumulation) => accumulation.category_id,
-  );
-  groups.sort((a, b) => {
-    const totalA = a.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-    const totalB = b.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-    return totalB - totalA;
-  });
+  const groups = useMemo(() => {
+    const result = groupItemsByCategory(
+      accumulations,
+      categories,
+      (accumulation) => accumulation.category_id,
+    );
+    result.sort((a, b) => {
+      const totalA = a.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+      const totalB = b.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+      return totalB - totalA;
+    });
+    return result;
+  }, [accumulations, categories]);
 
   return (
     <div className={styles.root}>

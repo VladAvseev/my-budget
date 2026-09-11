@@ -1,13 +1,14 @@
 import { api } from '@/shared/api/http';
 import type { Accumulation } from '@/shared/api/types/domain';
 import {
+  accumulationsQueryKey,
   accumulationsTotalQueryKey,
-  invalidateHomeCaches,
   type AccumulationsTotal,
 } from '@/shared/api/hooks';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { settleAccumulationMutation } from './cachePatches';
 
 const createAccumulationMutationKey = ['createAccumulation'] as const;
 
@@ -42,14 +43,15 @@ export const useCreateAccumulation = (userId: string) => {
       return api.post<UseCreateAccumulationResponse>('/accumulations', body);
     },
     onMutate: async (input) => {
-      const key = ['accumulations', userId];
+      const key = accumulationsQueryKey(userId);
       const totalKey = accumulationsTotalQueryKey(userId);
       const previous = queryClient.getQueryData<Accumulation[]>(key) ?? [];
       const previousTotal = queryClient.getQueryData<AccumulationsTotal>(totalKey);
 
       const now = new Date().toISOString();
+      const optimisticId = createOptimisticId();
       const optimistic: (typeof previous)[number] & OptimisticItem = {
-        id: createOptimisticId(),
+        id: optimisticId,
         user_id: userId,
         category_id: input.categoryId ?? null,
         description: input.description,
@@ -68,12 +70,12 @@ export const useCreateAccumulation = (userId: string) => {
         }));
       }
 
-      return { previous, previousTotal, patchedTotal: delta !== 0 };
+      return { previous, previousTotal, patchedTotal: delta !== 0, optimisticId };
     },
     onError: (_error, _input, context) => {
       if (!context) return;
       const totalKey = accumulationsTotalQueryKey(userId);
-      queryClient.setQueryData(['accumulations', userId], context.previous);
+      queryClient.setQueryData(accumulationsQueryKey(userId), context.previous);
       if (!context.patchedTotal) return;
       if (context.previousTotal === undefined) {
         queryClient.removeQueries({ queryKey: totalKey, exact: true });
@@ -81,10 +83,14 @@ export const useCreateAccumulation = (userId: string) => {
         queryClient.setQueryData(totalKey, context.previousTotal);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['accumulations', userId] });
-      queryClient.invalidateQueries({ queryKey: ['userSummary', userId] });
-      invalidateHomeCaches(queryClient);
+    // Тихий settle: optimistic-строка замещается серверной, total и bootstrap
+    // пересобираются на клиенте — refetch списка/суммы/главной не нужен.
+    onSuccess: (created, _input, context) => {
+      settleAccumulationMutation(queryClient, userId, {
+        previous: null,
+        next: created,
+        optimisticId: context?.optimisticId,
+      });
     },
   });
 };

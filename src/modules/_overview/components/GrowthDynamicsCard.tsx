@@ -35,7 +35,7 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
 
   const { displayCurrency, defaultCurrency, rates, displaySymbol } = currency;
 
-  const reportsQuery = useReports();
+  const reportsQuery = useReports(userId);
   const accumulationsQuery = useAccumulations(userId);
   const profileQuery = useProfile();
 

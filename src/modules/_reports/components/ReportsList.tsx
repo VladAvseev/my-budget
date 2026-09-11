@@ -1,4 +1,5 @@
 import { ChevronRightIcon, PlusIcon } from '@/shared/icons';
+import { useAuth } from '@/shared/api/authProvider';
 import commonStyles from '@/shared/styles/common.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
@@ -14,9 +15,11 @@ import { createModalOpenAtom, searchQueryAtom } from '../atoms/reports';
 import styles from './ReportsList.module.css';
 
 export const ReportsList = () => {
+  const { user } = useAuth();
+  const userId = user?.id ?? '';
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
   const [, setIsCreateOpen] = useAtom(createModalOpenAtom);
-  const { data, isLoading, error, refetch, isFetching } = useReports();
+  const { data, isLoading, error, refetch, isFetching } = useReports(userId);
 
   const reports = data ?? [];
   const filtered = searchQuery.trim()

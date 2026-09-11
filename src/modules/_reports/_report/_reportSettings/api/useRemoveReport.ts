@@ -1,4 +1,4 @@
-import { invalidateHomeCaches } from '@/shared/api/hooks';
+import { growthDynamicsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Report } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -40,6 +40,8 @@ export const useRemoveReport = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
       queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
       queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
+      // вместе с отчётом из динамики роста выпадают его savings-операции
+      queryClient.invalidateQueries({ queryKey: growthDynamicsQueryKey, exact: true });
       invalidateHomeCaches(queryClient);
     },
   });

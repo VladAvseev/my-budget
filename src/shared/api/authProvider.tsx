@@ -56,6 +56,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const {
       data: { subscription },
     } = authService.onAuthStateChange((_event, session) => {
+      // Выход/смерть сессии: сбрасываем весь кэш — ключи без userId
+      // (['bootstrap'], ['profile'] до ре-посева) иначе утекут в следующий аккаунт.
+      if (!session) queryClient.clear();
       setSession(session);
       setUser(session?.user ?? null);
       seedProfile(session?.user);

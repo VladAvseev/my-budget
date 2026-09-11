@@ -1,5 +1,5 @@
-import type { Accumulation, Operation, Report } from '@/shared/api/types/domain';
-import { sumOperations } from '@/shared/utils/operations';
+import type { Accumulation } from '@/shared/api/types/domain';
+import type { GrowthMonth } from '@/shared/api/hooks';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 
 export type GrowthChartMode = 'total' | 'period';
@@ -20,9 +20,6 @@ const MONTH_LABELS = [
   'Дек',
 ];
 
-const monthKey = (date: Date): string =>
-  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-
 const formatLabel = (date: Date): string =>
   `${MONTH_LABELS[date.getMonth()]} ${date.getFullYear()}`;
 
@@ -31,57 +28,49 @@ const startOfMonth = (date: Date): Date => new Date(date.getFullYear(), date.get
 const addMonths = (date: Date, n: number): Date =>
   new Date(date.getFullYear(), date.getMonth() + n, 1);
 
+/** 'YYYY-MM' → первая числа месяца в ЛОКАЛЬНОЙ зоне (без UTC-сдвига парсинга ISO). */
+const parseMonth = (month: string): Date | null => {
+  const [year, m] = month.split('-').map(Number);
+  if (!year || !m || m < 1 || m > 12) return null;
+  return new Date(year, m - 1, 1);
+};
+
 const totalAccumulations = (accumulations: Accumulation[]): number =>
   accumulations.reduce((sum, a) => sum + (Number(a.amount) || 0), 0);
 
 export interface BuildGrowthChartDataArgs {
-  reports: Report[];
-  operationsByReport: Map<string, Operation[]>;
+  /** Помесячный нетто-прирост из GET /accumulations/dynamics (отсортирован по месяцам). */
+  months: GrowthMonth[];
   accumulations: Accumulation[];
   period: GrowthPeriod;
 }
 
+/**
+ * Кумулятивный график роста: база прямых накоплений + нарастающий итог
+ * помесячного нетто-прироста. Месяцы-заполнители приходят с сервера, здесь
+ * остаётся только кумуляция, форматирование подписей и отсечение «год».
+ */
 export const buildGrowthChartData = ({
-  reports,
-  operationsByReport,
+  months,
   accumulations,
   period,
 }: BuildGrowthChartDataArgs): ChartPoint[] => {
-  if (reports.length === 0) return [];
-
-  const reportsAsc = [...reports].sort(
-    (a, b) => new Date(a.period_start).getTime() - new Date(b.period_start).getTime(),
-  );
-
   const now = startOfMonth(new Date());
-  const firstMonth = startOfMonth(new Date(reportsAsc[0].period_start));
-
-  const reportSummaries = new Map<string, ReturnType<typeof sumOperations>>();
-  for (const report of reportsAsc) {
-    const operations = operationsByReport.get(report.id) ?? [];
-    reportSummaries.set(monthKey(new Date(report.period_start)), sumOperations(operations));
-  }
+  const directTotal = totalAccumulations(accumulations);
 
   const points: ChartPoint[] = [];
   let cumulativeValue = 0;
-  const directTotal = totalAccumulations(accumulations);
 
-  let cursor = firstMonth;
-  while (cursor <= now) {
-    const key = monthKey(cursor);
-    const summary = reportSummaries.get(key);
+  for (const entry of months) {
+    const cursor = parseMonth(entry.month);
+    if (!cursor || cursor > now) continue;
 
-    if (summary) {
-      cumulativeValue += summary.savings;
-    }
-
+    cumulativeValue += entry.savings;
     points.push({
-      month: new Date(cursor),
+      month: cursor,
       label: formatLabel(cursor),
       value: directTotal + cumulativeValue,
     });
-
-    cursor = addMonths(cursor, 1);
   }
 
   if (period === 'all') return points;
