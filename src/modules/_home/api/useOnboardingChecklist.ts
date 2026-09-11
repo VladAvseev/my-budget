@@ -1,7 +1,4 @@
-import { useProfile } from '@/shared/api/hooks';
-import { useAuth } from '@/shared/api/authProvider';
-import { api } from '@/shared/api/http';
-import { useQuery } from '@tanstack/react-query';
+import { useBootstrap } from '@/shared/api/hooks';
 
 export interface OnboardingItem {
   id: string;
@@ -11,39 +8,18 @@ export interface OnboardingItem {
   done: boolean;
 }
 
-/** Ответ GET /users/me/onboarding — счётчики чек-листа (серверный OnboardingState). */
-export interface OnboardingState {
-  categories: number;
-  reports: number;
-  operations: number;
-}
-
-/** Данные внутреннего запроса счётчиков (пользователь — из JWT). */
-export type UseOnboardingCountsResponse = OnboardingState;
-
 /**
- * Чек-лист онбординга: счётчики из GET /users/me/onboarding + профиль из useProfile.
+ * Чек-лист онбординга из срезов GET /users/me/bootstrap (profile + onboarding):
+ * отдельного запроса на главной больше нет — данные приходят вместе
+ * с остальными цифрами одним bootstrap-ответом.
  */
+const EMPTY_ONBOARDING = { categories: 0, reports: 0, operations: 0 };
+
 export const useOnboardingChecklist = () => {
-  const { user } = useAuth();
-  const userId = user?.id ?? '';
+  const { data, isLoading, error } = useBootstrap();
 
-  const profileQuery = useProfile();
-
-  const countsQuery = useQuery<UseOnboardingCountsResponse>({
-    queryKey: ['onboardingCounts', userId],
-    enabled: Boolean(userId),
-    staleTime: 5 * 60 * 1000,
-    queryFn: async ({ signal }) =>
-      (await api.get<UseOnboardingCountsResponse>('/users/me/onboarding', { signal })) ?? {
-        categories: 0,
-        reports: 0,
-        operations: 0,
-      },
-  });
-
-  const profile = profileQuery.data ?? null;
-  const counts = countsQuery.data ?? { categories: 0, reports: 0, operations: 0 };
+  const profile = data?.profile ?? null;
+  const counts = data?.onboarding ?? EMPTY_ONBOARDING;
 
   const items: OnboardingItem[] = [
     {
@@ -81,7 +57,7 @@ export const useOnboardingChecklist = () => {
     nextItem: items.find((item) => !item.done) ?? null,
     allDone: items.every((item) => item.done),
     onboarded: profile?.onboarded ?? false,
-    isLoading: profileQuery.isLoading || countsQuery.isLoading,
-    error: profileQuery.error ?? countsQuery.error,
+    isLoading,
+    error,
   };
 };

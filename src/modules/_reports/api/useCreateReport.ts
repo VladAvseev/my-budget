@@ -1,3 +1,4 @@
+import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Report } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
@@ -81,6 +82,7 @@ export const useCreateReport = () => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

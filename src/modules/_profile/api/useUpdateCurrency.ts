@@ -1,5 +1,6 @@
 import { api } from '@/shared/api/http';
 import type { ApiUser } from '@/shared/api/http';
+import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -27,6 +28,7 @@ export const useUpdateCurrency = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

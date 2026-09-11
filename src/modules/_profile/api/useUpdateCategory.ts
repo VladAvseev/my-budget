@@ -1,5 +1,6 @@
 import { api } from '@/shared/api/http';
 import type { Category } from '@/shared/api/types/domain';
+import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -68,6 +69,7 @@ export const useUpdateCategory = (userId: string) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['categories', userId] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

@@ -1,28 +1,17 @@
 import { api } from '@/shared/api/http';
 import { useAuth } from '@/shared/api/authProvider';
 import type { ApiUser } from '@/shared/api/http';
+import { toProfile } from '@/shared/api/profileMapper';
 import type { Profile } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
 /**
  * Профиль пользователя: GET /users/me.
- * Сервер отдаёт camelCase PublicUser; здесь он адаптируется к прежнему
- * snake_case формату Profile, чтобы компоненты (AccountCard, StartBalanceCard,
- * онбординг) не менялись. Request нет — пользователь определяется по токену.
+ * Сервер отдаёт camelCase PublicUser; toProfile (profileMapper) адаптирует
+ * его к прежнему snake_case формату Profile. AuthProvider сеет этот кэш из
+ * сессии, поэтому на смонтированной странице запрос уходит в фон или не
+ * уходит вовсе. Request нет — пользователь определяется по токену.
  */
-const toProfile = (u: ApiUser): Profile => ({
-  user_id: u.id,
-  email: u.email,
-  // start_balance типизирован строкой — публичный API профиля уже привязан
-  // к Number(...) в UI.
-  start_balance: String(u.startBalance),
-  currency: u.currency,
-  onboarded: u.onboarded,
-  role: u.role,
-  last_active_at: u.lastActiveAt,
-  created_at: u.createdAt,
-  updated_at: u.updatedAt,
-});
 
 /** Данные хука: ответ GET /users/me, адаптированный к форме Profile. */
 export type UseProfileResponse = Profile | null;

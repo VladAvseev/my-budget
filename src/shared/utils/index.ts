@@ -17,6 +17,7 @@ export { trimStrings } from './trim';
 export {
   buildGoalForecast,
   buildGoalsOverallProgress,
+  buildGoalsOverallFromTotals,
   buildGoalsProgress,
   getCategorySavedTotal,
   type GoalForecast,

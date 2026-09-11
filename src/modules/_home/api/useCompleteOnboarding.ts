@@ -1,5 +1,6 @@
 import { api } from '@/shared/api/http';
 import type { ApiUser } from '@/shared/api/http';
+import { bootstrapQueryKey, type UseBootstrapResponse } from '@/shared/api/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -27,6 +28,10 @@ export const useCompleteOnboarding = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
+      // Онбординг-карточка скрывается сразу, без рефетча всей главной.
+      queryClient.setQueryData<UseBootstrapResponse>(bootstrapQueryKey, (prev) =>
+        prev ? { ...prev, profile: { ...prev.profile, onboarded: true } } : prev,
+      );
     },
   });
 };

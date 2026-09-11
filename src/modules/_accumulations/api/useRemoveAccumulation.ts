@@ -1,6 +1,10 @@
 import { api } from '@/shared/api/http';
 import type { Accumulation } from '@/shared/api/types/domain';
-import { accumulationsTotalQueryKey, type AccumulationsTotal } from '@/shared/api/hooks';
+import {
+  accumulationsTotalQueryKey,
+  invalidateHomeCaches,
+  type AccumulationsTotal,
+} from '@/shared/api/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const removeAccumulationMutationKey = ['removeAccumulation'] as const;
@@ -51,6 +55,7 @@ export const useRemoveAccumulation = (userId: string) => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['accumulations', userId] });
       queryClient.invalidateQueries({ queryKey: ['userSummary', userId] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

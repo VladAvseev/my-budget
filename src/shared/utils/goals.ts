@@ -67,6 +67,32 @@ export interface GoalsOverallProgress {
   percent: number;
 }
 
+/**
+ * Общий прогресс из уже агрегированных сумм по категориям (главная,
+ * bootstrap: сервер отдаёт savingsStructure и goals без вычислений).
+ * Формула вклада цели зеркалит buildGoalsOverallProgress
+ * (clamp(min=0, saved, target)) — при правке одной синхронизируйте другую.
+ */
+export const buildGoalsOverallFromTotals = (
+  goals: Array<{ categoryId: string; amount: number }>,
+  savedByCategory: ReadonlyMap<string, number>,
+): GoalsOverallProgress => {
+  let totalSaved = 0;
+  let totalTarget = 0;
+  for (const goal of goals) {
+    const target = Number(goal.amount) || 0;
+    const saved = savedByCategory.get(goal.categoryId) ?? 0;
+    totalSaved += Math.max(0, Math.min(saved, target));
+    totalTarget += target;
+  }
+  const rawPercent = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
+  return {
+    totalSaved,
+    totalTarget,
+    percent: Math.min(100, Math.max(0, Math.round(rawPercent))),
+  };
+};
+
 export const buildGoalsOverallProgress = (progress: GoalProgress[]): GoalsOverallProgress => {
   // Перевыполнение отдельной цели не увеличивает общий прогресс:
   // вклад цели ограничен её суммой (минимум 0 при отрицательных накоплениях).

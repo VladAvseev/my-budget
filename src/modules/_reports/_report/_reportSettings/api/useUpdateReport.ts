@@ -1,3 +1,4 @@
+import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Report } from '@/shared/api/types/domain';
 import { trimStrings } from '@/shared/utils';
@@ -50,6 +51,7 @@ export const useUpdateReport = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
       queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
       queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

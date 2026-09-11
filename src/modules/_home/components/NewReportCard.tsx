@@ -1,5 +1,5 @@
+import { useBootstrap } from '@/shared/api/hooks';
 import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
-import { useReports } from '../api/useReports';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { formatDisplay } from '@/shared/utils';
@@ -7,15 +7,14 @@ import { Link } from 'react-router-dom';
 import styles from '../homeCard.module.css';
 
 export const NewReportCard = () => {
-  const { data: reports = [], isLoading } = useReports();
+  const { data } = useBootstrap();
 
-  if (isLoading || reports.length === 0) return null;
+  // «Последний» — тот же отчёт, что в LastReportCard: максимум по period_end.
+  const lastReport = data?.lastReport ?? null;
+  const latestPeriodEnd = lastReport?.period_end ?? null;
 
-  const latestReport = reports.reduce((max, report) =>
-    new Date(report.period_end) > new Date(max.period_end) ? report : max,
-  );
+  if (!latestPeriodEnd) return null;
 
-  const latestPeriodEnd = latestReport.period_end;
   const isPeriodEnded = new Date() > new Date(latestPeriodEnd);
 
   if (!isPeriodEnded) return null;

@@ -1,4 +1,4 @@
-import { goalsQueryKey } from '@/shared/api/hooks';
+import { goalsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Goal } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -34,6 +34,7 @@ export const useRemoveGoal = (userId: string) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['goals', userId] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

@@ -1,5 +1,6 @@
 import { api } from '@/shared/api/http';
 import type { Category, CategoryType } from '@/shared/api/types/domain';
+import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { categoriesQueryKey } from './keys';
@@ -72,6 +73,7 @@ export const useCreateCategory = (userId: string) => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
       queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

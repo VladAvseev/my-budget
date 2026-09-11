@@ -1,6 +1,10 @@
 import { api } from '@/shared/api/http';
 import type { Accumulation } from '@/shared/api/types/domain';
-import { accumulationsTotalQueryKey, type AccumulationsTotal } from '@/shared/api/hooks';
+import {
+  accumulationsTotalQueryKey,
+  invalidateHomeCaches,
+  type AccumulationsTotal,
+} from '@/shared/api/hooks';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -80,6 +84,7 @@ export const useCreateAccumulation = (userId: string) => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['accumulations', userId] });
       queryClient.invalidateQueries({ queryKey: ['userSummary', userId] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

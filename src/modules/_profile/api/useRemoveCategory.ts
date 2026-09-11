@@ -1,5 +1,6 @@
 import { api } from '@/shared/api/http';
 import type { Category } from '@/shared/api/types/domain';
+import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /** DELETE /categories/:id + оптимистичное удаление. */
@@ -39,6 +40,7 @@ export const useRemoveCategory = (userId: string) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['categories', userId] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

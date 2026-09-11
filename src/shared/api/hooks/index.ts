@@ -26,3 +26,14 @@ export {
   type SavingsOperation,
   type UseSavingsOperationsResponse,
 } from './useSavingsOperations';
+export {
+  bootstrapQueryKey,
+  invalidateHomeCaches,
+  useBootstrap,
+  type BootstrapGoalItem,
+  type BootstrapLastReport,
+  type BootstrapOnboarding,
+  type BootstrapProfile,
+  type BootstrapSavingsItem,
+  type UseBootstrapResponse,
+} from './useBootstrap';

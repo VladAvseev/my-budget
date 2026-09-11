@@ -1,9 +1,11 @@
+import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
  * DELETE /reports/:id/daily-expenses:
- * сервер одной транзакцией удаляет daily-операции и сбрасывает настройки.
+ * сервер одной транзакцией удаляет daily-операции и сбрасывает флаг с бюджетом
+ * (даты периода сохраняются).
  */
 
 /** Запроса нет (id — из хука,variables = undefined). */
@@ -27,6 +29,7 @@ export const useDisableDailyExpenses = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
       queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
       queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

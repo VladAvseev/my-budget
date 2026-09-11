@@ -1,4 +1,4 @@
-import { goalsQueryKey } from '@/shared/api/hooks';
+import { goalsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Goal } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
@@ -63,6 +63,7 @@ export const useCreateGoal = (userId: string) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['goals', userId] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

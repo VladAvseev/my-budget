@@ -1,12 +1,6 @@
-import type { Category } from '@/shared/api/types/domain';
-import { useCurrency } from '@/shared/api/hooks';
+import { useCurrency, type BootstrapSavingsItem } from '@/shared/api/hooks';
 import { formatAmount } from '@/shared/utils';
 import styles from './AccumulationsStructure.module.css';
-
-export interface AccumulationsStructureItem {
-  categoryId: string | null;
-  amount: number;
-}
 
 interface CategorySegment {
   key: string;
@@ -19,46 +13,25 @@ interface CategorySegment {
 }
 
 interface AccumulationsLegendProps {
-  items: AccumulationsStructureItem[];
-  categories: Category[];
+  /** Агрегат из bootstrap: сумма по категории уже посчитана сервером. */
+  items: BootstrapSavingsItem[];
   fullWidth?: boolean;
 }
 
-const buildSegments = (
-  items: AccumulationsStructureItem[],
-  categories: Category[],
-): { segments: CategorySegment[]; total: number } => {
-  const categoriesById = new Map(categories.map((category) => [category.id, category]));
-
+const buildSegments = (items: BootstrapSavingsItem[]): { segments: CategorySegment[]; total: number } => {
   const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
-  const groupedTotals = new Map<string, { label: string; color: string; total: number }>();
-  for (const item of items) {
-    const category = item.categoryId ? categoriesById.get(item.categoryId) : null;
-    const key = category ? category.id : 'none';
-    const value = Number(item.amount) || 0;
-    const existing = groupedTotals.get(key);
-    if (existing) {
-      existing.total += value;
-    } else {
-      groupedTotals.set(key, {
-        label: category ? category.name : 'Без категории',
-        color: category?.color ?? 'var(--color-border)',
-        total: value,
-      });
-    }
-  }
-
+  const sorted = [...items].sort((a, b) => b.amount - a.amount);
   const segments: CategorySegment[] = [];
   let cursor = 0;
-  const sortedGroups = [...groupedTotals.entries()].sort((a, b) => b[1].total - a[1].total);
-  for (const [key, group] of sortedGroups) {
-    const percent = total > 0 ? (group.total / total) * 100 : 0;
+  for (const item of sorted) {
+    const value = Number(item.amount) || 0;
+    const percent = total > 0 ? (value / total) * 100 : 0;
     segments.push({
-      key,
-      label: group.label,
-      color: group.color,
-      total: group.total,
+      key: item.categoryId ?? 'none',
+      label: item.name ?? 'Без категории',
+      color: item.color ?? 'var(--color-border)',
+      total: value,
       percent,
       start: cursor,
       end: cursor + percent,
@@ -71,10 +44,9 @@ const buildSegments = (
 
 export const AccumulationsLegend = ({
   items,
-  categories,
   fullWidth = false,
 }: AccumulationsLegendProps) => {
-  const { segments } = buildSegments(items, categories);
+  const { segments } = buildSegments(items);
   const currency = useCurrency();
 
   return (

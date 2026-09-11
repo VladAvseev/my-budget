@@ -1,38 +1,39 @@
-import { useAccumulationsTotal, useCurrency, useProfile, useUserSummary } from '@/shared/api/hooks';
+import {
+  useBootstrap,
+  useCurrency,
+  type UseBootstrapResponse,
+} from '@/shared/api/hooks';
 import { ChevronRightIcon, OverviewIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/api/authProvider';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
 import { computeGlobalTotals, formatAmount } from '@/shared/utils';
 import { Link } from 'react-router-dom';
+import { CardSkeleton } from './CardSkeleton';
 import styles from '../homeCard.module.css';
 
+const EMPTY_BOOTSTRAP: UseBootstrapResponse = {
+  profile: { startBalance: 0, currency: null, onboarded: false },
+  onboarding: { categories: 0, reports: 0, operations: 0 },
+  lastReport: null,
+  globalTotals: { income: 0, expense: 0, savings: 0, daily: 0, accumulationsTotal: 0 },
+  savingsStructure: [],
+  goals: [],
+};
+
 export const OverviewCard = () => {
-  const { user } = useAuth();
-  const userId = user?.id ?? '';
-  const { data: summaryData, isFetched: summaryFetched } = useUserSummary(userId);
-  const accumulationsQuery = useAccumulationsTotal(userId);
-  const profileQuery = useProfile();
+  const { data, isLoading } = useBootstrap();
   const currency = useCurrency();
 
-  if (!profileQuery.isFetched || !summaryFetched || !accumulationsQuery.isFetched) {
-    return (
-      <VCard
-        className={`${styles.loadingCard} ${styles.animateCard}`}
-        style={{ animationDelay: '0.12s' }}
-      >
-        <VLoader size={28} />
-      </VCard>
-    );
+  if (isLoading) {
+    return <CardSkeleton delay="0.12s" />;
   }
 
-  const startBalance = Number(profileQuery.data?.start_balance ?? 0) || 0;
-  const initialSavings = accumulationsQuery.total;
+  const bootstrap = data ?? EMPTY_BOOTSTRAP;
+  const startBalance = Number(bootstrap.profile.startBalance) || 0;
   const { income, expense, savings: savingsTotal, balance } = computeGlobalTotals(
     startBalance,
-    summaryData,
-    initialSavings,
+    bootstrap.globalTotals,
+    bootstrap.globalTotals.accumulationsTotal,
   );
   const percentOfIncome = (value: number) =>
     income > 0 ? Math.max(0, Math.round((value / income) * 100)) : null;

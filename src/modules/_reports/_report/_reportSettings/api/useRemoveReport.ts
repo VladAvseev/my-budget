@@ -1,3 +1,4 @@
+import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Report } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -39,6 +40,7 @@ export const useRemoveReport = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
       queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
       queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
+      invalidateHomeCaches(queryClient);
     },
   });
 };

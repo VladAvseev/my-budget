@@ -1,86 +1,56 @@
+import { buildGoalsOverallFromTotals, formatAmount } from '@/shared/utils';
 import {
-  buildGoalsOverallProgress,
-  buildGoalsProgress,
-  formatAmount,
-  type GoalProgress,
-} from '@/shared/utils';
-import { useAccumulations, useCurrency, useGoals } from '@/shared/api/hooks';
+  useBootstrap,
+  useCurrency,
+  type BootstrapGoalItem,
+  type BootstrapSavingsItem,
+} from '@/shared/api/hooks';
 import { ChevronRightIcon, SavingsIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/api/authProvider';
-import { signedOperationAmount, type OperationType } from '@/shared/api/types/domain';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useCategories } from '../api/useCategories';
-import { useSavingsOperations } from '@/shared/api/hooks';
 import { AccumulationsLegend } from './AccumulationsStructure';
+import { CardSkeleton } from './CardSkeleton';
 import styles from '../homeCard.module.css';
 
-const EMPTY_ARRAY: never[] = [];
+const EMPTY_SAVINGS: BootstrapSavingsItem[] = [];
+const EMPTY_GOALS: BootstrapGoalItem[] = [];
 
 export const AccumulationsCard = () => {
-  const { user } = useAuth();
-  const userId = user?.id ?? '';
-  const accumulationsQuery = useAccumulations(userId);
-  const savingsQuery = useSavingsOperations(userId);
-  const categoriesQuery = useCategories(userId);
-  const goalsQuery = useGoals(userId);
+  const { data, isLoading } = useBootstrap();
   const currency = useCurrency();
 
-  const accumulations = accumulationsQuery.data ?? EMPTY_ARRAY;
-  const categories = categoriesQuery.data ?? [];
+  const structure = data?.savingsStructure ?? EMPTY_SAVINGS;
+  const goals = data?.goals ?? EMPTY_GOALS;
 
-  const structureItems = useMemo(
-    () => [
-      ...accumulations.map((accumulation) => ({
-        categoryId: accumulation.category_id,
-        amount: Number(accumulation.amount) || 0,
-      })),
-      ...(savingsQuery.data ?? []).map((operation) => ({
-        categoryId: operation.category_id,
-        amount: signedOperationAmount(
-          operation.type as OperationType,
-          Number(operation.amount) || 0,
+  const savedByCategory = useMemo(
+    () =>
+      new Map(
+        structure.flatMap((item) =>
+          item.categoryId === null ? [] : ([[item.categoryId, item.amount]] as const),
         ),
-      })),
-    ],
-    [accumulations, savingsQuery.data],
+      ),
+    [structure],
   );
 
-  const progressList = useMemo<GoalProgress[]>(() => {
-    const list = buildGoalsProgress(goalsQuery.data ?? [], accumulations, savingsQuery.data ?? []);
-    list.sort((a, b) => Math.abs(b.savedAmount) - Math.abs(a.savedAmount));
-    return list;
-  }, [goalsQuery.data, accumulations, savingsQuery.data]);
-
-  const isLoading =
-    accumulationsQuery.isLoading ||
-    savingsQuery.isLoading ||
-    categoriesQuery.isLoading ||
-    goalsQuery.isLoading;
+  // Формула — общая с buildGoalsOverallProgress (shared/utils/goals).
+  const overall = useMemo(
+    () => buildGoalsOverallFromTotals(goals, savedByCategory),
+    [goals, savedByCategory],
+  );
 
   if (isLoading) {
-    return (
-      <VCard
-        className={`${styles.loadingCard} ${styles.animateCard}`}
-        style={{ animationDelay: '0.24s' }}
-      >
-        <VLoader size={28} />
-      </VCard>
-    );
+    return <CardSkeleton delay="0.24s" />;
   }
 
-  const hasStructure = structureItems.length > 0;
-  const hasGoals = (goalsQuery.data?.length ?? 0) > 0;
+  const hasStructure = structure.length > 0;
+  const hasGoals = goals.length > 0;
 
   if (!hasStructure && !hasGoals) {
     return null;
   }
 
-  const total = structureItems.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-
-  const overall = buildGoalsOverallProgress(progressList);
+  const total = structure.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
   const formatPair = (savedAmount: number, targetAmount: number) =>
     `${formatAmount(savedAmount, currency?.symbol)} из ${formatAmount(targetAmount, currency?.symbol)}`;
@@ -103,7 +73,7 @@ export const AccumulationsCard = () => {
           <div className={styles.section}>
             <div className={styles.sectionTitle}>Структура накоплений</div>
             {total > 0 ? (
-              <AccumulationsLegend items={structureItems} categories={categories} fullWidth />
+              <AccumulationsLegend items={structure} fullWidth />
             ) : (
               <div className={styles.emptyMessage}>Доли накоплений невозможно отобразить</div>
             )}

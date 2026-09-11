@@ -1,35 +1,26 @@
-import { useReports } from '../api/useReports';
-import { useSummary } from '../api/useSummary';
+import { useBootstrap, useCurrency } from '@/shared/api/hooks';
 import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
-import { useCurrency } from '@/shared/api/hooks';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
-import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount } from '@/shared/utils';
 import { Link } from 'react-router-dom';
+import { CardSkeleton } from './CardSkeleton';
 import styles from '../homeCard.module.css';
 
+const EMPTY_SUMMARY = { income: 0, expense: 0, savings: 0, daily: 0 };
+
 export const LastReportCard = () => {
-  const reportsQuery = useReports();
-  const reports = reportsQuery.data ?? [];
-  const lastReport = reports[0];
-  const { data: summaryData, isFetched: summaryFetched } = useSummary(lastReport?.id ?? '');
-  const summary = summaryData ?? { income: 0, expense: 0, savings: 0, daily: 0 };
+  const { data, isLoading } = useBootstrap();
+  const lastReport = data?.lastReport ?? null;
+  const summary = lastReport?.summary ?? EMPTY_SUMMARY;
   const currency = useCurrency();
 
-  if (reportsQuery.isLoading) {
-    return (
-      <VCard
-        className={`${styles.loadingCard} ${styles.animateCard}`}
-        style={{ animationDelay: '0.18s' }}
-      >
-        <VLoader size={28} />
-      </VCard>
-    );
+  if (isLoading) {
+    return <CardSkeleton delay="0.18s" />;
   }
 
-  if (reportsQuery.error || !lastReport) {
+  if (!lastReport) {
     return (
       <Link
         to="/reports"
@@ -51,17 +42,6 @@ export const LastReportCard = () => {
           <ChevronRightIcon size={18} />
         </span>
       </Link>
-    );
-  }
-
-  if (!summaryFetched) {
-    return (
-      <VCard
-        className={`${styles.loadingCard} ${styles.animateCard}`}
-        style={{ animationDelay: '0.18s' }}
-      >
-        <VLoader size={28} />
-      </VCard>
     );
   }
 

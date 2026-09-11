@@ -1,3 +1,4 @@
+import { invalidateHomeCaches } from '@/shared/api/hooks';
 import type { useQueryClient } from '@tanstack/react-query';
 
 export const invalidateReportCache = (
@@ -10,4 +11,5 @@ export const invalidateReportCache = (
   queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
   queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });
   queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
+  invalidateHomeCaches(queryClient);
 };
