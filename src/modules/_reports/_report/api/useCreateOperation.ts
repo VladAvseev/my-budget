@@ -3,7 +3,8 @@ import { api } from '@/shared/api/http';
 import type { Operation, OperationType } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
-import { operationsQueryKey } from './keys';
+import { applySummaryDelta, restoreSummary } from './applySummaryDelta';
+import { operationsKeyForType } from './keys';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -53,8 +54,11 @@ export const useCreateOperation = (reportId: string) => {
       return api.post<UseCreateOperationResponse>('/operations', body);
     },
     onMutate: async (input) => {
-      const key = operationsQueryKey(reportId, input.type);
+      const key = operationsKeyForType(reportId, input.type);
       const previous = queryClient.getQueryData<Operation[]>(key) ?? [];
+      const summaryPrevious = applySummaryDelta(queryClient, reportId, {
+        add: { type: input.type, amount: input.amount },
+      });
 
       const now = new Date().toISOString();
       const optimistic: Operation & OptimisticItem = {
@@ -73,11 +77,12 @@ export const useCreateOperation = (reportId: string) => {
 
       queryClient.setQueryData(key, [optimistic, ...previous]);
 
-      return { previous };
+      return { previous, summaryPrevious, key };
     },
     onError: (_error, _input, context) => {
       if (!context) return;
-      queryClient.setQueryData(operationsQueryKey(reportId, _input.type), context.previous);
+      queryClient.setQueryData(context.key, context.previous);
+      restoreSummary(queryClient, reportId, context.summaryPrevious);
     },
     onSettled: () => invalidateReportCache(queryClient, reportId),
   });

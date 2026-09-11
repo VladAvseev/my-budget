@@ -16,7 +16,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import { groupedByTypeAtom, operationModalAtom } from '../atoms/report';
 import { categoryTypeForOperation } from '../api/categoryTypeForOperation';
 import { useCategoryLimits } from '../api/useCategoryLimits';
-import { useCategories } from '../api/useCategories';
+import { useCategoriesByType } from '../api/useCategories';
 import { useOperations, useSavingsReportOperations } from '../api/useOperations';
 import { OperationCard } from './OperationCard';
 import { CategoryLimitsSummary, formatLimitValue, getLimitColor } from './CategoryLimitsSummary';
@@ -31,36 +31,24 @@ interface OperationListProps {
 export const OperationList = ({ reportId, type }: OperationListProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
-  const operationsQuery = useOperations(reportId, type);
-  const savingsQueries = useSavingsReportOperations(reportId, isSavingsType(type));
   const isSavings = isSavingsType(type);
-  const categoriesQuery = useCategories(userId, categoryTypeForOperation(type));
+  const operationsQuery = useOperations(reportId, type);
+  const savingsQuery = useSavingsReportOperations(reportId, isSavings);
+  const categoriesQuery = useCategoriesByType(userId, categoryTypeForOperation(type));
   const limitsQuery = useCategoryLimits(type === 'expense' ? reportId : '');
   const setModal = useSetAtom(operationModalAtom);
   const [groupedByType, setGroupedByType] = useAtom(groupedByTypeAtom);
   const currency = useCurrency();
 
-  const operations = useMemo(
-    () =>
-      isSavings
-        ? [...(savingsQueries[0]?.data ?? []), ...(savingsQueries[1]?.data ?? [])].sort((a, b) =>
-            (b.created_at ?? '').localeCompare(a.created_at ?? ''),
-          )
-        : (operationsQuery.data ?? []),
-    [isSavings, savingsQueries, operationsQuery.data],
-  );
-  const operationsLoading = isSavings
-    ? savingsQueries.some((query) => query.isLoading)
-    : operationsQuery.isLoading;
-  const operationsError = isSavings
-    ? savingsQueries.find((query) => query.error)?.error
-    : operationsQuery.error;
+  const activeListQuery = isSavings ? savingsQuery : operationsQuery;
+  // Стабильная ссылка между рендерами: groups-memo ниже зависит от operations.
+  const operations = useMemo(() => activeListQuery.data ?? [], [activeListQuery.data]);
+  const operationsLoading = activeListQuery.isLoading;
+  const operationsError = activeListQuery.error;
+  const hasOperationsData = activeListQuery.data != null;
   const categories = categoriesQuery.data ?? [];
   const limits = limitsQuery.data ?? [];
   const isGrouped = groupedByType[type] ?? false;
-  const hasOperationsData = isSavings
-    ? savingsQueries.some((query) => query.data != null)
-    : operationsQuery.data != null;
 
   const toggleGrouping = (next: boolean) => {
     setGroupedByType((prev) => ({ ...prev, [type]: next }));
@@ -70,19 +58,17 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const limitsByCategory = new Map(limits.map((limit) => [limit.category_id, limit]));
 
   const groups = useMemo(() => {
-    const queryOperations = isSavings ? operations : (operationsQuery.data ?? []);
-    const queryCategories = categoriesQuery.data ?? [];
     const result: { key: string; label: string; color?: string; operations: Operation[] }[] = [];
 
     const byCategory = new Map<string, Operation[]>();
-    for (const operation of queryOperations) {
+    for (const operation of operations) {
       const key = operation.category_id ?? 'none';
       const list = byCategory.get(key) ?? [];
       list.push(operation);
       byCategory.set(key, list);
     }
 
-    for (const category of queryCategories) {
+    for (const category of categoriesQuery.data ?? []) {
       const grouped = byCategory.get(category.id);
       if (grouped) {
         result.push({
@@ -111,7 +97,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
       result.push({ key: 'none', label: 'Без категории', operations: withoutCategory });
     }
     return result;
-  }, [isSavings, operations, operationsQuery.data, categoriesQuery.data]);
+  }, [operations, categoriesQuery.data]);
 
   return (
     <div className={styles.root}>
@@ -134,16 +120,8 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
         <VErrorCard
           title="Не удалось загрузить операции"
           error={operationsError}
-          onRetry={() =>
-            isSavings
-              ? savingsQueries.forEach((query) => void query.refetch())
-              : void operationsQuery.refetch()
-          }
-          isRetrying={
-            isSavings
-              ? savingsQueries.some((query) => query.isFetching)
-              : operationsQuery.isFetching
-          }
+          onRetry={() => void activeListQuery.refetch()}
+          isRetrying={activeListQuery.isFetching}
         />
       )}
 

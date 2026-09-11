@@ -1,7 +1,9 @@
 import { api } from '@/shared/api/http';
 import type { Operation, OperationType } from '@/shared/api/types/domain';
+import type { OperationSummary } from '@/shared/api/hooks';
 import { type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
+import { applySummaryDelta, restoreSummary } from './applySummaryDelta';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -54,6 +56,21 @@ export const useUpdateOperation = (reportId: string) => {
       const prefix = ['reports', reportId, 'operations'];
       const previous = queryClient.getQueriesData<Operation[]>({ queryKey: prefix });
 
+      // Снимок сводки: убираем старый вклад операции и вносим новый.
+      const oldOperation = previous
+        .flatMap(([, items]) => items ?? [])
+        .find((item) => item.id === id);
+      let summaryPrevious: OperationSummary | undefined;
+      if (oldOperation) {
+        const oldAmount = Number(oldOperation.amount) || 0;
+        const newType = input.type ?? oldOperation.type;
+        const newAmount = input.amount ?? oldAmount;
+        summaryPrevious = applySummaryDelta(queryClient, reportId, {
+          remove: { type: oldOperation.type, amount: oldAmount },
+          add: { type: newType, amount: newAmount },
+        });
+      }
+
       queryClient.setQueriesData<Operation[]>({ queryKey: prefix }, (items = []) =>
         items.map((item) =>
           item.id === id
@@ -72,7 +89,7 @@ export const useUpdateOperation = (reportId: string) => {
         ),
       );
 
-      return { previous };
+      return { previous, summaryPrevious };
     },
     onError: (_error, _input, context) => {
       if (!context) return;
@@ -81,6 +98,7 @@ export const useUpdateOperation = (reportId: string) => {
           queryClient.setQueryData(cacheKey, cached);
         }
       }
+      restoreSummary(queryClient, reportId, context.summaryPrevious);
     },
     onSettled: () => invalidateReportCache(queryClient, reportId),
   });

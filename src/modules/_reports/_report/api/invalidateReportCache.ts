@@ -6,7 +6,8 @@ export const invalidateReportCache = (
   reportId: string,
 ) => {
   queryClient.invalidateQueries({ queryKey: ['reports', reportId, 'operations'] });
-  queryClient.invalidateQueries({ queryKey: ['reports', reportId, 'summary'] });
+  // summary локальной сводки не инвалидируем: мутации операций двигают её
+  // оптимистично (см. applySummaryDelta), глобальные сводки — рефетчатся.
   queryClient.invalidateQueries({ queryKey: ['userSummary'] });
   queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
   queryClient.invalidateQueries({ queryKey: ['overview', 'operations'] });

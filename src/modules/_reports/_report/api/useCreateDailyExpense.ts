@@ -4,6 +4,7 @@ import type { Operation } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { getNextFreeDate } from '@/shared/utils/date';
 import { trimStrings } from '@/shared/utils';
+import { applySummaryDelta, restoreSummary } from './applySummaryDelta';
 import { operationsQueryKey } from './keys';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -60,6 +61,10 @@ export const useCreateDailyExpense = (reportId: string) => {
       );
       if (!date) return undefined;
 
+      const summaryPrevious = applySummaryDelta(queryClient, reportId, {
+        add: { type: 'daily', amount: input.amount },
+      });
+
       const now = new Date().toISOString();
       const optimistic: Operation & OptimisticItem = {
         id: createOptimisticId(),
@@ -77,11 +82,12 @@ export const useCreateDailyExpense = (reportId: string) => {
 
       queryClient.setQueryData(key, [optimistic, ...previous]);
 
-      return { previous };
+      return { previous, summaryPrevious };
     },
     onError: (_error, _input, context) => {
       if (!context) return;
       queryClient.setQueryData(operationsQueryKey(reportId, 'daily'), context.previous);
+      restoreSummary(queryClient, reportId, context.summaryPrevious);
     },
     onSettled: () => invalidateReportCache(queryClient, reportId),
   });

@@ -2,7 +2,7 @@ import type { CategoryType } from '@/shared/api/types/domain';
 import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VSelect } from '@/shared/ui/VSelect';
 import { useMemo } from 'react';
-import { useCategories } from '../../../api/useCategories';
+import { useCategoriesByType } from '../../../api/useCategories';
 
 interface CategorySelectProps {
   userId: string;
@@ -19,7 +19,7 @@ export const CategorySelect = ({
   disabled = false,
   onChange,
 }: CategorySelectProps) => {
-  const categoriesQuery = useCategories(userId, categoryType);
+  const categoriesQuery = useCategoriesByType(userId, categoryType);
 
   const options = useMemo(() => {
     const queryCategories = categoriesQuery.data ?? [];

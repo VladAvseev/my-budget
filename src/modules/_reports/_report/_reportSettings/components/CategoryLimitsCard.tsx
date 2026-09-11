@@ -13,7 +13,7 @@ import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { useMemo, useState } from 'react';
 import type { CategoryLimit } from '@/shared/api/types/domain';
-import { useCategories } from '../../api/useCategories';
+import { useCategoriesByType } from '../../api/useCategories';
 import { useCategoryLimits } from '../../api/useCategoryLimits';
 import { useSetCategoryLimits } from '../api/useSetCategoryLimits';
 import { ImportLimitsModal } from './ImportLimitsModal';
@@ -47,7 +47,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
   const userId = user?.id ?? '';
 
   const limitsQuery = useCategoryLimits(report.id);
-  const categoriesQuery = useCategories(userId, 'expense');
+  const categoriesQuery = useCategoriesByType(userId, 'expense');
   const setLimits = useSetCategoryLimits(report.id);
 
   const [draftLimits, setDraftLimits] = useState<LimitDraft[]>(() =>

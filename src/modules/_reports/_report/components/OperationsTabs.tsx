@@ -7,20 +7,24 @@ import { OperationList } from './OperationList';
 import { DailyOperationsTab } from './DailyOperationsTab';
 
 interface OperationsTabsProps {
-  report: Report;
+  /** Id из пути: запросы вкладок стартуют, не дожидаясь загрузки отчёта. */
+  reportId: string;
+  /** Отчёт подгружается параллельно: без него вкладка «Еж. расходы» скрыта. */
+  report?: Report;
 }
 
 export type OperationsTab = 'expense' | 'income' | 'savings' | 'daily';
 
-export const OperationsTabs = ({ report }: OperationsTabsProps) => {
-  const [activeTab, setActiveTab] = useState<OperationsTab>(
-    report.has_daily_expenses ? 'daily' : 'expense',
-  );
+export const OperationsTabs = ({ reportId, report }: OperationsTabsProps) => {
+  // Дефолтный таб всегда «Расходы»: он не зависит от полей отчёта, поэтому
+  // не нужно ждать его загрузки и переключать таб по факту прихода данных.
+  const [activeTab, setActiveTab] = useState<OperationsTab>('expense');
 
-  const tabs: { value: OperationsTab; label: string }[] = [{ value: 'expense', label: 'Расходы' }];
-  if (report.has_daily_expenses) {
-    tabs.unshift({ value: 'daily', label: 'Еж. расходы' });
+  const tabs: { value: OperationsTab; label: string }[] = [];
+  if (report?.has_daily_expenses) {
+    tabs.push({ value: 'daily', label: 'Еж. расходы' });
   }
+  tabs.push({ value: 'expense', label: 'Расходы' });
   tabs.push({ value: 'income', label: 'Доходы' });
   tabs.push({ value: 'savings', label: 'Накопления' });
 
@@ -29,9 +33,9 @@ export const OperationsTabs = ({ report }: OperationsTabsProps) => {
       <VButtonGroup options={tabs} value={activeTab} onChange={setActiveTab} fullWidth />
 
       {activeTab === 'daily' ? (
-        <DailyOperationsTab report={report} />
+        report && <DailyOperationsTab report={report} />
       ) : (
-        <OperationList reportId={report.id} type={activeTab as OperationType} />
+        <OperationList reportId={reportId} type={activeTab as OperationType} />
       )}
     </div>
   );

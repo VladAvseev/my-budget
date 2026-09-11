@@ -11,7 +11,7 @@ import { useCurrency } from '@/shared/api/hooks';
 import { useMemo, useState } from 'react';
 import { useReports } from '../../../api/useReports';
 import { useCategoryLimits } from '../../api/useCategoryLimits';
-import { useCategories } from '../../api/useCategories';
+import { useCategoriesByType } from '../../api/useCategories';
 import { useSetCategoryLimits } from '../api/useSetCategoryLimits';
 import settingsStyles from '../settingsCard.module.css';
 
@@ -27,7 +27,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
   const currency = useCurrency();
 
   const reportsQuery = useReports();
-  const categoriesQuery = useCategories(userId, 'expense');
+  const categoriesQuery = useCategoriesByType(userId, 'expense');
   const setLimits = useSetCategoryLimits(report.id);
 
   const [selectedReportId, setSelectedReportId] = useState('');

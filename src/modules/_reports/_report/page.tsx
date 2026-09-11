@@ -1,7 +1,7 @@
 import { SettingsIcon } from '@/shared/icons';
 import commonStyles from '@/shared/styles/common.module.css';
 import { VCard } from '@/shared/ui/VCard';
-import { VSkeletonCard, VSkeletonList } from '@/shared/ui/VSkeleton';
+import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { useAtom } from 'jotai';
@@ -18,9 +18,12 @@ import styles from './pageSkeleton.module.css';
 export const Page: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { data: report, isLoading, error } = useReport(id ?? '');
-  const { data: summary } = useSummary(id ?? '');
+  const reportId = id ?? '';
+  const { data: report, isLoading, error } = useReport(reportId);
+  const { data: summary, isLoading: summaryLoading } = useSummary(reportId);
   const [operationModal, setOperationModal] = useAtom(operationModalAtom);
+
+  const notFound = !isLoading && (Boolean(error) || report === null);
 
   return (
     <div className={commonStyles.page}>
@@ -30,7 +33,7 @@ export const Page: React.FC = () => {
           onBack={() => navigate('/reports')}
           backAriaLabel="Назад к периодам"
         />
-        {report && !isLoading && (
+        {report && (
           <VIconButton
             ariaLabel="Настройки периода"
             onClick={() => navigate(`/reports/${report.id}/settings`)}
@@ -41,49 +44,49 @@ export const Page: React.FC = () => {
         )}
       </div>
 
-      {isLoading && (
-        <>
-          <div className={styles.summaryGrid}>
-            {[0, 1, 2, 3].map((i) => (
-              <VSkeletonCard key={i} compact title={false} lines={2} delay={`${i * 0.05}s`} />
-            ))}
-          </div>
-          <VSkeletonList count={4} cardProps={{ compact: true, title: false, lines: 1 }} />
-        </>
-      )}
-
-      {!isLoading && (error || !report) && (
+      {notFound && (
         <VCard>
           <div className={commonStyles.textSecondary}>Период не найден</div>
         </VCard>
       )}
 
-      {!isLoading && !error && report && (
+      {!notFound && (
         <>
+          {/* Вкладки монтируются сразу: операции/категории/лимиты запрашиваются
+              параллельно с отчётом, а не дождавшись его. */}
           <div className={commonStyles.animateCard}>
-            <SummaryCards summary={summary} />
+            {summaryLoading ? (
+              <div className={styles.summaryGrid}>
+                {[0, 1, 2, 3].map((i) => (
+                  <VSkeletonCard key={i} compact title={false} lines={2} delay={`${i * 0.05}s`} />
+                ))}
+              </div>
+            ) : (
+              <SummaryCards summary={summary} />
+            )}
           </div>
           <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
-            <OperationsTabs report={report} />
+            <OperationsTabs reportId={reportId} report={report ?? undefined} />
           </div>
-          {operationModal?.operation ? (
-            <EditOperationModal
-              key={operationModal.operation.id}
-              operation={operationModal.operation}
-              report={report}
-              onClose={() => setOperationModal(null)}
-              isDeletable={operationModal.isDeletable}
-            />
-          ) : (
-            operationModal && (
-              <CreateOperationModal
-                key={operationModal.type}
-                type={operationModal.type}
+          {report &&
+            (operationModal?.operation ? (
+              <EditOperationModal
+                key={operationModal.operation.id}
+                operation={operationModal.operation}
                 report={report}
                 onClose={() => setOperationModal(null)}
+                isDeletable={operationModal.isDeletable}
               />
-            )
-          )}
+            ) : (
+              operationModal && (
+                <CreateOperationModal
+                  key={operationModal.type}
+                  type={operationModal.type}
+                  report={report}
+                  onClose={() => setOperationModal(null)}
+                />
+              )
+            ))}
         </>
       )}
     </div>
