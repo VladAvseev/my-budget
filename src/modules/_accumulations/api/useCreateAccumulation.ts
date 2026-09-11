@@ -1,6 +1,6 @@
 import { api } from '@/shared/api/http';
 import type { Accumulation, AccumulationInput } from '@/shared/api/types/domain';
-import { accumulationsTotalQueryKey, type AccumulationsTotal } from '@/shared/hooks';
+import { accumulationsTotalQueryKey, type AccumulationsTotal } from '@/shared/api/hooks';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

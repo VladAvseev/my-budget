@@ -4,7 +4,7 @@ import {
   formatAmount,
   type GoalProgress,
 } from '@/shared/utils';
-import { useAccumulations, useCurrency, useGoals } from '@/shared/hooks';
+import { useAccumulations, useCurrency, useGoals } from '@/shared/api/hooks';
 import { ChevronRightIcon, SavingsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/api/authProvider';
 import { signedOperationAmount, type OperationType } from '@/shared/api/types/domain';

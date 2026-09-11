@@ -1,4 +1,4 @@
-import { useAccumulationsTotal, useCurrency, useProfile, useUserSummary } from '@/shared/hooks';
+import { useAccumulationsTotal, useCurrency, useProfile, useUserSummary } from '@/shared/api/hooks';
 import { ChevronRightIcon, OverviewIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/api/authProvider';
 import summaryStyles from '@/shared/styles/summary.module.css';

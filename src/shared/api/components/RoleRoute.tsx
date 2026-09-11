@@ -1,4 +1,4 @@
-import { useAdminStatus } from '@/shared/hooks';
+import { useAdminStatus } from '@/shared/api/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
 import { VLoader } from '@/shared/ui/VLoader';
 import type { ReactNode } from 'react';

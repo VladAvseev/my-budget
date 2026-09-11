@@ -7,7 +7,7 @@ import { VLoader } from '@/shared/ui/VLoader';
 import { VModal } from '@/shared/ui/VModal';
 import { VSelect } from '@/shared/ui/VSelect';
 import { formatAmount, getErrorMessage } from '@/shared/utils';
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import { useMemo, useState } from 'react';
 import { useReports } from '../../../api/useReports';
 import { useCategoryLimits } from '../../api/useCategoryLimits';

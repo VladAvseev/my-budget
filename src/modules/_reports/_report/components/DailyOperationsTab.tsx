@@ -6,7 +6,7 @@ import { VHint } from '@/shared/ui/VHint';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount, parseISO } from '@/shared/utils';
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useSetAtom } from 'jotai';
 import { useMemo } from 'react';

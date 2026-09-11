@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
-import { useGoals } from '@/shared/hooks';
+import { useGoals } from '@/shared/api/hooks';
 import modalStyles from '@/shared/styles/modal.module.css';
 import commonStyles from '@/shared/styles/common.module.css';
 import { getErrorMessage, toISODate } from '@/shared/utils';

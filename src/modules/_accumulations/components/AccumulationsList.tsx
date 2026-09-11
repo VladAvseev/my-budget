@@ -1,5 +1,5 @@
 import { useAuth } from '@/shared/api/authProvider';
-import { useAccumulations } from '@/shared/hooks';
+import { useAccumulations } from '@/shared/api/hooks';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';

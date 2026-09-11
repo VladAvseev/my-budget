@@ -1,5 +1,5 @@
 import type { Category } from '@/shared/api/types/domain';
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';

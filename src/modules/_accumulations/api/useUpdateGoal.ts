@@ -1,4 +1,4 @@
-import { goalsQueryKey } from '@/shared/hooks';
+import { goalsQueryKey } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Goal, GoalUpdateInput } from '@/shared/api/types/domain';
 import { type OptimisticItem } from '@/shared/optimistic';

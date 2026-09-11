@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai';
-import { useCurrency, useExchangeRates, useProfile } from '@/shared/hooks';
+import { useCurrency, useExchangeRates, useProfile } from '@/shared/api/hooks';
 import { getCurrencyByCode, isQuickCurrency } from '@/shared/constants/currencies';
 import { selectedDisplayCurrencyAtom } from '../atoms/accumulations';
 

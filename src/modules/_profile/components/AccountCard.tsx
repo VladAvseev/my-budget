@@ -1,4 +1,4 @@
-import { useProfile } from '@/shared/hooks';
+import { useProfile } from '@/shared/api/hooks';
 import { useAuth } from '@/shared/api/authProvider';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';

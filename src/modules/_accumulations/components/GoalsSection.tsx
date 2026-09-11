@@ -1,5 +1,5 @@
 import { PlusIcon } from '@/shared/icons';
-import { useAccumulations, useGoals } from '@/shared/hooks';
+import { useAccumulations, useGoals } from '@/shared/api/hooks';
 import { useAuth } from '@/shared/api/authProvider';
 import { signedOperationAmount, type Goal, type OperationType } from '@/shared/api/types/domain';
 import {

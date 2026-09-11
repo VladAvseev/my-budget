@@ -1,4 +1,4 @@
-import { useProfile } from '@/shared/hooks';
+import { useProfile } from '@/shared/api/hooks';
 import { CURRENCIES, QUICK_CURRENCIES } from '@/shared/constants/currencies';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';

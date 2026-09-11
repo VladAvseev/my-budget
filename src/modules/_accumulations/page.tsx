@@ -1,6 +1,7 @@
 import { PlusIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/api/authProvider';
-import { useAccumulations, useBreakpoint } from '@/shared/hooks';
+import { useBreakpoint } from '@/shared/hooks';
+import { useAccumulations } from '@/shared/api/hooks';
 import { signedOperationAmount, type OperationType } from '@/shared/api/types/domain';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';

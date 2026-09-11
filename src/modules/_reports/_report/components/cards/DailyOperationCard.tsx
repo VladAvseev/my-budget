@@ -1,5 +1,5 @@
 import type { Operation } from '@/shared/api/types/domain';
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
 import { formatAmount, formatDisplay } from '@/shared/utils';

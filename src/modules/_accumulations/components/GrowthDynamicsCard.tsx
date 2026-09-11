@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useAccumulations, useProfile } from '@/shared/hooks';
+import { useAccumulations, useProfile } from '@/shared/api/hooks';
 import { convertAmount } from '@/shared/utils';
 import {
   aggregatePoints,

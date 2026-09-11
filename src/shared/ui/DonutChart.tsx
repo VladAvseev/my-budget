@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { formatAmount } from '@/shared/utils/format';
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import styles from './DonutChart.module.css';
 
 export interface DonutSegment {

@@ -1,7 +1,7 @@
 import { useReports } from '../api/useReports';
 import { useSummary } from '../api/useSummary';
 import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';

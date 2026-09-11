@@ -9,7 +9,7 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VToggle } from '@/shared/ui/VToggle';
 import { formatAmount } from '@/shared/utils';
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { groupedByTypeAtom, operationModalAtom } from '../atoms/report';

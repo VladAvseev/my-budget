@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useAccumulations, useProfile } from '@/shared/hooks';
+import { useAccumulations, useProfile } from '@/shared/api/hooks';
 import { useReports } from '../api/useReports';
 import { useOverviewOperationsMap } from '../api/useOverviewOperationsMap';
 import { getPeriodEnd, trimIncompletePeriod } from '@/shared/utils/chartPoints';

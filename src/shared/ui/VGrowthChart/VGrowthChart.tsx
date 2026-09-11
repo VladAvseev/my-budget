@@ -2,7 +2,7 @@ import { useMemo, useState, useCallback, useRef, useEffect, useLayoutEffect } fr
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 import { getPointChange } from '@/shared/utils/chartPoints';
 import { formatAmount } from '@/shared/utils/format';
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import styles from './VGrowthChart.module.css';
 
 interface VGrowthChartProps {

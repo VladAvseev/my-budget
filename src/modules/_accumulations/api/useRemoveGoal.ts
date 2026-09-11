@@ -1,4 +1,4 @@
-import { goalsQueryKey } from '@/shared/hooks';
+import { goalsQueryKey } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Goal } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

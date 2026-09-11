@@ -1,5 +1,5 @@
 import type { Category } from '@/shared/api/types/domain';
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import { formatAmount } from '@/shared/utils';
 import styles from './AccumulationsStructure.module.css';
 

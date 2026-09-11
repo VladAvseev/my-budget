@@ -1,4 +1,4 @@
-import { useProfile } from '@/shared/hooks';
+import { useProfile } from '@/shared/api/hooks';
 import { useAuth } from '@/shared/api/authProvider';
 import { api } from '@/shared/api/http';
 import { useQuery } from '@tanstack/react-query';

@@ -1,4 +1,4 @@
-import { useCurrency } from '@/shared/hooks';
+import { useCurrency } from '@/shared/api/hooks';
 import { formatAmount } from '@/shared/utils/format';
 import type { VGrowthStatsData } from './types';
 import styles from './GrowthStats.module.css';
