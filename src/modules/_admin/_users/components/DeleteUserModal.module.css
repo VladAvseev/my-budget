@@ -9,7 +9,7 @@
   color: var(--color-text-primary);
 }
 
-.email {
+.login {
   font-weight: var(--font-weight-bold);
   color: var(--color-error);
   word-break: break-all;

@@ -32,13 +32,13 @@ export interface AuthState {
 }
 
 export interface LoginCredentials {
-  email: string;
+  login: string;
   password: string;
 }
 
 export interface AuthContextType extends AuthState {
-  signUp: (email: string, password: string) => Promise<AuthResponse>;
-  signIn: (email: string, password: string) => Promise<AuthResponse>;
+  signUp: (login: string, password: string) => Promise<AuthResponse>;
+  signIn: (login: string, password: string) => Promise<AuthResponse>;
   signOut: () => Promise<{ error: AuthError | null }>;
   getToken: () => Promise<string | null>;
   updatePassword: (newPassword: string) => Promise<{ error: AuthError | null }>;

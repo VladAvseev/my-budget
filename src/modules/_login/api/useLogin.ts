@@ -12,7 +12,7 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: (credentials: LoginCredentials) =>
-      authService.signIn(credentials.email, credentials.password),
+      authService.signIn(credentials.login, credentials.password),
     onSuccess: (result) => {
       if (result.error) {
         setError(getErrorMessage(result.error));

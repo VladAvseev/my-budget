@@ -87,7 +87,7 @@ export interface CategoryLimit {
  */
 export interface Profile {
   user_id: string;
-  email: string;
+  login: string;
   start_balance: string;
   currency: string | null;
   onboarded: boolean;

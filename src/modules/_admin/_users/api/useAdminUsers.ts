@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
  */
 export interface AdminUserRow {
   user_id: string;
-  email: string;
+  login: string;
   last_active_at: string | null;
   onboarded: boolean;
   reportsCount: number;

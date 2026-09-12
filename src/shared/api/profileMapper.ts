@@ -11,7 +11,7 @@ import type { Profile } from '@/shared/api/types/domain';
  */
 export const toProfile = (u: ApiUser): Profile => ({
   user_id: u.id,
-  email: u.email,
+  login: u.login,
   // start_balance типизирован строкой — публичный API профиля уже привязан
   // к Number(...) в UI.
   start_balance: String(u.startBalance),

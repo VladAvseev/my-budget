@@ -13,6 +13,7 @@ export { capitalizeFirst } from './capitalize';
 export { formatBytes } from './bytes';
 export { formatAmount, type ConvertOptions } from './format';
 export { getErrorMessage } from './errorMessage';
+export { normalizeLogin, validateLogin, INVALID_LOGIN_MESSAGE } from './validateLogin';
 export { trimStrings } from './trim';
 export {
   buildGoalForecast,

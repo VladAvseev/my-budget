@@ -23,7 +23,7 @@ import axios, { AxiosError, type GenericAbortSignal } from 'axios';
 export interface ApiUser {
   /** публичный профиль из ответа сервера (camelCase, см. _users/types.ts сервера). */
   id: string;
-  email: string;
+  login: string;
   role: string;
   startBalance: number;
   currency: string | null;
@@ -68,10 +68,27 @@ export class ApiError extends Error {
 
 // ── Хранилище сессии ────────────────────────────────────────────────────────
 
+/**
+ * Старые строки mb_session (до перехода email → login) кэшируют профиль с
+ * `email`, а не `login`: такой объект устарел, отдаём null — приложение
+ * отправит на экран входа. Серверная refresh-сессия при этом жива (привязана
+ * к user_id), просто пользователь перезалогинится своим логином (он же
+ * локальная часть прежнего email) и кэш обновится. removeItem без
+ * emitSessionChange: шина на старте ещё пуста, а эмит из середины
+ * инициализации модулей наталкивает слушателей на неинициализированные let.
+ */
 export function getStoredSession(): StoredSession | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as StoredSession) : null;
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw) as StoredSession;
+    if (typeof parsed.user?.login !== 'string') {
+      localStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+    return parsed;
   } catch {
     return null;
   }

@@ -23,7 +23,7 @@ interface Column {
 }
 
 const COLUMNS: Column[] = [
-  { key: 'email', label: 'Пользователь', sortType: 'string' },
+  { key: 'login', label: 'Пользователь', sortType: 'string' },
   { key: 'last_active_at', label: 'Активность', sortType: 'date' },
   { key: 'reportsCount', label: 'Периоды (еж)', sortType: 'number' },
   { key: 'operationsCount', label: 'Опер', sortType: 'number' },
@@ -39,8 +39,6 @@ const COLUMNS: Column[] = [
 const formatDate = (value: string | null): string =>
   value ? formatDisplay(value.slice(0, 10)) : '—';
 
-const formatEmail = (value: string): string => value.split('@')[0] ?? value;
-
 /** Периоды + доля периодов с ежедневными расходами: «12 (75%)». */
 const formatPeriods = (row: AdminUserRow): string =>
   row.reportsCount > 0
@@ -50,7 +48,7 @@ const formatPeriods = (row: AdminUserRow): string =>
 const cellToString = (row: AdminUserRow, key: ColumnKey): string => {
   const value = row[key];
   switch (key) {
-    case 'email':
+    case 'login':
       return String(value).toLowerCase();
     case 'last_active_at':
       return formatDate(value as string | null).toLowerCase();
@@ -212,7 +210,7 @@ export const Page: React.FC = () => {
             ) : (
               rows.map((row) => (
                 <tr key={row.user_id}>
-                  <td>{formatEmail(row.email)}</td>
+                  <td>{row.login}</td>
                   <td>{formatDate(row.last_active_at)}</td>
                   <td className={styles.numCell}>{formatPeriods(row)}</td>
                   <td className={styles.numCell}>{row.operationsCount}</td>
@@ -226,7 +224,7 @@ export const Page: React.FC = () => {
                   <td className={styles.actionCell}>
                     {row.user_id !== current?.id && (
                       <VIconButton
-                        ariaLabel={`Удалить ${row.email}`}
+                        ariaLabel={`Удалить ${row.login}`}
                         color="var(--color-error)"
                         onClick={() => setDeletingUser(row)}
                       >

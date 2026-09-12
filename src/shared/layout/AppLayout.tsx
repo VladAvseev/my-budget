@@ -51,9 +51,9 @@ const NAV_ITEMS: NavItem[] = [
 const ProfileLink = () => {
   const { user } = useAuth();
 
-  const email = user?.email ?? '';
-  const initial = email ? email[0].toUpperCase() : '?';
-  const name = email ? email.split('@')[0] : 'Профиль';
+  const login = user?.login ?? '';
+  const initial = login ? login[0].toUpperCase() : '?';
+  const name = login || 'Профиль';
 
   return (
     <NavLink to="/profile" className={styles.profileLink}>

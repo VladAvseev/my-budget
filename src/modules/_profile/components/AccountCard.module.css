@@ -11,7 +11,7 @@
   min-width: 0;
 }
 
-.accountEmail {
+.accountLogin {
   font-size: var(--font-size-m);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);

@@ -23,8 +23,8 @@ export interface AdminLogRow {
   error: string | null;
   /** Автор запроса; null — запрос без авторизации (или пользователь удалён). */
   userId: string | null;
-  /** Email автора (для отображения в таблице логов). */
-  userEmail: string | null;
+  /** Логин автора (для отображения в таблице логов). */
+  userLogin: string | null;
   /** true — на момент запроса был валидный access-токен. */
   isAuthenticated: boolean;
 }

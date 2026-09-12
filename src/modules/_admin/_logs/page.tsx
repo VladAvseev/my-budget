@@ -201,14 +201,14 @@ export const Page: React.FC = () => {
     setPage(1);
   };
 
-  // Лёгкие id+email для селекта автора — без тяжёлых агрегатов GET /admin/users.
+  // Лёгкие id+login для селекта автора — без тяжёлых агрегатов GET /admin/users.
   const optionsQuery = useAdminUserOptions();
   const userOptions = useMemo<VSelectOption[]>(
     () => [
       { value: LOG_USER_ANONYMOUS, label: 'Без авторизации' },
       ...(optionsQuery.data ?? []).map((option) => ({
         value: option.userId,
-        label: option.email,
+        label: option.login,
       })),
     ],
     [optionsQuery.data],
@@ -421,7 +421,7 @@ export const Page: React.FC = () => {
                             </td>
                             <td>{formatNumber(row.durationMs)} мс</td>
                              <td>
-                               {row.userEmail ?? (
+                               {row.userLogin ?? (
                                  <span className={styles.userAnonymous}>
                                    {row.isAuthenticated ? '—' : 'без авторизации'}
                                  </span>

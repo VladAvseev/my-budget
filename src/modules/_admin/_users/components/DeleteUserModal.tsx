@@ -15,16 +15,16 @@ interface DeleteUserModalProps {
 
 /**
  * Модалка подтверждения удаления: кнопка активна, только когда введён точный
- * email пользователя (регистронезависимо). Размонтируется вместе с parent
+ * логин пользователя (регистронезависимо). Размонтируется вместе с parent
  * (рендерится по условию), поэтому состояние ввода не нужно сбрасывать эффектом.
  */
 export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ user, onClose }) => {
-  const [confirmEmail, setConfirmEmail] = useState('');
+  const [confirmLogin, setConfirmLogin] = useState('');
   const deleteMutation = useDeleteAdminUser();
 
-  const email = user.email;
+  const login = user.login;
   const isConfirmed =
-    email !== '' && confirmEmail.trim().toLowerCase() === email.trim().toLowerCase();
+    login !== '' && confirmLogin.trim().toLowerCase() === login.trim().toLowerCase();
 
   const handleConfirm = () => {
     if (!isConfirmed || deleteMutation.isPending) {
@@ -61,13 +61,13 @@ export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ user, onClose 
           цели. Отменить это действие нельзя.
         </p>
         <p className={styles.confirmText}>
-          Для подтверждения введите email пользователя <span className={styles.email}>{email}</span>
+          Для подтверждения введите логин пользователя <span className={styles.login}>{login}</span>
           .
         </p>
         <VTextInput
-          value={confirmEmail}
-          onChange={setConfirmEmail}
-          placeholder={email}
+          value={confirmLogin}
+          onChange={setConfirmLogin}
+          placeholder={login}
           autoComplete="off"
         />
       </div>

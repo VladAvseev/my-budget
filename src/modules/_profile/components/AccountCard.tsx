@@ -19,8 +19,8 @@ export const AccountCard = () => {
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
 
-  const email = user?.email ?? '—';
-  const initial = email !== '—' && email ? email[0].toUpperCase() : '?';
+  const login = user?.login ?? '—';
+  const initial = login !== '—' && login ? login[0].toUpperCase() : '?';
   const createdAt = profile?.created_at ? formatDisplay(profile.created_at.slice(0, 10)) : null;
 
   const handleSignOut = async () => {
@@ -41,8 +41,8 @@ export const AccountCard = () => {
         <div className={styles.accountHeader}>
           <div className={commonStyles.avatar}>{initial}</div>
           <div className={styles.accountInfo}>
-            <span className={commonStyles.infoLabel}>Email</span>
-            <span className={styles.accountEmail}>{email}</span>
+            <span className={commonStyles.infoLabel}>Логин</span>
+            <span className={styles.accountLogin}>{login}</span>
             {createdAt && <span className={commonStyles.infoLabel}>На сайте с {createdAt}</span>}
           </div>
         </div>

@@ -53,9 +53,9 @@ class AuthService {
    * POST /auth/register. Писем о подтверждении сервер не шлёт и сразу выдаёт
    * сессию, поэтому SIGNED_IN эмитится немедленно.
    */
-  async signUp(email: string, password: string): Promise<AuthResponse> {
+  async signUp(login: string, password: string): Promise<AuthResponse> {
     try {
-      const session = await api.publicPost<ApiSession>('/auth/register', { email, password });
+      const session = await api.publicPost<ApiSession>('/auth/register', { login, password });
       storeSession(session);
       wasSignedIn = true;
       emit('SIGNED_IN');
@@ -66,9 +66,9 @@ class AuthService {
   }
 
   /** POST /auth/login — новая «сессия-устройство» (одна строка в refresh_tokens). */
-  async signIn(email: string, password: string): Promise<AuthResponse> {
+  async signIn(login: string, password: string): Promise<AuthResponse> {
     try {
-      const session = await api.publicPost<ApiSession>('/auth/login', { email, password });
+      const session = await api.publicPost<ApiSession>('/auth/login', { login, password });
       storeSession(session);
       wasSignedIn = true;
       emit('SIGNED_IN');

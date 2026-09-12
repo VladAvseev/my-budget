@@ -1,5 +1,6 @@
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
+import { validateLogin } from '@/shared/utils';
 import { VPasswordInput } from '@/shared/ui/VPasswordInput';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import commonStyles from '@/shared/styles/common.module.css';
@@ -7,30 +8,29 @@ import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRegistration } from '../api/useRegistration';
-import { confirmPasswordAtom, emailAtom, errorAtom, passwordAtom } from '../atoms/registration';
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { confirmPasswordAtom, errorAtom, loginAtom, passwordAtom } from '../atoms/registration';
 
 export const RegistrationForm = () => {
-  const [email, setEmail] = useAtom(emailAtom);
+  const [login, setLogin] = useAtom(loginAtom);
   const [password, setPassword] = useAtom(passwordAtom);
   const [confirmPassword, setConfirmPassword] = useAtom(confirmPasswordAtom);
   const [error, setError] = useAtom(errorAtom);
-  const [emailError, setEmailError] = useState<string>();
+  const [loginError, setLoginError] = useState<string>();
   const [passwordError, setPasswordError] = useState<string>();
   const [confirmError, setConfirmError] = useState<string>();
 
   const registration = useRegistration();
-  const isEmpty = !email || !password || !confirmPassword;
+  const isEmpty = !login || !password || !confirmPassword;
 
   const validate = () => {
     let isValid = true;
 
-    if (!EMAIL_PATTERN.test(email)) {
-      setEmailError('Введите корректный email');
+    const invalidLogin = login === '' ? undefined : validateLogin(login);
+    if (invalidLogin) {
+      setLoginError(invalidLogin);
       isValid = false;
     } else {
-      setEmailError(undefined);
+      setLoginError(undefined);
     }
 
     if (password.length < 8) {
@@ -57,7 +57,7 @@ export const RegistrationForm = () => {
       return;
     }
 
-    registration.mutate({ email, password });
+    registration.mutate({ login, password });
   };
 
   return (
@@ -70,16 +70,15 @@ export const RegistrationForm = () => {
       />
 
       <VTextInput
-        label="Email"
-        type="email"
-        autoComplete="email"
-        placeholder="you@example.com"
-        value={email}
-        error={emailError}
+        label="Логин"
+        autoComplete="username"
+        placeholder="3–20 символов: буквы, цифры, _ - ."
+        value={login}
+        error={loginError}
         disabled={registration.isPending}
         onChange={(value) => {
-          setEmail(value);
-          setEmailError(undefined);
+          setLogin(value);
+          setLoginError(undefined);
         }}
       />
 

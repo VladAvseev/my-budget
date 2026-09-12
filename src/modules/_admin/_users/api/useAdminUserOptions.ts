@@ -1,12 +1,12 @@
 import { api } from '@/shared/api/http';
 import { useQuery } from '@tanstack/react-query';
 
-/** GET /admin/users/options: лёгкие id + email для селектов (без агрегатов). */
+/** GET /admin/users/options: лёгкие id + login для селектов (без агрегатов). */
 
-/** Опция пользователя: только идентификатор и email. */
+/** Опция пользователя: только идентификатор и логин. */
 export interface AdminUserOption {
   userId: string;
-  email: string;
+  login: string;
 }
 
 /** Запроса нет. */
