@@ -152,7 +152,7 @@ const SortHeader: React.FC<SortHeaderProps> = ({ label, field, activeField, orde
   </th>
 );
 
-/** Скелетон таблицы логов: те же 7 колонок, что у реальной таблицы. */
+/** Скелетон таблицы логов: те же 6 колонок, что у реальной таблицы. */
 const LogsTableSkeleton: React.FC = () => (
   <div className={styles.tableWrapper}>
     <table className={styles.table}>
@@ -164,13 +164,12 @@ const LogsTableSkeleton: React.FC = () => (
           <th>Статус</th>
           <th>Выполнение</th>
           <th>Пользователь</th>
-          <th>IP</th>
         </tr>
       </thead>
       <tbody>
         {Array.from({ length: 10 }, (_, rowIndex) => (
           <tr key={rowIndex}>
-            {Array.from({ length: 7 }, (_, cellIndex) => (
+            {Array.from({ length: 6 }, (_, cellIndex) => (
               <td key={cellIndex}>
                 <VSkeleton height={14} width={cellIndex === 2 ? 220 : 70} />
               </td>
@@ -393,13 +392,12 @@ export const Page: React.FC = () => {
                       onSort={handleSort}
                     />
                     <th>Пользователь</th>
-                    <th>IP</th>
                   </tr>
                 </thead>
                 <tbody>
                   {logs.items.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className={styles.empty}>
+                      <td colSpan={6} className={styles.empty}>
                         Логи не найдены
                       </td>
                     </tr>
@@ -422,18 +420,17 @@ export const Page: React.FC = () => {
                               {row.status}
                             </td>
                             <td>{formatNumber(row.durationMs)} мс</td>
-                            <td>
-                              {row.userEmail ?? (
-                                <span className={styles.userAnonymous}>
-                                  {row.isAuthenticated ? '—' : 'без авторизации'}
-                                </span>
-                              )}
-                            </td>
-                            <td>{row.ip ?? '—'}</td>
-                          </tr>
-                          {isExpanded && row.error && (
-                            <tr>
-                              <td colSpan={7} className={styles.detailsCell}>
+                             <td>
+                               {row.userEmail ?? (
+                                 <span className={styles.userAnonymous}>
+                                   {row.isAuthenticated ? '—' : 'без авторизации'}
+                                 </span>
+                               )}
+                             </td>
+                           </tr>
+                           {isExpanded && row.error && (
+                             <tr>
+                               <td colSpan={6} className={styles.detailsCell}>
                                 <div className={styles.detailsBlock}>
                                   <span className={styles.detailsTitle}>Ошибка</span>
                                   <pre className={`${styles.detailsCode} ${styles.errorText}`}>

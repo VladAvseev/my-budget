@@ -10,7 +10,7 @@ export type AdminLogsSortOrder = 'asc' | 'desc';
 
 /**
  * Одна строка лога: сервер хранит только метод, путь, статус, длительность,
- * автора, ip и текст ошибки (для ответов с статусом >= 400).
+ * автора и текст ошибки (для ответов с статусом >= 400).
  */
 export interface AdminLogRow {
   id: number;
@@ -27,7 +27,6 @@ export interface AdminLogRow {
   userEmail: string | null;
   /** true — на момент запроса был валидный access-токен. */
   isAuthenticated: boolean;
-  ip: string | null;
 }
 
 /** Страница логов (ответ GET /admin/logs). */
