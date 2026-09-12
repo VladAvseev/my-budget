@@ -63,7 +63,7 @@ export const LoginForm = () => {
       <VTextInput
         label="Логин"
         autoComplete="username"
-        placeholder="ivan_petrov"
+        placeholder="my_login"
         value={login}
         error={loginError}
         disabled={loginMutation.isPending}
