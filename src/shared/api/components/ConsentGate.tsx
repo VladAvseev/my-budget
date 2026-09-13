@@ -13,7 +13,7 @@ import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VModal } from '@/shared/ui/VModal';
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import styles from './ConsentGate.module.css';
 
@@ -46,6 +46,13 @@ const LegalDocumentView = lazy(async () => {
  * шлёт событие 'consent-required' — статус перечитывается. Под чекбоксом —
  * ссылки на политику и пользовательское соглашение: полный правовой комплект
  * доступен прямо из окна, а не только со страниц /legal/*.
+ *
+ * Исключение — публичные страницы /legal/*: там окно НЕ рисуется, иначе
+ * переход по ссылке из модалки (в той же или новой вкладке — токен-то общий)
+ * упирался бы в то же перекрытие и документ нельзя было бы прочитать.
+ * Юридической дыры нет: тексты и так доступны гостям, а бизнес-API по-прежнему
+ * закрыт серверным requireConsent; вернёшься на любой другой маршрут — окно
+ * на месте (статус согласия перечитывается без перемонтирования гарда).
  */
 
 const INTRO: Record<NonNullable<ConsentStatus['reason']>, string> = {
@@ -61,8 +68,12 @@ const INTRO: Record<NonNullable<ConsentStatus['reason']>, string> = {
     'хранить и обрабатывать ваши данные: примите политику заново или удалите аккаунт.',
 };
 
+/** Префикс публичных страниц юридических документов — на нём gate не блокирует. */
+const LEGAL_PATH_PREFIX = '/legal';
+
 export const ConsentGate = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, user } = useAuth();
+  const { pathname } = useLocation();
   const statusQuery = useConsentStatus();
   const { refetch } = statusQuery;
 
@@ -88,6 +99,12 @@ export const ConsentGate = ({ children }: { children: ReactNode }) => {
 
   const status = statusQuery.data;
   if (!status?.needsConsent) {
+    return <>{children}</>;
+  }
+
+  // На /legal/* окно не рисуется: иначе ссылки из самого окна вели бы на
+  // страницы, перекрытые тем же окном (см. docstring компонента).
+  if (pathname === LEGAL_PATH_PREFIX || pathname.startsWith(`${LEGAL_PATH_PREFIX}/`)) {
     return <>{children}</>;
   }
 
