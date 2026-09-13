@@ -58,11 +58,17 @@ const STORAGE_KEY = '***';
 /** Ошибка API: HTTP-статус + текст, который сервер уже отдаёт по-русски. */
 export class ApiError extends Error {
   status: number;
+  /**
+   * Машинночитаемый код ожидаемой бизнес-ошибки из envelope
+   * { error: { code } } (например 'CONSENT_REQUIRED' — показать consent-gate).
+   */
+  code?: string;
 
-  constructor(message: string, status: number) {
+  constructor(message: string, status: number, code?: string) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
+    this.code = code;
   }
 }
 
@@ -187,10 +193,21 @@ http.interceptors.response.use(undefined, (error: unknown) => {
       return Promise.reject(cancelReason(error.config?.signal, error));
     }
     if (error.response) {
-      const message =
-        (error.response.data as { error?: { message?: string } })?.error?.message ??
-        `Ошибка запроса (${error.response.status})`;
-      return Promise.reject(new ApiError(message, error.response.status));
+      const envelope = (
+        error.response.data as { error?: { message?: string; code?: string } } | undefined
+      )?.error;
+      const apiError = new ApiError(
+        envelope?.message ?? `Ошибка запроса (${error.response.status})`,
+        error.response.status,
+        envelope?.code,
+      );
+      // Серверный requireConsent ответил 403 CONSENT_REQUIRED (срочный отзыв/
+      // публикация новой версии, пока вкладка открыта) — сигнал ConsentGate
+      // перечитать статус. Окно событий: сам http.ts про Query ничего не знает.
+      if (envelope?.code === 'CONSENT_REQUIRED') {
+        window.dispatchEvent(new Event('consent-required'));
+      }
+      return Promise.reject(apiError);
     }
     return Promise.reject(new ApiError('Нет связи с сервером', 0));
   }
@@ -274,4 +291,7 @@ export const api = {
     request<T>('POST', path, { ...opts, body, auth: false }),
   publicPatch: <T>(path: string, body?: unknown, opts?: ApiRequestConfig) =>
     request<T>('PATCH', path, { ...opts, body, auth: false }),
+  /** GET без Bearer: публичные /legal/* (текст доступен и незалогиненным). */
+  publicGet: <T>(path: string, opts?: ApiRequestConfig) =>
+    request<T>('GET', path, { ...opts, auth: false }),
 };

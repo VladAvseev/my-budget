@@ -37,11 +37,7 @@ export type UseAdminLogsDynamicsResponse = AdminLogsDynamics;
  * фильтров keepPreviousData оставляет прошлый график (карточка приглушает его
  * через isPlaceholderData).
  */
-export const useAdminLogsDynamics = ({
-  audience,
-  metric,
-  bucket,
-}: UseAdminLogsDynamicsRequest) =>
+export const useAdminLogsDynamics = ({ audience, metric, bucket }: UseAdminLogsDynamicsRequest) =>
   useQuery<UseAdminLogsDynamicsResponse>({
     queryKey: ['admin', 'logs', 'dynamics', audience, metric, bucket],
     placeholderData: keepPreviousData,

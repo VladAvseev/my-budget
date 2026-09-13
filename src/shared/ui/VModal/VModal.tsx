@@ -14,6 +14,13 @@ export interface VModalProps {
   width?: string;
   style?: CSSProperties;
   className?: string;
+  /**
+   * Блокирующий режим (consent-gate): крестик скрыт, Escape не закрывает —
+   * пользователь обязан принять решение (принять согласие или выйти/удалить
+   * аккаунт кнопками внутри), «закрыть на секунду» недоступно. onClose при
+   * этом обязателен: его использует вложенное подтверждение удаления.
+   */
+  blocking?: boolean;
 }
 
 const FOCUSABLE_SELECTOR =
@@ -29,12 +36,15 @@ export const VModal = ({
   width = '480px',
   style,
   className,
+  blocking,
 }: VModalProps) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const onCloseRef = useRef(onClose);
+  const blockingRef = useRef(blocking);
 
   useEffect(() => {
     onCloseRef.current = onClose;
+    blockingRef.current = blocking;
   });
 
   useEffect(() => {
@@ -49,7 +59,10 @@ export const VModal = ({
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onCloseRef.current();
+        // В блокирующем режиме Escape не закрывает окно (consent-gate).
+        if (!blockingRef.current) {
+          onCloseRef.current();
+        }
         return;
       }
       if (event.key !== 'Tab') {
@@ -103,9 +116,14 @@ export const VModal = ({
       >
         <div className={styles.header}>
           <div className={styles.title}>{title}</div>
-          <button type="button" aria-label="Закрыть" onClick={onClose} className={styles.close}>
-            <ClearIcon size={18} color="currentColor" />
-          </button>
+          {blocking ? (
+            // Пустой элемент вместо крестика сохраняет раскладку заголовка.
+            <span aria-hidden="true" />
+          ) : (
+            <button type="button" aria-label="Закрыть" onClick={onClose} className={styles.close}>
+              <ClearIcon size={18} color="currentColor" />
+            </button>
+          )}
         </div>
 
         {Boolean(error) && (

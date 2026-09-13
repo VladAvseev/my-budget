@@ -74,7 +74,8 @@ export const LogsDynamicsCard = () => {
   const bucketLabel = bucket === 'hour' ? 'час' : 'сутки';
   const avgLabel = `В среднем за ${bucketLabel}`;
   const lastLabel = `за последний ${bucket === 'hour' ? 'час' : 'день'}`;
-  const title = metric === 'unique_users' ? 'Активность уникальных пользователей' : 'Количество логов';
+  const title =
+    metric === 'unique_users' ? 'Активность уникальных пользователей' : 'Количество логов';
 
   return (
     <VCard className={styles.card}>

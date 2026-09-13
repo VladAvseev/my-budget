@@ -1,0 +1,38 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+
+.intro {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-m);
+  line-height: 1.5;
+}
+
+/* Сам прокручиваемый блок текста поверх прокрутки тела модалки не нужен —
+   VModal.body уже overflow-y: auto; ограничим только рамку-контейнер. */
+.document {
+  padding: var(--space-l);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  background-color: var(--color-bg-secondary, transparent);
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl);
+}
+
+.link {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

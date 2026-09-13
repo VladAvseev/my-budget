@@ -18,7 +18,9 @@ interface AccumulationsLegendProps {
   fullWidth?: boolean;
 }
 
-const buildSegments = (items: BootstrapSavingsItem[]): { segments: CategorySegment[]; total: number } => {
+const buildSegments = (
+  items: BootstrapSavingsItem[],
+): { segments: CategorySegment[]; total: number } => {
   const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
   const sorted = [...items].sort((a, b) => b.amount - a.amount);
@@ -42,10 +44,7 @@ const buildSegments = (items: BootstrapSavingsItem[]): { segments: CategorySegme
   return { segments, total };
 };
 
-export const AccumulationsLegend = ({
-  items,
-  fullWidth = false,
-}: AccumulationsLegendProps) => {
+export const AccumulationsLegend = ({ items, fullWidth = false }: AccumulationsLegendProps) => {
   const { segments } = buildSegments(items);
   const currency = useCurrency();
 

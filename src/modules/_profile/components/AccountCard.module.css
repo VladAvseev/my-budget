@@ -29,3 +29,31 @@
 .logoutButton {
   margin-left: auto;
 }
+
+.legalSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.legalNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-m);
+  font-size: var(--font-size-m);
+}
+
+.legalLink {
+  font-size: var(--font-size-m);
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.legalLink:hover {
+  text-decoration: underline;
+}
+
+.consentLine {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+}

@@ -13,7 +13,10 @@ import styles from './page.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useOverviewCategorySummary, type CategorySummaryRow } from './api/useOverviewCategorySummary';
+import {
+  useOverviewCategorySummary,
+  type CategorySummaryRow,
+} from './api/useOverviewCategorySummary';
 import { useReports } from './api/useReports';
 import {
   comparedReportIdAtom,

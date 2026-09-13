@@ -1,26 +1,37 @@
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
+import { VCheckbox } from '@/shared/ui/VCheckbox';
 import { validateLogin } from '@/shared/utils';
 import { VPasswordInput } from '@/shared/ui/VPasswordInput';
 import { VTextInput } from '@/shared/ui/VTextInput';
+import { GATING_DOCUMENT_TYPE, legalDocumentPath } from '@/shared/legal/documents';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRegistration } from '../api/useRegistration';
-import { confirmPasswordAtom, errorAtom, loginAtom, passwordAtom } from '../atoms/registration';
+import {
+  confirmPasswordAtom,
+  consentAtom,
+  errorAtom,
+  loginAtom,
+  passwordAtom,
+} from '../atoms/registration';
 
 export const RegistrationForm = () => {
   const [login, setLogin] = useAtom(loginAtom);
   const [password, setPassword] = useAtom(passwordAtom);
   const [confirmPassword, setConfirmPassword] = useAtom(confirmPasswordAtom);
+  const [consent, setConsent] = useAtom(consentAtom);
   const [error, setError] = useAtom(errorAtom);
   const [loginError, setLoginError] = useState<string>();
   const [passwordError, setPasswordError] = useState<string>();
   const [confirmError, setConfirmError] = useState<string>();
 
   const registration = useRegistration();
-  const isEmpty = !login || !password || !confirmPassword;
+  // Кнопка заблокирована, пока чекбокс согласия не отмечен вручную (п.3) —
+  // сервер всё равно проверит флаг повторно (п.4), обход UI не создаёт аккаунт.
+  const isEmpty = !login || !password || !confirmPassword || !consent;
 
   const validate = () => {
     let isValid = true;
@@ -57,7 +68,7 @@ export const RegistrationForm = () => {
       return;
     }
 
-    registration.mutate({ login, password });
+    registration.mutate({ login, password, consent });
   };
 
   return (
@@ -107,6 +118,32 @@ export const RegistrationForm = () => {
           setConfirmError(undefined);
         }}
       />
+
+      {/* Неотмеченный по умолчанию чекбокс + явные ссылки на оба документа
+          (требование п.3): принятие «Политики конфиденциальности» считается
+          согласием на обработку ПДн. Без чекбокса кнопка сабмита неактивна,
+          сервер всё равно проверит флаг повторно (п.4), обход UI не создаёт
+          аккаунт. */}
+      <VCheckbox checked={consent} onChange={setConsent} disabled={registration.isPending}>
+        Принимаю{' '}
+        <Link
+          to={legalDocumentPath(GATING_DOCUMENT_TYPE)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={commonStyles.link}
+        >
+          «Политику конфиденциальности»
+        </Link>{' '}
+        (даю согласие на обработку персональных данных) и{' '}
+        <Link
+          to={legalDocumentPath('terms_of_use')}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={commonStyles.link}
+        >
+          «Пользовательское соглашение»
+        </Link>
+      </VCheckbox>
 
       <VButton onClick={handleSubmit} isLoading={registration.isPending} isDisabled={isEmpty}>
         Зарегистрироваться

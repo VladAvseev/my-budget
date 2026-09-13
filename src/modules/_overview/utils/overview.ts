@@ -1,8 +1,5 @@
 import type { Category } from '@/shared/api/types/domain';
-import {
-  signedOperationAmount,
-  type OperationType,
-} from '@/shared/api/types/domain';
+import { signedOperationAmount, type OperationType } from '@/shared/api/types/domain';
 import type { Report } from '@/shared/api/types/domain';
 import { emptyAmounts, type OperationAmounts } from '@/shared/utils';
 import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';

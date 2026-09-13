@@ -55,14 +55,7 @@ export interface UseAdminLogsRequest {
 export type UseAdminLogsResponse = AdminLogsPage;
 
 /** GET /admin/logs: страница логов запросов с фильтром, сортировкой и пагинацией. */
-export const useAdminLogs = ({
-  status,
-  userId,
-  methods,
-  page,
-  sort,
-  order,
-}: UseAdminLogsRequest) =>
+export const useAdminLogs = ({ status, userId, methods, page, sort, order }: UseAdminLogsRequest) =>
   useQuery<UseAdminLogsResponse>({
     queryKey: ['admin', 'logs', { status, userId, methods, page, sort, order }],
     queryFn: ({ signal }) =>

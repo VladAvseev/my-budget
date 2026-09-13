@@ -1,12 +1,21 @@
-import { useProfile } from '@/shared/api/hooks';
+import {
+  useProfile,
+  useDeleteAccount,
+  useRevokeConsent,
+  useConsentStatus,
+} from '@/shared/api/hooks';
 import { useAuth } from '@/shared/api/authProvider';
+import { GATING_DOCUMENT_TYPE, legalDocumentPath } from '@/shared/legal/documents';
+import { LegalLinks } from '@/shared/legal/LegalLinks';
+import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
-import { formatDisplay } from '@/shared/utils';
+import { formatDisplay, getErrorMessage } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { changePasswordOpenAtom } from '../atoms/profile';
 import { ChangePasswordModal } from './ChangePasswordModal';
 import styles from './AccountCard.module.css';
@@ -15,9 +24,16 @@ export const AccountCard = () => {
   const { user } = useAuth();
   const { signOut } = useAuth();
   const { data: profile } = useProfile();
+  const { data: consentStatus } = useConsentStatus();
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useAtom(changePasswordOpenAtom);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
+  const [isRevokeConfirmOpen, setIsRevokeConfirmOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [consentError, setConsentError] = useState<string>();
+
+  const revokeConsent = useRevokeConsent();
+  const deleteAccount = useDeleteAccount();
 
   const login = user?.login ?? '—';
   const initial = login !== '—' && login ? login[0].toUpperCase() : '?';
@@ -31,6 +47,29 @@ export const AccountCard = () => {
       setIsSigningOut(false);
       setIsLogoutConfirmOpen(false);
     }
+  };
+
+  /** Отзыв согласия (п.7): сервер сразу обезличивает данные и рвёт сессии. */
+  const handleRevoke = () => {
+    setConsentError(undefined);
+    revokeConsent.mutate(undefined, {
+      onSuccess: () => {
+        setIsRevokeConfirmOpen(false);
+        void signOut();
+      },
+      onError: (error) => setConsentError(getErrorMessage(error)),
+    });
+  };
+
+  const handleDelete = () => {
+    setConsentError(undefined);
+    deleteAccount.mutate(undefined, {
+      onSuccess: () => {
+        setIsDeleteConfirmOpen(false);
+        void signOut();
+      },
+      onError: (error) => setConsentError(getErrorMessage(error)),
+    });
   };
 
   return (
@@ -60,6 +99,58 @@ export const AccountCard = () => {
             Выйти
           </VButton>
         </div>
+
+        <div className={commonStyles.columnL}>
+          <span className={commonStyles.infoLabel}>
+            Отзыв согласия или удаление аккаунта обезличивают все данные безвозвратно (в юридическом
+            журнале остаются только факт и дата событий).
+          </span>
+          {consentError && (
+            <VBanner
+              type="error"
+              visible
+              message={consentError}
+              onClose={() => setConsentError(undefined)}
+            />
+          )}
+          <div className={styles.actionsRow}>
+            <VButton
+              variant="secondary"
+              onClick={() => setIsRevokeConfirmOpen(true)}
+              isDisabled={revokeConsent.isPending || deleteAccount.isPending}
+            >
+              Отозвать согласие
+            </VButton>
+            <VButton
+              variant="danger"
+              onClick={() => setIsDeleteConfirmOpen(true)}
+              isDisabled={revokeConsent.isPending || deleteAccount.isPending}
+            >
+              Удалить аккаунт
+            </VButton>
+          </div>
+        </div>
+
+        {/* Правовые документы (п.2 требований): все тексты живут в БД, отсюда
+            только ссылки. Версия принятого согласия ведёт на историческую
+            версию политики — «какой текст я видел, когда соглашался». */}
+        <div className={styles.legalSection}>
+          <span className={commonStyles.infoLabel}>Правовые документы</span>
+          <LegalLinks className={styles.legalNav} itemClassName={styles.legalLink} />
+          {consentStatus?.grantedVersion && (
+            <span className={styles.consentLine}>
+              Согласие на обработку ПДн (политика конфиденциальности) принято для версии{' '}
+              <Link
+                to={legalDocumentPath(GATING_DOCUMENT_TYPE, consentStatus.grantedVersion)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.legalLink}
+              >
+                {consentStatus.grantedVersion}
+              </Link>
+            </span>
+          )}
+        </div>
       </div>
 
       <ChangePasswordModal
@@ -76,6 +167,37 @@ export const AccountCard = () => {
         isLoading={isSigningOut}
         onCancel={() => setIsLogoutConfirmOpen(false)}
         onConfirm={handleSignOut}
+      />
+
+      <VConfirmModal
+        visible={isRevokeConfirmOpen}
+        title="Отозвать согласие"
+        message={
+          'Вы отзываете согласие на обработку персональных данных. Это необратимо: ' +
+          'отчёты, операции, категории, накопления и цели будут удалены немедленно, ' +
+          'аккаунт — обезличен (войти в него станет невозможно), вы выйдете на всех ' +
+          'устройствах. Восстановить данные нельзя, только зарегистрировать новый аккаунт.'
+        }
+        confirmLabel="Отозвать и удалить данные"
+        cancelLabel="Отмена"
+        isLoading={revokeConsent.isPending}
+        onCancel={() => setIsRevokeConfirmOpen(false)}
+        onConfirm={handleRevoke}
+      />
+
+      <VConfirmModal
+        visible={isDeleteConfirmOpen}
+        title="Удалить аккаунт"
+        message={
+          'Аккаунт и все финансовые данные будут удалены безвозвратно (в юридическом ' +
+          'журнале согласий останутся только факт и дата обезличивания). Вы выйдете ' +
+          'на всех устройствах.'
+        }
+        confirmLabel="Удалить навсегда"
+        cancelLabel="Отмена"
+        isLoading={deleteAccount.isPending}
+        onCancel={() => setIsDeleteConfirmOpen(false)}
+        onConfirm={handleDelete}
       />
     </VCard>
   );

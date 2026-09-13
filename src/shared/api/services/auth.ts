@@ -51,11 +51,16 @@ let wasSignedIn = Boolean(getStoredSession());
 class AuthService {
   /**
    * POST /auth/register. Писем о подтверждении сервер не шлёт и сразу выдаёт
-   * сессию, поэтому SIGNED_IN эмитится немедленно.
+   * сессию, поэтому SIGNED_IN эмитится немедленно. consent — обязательный для
+   * сервера флаг согласия на обработку ПДн (без true регистрация вернёт 400).
    */
-  async signUp(login: string, password: string): Promise<AuthResponse> {
+  async signUp(login: string, password: string, consent: boolean): Promise<AuthResponse> {
     try {
-      const session = await api.publicPost<ApiSession>('/auth/register', { login, password });
+      const session = await api.publicPost<ApiSession>('/auth/register', {
+        login,
+        password,
+        consent,
+      });
       storeSession(session);
       wasSignedIn = true;
       emit('SIGNED_IN');

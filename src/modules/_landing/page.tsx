@@ -1,4 +1,5 @@
 import { BanknotesIcon, MenuIcon, OverviewIcon, SavingsIcon } from '@/shared/icons';
+import { LegalLinks } from '@/shared/legal/LegalLinks';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import React from 'react';
@@ -206,6 +207,7 @@ export const Page: React.FC = () => {
       <footer className={styles.footer}>
         <div className={`${styles.container} ${styles.footerInner}`}>
           <span className={styles.footerCopy}>© {new Date().getFullYear()} «Мои финансы»</span>
+          <LegalLinks className={styles.footerNav} itemClassName={styles.footerLink} />
         </div>
       </footer>
     </div>

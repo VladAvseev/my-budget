@@ -420,17 +420,17 @@ export const Page: React.FC = () => {
                               {row.status}
                             </td>
                             <td>{formatNumber(row.durationMs)} мс</td>
-                             <td>
-                               {row.userLogin ?? (
-                                 <span className={styles.userAnonymous}>
-                                   {row.isAuthenticated ? '—' : 'без авторизации'}
-                                 </span>
-                               )}
-                             </td>
-                           </tr>
-                           {isExpanded && row.error && (
-                             <tr>
-                               <td colSpan={6} className={styles.detailsCell}>
+                            <td>
+                              {row.userLogin ?? (
+                                <span className={styles.userAnonymous}>
+                                  {row.isAuthenticated ? '—' : 'без авторизации'}
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                          {isExpanded && row.error && (
+                            <tr>
+                              <td colSpan={6} className={styles.detailsCell}>
                                 <div className={styles.detailsBlock}>
                                   <span className={styles.detailsTitle}>Ошибка</span>
                                   <pre className={`${styles.detailsCode} ${styles.errorText}`}>

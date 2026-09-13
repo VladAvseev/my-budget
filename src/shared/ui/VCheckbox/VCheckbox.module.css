@@ -1,0 +1,26 @@
+.root {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-m);
+  cursor: pointer;
+}
+
+.input {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: var(--color-accent);
+  cursor: inherit;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.label {
+  font-size: var(--font-size-m);
+  line-height: 1.45;
+  color: var(--color-text-primary);
+}

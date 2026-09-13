@@ -34,10 +34,15 @@ export interface AuthState {
 export interface LoginCredentials {
   login: string;
   password: string;
+  /**
+   * Флаг согласия на обработку ПДн (только регистрация). Обязателен на сервере
+   * (п.4 требований): без true аккаунт не создаётся.
+   */
+  consent?: boolean;
 }
 
 export interface AuthContextType extends AuthState {
-  signUp: (login: string, password: string) => Promise<AuthResponse>;
+  signUp: (login: string, password: string, consent: boolean) => Promise<AuthResponse>;
   signIn: (login: string, password: string) => Promise<AuthResponse>;
   signOut: () => Promise<{ error: AuthError | null }>;
   getToken: () => Promise<string | null>;

@@ -119,12 +119,9 @@ export const CategoryBreakdown = ({
     expenseCategories.data ?? [],
     ['expense'],
   );
-  const incomeGroups = buildCategoryGroups(
-    reports,
-    summaryByReport,
-    incomeCategories.data ?? [],
-    ['income'],
-  );
+  const incomeGroups = buildCategoryGroups(reports, summaryByReport, incomeCategories.data ?? [], [
+    'income',
+  ]);
   const savingsGroups = buildCategoryGroups(
     reports,
     summaryByReport,
@@ -302,8 +299,7 @@ export const CategoryBreakdown = ({
         </div>
       )}
 
-      {(savingsGroups.length > 0 ||
-        hasOperations(summaryByReport, ['savings', 'savings_out'])) && (
+      {(savingsGroups.length > 0 || hasOperations(summaryByReport, ['savings', 'savings_out'])) && (
         <div className={styles.section}>
           {sectionTitle(
             'Накопления',

@@ -45,7 +45,9 @@ const parsePeriod = (period: string, aggregation: DynamicsAggregation): Date | n
   }
   if (aggregation === 'M') {
     const [year, month] = parseNumbers(parts, 2) ?? [];
-    return year === undefined || month === undefined ? null : new Date(Date.UTC(year, month - 1, 1));
+    return year === undefined || month === undefined
+      ? null
+      : new Date(Date.UTC(year, month - 1, 1));
   }
   const [year] = parseNumbers(parts, 1) ?? [];
   return year === undefined ? null : new Date(Date.UTC(year, 0, 1));

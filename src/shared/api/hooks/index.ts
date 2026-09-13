@@ -6,6 +6,21 @@ export {
 } from './useGlobalBalance';
 export { useGlobalBalance } from './useGlobalBalance';
 export { useProfile, type UseProfileResponse } from './useProfile';
+export {
+  consentStatusQueryKey,
+  useConsentStatus,
+  useDeleteAccount,
+  useGrantConsent,
+  useRevokeConsent,
+  type ConsentStatus,
+  type UseConsentStatusResponse,
+} from './useConsent';
+export {
+  legalDocumentQueryKey,
+  useLegalDocument,
+  type LegalDocument,
+  type UseLegalDocumentResponse,
+} from './useLegalDocument';
 export { useCurrency } from './useCurrency';
 export { useAdminStatus } from './useAdminStatus';
 export {

@@ -1,8 +1,4 @@
-import {
-  useBootstrap,
-  useCurrency,
-  type UseBootstrapResponse,
-} from '@/shared/api/hooks';
+import { useBootstrap, useCurrency, type UseBootstrapResponse } from '@/shared/api/hooks';
 import { ChevronRightIcon, OverviewIcon } from '@/shared/icons';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
@@ -30,7 +26,12 @@ export const OverviewCard = () => {
 
   const bootstrap = data ?? EMPTY_BOOTSTRAP;
   const startBalance = Number(bootstrap.profile.startBalance) || 0;
-  const { income, expense, savings: savingsTotal, balance } = computeGlobalTotals(
+  const {
+    income,
+    expense,
+    savings: savingsTotal,
+    balance,
+  } = computeGlobalTotals(
     startBalance,
     bootstrap.globalTotals,
     bootstrap.globalTotals.accumulationsTotal,

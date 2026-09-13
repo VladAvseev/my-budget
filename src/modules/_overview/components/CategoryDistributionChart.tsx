@@ -20,9 +20,7 @@ const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: strin
   { value: 'savings', label: 'Накопления' },
 ];
 
-export const CategoryDistributionChart = ({
-  summaryByReport,
-}: CategoryDistributionChartProps) => {
+export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistributionChartProps) => {
   const [selectedType, setSelectedType] = useState<'expense' | 'income' | 'savings'>('expense');
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 

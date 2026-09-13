@@ -1,5 +1,7 @@
 import { registration } from '@/modules/_registration';
+import { legal } from '@/modules/_legal';
 import { AuthProvider } from '@/shared/api/authProvider';
+import { ConsentGate } from '@/shared/api/components/ConsentGate';
 import React from 'react';
 import { BrowserRouter, Routes } from 'react-router-dom';
 import { login } from '@/modules/_login';
@@ -18,17 +20,22 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {login()}
-          {registration()}
-          {home({ guest: <LandingPage /> })}
-          {profile()}
-          {reports()}
-          {accumulations()}
-          {overview()}
-          {admin()}
-          {notFound()}
-        </Routes>
+        {/* ConsentGate — поверх всех маршрутов: '/' для авторизованных идёт
+            через AuthSwitch, минуя ProtectedRoute, поэтому gate не в гарде. */}
+        <ConsentGate>
+          <Routes>
+            {login()}
+            {registration()}
+            {home({ guest: <LandingPage /> })}
+            {profile()}
+            {reports()}
+            {accumulations()}
+            {overview()}
+            {admin()}
+            {legal()}
+            {notFound()}
+          </Routes>
+        </ConsentGate>
       </AuthProvider>
     </BrowserRouter>
   );

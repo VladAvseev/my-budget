@@ -12,7 +12,7 @@ export const useRegistration = () => {
 
   return useMutation({
     mutationFn: (credentials: LoginCredentials) =>
-      authService.signUp(credentials.login, credentials.password),
+      authService.signUp(credentials.login, credentials.password, credentials.consent === true),
     onSuccess: (result) => {
       if (result.error) {
         setError(getErrorMessage(result.error));

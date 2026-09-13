@@ -45,8 +45,7 @@ export default defineConfig({
     // В отчёте о размерах показываем только оригиналы:
     // их gzip-размер и так выводится в колонке Gzip
     printFileSize: {
-      exclude: (asset) =>
-        /\.(?:map|LICENSE\.txt|d\.(?:ts|mts|cts)|gz)$/.test(asset.name),
+      exclude: (asset) => /\.(?:map|LICENSE\.txt|d\.(?:ts|mts|cts)|gz)$/.test(asset.name),
     },
   },
   splitChunks: {

@@ -1,10 +1,5 @@
 import { useBreakpoint } from '@/shared/hooks';
-import {
-  useAdminStatus,
-  useCapital,
-  useCurrency,
-  useGlobalBalance,
-} from '@/shared/api/hooks';
+import { useAdminStatus, useCapital, useCurrency, useGlobalBalance } from '@/shared/api/hooks';
 import {
   BanknotesIcon,
   ChevronRightIcon,

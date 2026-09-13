@@ -95,11 +95,7 @@ export const OperationsDynamicsCard = () => {
         {metric === 'count' && (
           <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />
         )}
-        <VButtonGroup
-          options={aggregationOptions}
-          value={aggregation}
-          onChange={setAggregation}
-        />
+        <VButtonGroup options={aggregationOptions} value={aggregation} onChange={setAggregation} />
       </div>
 
       <div className={isStale ? styles.stale : undefined}>
