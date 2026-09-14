@@ -1,5 +1,11 @@
 import { convertAmount } from './convertCurrency';
 
+/** Доля от дохода: дефицит сохраняет знак, при нулевом доходе доля не определена. */
+export const percentOfIncome = (value: number, income: number): number | null =>
+  income > 0 && Number.isFinite(income) && Number.isFinite(value)
+    ? Math.round((value / income) * 100)
+    : null;
+
 export interface ConvertOptions {
   from: string;
   to: string;

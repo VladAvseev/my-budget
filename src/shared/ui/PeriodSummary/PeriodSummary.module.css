@@ -24,3 +24,7 @@
   font-size: var(--font-size-s);
   color: var(--color-text-secondary);
 }
+
+.value {
+  overflow-wrap: anywhere;
+}

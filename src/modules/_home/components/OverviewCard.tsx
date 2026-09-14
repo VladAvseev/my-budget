@@ -1,8 +1,15 @@
-import { useBootstrap, useCurrency, type UseBootstrapResponse } from '@/shared/api/hooks';
+import { useAuth } from '@/shared/api/authProvider';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
+import {
+  useBootstrap,
+  useCapital,
+  useCurrency,
+  type UseBootstrapResponse,
+} from '@/shared/api/hooks';
 import { ChevronRightIcon, OverviewIcon } from '@/shared/icons';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
-import { computeGlobalTotals, formatAmount } from '@/shared/utils';
+import { formatAmount, percentOfIncome } from '@/shared/utils';
 import { Link } from 'react-router-dom';
 import { CardSkeleton } from './CardSkeleton';
 import styles from '../homeCard.module.css';
@@ -17,16 +24,27 @@ const EMPTY_BOOTSTRAP: UseBootstrapResponse = {
 export const OverviewCard = () => {
   const { data, isLoading } = useBootstrap();
   const currency = useCurrency();
+  const { user } = useAuth();
+  const capitalQuery = useCapital(user?.id ?? '');
 
-  if (isLoading) {
+  if (isLoading || capitalQuery.isLoading) {
     return <CardSkeleton delay="0.12s" />;
   }
 
   const bootstrap = data ?? EMPTY_BOOTSTRAP;
-  const startBalance = Number(bootstrap.profile.startBalance) || 0;
-  const { income, expense, balance } = computeGlobalTotals(startBalance, bootstrap.globalTotals);
-  const percentOfIncome = (value: number) =>
-    income > 0 ? Math.max(0, Math.round((value / income) * 100)) : null;
+  if (capitalQuery.isError) {
+    return (
+      <VErrorCard
+        title="Не удалось загрузить капитал"
+        error={capitalQuery.error}
+        onRetry={() => void capitalQuery.refetch()}
+        isRetrying={capitalQuery.isFetching}
+      />
+    );
+  }
+  const { income, expense: regularExpense, daily } = bootstrap.globalTotals;
+  const expense = regularExpense + daily;
+  const capital = capitalQuery.capital ?? 0;
 
   const items = [
     {
@@ -38,14 +56,14 @@ export const OverviewCard = () => {
     {
       label: 'Расходы',
       value: formatAmount(expense, currency?.symbol),
-      percent: percentOfIncome(expense),
+      percent: percentOfIncome(expense, income),
       color: 'var(--color-error)',
     },
     {
-      label: 'Баланс',
-      value: formatAmount(balance, currency?.symbol),
-      percent: percentOfIncome(balance),
-      color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
+      label: 'Капитал',
+      value: formatAmount(capital, currency?.symbol),
+      percent: null,
+      color: capital >= 0 ? 'var(--color-success)' : 'var(--color-error)',
     },
   ];
 
@@ -62,7 +80,9 @@ export const OverviewCard = () => {
           </span>
           <div className={summaryStyles.title}>Аналитика</div>
         </div>
-        <div className={summaryStyles.subtitle}>Общая сводка с учётом начального баланса</div>
+        <div className={summaryStyles.subtitle}>
+          Доходы и расходы за всё время · капитал по всем счетам
+        </div>
         <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
             <div key={`${item.label}-label`} className={summaryStyles.label}>

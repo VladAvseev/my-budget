@@ -1,49 +1,14 @@
-import { VCard } from '@/shared/ui/VCard';
-import { formatAmount } from '@/shared/utils';
+import { PeriodSummary } from '@/shared/ui/PeriodSummary';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
-import { percentOfIncome } from '../utils/overview';
-import styles from './SummaryCard.module.css';
 
-interface SummaryCardProps {
-  income: number;
-  expenses: number;
-}
-
-export const SummaryCard = ({ income, expenses }: SummaryCardProps) => {
+export const SummaryCard = ({ income, expenses }: { income: number; expenses: number }) => {
   const { displaySymbol, convertOptions } = useDisplayCurrency();
-  const balance = income - expenses;
-
-  const items = [
-    {
-      label: 'Доходы',
-      value: income,
-      color: 'var(--color-success)',
-    },
-    {
-      label: 'Расходы',
-      value: expenses,
-      percent: percentOfIncome(expenses, income),
-      color: 'var(--color-error)',
-    },
-    {
-      label: 'Остаток',
-      value: balance,
-      percent: balance >= 0 ? percentOfIncome(balance, income) : 0,
-      color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
-    },
-  ];
-
   return (
-    <div className={styles.grid}>
-      {items.map((item) => (
-        <VCard key={item.label} className={styles.card}>
-          <div className={styles.label}>{item.label}</div>
-          <div className={styles.value} style={{ color: item.color }}>
-            {formatAmount(item.value, displaySymbol, convertOptions)}
-          </div>
-          {item.percent != null && <div className={styles.percent}>{item.percent}% от доходов</div>}
-        </VCard>
-      ))}
-    </div>
+    <PeriodSummary
+      income={income}
+      expenses={expenses}
+      currencySymbol={displaySymbol}
+      convertOptions={convertOptions}
+    />
   );
 };

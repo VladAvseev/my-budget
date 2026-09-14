@@ -3,7 +3,7 @@ import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
 import summaryStyles from '@/shared/styles/summary.module.css';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
-import { formatAmount } from '@/shared/utils';
+import { formatAmount, percentOfIncome } from '@/shared/utils';
 import { Link } from 'react-router-dom';
 import { CardSkeleton } from './CardSkeleton';
 import styles from '../homeCard.module.css';
@@ -47,9 +47,6 @@ export const LastReportCard = () => {
 
   const expenses = summary.expense + summary.daily;
   const balance = summary.income - expenses;
-  const percentOfIncome = (value: number) =>
-    summary.income > 0 ? Math.max(0, Math.round((value / summary.income) * 100)) : null;
-
   const items = [
     {
       label: 'Доходы',
@@ -60,13 +57,13 @@ export const LastReportCard = () => {
     {
       label: 'Расходы',
       value: formatAmount(expenses, currency?.symbol),
-      percent: percentOfIncome(expenses),
+      percent: percentOfIncome(expenses, summary.income),
       color: 'var(--color-error)',
     },
     {
       label: 'Остаток',
       value: formatAmount(balance, currency?.symbol),
-      percent: percentOfIncome(balance),
+      percent: percentOfIncome(balance, summary.income),
       color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
     },
   ];

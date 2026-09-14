@@ -1,6 +1,6 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
-import { useAccounts, useCurrency } from '@/shared/api/hooks';
+import { useCapital, useCurrency } from '@/shared/api/hooks';
 import { useBreakpoint } from '@/shared/hooks';
 import { ChevronDownIcon } from '@/shared/icons';
 import { VBadge } from '@/shared/ui/VBadge';
@@ -9,26 +9,18 @@ import styles from './AccountsBalanceBadge.module.css';
 
 export const AccountsBalanceBadge = () => {
   const { user } = useAuth();
-  const accountsQuery = useAccounts(user?.id ?? '');
+  const accountsQuery = useCapital(user?.id ?? '');
   const currency = useCurrency();
   const { isDesktop } = useBreakpoint();
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelId = useId();
-  const accounts = (accountsQuery.data ?? [])
-    .filter((account) => !account.is_closed)
-    .sort((a, b) => Number(b.is_primary) - Number(a.is_primary) || b.balance - a.balance)
-    .map((account) => ({
-      ...account,
-      // Складываем отображаемые денежные значения: дробные копейки не меняют итог списка.
-      cents: Math.round(Number(account.balance.toFixed(2)) * 100),
-    }));
-  const total = accounts.reduce((sum, account) => sum + account.cents, 0) / 100;
+  const { accounts, capital } = accountsQuery;
   const expandable = accounts.length > 1;
   const expanded = expandable && isOpen;
   const amount = accountsQuery.data
-    ? formatAmount(total, currency?.symbol)
+    ? formatAmount(capital ?? 0, currency?.symbol)
     : accountsQuery.isError
       ? 'Баланс недоступен'
       : 'Загрузка…';

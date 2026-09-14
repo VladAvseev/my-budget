@@ -1,3 +1,5 @@
+import { useCapital } from '@/shared/api/hooks';
+import { formatAmount } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
@@ -43,11 +45,19 @@ export const Page: React.FC = () => {
   const { isDesktop } = useBreakpoint();
   const userId = user?.id ?? '';
   const reportsQuery = useReports(userId);
+  const capitalQuery = useCapital(userId);
   const [selectedIds] = useAtom(selectedReportIdsAtom);
   const [comparedId] = useAtom(comparedReportIdAtom);
   const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
   const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
-  const { defaultCurrency, isCurrencyDisabled, displayCurrency, rates } = useDisplayCurrency();
+  const {
+    defaultCurrency,
+    isCurrencyDisabled,
+    displayCurrency,
+    rates,
+    displaySymbol,
+    convertOptions,
+  } = useDisplayCurrency();
 
   useEffect(() => {
     if (defaultCurrency) {
@@ -131,6 +141,24 @@ export const Page: React.FC = () => {
         </div>
       )}
 
+      {capitalQuery.isError ? (
+        <VErrorCard
+          title="Не удалось загрузить капитал"
+          error={capitalQuery.error}
+          onRetry={() => void capitalQuery.refetch()}
+          isRetrying={capitalQuery.isFetching}
+        />
+      ) : capitalQuery.capital === null ? (
+        <VSkeletonCard compact title={false} lines={2} />
+      ) : (
+        <VCard>
+          <div className={commonStyles.titleXl}>
+            Капитал: {formatAmount(capitalQuery.capital, displaySymbol, convertOptions)}
+          </div>
+          <div>Текущий баланс всех счетов</div>
+        </VCard>
+      )}
+
       <div className={commonStyles.row}>
         <div className={commonStyles.titleXl}>Отчёт по периодам</div>
       </div>
@@ -190,7 +218,7 @@ export const Page: React.FC = () => {
               {summaryLoading ? (
                 <>
                   <div className={styles.summaryGrid}>
-                    {[0, 1, 2, 3].map((i) => (
+                    {[0, 1, 2].map((i) => (
                       <VSkeletonCard
                         key={i}
                         compact

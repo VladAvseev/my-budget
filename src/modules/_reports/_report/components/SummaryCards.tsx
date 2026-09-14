@@ -1,63 +1,13 @@
-import { VCard } from '@/shared/ui/VCard';
-import { formatAmount } from '@/shared/utils';
 import { useCurrency, type OperationSummary } from '@/shared/api/hooks';
-import { useMemo } from 'react';
-import styles from './SummaryCards.module.css';
+import { PeriodSummary } from '@/shared/ui/PeriodSummary';
 
-interface SummaryCardsProps {
-  summary: OperationSummary | undefined;
-}
-
-type SummaryItem = {
-  label: string;
-  value: number;
-  percent: number | null;
-  color: string;
-};
-
-export const SummaryCards = ({ summary }: SummaryCardsProps) => {
+export const SummaryCards = ({ summary }: { summary: OperationSummary | undefined }) => {
   const currency = useCurrency();
-  const summaryData = useMemo(() => summary ?? { income: 0, expense: 0, daily: 0 }, [summary]);
-  const expenses = summaryData.expense + summaryData.daily;
-
-  const items = useMemo<SummaryItem[]>(() => {
-    const balance = summaryData.income - expenses;
-    const percentOfIncome = (value: number) =>
-      summaryData.income > 0 ? Math.max(0, Math.round((value / summaryData.income) * 100)) : null;
-
-    return [
-      {
-        label: 'Доходы',
-        value: summaryData.income,
-        percent: null,
-        color: 'var(--color-success)',
-      },
-      {
-        label: 'Расходы',
-        value: expenses,
-        percent: percentOfIncome(expenses),
-        color: 'var(--color-error)',
-      },
-      {
-        label: 'Остаток',
-        value: balance,
-        percent: percentOfIncome(balance),
-        color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
-      },
-    ];
-  }, [summaryData, expenses]);
-
   return (
-    <div className={styles.grid}>
-      {items.map((item) => (
-        <VCard key={item.label} className={styles.card}>
-          <div className={styles.label}>{item.label}</div>
-          <div className={styles.value} style={{ color: item.color }}>
-            {formatAmount(item.value, currency?.symbol)}
-          </div>
-          {item.percent != null && <div className={styles.percent}>{item.percent}% от доходов</div>}
-        </VCard>
-      ))}
-    </div>
+    <PeriodSummary
+      income={summary?.income ?? 0}
+      expenses={(summary?.expense ?? 0) + (summary?.daily ?? 0)}
+      currencySymbol={currency?.symbol}
+    />
   );
 };
