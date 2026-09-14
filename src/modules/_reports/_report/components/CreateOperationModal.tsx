@@ -1,9 +1,5 @@
-import type { OperationType } from '@/shared/api/types/domain';
-import type { Report } from '@/shared/api/types/domain';
-import { isSavingsType } from '@/shared/api/types/domain';
-import { CreateDailyModal } from './modals/create/CreateDailyModal';
-import { CreateSavingsModal } from './modals/create/CreateSavingsModal';
-import { CreateStandardModal } from './modals/create/CreateStandardModal';
+import type { OperationType, Report } from '@/shared/api/types/domain';
+import { OperationForm } from './modals/shared/OperationForm';
 
 interface CreateOperationModalProps {
   type: OperationType;
@@ -11,20 +7,10 @@ interface CreateOperationModalProps {
   onClose: () => void;
 }
 
-export const CreateOperationModal = ({ type, report, onClose }: CreateOperationModalProps) => {
-  if (type === 'daily') {
-    return <CreateDailyModal report={report} onClose={onClose} />;
-  }
-  if (isSavingsType(type)) {
-    return (
-      <CreateSavingsModal
-        type={type as 'savings' | 'savings_out'}
-        report={report}
-        onClose={onClose}
-      />
-    );
-  }
-  return (
-    <CreateStandardModal type={type as 'income' | 'expense'} report={report} onClose={onClose} />
-  );
-};
+export const CreateOperationModal = ({ type, report, onClose }: CreateOperationModalProps) => (
+  <OperationForm
+    initialType={type === 'savings' || type === 'savings_out' ? 'transfer' : type}
+    report={report}
+    onClose={onClose}
+  />
+);

@@ -1,6 +1,6 @@
 import { useAuth } from '@/shared/api/authProvider';
 import { api } from '@/shared/api/http';
-import type { Operation, OperationType } from '@/shared/api/types/domain';
+import type { ApiOperationType, Operation } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { applySummaryDelta, restoreSummary } from './applySummaryDelta';
@@ -10,31 +10,37 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
  * POST /operations: reportId уходит в теле,
- * user_id сервер берёт из JWT. Проверка своей savings-категории — на сервере.
+ * user_id сервер берёт из JWT. Привязку к счетам проверяет сервер.
  */
 const createOperationMutationKey = ['createOperation'] as const;
 
 /** Запрос POST /operations — payload модалки (прежний OperationInput). */
-export interface UseCreateOperationRequest {
-  type: OperationType;
+export type UseCreateOperationRequest = {
   amount: number;
-  categoryId?: string | null;
   description?: string | null;
   date?: string | null;
-}
+} & (
+  | {
+      type: 'transfer';
+      from_account_id: string;
+      to_account_id: string;
+      categoryId?: never;
+      account_id?: never;
+    }
+  | {
+      type: Exclude<ApiOperationType, 'transfer'>;
+      account_id: string;
+      categoryId?: string | null;
+      from_account_id?: never;
+      to_account_id?: never;
+    }
+);
 
 /** Ответ POST /operations — созданная операция (201). */
 export type UseCreateOperationResponse = Operation;
 
 /** Тело на проводе (серверный CreateOperationInput). */
-interface CreateOperationBody {
-  reportId: string;
-  type: OperationType;
-  amount: number;
-  categoryId: string | null;
-  description: string | null;
-  date: string | null;
-}
+type CreateOperationBody = UseCreateOperationRequest & { reportId: string };
 
 export const useCreateOperation = (reportId: string) => {
   const queryClient = useQueryClient();
@@ -45,9 +51,18 @@ export const useCreateOperation = (reportId: string) => {
     mutationFn: async (input: UseCreateOperationRequest) => {
       const body: CreateOperationBody = {
         reportId,
-        type: input.type,
         amount: input.amount,
-        categoryId: input.categoryId ?? null,
+        ...(input.type === 'transfer'
+          ? {
+              type: input.type,
+              from_account_id: input.from_account_id,
+              to_account_id: input.to_account_id,
+            }
+          : {
+              type: input.type,
+              account_id: input.account_id,
+              ...(input.type === 'daily' ? {} : { categoryId: input.categoryId ?? null }),
+            }),
         description: input.description ?? null,
         date: input.date ?? null,
       };
@@ -55,6 +70,7 @@ export const useCreateOperation = (reportId: string) => {
     },
     onMutate: async (input) => {
       const key = operationsKeyForType(reportId, input.type);
+      await queryClient.cancelQueries({ queryKey: key, exact: true });
       const previous = queryClient.getQueryData<Operation[]>(key) ?? [];
       const summaryPrevious = applySummaryDelta(queryClient, reportId, {
         add: { type: input.type, amount: input.amount },
@@ -66,8 +82,12 @@ export const useCreateOperation = (reportId: string) => {
         report_id: reportId,
         user_id: user?.id ?? '',
         type: input.type,
+        account_id: input.type === 'transfer' ? null : input.account_id,
+        from_account_id: input.type === 'transfer' ? input.from_account_id : null,
+        to_account_id: input.type === 'transfer' ? input.to_account_id : null,
         amount: input.amount,
-        category_id: input.categoryId ?? null,
+        category_id:
+          input.type === 'transfer' || input.type === 'daily' ? null : (input.categoryId ?? null),
         description: trimStrings(input.description ?? null),
         date: input.date ?? null,
         created_at: now,

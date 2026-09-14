@@ -15,6 +15,9 @@
  */
 
 export interface Operation {
+  account_id: string | null;
+  from_account_id: string | null;
+  to_account_id: string | null;
   id: string;
   report_id: string;
   user_id: string;
@@ -97,10 +100,13 @@ export interface Profile {
   updated_at: string;
 }
 
-export type OperationType = 'income' | 'expense' | 'savings' | 'savings_out' | 'daily';
+/** Типы, принимаемые текущим API операций. */
+export type ApiOperationType = 'income' | 'expense' | 'daily' | 'transfer';
+/** Старые разделы мигрируют отдельно от форм операций. */
+export type OperationType = 'income' | 'expense' | 'daily' | 'savings' | 'savings_out';
 export type CategoryType = 'expense' | 'income' | 'savings';
 
-export const isSavingsType = (type: OperationType): boolean =>
+export const isSavingsType = (type: OperationType | ApiOperationType): boolean =>
   type === 'savings' || type === 'savings_out';
 
 export const operationSign = (type: OperationType): 1 | -1 => (type === 'savings_out' ? -1 : 1);
