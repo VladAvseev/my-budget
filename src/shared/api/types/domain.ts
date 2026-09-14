@@ -83,7 +83,7 @@ export interface CategoryLimit {
 /**
  * Профиль: форма строк прежней таблицы profiles. GET /users/me отдаёт
  * camelCase PublicUser — адаптацию выполняет хук useProfile, поэтому
- * потребители (AccountCard, StartBalanceCard, онбординг) не менялись.
+ * потребители (AccountCard, онбординг) не менялись.
  */
 export interface Profile {
   user_id: string;
@@ -107,3 +107,16 @@ export const operationSign = (type: OperationType): 1 | -1 => (type === 'savings
 
 export const signedOperationAmount = (type: OperationType, amount: number): number =>
   amount * operationSign(type);
+
+/** Счёт: точная форма AccountDto из API /accounts. Валюта хранится в профиле. */
+export interface Account {
+  id: string;
+  user_id: string;
+  name: string;
+  initial_balance: number;
+  balance: number;
+  is_closed: boolean;
+  is_primary: boolean;
+  created_at: string;
+  updated_at: string;
+}

@@ -1,0 +1,14 @@
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/shared/api/http';
+import type { Account } from '@/shared/api/types/domain';
+import { accountsQueryKey } from './keys';
+
+export type UseAccountsResponse = Account[];
+
+/** Без is_closed: профиль показывает и открытые, и закрытые счета. */
+export const useAccounts = (userId: string) =>
+  useQuery<UseAccountsResponse>({
+    queryKey: [...accountsQueryKey(userId), 'all'],
+    enabled: Boolean(userId),
+    queryFn: ({ signal }) => api.get<UseAccountsResponse>('/accounts', { signal }),
+  });

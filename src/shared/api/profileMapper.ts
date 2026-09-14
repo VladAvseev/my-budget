@@ -3,7 +3,7 @@ import type { Profile } from '@/shared/api/types/domain';
 
 /**
  * Публичный профиль API (camelCase PublicUser) → прежняя snake_case-форма
- * Profile: потребители (AccountCard, StartBalanceCard, кэш ['profile'])
+ * Profile: потребители (AccountCard, кэш ['profile'])
  * не менялись при переезде на собственный бэкенд.
  *
  * Используется и хуком useProfile, и AuthProvider для посева кэша из

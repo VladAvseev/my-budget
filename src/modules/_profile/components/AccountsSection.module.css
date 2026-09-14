@@ -1,0 +1,65 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-l);
+}
+
+.header h2 {
+  margin: 0;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  padding-block: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.account:last-child {
+  padding-bottom: 0;
+}
+.identity {
+  min-width: 0;
+}
+.name {
+  margin: 0 0 var(--space-s);
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-medium);
+  overflow-wrap: anywhere;
+}
+
+.badges,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
+.balance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.amount {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.hint {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-m);
+}

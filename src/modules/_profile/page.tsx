@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AccountCard } from './components/AccountCard';
 import { CategorySection } from './components/CategorySection';
-import { StartBalanceCard } from './components/StartBalanceCard';
+import { AccountsSection } from './components/AccountsSection';
 import { ThemeCard } from './components/ThemeCard';
 
 const AnimatedItem = ({ delay, children }: { delay: string; children: ReactNode }) => (
@@ -29,7 +29,7 @@ export const Page: React.FC = () => {
         <AccountCard />
       </AnimatedItem>
       <AnimatedItem delay="0.06s">
-        <StartBalanceCard />
+        <AccountsSection />
       </AnimatedItem>
       <AnimatedItem delay="0.12s">
         <ThemeCard />
