@@ -42,6 +42,7 @@ export const useRemoveReport = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       queryClient.invalidateQueries({ queryKey: ['reports', id] });
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
       queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
       queryClient.invalidateQueries({ queryKey: ['overview', 'category-summary'] });
       // вместе с отчётом из динамики роста выпадают его savings-операции

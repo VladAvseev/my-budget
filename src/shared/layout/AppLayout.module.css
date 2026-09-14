@@ -116,34 +116,6 @@
     transform 0.15s ease;
 }
 
-.stats {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-s);
-  padding: var(--space-m);
-  border-radius: var(--radius-m);
-  background-color: var(--color-accent-alpha);
-  border: 1px solid var(--color-accent);
-}
-
-.statRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-xs);
-}
-
-.statLabel {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
-}
-
-.statValue {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-accent);
-}
-
 .nav {
   display: flex;
   flex-direction: column;
@@ -237,30 +209,6 @@
   flex: 1;
   min-width: 0;
   gap: var(--space-s);
-}
-
-.mobileStat {
-  display: flex;
-  flex: 0 1 auto;
-  min-width: 0;
-  flex-direction: column;
-  width: 100%;
-  max-width: 150px;
-  padding: var(--space-xs);
-  border-radius: var(--radius-m);
-  background-color: var(--color-accent-alpha);
-  border: 1px solid var(--color-accent);
-}
-
-.mobileStatLabel {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
-}
-
-.mobileStatValue {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-accent);
 }
 
 .mobileProfileLink {

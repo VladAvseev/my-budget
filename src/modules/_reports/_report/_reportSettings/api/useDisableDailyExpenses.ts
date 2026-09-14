@@ -27,6 +27,7 @@ export const useDisableDailyExpenses = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ['reports', id, 'operations'] });
       queryClient.invalidateQueries({ queryKey: ['reports', id, 'summary'] });
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
       queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
       queryClient.invalidateQueries({ queryKey: ['overview', 'category-summary'] });
       // удаление daily-операций меняет помесячную дельту капитала

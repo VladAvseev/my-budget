@@ -1,10 +1,7 @@
-// Тип только (import type) — рантайм-цикла с useGlobalBalance,
-// импортирующим computeGlobalTotals, не создаёт.
 import type { OperationSummary } from '@/shared/api/hooks/useGlobalBalance';
 
 /**
- * Единая формула глобальных итогов (сайдбар «Капитал/Баланс» и карточка
- * «Аналитика» на главной).
+ * Единая формула глобальных итогов для аналитики и useCapital.
  */
 export interface GlobalTotals {
   /** «Доходы»: сводка + начальный баланс + начальные накопления. */

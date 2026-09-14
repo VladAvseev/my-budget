@@ -4,7 +4,7 @@ export {
   type OperationSummary,
   type UseUserSummaryResponse,
 } from './useGlobalBalance';
-export { useGlobalBalance } from './useGlobalBalance';
+export { useAccounts, accountsQueryKey, type UseAccountsResponse } from './useAccounts';
 export { useProfile, type UseProfileResponse } from './useProfile';
 export {
   consentStatusQueryKey,

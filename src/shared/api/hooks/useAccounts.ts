@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/shared/api/http';
 import type { Account } from '@/shared/api/types/domain';
-import { accountsQueryKey } from './keys';
+
+export const accountsQueryKey = (userId: string) => ['accounts', userId] as const;
 
 export type UseAccountsResponse = Account[];
 

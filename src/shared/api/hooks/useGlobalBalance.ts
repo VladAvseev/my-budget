@@ -1,8 +1,5 @@
 import { api } from '@/shared/api/http';
-import { useAuth } from '@/shared/api/authProvider';
-import { computeGlobalTotals } from '@/shared/utils';
 import { useQuery } from '@tanstack/react-query';
-import { useProfile } from './useProfile';
 
 /**
  * Сводка сумм по типам операций — общая response-форма эндпоинтов
@@ -35,19 +32,3 @@ export const useUserSummary = (_userId: string) =>
       },
     placeholderData: { income: 0, expense: 0, savings: 0, daily: 0 },
   });
-
-/** Композиция profile + userSummary, прямого запроса нет — Request/Response не заводятся. */
-export const useGlobalBalance = () => {
-  const { user } = useAuth();
-  const userId = user?.id ?? '';
-  const profileQuery = useProfile();
-  const summaryQuery = useUserSummary(userId);
-
-  const startBalance = Number(profileQuery.data?.start_balance ?? 0) || 0;
-  const { balance } = computeGlobalTotals(startBalance, summaryQuery.data, 0);
-
-  return {
-    balance,
-    isLoading: summaryQuery.isLoading,
-  };
-};

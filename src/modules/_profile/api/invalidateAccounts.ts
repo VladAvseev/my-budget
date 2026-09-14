@@ -1,6 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
-import { invalidateHomeCaches } from '@/shared/api/hooks';
-import { accountsQueryKey } from './keys';
+import { accountsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
 
 export const invalidateAccounts = async (client: QueryClient, userId: string) => {
   invalidateHomeCaches(client);

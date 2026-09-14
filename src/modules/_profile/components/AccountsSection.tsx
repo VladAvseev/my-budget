@@ -15,7 +15,7 @@ import { VSelect } from '@/shared/ui/VSelect';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { formatAmount, getErrorMessage } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
-import { useAccounts } from '../api/useAccounts';
+import { useAccounts } from '@/shared/api/hooks';
 import { useUpdateAccount } from '../api/useUpdateAccount';
 import { useRemoveAccount } from '../api/useRemoveAccount';
 import { useUpdateCurrency } from '../api/useUpdateCurrency';

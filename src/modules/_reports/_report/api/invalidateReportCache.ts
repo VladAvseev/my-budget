@@ -13,6 +13,7 @@ export const invalidateReportCache = (
   // summary локальной сводки не инвалидируем: мутации операций двигают её
   // оптимистично (см. applySummaryDelta), глобальные сводки — рефетчатся.
   queryClient.invalidateQueries({ queryKey: ['userSummary'] });
+  queryClient.invalidateQueries({ queryKey: ['accounts'] });
   queryClient.invalidateQueries({ queryKey: ['savingsOperations'] });
   queryClient.invalidateQueries({ queryKey: ['overview', 'category-summary'] });
   queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });

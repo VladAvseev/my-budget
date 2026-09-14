@@ -1,5 +1,5 @@
 import { useBreakpoint } from '@/shared/hooks';
-import { useAdminStatus, useCapital, useCurrency, useGlobalBalance } from '@/shared/api/hooks';
+import { useAdminStatus } from '@/shared/api/hooks';
 import {
   BanknotesIcon,
   ChevronRightIcon,
@@ -13,7 +13,7 @@ import {
 } from '@/shared/icons';
 import { useAuth } from '@/shared/api/authProvider';
 import { VCard } from '@/shared/ui/VCard';
-import { formatAmount } from '@/shared/utils';
+import { AccountsBalanceBadge } from '@/shared/layout/AccountsBalanceBadge';
 import {
   useEffect,
   useLayoutEffect,
@@ -62,13 +62,7 @@ const ProfileLink = () => {
 };
 
 const SidebarContent = () => {
-  const { balance } = useGlobalBalance();
-  const { capital } = useCapital();
   const { isAdmin } = useAdminStatus();
-  const currency = useCurrency();
-
-  const showCapital =
-    formatAmount(capital, currency?.symbol) !== formatAmount(balance, currency?.symbol);
 
   return (
     <>
@@ -77,18 +71,7 @@ const SidebarContent = () => {
         <span className={styles.brandTitle}>Мои финансы</span>
       </div>
 
-      <div className={styles.stats}>
-        {showCapital && (
-          <div className={styles.statRow}>
-            <span className={styles.statLabel}>Капитал</span>
-            <span className={styles.statValue}>{formatAmount(capital, currency?.symbol)}</span>
-          </div>
-        )}
-        <div className={styles.statRow}>
-          <span className={styles.statLabel}>Баланс</span>
-          <span className={styles.statValue}>{formatAmount(balance, currency?.symbol)}</span>
-        </div>
-      </div>
+      <AccountsBalanceBadge />
 
       <ProfileLink />
 
@@ -217,9 +200,6 @@ const MobileFooter = () => {
 
 export const AppLayout = ({ children }: AppLayoutProps) => {
   const { isDesktop } = useBreakpoint();
-  const { balance } = useGlobalBalance();
-  const { capital } = useCapital();
-  const currency = useCurrency();
   const mainRef = useRef<HTMLElement>(null);
   const location = useLocation();
 
@@ -230,9 +210,6 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
       window.scrollTo(0, 0);
     }
   }, [location.pathname, isDesktop]);
-
-  const showCapital =
-    formatAmount(capital, currency?.symbol) !== formatAmount(balance, currency?.symbol);
 
   if (isDesktop) {
     return (
@@ -256,20 +233,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     <div className={styles.mobileRoot}>
       <header className={styles.mobileHeader}>
         <div className={styles.mobileStats}>
-          {showCapital && (
-            <div className={styles.mobileStat}>
-              <span className={styles.mobileStatLabel}>Капитал</span>
-              <span className={styles.mobileStatValue}>
-                {formatAmount(capital, currency?.symbol)}
-              </span>
-            </div>
-          )}
-          <div className={styles.mobileStat}>
-            <span className={styles.mobileStatLabel}>Баланс</span>
-            <span className={styles.mobileStatValue}>
-              {formatAmount(balance, currency?.symbol)}
-            </span>
-          </div>
+          <AccountsBalanceBadge />
         </div>
         <MobileProfileLink />
       </header>
