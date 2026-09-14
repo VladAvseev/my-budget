@@ -15,7 +15,7 @@ import { CardSkeleton } from './CardSkeleton';
 import styles from '../homeCard.module.css';
 
 const EMPTY_BOOTSTRAP: UseBootstrapResponse = {
-  profile: { startBalance: 0, currency: null, onboarded: false },
+  profile: { currency: null, onboarded: false },
   onboarding: { categories: 0, reports: 0, operations: 0 },
   lastReport: null,
   globalTotals: { income: 0, expense: 0, daily: 0 },

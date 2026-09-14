@@ -66,12 +66,12 @@ export interface CategoryLimit {
 /**
  * Профиль: форма строк прежней таблицы profiles. GET /users/me отдаёт
  * camelCase PublicUser — адаптацию выполняет хук useProfile, поэтому
- * потребители (AccountCard, онбординг) не менялись.
+ * потребители (онбординг, валюта) не менялись. Стартовый баланс больше не
+ * часть профиля: он принадлежит счетам (Account.initial_balance).
  */
 export interface Profile {
   user_id: string;
   login: string;
-  start_balance: string;
   currency: string | null;
   onboarded: boolean;
   role: string;

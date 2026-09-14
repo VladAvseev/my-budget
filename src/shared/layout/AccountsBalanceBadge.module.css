@@ -2,6 +2,7 @@
   position: relative;
   min-width: 0;
   max-width: 100%;
+  font-variant-numeric: tabular-nums;
 }
 
 .trigger {
@@ -21,21 +22,17 @@
   outline-offset: 2px;
 }
 
-.badge {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs) var(--space-s);
-  text-align: left;
+.root .badge {
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+  background-color: var(--color-accent-alpha);
+  border-color: var(--color-accent);
 }
 
-.label {
-  color: var(--color-text-secondary);
-}
-
-.amount,
-.accountAmount {
-  font-variant-numeric: tabular-nums;
-  overflow-wrap: anywhere;
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  margin-left: var(--space-xs);
 }
 
 .popover {
@@ -86,4 +83,5 @@
   flex-shrink: 0;
   max-width: 60%;
   text-align: right;
+  overflow-wrap: anywhere;
 }

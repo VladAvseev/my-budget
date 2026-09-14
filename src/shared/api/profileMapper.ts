@@ -3,7 +3,7 @@ import type { Profile } from '@/shared/api/types/domain';
 
 /**
  * Публичный профиль API (camelCase PublicUser) → прежняя snake_case-форма
- * Profile: потребители (AccountCard, кэш ['profile'])
+ * Profile: потребители (кэш ['profile'], валюта, онбординг)
  * не менялись при переезде на собственный бэкенд.
  *
  * Используется и хуком useProfile, и AuthProvider для посева кэша из
@@ -12,9 +12,6 @@ import type { Profile } from '@/shared/api/types/domain';
 export const toProfile = (u: ApiUser): Profile => ({
   user_id: u.id,
   login: u.login,
-  // start_balance типизирован строкой — публичный API профиля уже привязан
-  // к Number(...) в UI.
-  start_balance: String(u.startBalance),
   currency: u.currency,
   onboarded: u.onboarded,
   role: u.role,

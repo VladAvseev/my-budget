@@ -25,7 +25,6 @@ export interface ApiUser {
   id: string;
   login: string;
   role: string;
-  startBalance: number;
   currency: string | null;
   onboarded: boolean;
   lastActiveAt: string | null;
