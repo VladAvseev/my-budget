@@ -9,7 +9,6 @@ import { useQuery } from '@tanstack/react-query';
 export interface OperationSummary {
   income: number;
   expense: number;
-  savings: number;
   daily: number;
 }
 
@@ -27,8 +26,7 @@ export const useUserSummary = (_userId: string) =>
       (await api.get<UseUserSummaryResponse>('/users/me/summary', { signal })) ?? {
         income: 0,
         expense: 0,
-        savings: 0,
         daily: 0,
       },
-    placeholderData: { income: 0, expense: 0, savings: 0, daily: 0 },
+    placeholderData: { income: 0, expense: 0, daily: 0 },
   });

@@ -21,7 +21,6 @@ import styles from './CategorySection.module.css';
 const TABS: { value: CategoryType; label: string }[] = [
   { value: 'expense', label: 'Расходы' },
   { value: 'income', label: 'Доходы' },
-  { value: 'savings', label: 'Накопления' },
 ];
 
 export const CategorySection = () => {

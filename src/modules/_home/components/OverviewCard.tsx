@@ -11,9 +11,7 @@ const EMPTY_BOOTSTRAP: UseBootstrapResponse = {
   profile: { startBalance: 0, currency: null, onboarded: false },
   onboarding: { categories: 0, reports: 0, operations: 0 },
   lastReport: null,
-  globalTotals: { income: 0, expense: 0, savings: 0, daily: 0, accumulationsTotal: 0 },
-  savingsStructure: [],
-  goals: [],
+  globalTotals: { income: 0, expense: 0, daily: 0 },
 };
 
 export const OverviewCard = () => {
@@ -26,16 +24,7 @@ export const OverviewCard = () => {
 
   const bootstrap = data ?? EMPTY_BOOTSTRAP;
   const startBalance = Number(bootstrap.profile.startBalance) || 0;
-  const {
-    income,
-    expense,
-    savings: savingsTotal,
-    balance,
-  } = computeGlobalTotals(
-    startBalance,
-    bootstrap.globalTotals,
-    bootstrap.globalTotals.accumulationsTotal,
-  );
+  const { income, expense, balance } = computeGlobalTotals(startBalance, bootstrap.globalTotals);
   const percentOfIncome = (value: number) =>
     income > 0 ? Math.max(0, Math.round((value / income) * 100)) : null;
 
@@ -51,12 +40,6 @@ export const OverviewCard = () => {
       value: formatAmount(expense, currency?.symbol),
       percent: percentOfIncome(expense),
       color: 'var(--color-error)',
-    },
-    {
-      label: 'Накопления',
-      value: formatAmount(savingsTotal, currency?.symbol),
-      percent: percentOfIncome(savingsTotal),
-      color: 'var(--color-warning)',
     },
     {
       label: 'Баланс',
@@ -79,9 +62,7 @@ export const OverviewCard = () => {
           </span>
           <div className={summaryStyles.title}>Аналитика</div>
         </div>
-        <div className={summaryStyles.subtitle}>
-          Общая сводка с учётом начального баланса и накоплений
-        </div>
+        <div className={summaryStyles.subtitle}>Общая сводка с учётом начального баланса</div>
         <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
             <div key={`${item.label}-label`} className={summaryStyles.label}>

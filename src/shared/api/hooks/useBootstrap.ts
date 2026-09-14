@@ -8,7 +8,7 @@ import type { OperationSummary } from './useGlobalBalance';
  * (серверный CTE в server/src/modules/_users/repository.ts).
  *
  * Хук общий (а не в modules/_home/api): ключ приходится инвалидировать
- * мутациям отчётов, накоплений, целей и профиля, а импорты между модулями
+ * мутациям отчётов и профиля, а импорты между модулями
  * запрещены — точка доступа живёт в shared.
  */
 
@@ -36,29 +36,12 @@ export interface BootstrapLastReport {
   summary: OperationSummary;
 }
 
-/** Элемент структуры накоплений: накопления + знаковые savings-операции. */
-export interface BootstrapSavingsItem {
-  /** null — без категории (лейбл рисует клиент). */
-  categoryId: string | null;
-  name: string | null;
-  color: string | null;
-  amount: number;
-}
-
-/** Цель без вычислений: общий прогресс считает computeGoalsOverall. */
-export interface BootstrapGoalItem {
-  categoryId: string;
-  amount: number;
-}
-
 /** Данные хука: ответ GET /users/me/bootstrap. */
 export interface UseBootstrapResponse {
   profile: BootstrapProfile;
   onboarding: BootstrapOnboarding;
   lastReport: BootstrapLastReport | null;
-  globalTotals: OperationSummary & { accumulationsTotal: number };
-  savingsStructure: BootstrapSavingsItem[];
-  goals: BootstrapGoalItem[];
+  globalTotals: OperationSummary;
 }
 
 /**
@@ -69,9 +52,7 @@ const EMPTY_BOOTSTRAP: UseBootstrapResponse = {
   profile: { startBalance: 0, currency: null, onboarded: false },
   onboarding: { categories: 0, reports: 0, operations: 0 },
   lastReport: null,
-  globalTotals: { income: 0, expense: 0, savings: 0, daily: 0, accumulationsTotal: 0 },
-  savingsStructure: [],
-  goals: [],
+  globalTotals: { income: 0, expense: 0, daily: 0 },
 };
 
 export const bootstrapQueryKey = ['bootstrap'] as const;
@@ -86,7 +67,7 @@ export const useBootstrap = () =>
 
 /**
  * Инвалидация данных главной: вызывать в onSuccess/onSettled любой мутации,
- * меняющая цифры bootstrap-а (операции, периоды, накопления, цели, категории,
+ * меняющая цифры bootstrap-а (операции, периоды, категории,
  * профиль). Отдельных ключей карточек больше нет — чиним одним вызовом.
  */
 export const invalidateHomeCaches = (queryClient: QueryClient): void => {

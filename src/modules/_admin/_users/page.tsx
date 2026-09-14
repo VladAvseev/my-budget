@@ -30,10 +30,7 @@ const COLUMNS: Column[] = [
   { key: 'incomeCount', label: 'Доходы', sortType: 'number' },
   { key: 'dailyCount', label: 'Еж. расходы', sortType: 'number' },
   { key: 'expenseCount', label: 'Расходы', sortType: 'number' },
-  { key: 'savingsCount', label: 'Накопления', sortType: 'number' },
-  { key: 'accumulationsCount', label: 'Накопления (нач)', sortType: 'number' },
   { key: 'categoriesCount', label: 'Категории', sortType: 'number' },
-  { key: 'goalsCount', label: 'Цели', sortType: 'number' },
 ];
 
 const formatDate = (value: string | null): string =>
@@ -217,10 +214,7 @@ export const Page: React.FC = () => {
                   <td className={styles.numCell}>{row.incomeCount}</td>
                   <td className={styles.numCell}>{row.dailyCount}</td>
                   <td className={styles.numCell}>{row.expenseCount}</td>
-                  <td className={styles.numCell}>{row.savingsCount}</td>
-                  <td className={styles.numCell}>{row.accumulationsCount}</td>
                   <td className={styles.numCell}>{row.categoriesCount}</td>
-                  <td className={styles.numCell}>{row.goalsCount}</td>
                   <td className={styles.actionCell}>
                     {row.user_id !== current?.id && (
                       <VIconButton

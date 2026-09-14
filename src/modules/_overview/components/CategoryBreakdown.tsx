@@ -105,12 +105,11 @@ export const CategoryBreakdown = ({
   comparedReport,
   comparedSummaryByReport,
 }: CategoryBreakdownProps) => {
-  const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
+  const { expenseCategories, incomeCategories } = useOverviewCategories();
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   const expensesLoading = expenseCategories.isLoading;
   const incomesLoading = incomeCategories.isLoading;
-  const savingsLoading = savingsCategories.isLoading;
 
   const dailyGroups = buildReportGroups(reports, summaryByReport, ['daily']);
   const expenseGroups = buildCategoryGroups(
@@ -122,12 +121,6 @@ export const CategoryBreakdown = ({
   const incomeGroups = buildCategoryGroups(reports, summaryByReport, incomeCategories.data ?? [], [
     'income',
   ]);
-  const savingsGroups = buildCategoryGroups(
-    reports,
-    summaryByReport,
-    savingsCategories.data ?? [],
-    ['savings', 'savings_out'],
-  );
 
   const comparedReports = comparedReport ? [comparedReport] : [];
   const comparedDaily = buildReportGroups(comparedReports, comparedSummaryByReport, ['daily']);
@@ -142,12 +135,6 @@ export const CategoryBreakdown = ({
     comparedSummaryByReport,
     incomeCategories.data ?? [],
     ['income'],
-  );
-  const comparedSavingsGroups = buildCategoryGroups(
-    comparedReports,
-    comparedSummaryByReport,
-    savingsCategories.data ?? [],
-    ['savings', 'savings_out'],
   );
 
   const comparedDailyTotal = comparedDaily.reduce((sum, item) => sum + item.amount, 0);
@@ -294,23 +281,6 @@ export const CategoryBreakdown = ({
             comparedIncomeGroups,
             incomesLoading,
             ['income'],
-            false,
-          )}
-        </div>
-      )}
-
-      {(savingsGroups.length > 0 || hasOperations(summaryByReport, ['savings', 'savings_out'])) && (
-        <div className={styles.section}>
-          {sectionTitle(
-            'Накопления',
-            sectionAverage(totalOf(savingsGroups)),
-            periodInfo(comparedTotalOf(comparedSavingsGroups), false),
-          )}
-          {categoryAccordions(
-            savingsGroups,
-            comparedSavingsGroups,
-            savingsLoading,
-            ['savings', 'savings_out'],
             false,
           )}
         </div>

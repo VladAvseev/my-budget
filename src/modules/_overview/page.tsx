@@ -26,7 +26,6 @@ import {
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
 import { CategoryDistributionChart } from './components/CategoryDistributionChart';
-import { GrowthDynamicsCard } from './components/GrowthDynamicsCard';
 import { PeriodCompareSelect } from './components/PeriodCompareSelect';
 import { ReportsFilter } from './components/ReportsFilter';
 import { SummaryCard } from './components/SummaryCard';
@@ -48,8 +47,7 @@ export const Page: React.FC = () => {
   const [comparedId] = useAtom(comparedReportIdAtom);
   const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
   const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
-  const { defaultCurrency, isCurrencyDisabled, displayCurrency, rates, displaySymbol } =
-    useDisplayCurrency();
+  const { defaultCurrency, isCurrencyDisabled, displayCurrency, rates } = useDisplayCurrency();
 
   useEffect(() => {
     if (defaultCurrency) {
@@ -133,12 +131,6 @@ export const Page: React.FC = () => {
         </div>
       )}
 
-      <GrowthDynamicsCard
-        userId={userId}
-        title="Рост капитала"
-        currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
-      />
-
       <div className={commonStyles.row}>
         <div className={commonStyles.titleXl}>Отчёт по периодам</div>
       </div>
@@ -173,8 +165,7 @@ export const Page: React.FC = () => {
             <VCard>
               <div className={commonStyles.emptyTitle}>Не выбран ни один период</div>
               <div className={commonStyles.emptyHint}>
-                Аналитика сводит информацию о доходах, расходах и накоплениях за выбранные периоды в
-                одном месте.
+                Аналитика сводит информацию о доходах и расходах за выбранные периоды в одном месте.
                 <br />
                 Выберите периоды в списке выше.
               </div>
@@ -216,11 +207,7 @@ export const Page: React.FC = () => {
               ) : (
                 <>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
-                    <SummaryCard
-                      income={totals.income}
-                      expenses={totals.expense + totals.daily}
-                      savings={totals.savings}
-                    />
+                    <SummaryCard income={totals.income} expenses={totals.expense + totals.daily} />
                   </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
                     <CategoryDistributionChart summaryByReport={summaryByReport} />

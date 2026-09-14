@@ -17,14 +17,11 @@ type SummaryItem = {
 
 export const SummaryCards = ({ summary }: SummaryCardsProps) => {
   const currency = useCurrency();
-  const summaryData = useMemo(
-    () => summary ?? { income: 0, expense: 0, savings: 0, daily: 0 },
-    [summary],
-  );
+  const summaryData = useMemo(() => summary ?? { income: 0, expense: 0, daily: 0 }, [summary]);
   const expenses = summaryData.expense + summaryData.daily;
 
   const items = useMemo<SummaryItem[]>(() => {
-    const balance = summaryData.income - expenses - summaryData.savings;
+    const balance = summaryData.income - expenses;
     const percentOfIncome = (value: number) =>
       summaryData.income > 0 ? Math.max(0, Math.round((value / summaryData.income) * 100)) : null;
 
@@ -40,12 +37,6 @@ export const SummaryCards = ({ summary }: SummaryCardsProps) => {
         value: expenses,
         percent: percentOfIncome(expenses),
         color: 'var(--color-error)',
-      },
-      {
-        label: 'Накопления',
-        value: summaryData.savings,
-        percent: percentOfIncome(summaryData.savings),
-        color: 'var(--color-warning)',
       },
       {
         label: 'Остаток',

@@ -37,7 +37,6 @@ const OPERATION_ITEMS: StructureItem[] = [
   { key: 'income', label: 'Доходы', color: 'var(--color-success)', value: 0 },
   { key: 'expense', label: 'Расходы', color: 'var(--color-error)', value: 0 },
   { key: 'daily', label: 'Ежедневные', color: 'var(--color-accent)', value: 0 },
-  { key: 'savings', label: 'Накопления', color: 'var(--color-warning)', value: 0 },
 ];
 
 export const ReportsOperationsCard: React.FC<ReportsOperationsCardProps> = ({

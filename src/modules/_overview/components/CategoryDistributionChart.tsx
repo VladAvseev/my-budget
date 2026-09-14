@@ -14,17 +14,16 @@ interface CategoryDistributionChartProps {
   summaryByReport: Map<string, CategorySummaryRow[]>;
 }
 
-const typeOptions: Array<{ value: 'expense' | 'income' | 'savings'; label: string }> = [
+const typeOptions: Array<{ value: 'expense' | 'income'; label: string }> = [
   { value: 'expense', label: 'Расходы' },
   { value: 'income', label: 'Доходы' },
-  { value: 'savings', label: 'Накопления' },
 ];
 
 export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistributionChartProps) => {
-  const [selectedType, setSelectedType] = useState<'expense' | 'income' | 'savings'>('expense');
+  const [selectedType, setSelectedType] = useState<'expense' | 'income'>('expense');
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 
-  const { expenseCategories, incomeCategories, savingsCategories } = useOverviewCategories();
+  const { expenseCategories, incomeCategories } = useOverviewCategories();
 
   const categories = useMemo(() => {
     switch (selectedType) {
@@ -32,10 +31,8 @@ export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistribut
         return expenseCategories.data ?? [];
       case 'income':
         return incomeCategories.data ?? [];
-      case 'savings':
-        return savingsCategories.data ?? [];
     }
-  }, [selectedType, expenseCategories.data, incomeCategories.data, savingsCategories.data]);
+  }, [selectedType, expenseCategories.data, incomeCategories.data]);
 
   const loading = useMemo(() => {
     switch (selectedType) {
@@ -43,18 +40,11 @@ export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistribut
         return expenseCategories.isLoading;
       case 'income':
         return incomeCategories.isLoading;
-      case 'savings':
-        return savingsCategories.isLoading;
     }
-  }, [
-    selectedType,
-    expenseCategories.isLoading,
-    incomeCategories.isLoading,
-    savingsCategories.isLoading,
-  ]);
+  }, [selectedType, expenseCategories.isLoading, incomeCategories.isLoading]);
 
   const chartData: ChartData = useMemo(() => {
-    let typeFilter: Array<'expense' | 'income' | 'savings' | 'savings_out' | 'daily'>;
+    let typeFilter: Array<'expense' | 'income' | 'daily'>;
     let includeDaily = false;
 
     switch (selectedType) {
@@ -64,9 +54,6 @@ export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistribut
         break;
       case 'income':
         typeFilter = ['income'];
-        break;
-      case 'savings':
-        typeFilter = ['savings', 'savings_out'];
         break;
     }
 

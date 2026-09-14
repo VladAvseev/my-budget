@@ -1,7 +1,5 @@
 import type { Category } from '@/shared/api/types/domain';
-import type { Operation, OperationType } from '@/shared/api/types/domain';
-import { isSavingsType } from '@/shared/api/types/domain';
-import { SavingsOperationCard } from './cards/SavingsOperationCard';
+import type { Operation } from '@/shared/api/types/domain';
 import { StandardOperationCard } from './cards/StandardOperationCard';
 
 interface OperationCardProps {
@@ -11,8 +9,5 @@ interface OperationCardProps {
 }
 
 export const OperationCard = ({ operation, category, pending = false }: OperationCardProps) => {
-  if (isSavingsType(operation.type as OperationType)) {
-    return <SavingsOperationCard operation={operation} category={category} pending={pending} />;
-  }
   return <StandardOperationCard operation={operation} category={category} pending={pending} />;
 };

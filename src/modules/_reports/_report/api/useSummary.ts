@@ -20,8 +20,7 @@ export const useSummary = (reportId: UseSummaryRequest) =>
       (await api.get<UseSummaryResponse>(`/reports/${reportId}/summary`, { signal })) ?? {
         income: 0,
         expense: 0,
-        savings: 0,
         daily: 0,
       },
-    placeholderData: { income: 0, expense: 0, savings: 0, daily: 0 },
+    placeholderData: { income: 0, expense: 0, daily: 0 },
   });

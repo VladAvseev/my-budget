@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { CardSkeleton } from './CardSkeleton';
 import styles from '../homeCard.module.css';
 
-const EMPTY_SUMMARY = { income: 0, expense: 0, savings: 0, daily: 0 };
+const EMPTY_SUMMARY = { income: 0, expense: 0, daily: 0 };
 
 export const LastReportCard = () => {
   const { data, isLoading } = useBootstrap();
@@ -46,7 +46,7 @@ export const LastReportCard = () => {
   }
 
   const expenses = summary.expense + summary.daily;
-  const balance = summary.income - expenses - summary.savings;
+  const balance = summary.income - expenses;
   const percentOfIncome = (value: number) =>
     summary.income > 0 ? Math.max(0, Math.round((value / summary.income) * 100)) : null;
 
@@ -62,12 +62,6 @@ export const LastReportCard = () => {
       value: formatAmount(expenses, currency?.symbol),
       percent: percentOfIncome(expenses),
       color: 'var(--color-error)',
-    },
-    {
-      label: 'Накопления',
-      value: formatAmount(summary.savings, currency?.symbol),
-      percent: percentOfIncome(summary.savings),
-      color: 'var(--color-warning)',
     },
     {
       label: 'Остаток',

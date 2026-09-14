@@ -39,8 +39,6 @@ export interface AdminDashboardStats {
     income: number;
     expense: number;
     daily: number;
-    /** savings и savings_out считаются вместе. */
-    savings: number;
   };
 }
 

@@ -8,9 +8,5 @@ interface CreateOperationModalProps {
 }
 
 export const CreateOperationModal = ({ type, report, onClose }: CreateOperationModalProps) => (
-  <OperationForm
-    initialType={type === 'savings' || type === 'savings_out' ? 'transfer' : type}
-    report={report}
-    onClose={onClose}
-  />
+  <OperationForm initialType={type} report={report} onClose={onClose} />
 );

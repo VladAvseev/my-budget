@@ -8,6 +8,5 @@ export const useOverviewCategories = () => {
     userId,
     expenseCategories: useCategories(userId, 'expense'),
     incomeCategories: useCategories(userId, 'income'),
-    savingsCategories: useCategories(userId, 'savings'),
   };
 };

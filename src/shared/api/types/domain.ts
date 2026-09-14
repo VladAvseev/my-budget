@@ -53,26 +53,6 @@ export interface Category {
   updated_at: string;
 }
 
-export interface Accumulation {
-  id: string;
-  user_id: string;
-  category_id: string | null;
-  description: string;
-  amount: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Goal {
-  id: string;
-  user_id: string;
-  category_id: string;
-  amount: number;
-  target_date: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
 export interface CategoryLimit {
   id: string;
   report_id: string;
@@ -102,17 +82,9 @@ export interface Profile {
 
 /** Типы, принимаемые текущим API операций. */
 export type ApiOperationType = 'income' | 'expense' | 'daily' | 'transfer';
-/** Старые разделы мигрируют отдельно от форм операций. */
-export type OperationType = 'income' | 'expense' | 'daily' | 'savings' | 'savings_out';
-export type CategoryType = 'expense' | 'income' | 'savings';
-
-export const isSavingsType = (type: OperationType | ApiOperationType): boolean =>
-  type === 'savings' || type === 'savings_out';
-
-export const operationSign = (type: OperationType): 1 | -1 => (type === 'savings_out' ? -1 : 1);
-
-export const signedOperationAmount = (type: OperationType, amount: number): number =>
-  amount * operationSign(type);
+/** Типы операций в списках и сводках периодов. */
+export type OperationType = 'income' | 'expense' | 'daily';
+export type CategoryType = 'expense' | 'income';
 
 /** Счёт: точная форма AccountDto из API /accounts. Валюта хранится в профиле. */
 export interface Account {

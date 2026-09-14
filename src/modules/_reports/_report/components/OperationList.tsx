@@ -17,10 +17,9 @@ import { groupedByTypeAtom, operationModalAtom } from '../atoms/report';
 import { categoryTypeForOperation } from '../api/categoryTypeForOperation';
 import { useCategoryLimits } from '../api/useCategoryLimits';
 import { useCategoriesByType } from '../api/useCategories';
-import { useOperations, useSavingsReportOperations } from '../api/useOperations';
+import { useOperations } from '../api/useOperations';
 import { OperationCard } from './OperationCard';
 import { CategoryLimitsSummary, formatLimitValue, getLimitColor } from './CategoryLimitsSummary';
-import { isSavingsType, signedOperationAmount } from '@/shared/api/types/domain';
 import styles from './operationList.module.css';
 
 interface OperationListProps {
@@ -31,21 +30,18 @@ interface OperationListProps {
 export const OperationList = ({ reportId, type }: OperationListProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
-  const isSavings = isSavingsType(type);
   const operationsQuery = useOperations(reportId, type);
-  const savingsQuery = useSavingsReportOperations(reportId, isSavings);
   const categoriesQuery = useCategoriesByType(userId, categoryTypeForOperation(type));
   const limitsQuery = useCategoryLimits(type === 'expense' ? reportId : '');
   const setModal = useSetAtom(operationModalAtom);
   const [groupedByType, setGroupedByType] = useAtom(groupedByTypeAtom);
   const currency = useCurrency();
 
-  const activeListQuery = isSavings ? savingsQuery : operationsQuery;
   // Стабильная ссылка между рендерами: groups-memo ниже зависит от operations.
-  const operations = useMemo(() => activeListQuery.data ?? [], [activeListQuery.data]);
-  const operationsLoading = activeListQuery.isLoading;
-  const operationsError = activeListQuery.error;
-  const hasOperationsData = activeListQuery.data != null;
+  const operations = useMemo(() => operationsQuery.data ?? [], [operationsQuery.data]);
+  const operationsLoading = operationsQuery.isLoading;
+  const operationsError = operationsQuery.error;
+  const hasOperationsData = operationsQuery.data != null;
   const categories = categoriesQuery.data ?? [];
   const limits = limitsQuery.data ?? [];
   const isGrouped = groupedByType[type] ?? false;
@@ -80,16 +76,8 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
       }
     }
     result.sort((a, b) => {
-      const totalA = a.operations.reduce(
-        (sum, op) =>
-          sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
-        0,
-      );
-      const totalB = b.operations.reduce(
-        (sum, op) =>
-          sum + Math.abs(signedOperationAmount(op.type as OperationType, Number(op.amount) || 0)),
-        0,
-      );
+      const totalA = a.operations.reduce((sum, op) => sum + Math.abs(Number(op.amount) || 0), 0);
+      const totalB = b.operations.reduce((sum, op) => sum + Math.abs(Number(op.amount) || 0), 0);
       return totalB - totalA;
     });
     const withoutCategory = byCategory.get('none');
@@ -120,8 +108,8 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
         <VErrorCard
           title="Не удалось загрузить операции"
           error={operationsError}
-          onRetry={() => void activeListQuery.refetch()}
-          isRetrying={activeListQuery.isFetching}
+          onRetry={() => void operationsQuery.refetch()}
+          isRetrying={operationsQuery.isFetching}
         />
       )}
 
@@ -141,8 +129,6 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
                 'Расход — это списание средств. Расход уменьшает баланс, капитал и остаток в рамках периода.'}
               {type === 'income' &&
                 'Доход — это поступление средств. Доход увеличивает баланс, капитал и остаток в рамках периода'}
-              {type === 'savings' &&
-                'Накопление — это отложенная сумма средств, которая учитывается отдельно от расходов и доходов. Накопления влияют на баланс и общую сумму накоплений в разделе "Накопления".'}
             </div>
             <div className={styles.emptyHint}>Нажмите «+», чтобы добавить первую операцию.</div>
           </div>
@@ -172,8 +158,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
           {groups.map((group, groupIndex) => {
             const limit = limitsByCategory.get(group.key);
             const groupTotal = group.operations.reduce(
-              (sum, op) =>
-                sum + signedOperationAmount(op.type as OperationType, Number(op.amount) || 0),
+              (sum, op) => sum + (Number(op.amount) || 0),
               0,
             );
             const limitAmount = limit ? Number(limit.amount) || 0 : 0;

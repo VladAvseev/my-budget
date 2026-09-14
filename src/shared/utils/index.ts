@@ -16,17 +16,6 @@ export { getErrorMessage } from './errorMessage';
 export { normalizeLogin, validateLogin, INVALID_LOGIN_MESSAGE } from './validateLogin';
 export { trimStrings } from './trim';
 export {
-  buildGoalForecast,
-  buildGoalsOverallProgress,
-  buildGoalsOverallFromTotals,
-  buildGoalsProgress,
-  getCategorySavedTotal,
-  type GoalForecast,
-  type GoalsOverallProgress,
-  type GoalProgress,
-  type GoalProgressSource,
-} from './goals';
-export {
   buildCode,
   buildName,
   buildPeriodDates,
@@ -42,14 +31,9 @@ export { convertAmount } from './convertCurrency';
 export { sumOperations, emptyAmounts, type OperationAmounts } from './operations';
 export {
   type ChartPoint,
-  type GrowthAggregation,
   type PointChange,
-  getPeriodEnd,
   trimIncompletePeriod,
-  trimLeadingPartialPeriod,
   getPointChange,
-  toPeriodDeltas,
-  aggregatePoints,
 } from './chartPoints';
 export { getOtherCurrencyRates, formatCurrencyRate, type CurrencyRateItem } from './currencyRates';
 export { computeGlobalTotals, type GlobalTotals } from './globalTotals';

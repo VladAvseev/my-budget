@@ -3,7 +3,6 @@ import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import commonStyles from '@/shared/styles/common.module.css';
 import styles from './homeCard.module.css';
-import { AccumulationsCard } from './components/AccumulationsCard';
 import { LastReportCard } from './components/LastReportCard';
 import { NewReportCard } from './components/NewReportCard';
 import { OnboardingCard } from './components/OnboardingCard';
@@ -32,7 +31,6 @@ export const Page: React.FC = () => {
             <NewReportCard />
             <LastReportCard />
             <OverviewCard />
-            <AccumulationsCard />
           </>
         )}
       </div>

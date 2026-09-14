@@ -13,7 +13,7 @@ interface OperationsTabsProps {
   report?: Report;
 }
 
-export type OperationsTab = 'expense' | 'income' | 'savings' | 'daily';
+export type OperationsTab = 'expense' | 'income' | 'daily';
 
 export const OperationsTabs = ({ reportId, report }: OperationsTabsProps) => {
   // Дефолтный таб всегда «Расходы»: он не зависит от полей отчёта, поэтому
@@ -26,7 +26,6 @@ export const OperationsTabs = ({ reportId, report }: OperationsTabsProps) => {
   }
   tabs.push({ value: 'expense', label: 'Расходы' });
   tabs.push({ value: 'income', label: 'Доходы' });
-  tabs.push({ value: 'savings', label: 'Накопления' });
 
   return (
     <div className={commonStyles.columnL}>

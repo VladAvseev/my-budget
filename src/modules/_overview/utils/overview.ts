@@ -1,5 +1,5 @@
 import type { Category } from '@/shared/api/types/domain';
-import { signedOperationAmount, type OperationType } from '@/shared/api/types/domain';
+import type { OperationType } from '@/shared/api/types/domain';
 import type { Report } from '@/shared/api/types/domain';
 import { emptyAmounts, type OperationAmounts } from '@/shared/utils';
 import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
@@ -39,8 +39,7 @@ export interface CategoryGroup {
 
 const emptyReportBreakdown = new Map<string, number>();
 
-const signedSummaryAmount = (row: CategorySummaryRow): number =>
-  signedOperationAmount(row.type as OperationType, Number(row.amount) || 0);
+const summaryAmount = (row: CategorySummaryRow): number => Number(row.amount) || 0;
 
 export const sumCategorySummary = (
   summaryByReport: Map<string, CategorySummaryRow[]>,
@@ -50,9 +49,7 @@ export const sumCategorySummary = (
     for (const row of rows) {
       const type = row.type as OperationType;
       const amount = Number(row.amount) || 0;
-      if (type === 'savings_out') {
-        total.savings -= amount;
-      } else if (type in total) {
+      if (type === 'income' || type === 'expense' || type === 'daily') {
         total[type as keyof OperationAmounts] += amount;
       }
     }
@@ -70,7 +67,7 @@ export const buildReportGroups = (
     const rows = summaryByReport.get(report.id) ?? [];
     const amount = rows.reduce((sum, row) => {
       if (!typeFilter.includes(row.type as OperationType)) return sum;
-      return sum + signedSummaryAmount(row);
+      return sum + summaryAmount(row);
     }, 0);
     if (amount !== 0) {
       result.push({ report, amount });
@@ -100,7 +97,7 @@ export const buildCategoryGroups = (
   for (const [reportId, rows] of summaryByReport) {
     for (const row of rows) {
       if (!typeFilter.includes(row.type as OperationType)) continue;
-      add(row.category_id ?? 'none', reportId, signedSummaryAmount(row));
+      add(row.category_id ?? 'none', reportId, summaryAmount(row));
     }
   }
 
@@ -159,7 +156,7 @@ export const buildChartData = (
   for (const rows of summaryByReport.values()) {
     for (const row of rows) {
       if (!typeFilter.includes(row.type as OperationType)) continue;
-      add(row.category_id ?? 'none', signedSummaryAmount(row));
+      add(row.category_id ?? 'none', summaryAmount(row));
     }
   }
 
@@ -167,7 +164,7 @@ export const buildChartData = (
     for (const rows of summaryByReport.values()) {
       for (const row of rows) {
         if (row.type !== 'daily') continue;
-        add('daily', signedSummaryAmount(row));
+        add('daily', summaryAmount(row));
       }
     }
   }

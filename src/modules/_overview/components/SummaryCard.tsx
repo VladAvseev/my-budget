@@ -7,12 +7,11 @@ import styles from './SummaryCard.module.css';
 interface SummaryCardProps {
   income: number;
   expenses: number;
-  savings: number;
 }
 
-export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => {
+export const SummaryCard = ({ income, expenses }: SummaryCardProps) => {
   const { displaySymbol, convertOptions } = useDisplayCurrency();
-  const balance = income - expenses - savings;
+  const balance = income - expenses;
 
   const items = [
     {
@@ -25,12 +24,6 @@ export const SummaryCard = ({ income, expenses, savings }: SummaryCardProps) => 
       value: expenses,
       percent: percentOfIncome(expenses, income),
       color: 'var(--color-error)',
-    },
-    {
-      label: 'Накопления',
-      value: savings,
-      percent: percentOfIncome(savings, income),
-      color: 'var(--color-warning)',
     },
     {
       label: 'Остаток',

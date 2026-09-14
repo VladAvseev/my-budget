@@ -1,6 +1,5 @@
 import type { Category } from '@/shared/api/types/domain';
 import type { Operation, OperationType } from '@/shared/api/types/domain';
-import { signedOperationAmount } from '@/shared/api/types/domain';
 import { useSetAtom } from 'jotai';
 import { operationModalAtom } from '../../atoms/report';
 import { OperationCardBase } from './OperationCardBase';
@@ -18,10 +17,7 @@ export const StandardOperationCard = ({
 }: StandardOperationCardProps) => {
   const setModal = useSetAtom(operationModalAtom);
 
-  const amount = signedOperationAmount(
-    operation.type as OperationType,
-    Number(operation.amount) || 0,
-  );
+  const amount = Number(operation.amount) || 0;
 
   return (
     <OperationCardBase
