@@ -1,4 +1,4 @@
-import { invalidateHomeCaches } from '@/shared/api/hooks';
+import { capitalDynamicsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
 import type { useQueryClient } from '@tanstack/react-query';
 
 export const invalidateReportCache = (
@@ -12,5 +12,8 @@ export const invalidateReportCache = (
   queryClient.invalidateQueries({ queryKey: ['accounts'] });
   queryClient.invalidateQueries({ queryKey: ['overview', 'category-summary'] });
   queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
+  // Динамика капитала в аналитике считается сервером из income/expense/daily
+  // операций отчётов — любые правки операций её двигают.
+  queryClient.invalidateQueries({ queryKey: capitalDynamicsQueryKey, exact: true });
   invalidateHomeCaches(queryClient);
 };

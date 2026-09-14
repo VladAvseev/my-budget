@@ -21,6 +21,7 @@
 }
 
 body {
+  color: var(--color-text-primary);
   font-family:
     'Roboto',
     'nbrb',

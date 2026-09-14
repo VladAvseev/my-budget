@@ -28,6 +28,7 @@ import {
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
 import { CategoryDistributionChart } from './components/CategoryDistributionChart';
+import { GrowthDynamicsCard } from './components/GrowthDynamicsCard';
 import { PeriodCompareSelect } from './components/PeriodCompareSelect';
 import { ReportsFilter } from './components/ReportsFilter';
 import { SummaryCard } from './components/SummaryCard';
@@ -155,9 +156,15 @@ export const Page: React.FC = () => {
           <div className={commonStyles.titleXl}>
             Капитал: {formatAmount(capitalQuery.capital, displaySymbol, convertOptions)}
           </div>
-          <div>Текущий баланс всех счетов</div>
+          <div className={commonStyles.textSecondary}>Текущий баланс всех счетов</div>
         </VCard>
       )}
+
+      <GrowthDynamicsCard
+        userId={userId}
+        title="Рост капитала"
+        currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
+      />
 
       <div className={commonStyles.row}>
         <div className={commonStyles.titleXl}>Отчёт по периодам</div>

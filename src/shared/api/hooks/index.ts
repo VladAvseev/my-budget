@@ -6,6 +6,12 @@ export {
 } from './useGlobalBalance';
 export { useAccounts, accountsQueryKey, type UseAccountsResponse } from './useAccounts';
 export { useCapital } from './useCapital';
+export {
+  capitalDynamicsQueryKey,
+  useCapitalDynamics,
+  type CapitalMonth,
+  type UseCapitalDynamicsResponse,
+} from './useCapitalDynamics';
 export { useProfile, type UseProfileResponse } from './useProfile';
 export {
   consentStatusQueryKey,
