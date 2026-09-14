@@ -1,5 +1,5 @@
 import type { Category } from '@/shared/api/types/domain';
-import type { Operation, OperationType } from '@/shared/api/types/domain';
+import type { ApiOperationType, Operation } from '@/shared/api/types/domain';
 import { useSetAtom } from 'jotai';
 import { operationModalAtom } from '../../atoms/report';
 import { OperationCardBase } from './OperationCardBase';
@@ -27,7 +27,7 @@ export const StandardOperationCard = ({
       category={category}
       date={operation.date}
       pending={pending}
-      onOpen={() => setModal({ type: operation.type as OperationType, operation })}
+      onOpen={() => setModal({ type: operation.type as ApiOperationType, operation })}
     />
   );
 };

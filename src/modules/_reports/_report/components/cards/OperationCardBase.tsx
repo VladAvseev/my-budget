@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Category } from '@/shared/api/types/domain';
 import { useCurrency } from '@/shared/api/hooks';
 import { VBadge } from '@/shared/ui/VBadge';
@@ -11,6 +12,8 @@ interface OperationCardBaseProps {
   amountColor: string;
   description?: string | null;
   category?: Category | null;
+  /** Переопределяет бейдж категории: у перевода показывается пара счетов. */
+  badge?: ReactNode;
   date?: string | null;
   pending?: boolean;
   onOpen: () => void;
@@ -21,6 +24,7 @@ export const OperationCardBase = ({
   amountColor,
   description,
   category,
+  badge,
   date,
   pending = false,
   onOpen,
@@ -55,6 +59,8 @@ export const OperationCardBase = ({
       <div className={styles.right}>
         {pending ? (
           <VLoader size={16} />
+        ) : badge ? (
+          badge
         ) : category?.name ? (
           <VBadge color={category?.color ?? undefined} className={styles.badge}>
             {category?.name}

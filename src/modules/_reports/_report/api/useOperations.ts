@@ -1,4 +1,4 @@
-import type { Operation, OperationType } from '@/shared/api/types/domain';
+import type { ApiOperationType, Operation } from '@/shared/api/types/domain';
 import { api } from '@/shared/api/http';
 import { operationsQueryKey } from './keys';
 import { useQuery } from '@tanstack/react-query';
@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 /** Параметры запроса (уходят в query-строку). */
 export interface UseOperationsRequest {
   reportId: string;
-  type: OperationType;
+  type: ApiOperationType;
 }
 
 /** Ответ GET /operations?reportId=&type=. */
@@ -22,7 +22,7 @@ const fetchOperations = async ({ reportId, type }: UseOperationsRequest, signal?
     signal,
   })) ?? [];
 
-export const useOperations = (reportId: string, type: OperationType) =>
+export const useOperations = (reportId: string, type: ApiOperationType) =>
   useQuery<UseOperationsResponse>({
     queryKey: operationsQueryKey(reportId, type),
     enabled: Boolean(reportId),

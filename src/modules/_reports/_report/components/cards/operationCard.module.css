@@ -58,6 +58,13 @@
   flex-shrink: 0;
 }
 
+.transferBadge {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .row {
   display: flex;
   align-items: center;

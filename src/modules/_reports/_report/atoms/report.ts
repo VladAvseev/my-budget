@@ -1,8 +1,8 @@
-import type { Operation, OperationType } from '@/shared/api/types/domain';
+import type { ApiOperationType, Operation } from '@/shared/api/types/domain';
 import { atom } from 'jotai';
 
 export interface OperationModalState {
-  type: OperationType;
+  type: ApiOperationType;
   operation: Operation | null;
   isDeletable?: boolean;
 }

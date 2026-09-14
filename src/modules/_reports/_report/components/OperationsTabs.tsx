@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { Report } from '@/shared/api/types/domain';
-import type { OperationType } from '@/shared/api/types/domain';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import commonStyles from '@/shared/styles/common.module.css';
 import { OperationList } from './OperationList';
@@ -13,7 +12,7 @@ interface OperationsTabsProps {
   report?: Report;
 }
 
-export type OperationsTab = 'expense' | 'income' | 'daily';
+export type OperationsTab = 'expense' | 'income' | 'daily' | 'transfer';
 
 export const OperationsTabs = ({ reportId, report }: OperationsTabsProps) => {
   // Дефолтный таб всегда «Расходы»: он не зависит от полей отчёта, поэтому
@@ -26,6 +25,7 @@ export const OperationsTabs = ({ reportId, report }: OperationsTabsProps) => {
   }
   tabs.push({ value: 'expense', label: 'Расходы' });
   tabs.push({ value: 'income', label: 'Доходы' });
+  tabs.push({ value: 'transfer', label: 'Переводы' });
 
   return (
     <div className={commonStyles.columnL}>
@@ -34,7 +34,7 @@ export const OperationsTabs = ({ reportId, report }: OperationsTabsProps) => {
       {activeTab === 'daily' ? (
         report && <DailyOperationsTab report={report} />
       ) : (
-        <OperationList reportId={reportId} type={activeTab as OperationType} />
+        <OperationList reportId={reportId} type={activeTab} />
       )}
     </div>
   );

@@ -1,8 +1,8 @@
-import type { OperationType, Report } from '@/shared/api/types/domain';
+import type { ApiOperationType, Report } from '@/shared/api/types/domain';
 import { OperationForm } from './modals/shared/OperationForm';
 
 interface CreateOperationModalProps {
-  type: OperationType;
+  type: ApiOperationType;
   report: Report;
   onClose: () => void;
 }

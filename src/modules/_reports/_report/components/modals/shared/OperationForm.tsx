@@ -19,17 +19,9 @@ import { capitalizeFirst, formatDisplay, getErrorMessage, getNextFreeDate } from
 import modalStyles from '@/shared/styles/modal.module.css';
 import { CategorySelect } from './CategorySelect';
 import { getAmountError } from './amountValidation';
-import styles from './OperationForm.module.css';
-
-const typeOptions: { value: ApiOperationType; label: string }[] = [
-  { value: 'income', label: 'Доход' },
-  { value: 'expense', label: 'Расход' },
-  { value: 'daily', label: 'Ежедневный расход' },
-  { value: 'transfer', label: 'Перевод' },
-];
 
 const isCurrentType = (value: string): value is ApiOperationType =>
-  typeOptions.some((option) => option.value === value);
+  value === 'income' || value === 'expense' || value === 'daily' || value === 'transfer';
 
 const closedMessage =
   'Операцию закрытого счёта нельзя изменить или удалить. Сначала откройте счёт.';
@@ -54,9 +46,10 @@ export const OperationForm = ({
   const createOperation = useCreateOperation(report.id);
   const updateOperation = useUpdateOperation(report.id);
   const removeOperation = useRemoveOperation(report.id);
-  const [type, setType] = useState<ApiOperationType>(
-    operation && isCurrentType(operation.type) ? operation.type : initialType,
-  );
+  // Тип в форме не выбирается: при создании он задан списком (initialType),
+  // при редактировании взят из операции и смене не подлежит.
+  const type: ApiOperationType =
+    operation && isCurrentType(operation.type) ? operation.type : initialType;
   const [amount, setAmount] = useState(operation ? String(operation.amount) : '');
   const [description, setDescription] = useState(operation?.description ?? '');
   const [date, setDate] = useState(operation?.date ?? '');
@@ -292,35 +285,6 @@ export const OperationForm = ({
       }
     >
       <div className={modalStyles.content}>
-        <div role="group" aria-label="Тип операции" className={styles.typeOptions}>
-          {typeOptions.map((option) => (
-            <VButton
-              key={option.value}
-              variant={type === option.value ? 'primary' : 'secondary'}
-              aria-pressed={type === option.value}
-              isDisabled={
-                fieldsDisabled ||
-                Boolean(
-                  operation && (operation.type === 'transfer') !== (option.value === 'transfer'),
-                )
-              }
-              onClick={() => {
-                if (type !== option.value) {
-                  setType(option.value);
-                  setCategoryId('');
-                  setSubmitError(undefined);
-                }
-              }}
-            >
-              {option.label}
-            </VButton>
-          ))}
-        </div>
-        {operation && (
-          <div className={modalStyles.dateLabel}>
-            Нельзя преобразовать перевод в обычную операцию или наоборот.
-          </div>
-        )}
         {accountsQuery.isError && (
           <VButton
             variant="secondary"

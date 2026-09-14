@@ -1,7 +1,7 @@
 import { PlusIcon } from '@/shared/icons';
 import { useMemo } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
-import type { Operation, OperationType } from '@/shared/api/types/domain';
+import type { Operation, ApiOperationType } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -24,14 +24,19 @@ import styles from './operationList.module.css';
 
 interface OperationListProps {
   reportId: string;
-  type: OperationType;
+  type: ApiOperationType;
 }
 
 export const OperationList = ({ reportId, type }: OperationListProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const operationsQuery = useOperations(reportId, type);
-  const categoriesQuery = useCategoriesByType(userId, categoryTypeForOperation(type));
+  // У переводов категорий нет: пустой userId отключает запрос в хуке.
+  const categoryType = categoryTypeForOperation(type);
+  const categoriesQuery = useCategoriesByType(
+    categoryType ? userId : '',
+    categoryType ?? 'expense',
+  );
   const limitsQuery = useCategoryLimits(type === 'expense' ? reportId : '');
   const setModal = useSetAtom(operationModalAtom);
   const [groupedByType, setGroupedByType] = useAtom(groupedByTypeAtom);
@@ -44,7 +49,9 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const hasOperationsData = operationsQuery.data != null;
   const categories = categoriesQuery.data ?? [];
   const limits = limitsQuery.data ?? [];
-  const isGrouped = groupedByType[type] ?? false;
+  const isTransfer = type === 'transfer';
+  // Переводы не группируются по категориям: переключатель скрыт, группировка выключена.
+  const isGrouped = !isTransfer && (groupedByType[type] ?? false);
 
   const toggleGrouping = (next: boolean) => {
     setGroupedByType((prev) => ({ ...prev, [type]: next }));
@@ -94,7 +101,13 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
       )}
 
       <div className={styles.toolbar}>
-        <VToggle label="Группировать по категориям" checked={isGrouped} onChange={toggleGrouping} />
+        {!isTransfer && (
+          <VToggle
+            label="Группировать по категориям"
+            checked={isGrouped}
+            onChange={toggleGrouping}
+          />
+        )}
         <VIconButton
           ariaLabel="Новая операция"
           onClick={() => setModal({ type, operation: null })}
@@ -129,6 +142,8 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
                 'Расход — это списание средств. Расход уменьшает баланс, капитал и остаток в рамках периода.'}
               {type === 'income' &&
                 'Доход — это поступление средств. Доход увеличивает баланс, капитал и остаток в рамках периода'}
+              {type === 'transfer' &&
+                'Перевод — это перемещение средств между своими счетами. Перевод не меняет капитал и остаток периода.'}
             </div>
             <div className={styles.emptyHint}>Нажмите «+», чтобы добавить первую операцию.</div>
           </div>

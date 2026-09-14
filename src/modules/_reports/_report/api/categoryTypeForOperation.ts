@@ -1,5 +1,6 @@
-import type { OperationType } from '@/shared/api/types/domain';
+import type { ApiOperationType } from '@/shared/api/types/domain';
 import type { CategoryType } from '@/shared/api/types/domain';
 
-export const categoryTypeForOperation = (type: OperationType): CategoryType =>
-  type === 'daily' ? 'expense' : type;
+/** У перевода категорий нет — возвращаем null, чтобы не тянуть запрос зря. */
+export const categoryTypeForOperation = (type: ApiOperationType): CategoryType | null =>
+  type === 'transfer' ? null : type === 'daily' ? 'expense' : type;
