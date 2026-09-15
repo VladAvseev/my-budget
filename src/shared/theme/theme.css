@@ -2,7 +2,9 @@
  * Material 3 Expressive — project token layer for my-budget (Web)
  * --------------------------------------------------------------------------
  * Baseline: официальная статическая схема M3 (Material Web v0.192).
- * Color strategy: Baseline static, light/dark, стандартный контраст.
+ * Color strategy: SchemeTonalSpot от seed #0099dc (@material/material-color-utilities@0.4.0, spec 2025, phone, contrast 0.0), light/dark.
+ * Brand override: primary/surface-tint = сам seed #0099dc (не тон-40/80 схемы), on-primary = белый (3.19:1, осознанный выбор продукта);
+ * нейтрали прогреты (hue ~70, low chroma), tertiary — тёплый бронзово-песочный, тёмная surface приподнята до tone 12.
  * Typography: Roboto Flex Variable.
  * CSS custom-property names are the project's Web mapping of M3 roles.
  * ========================================================================== */
@@ -189,102 +191,103 @@
   --md-sys-typescale-label-small-emphasized: 700 var(--md-sys-typescale-label-small-size)/var(--md-sys-typescale-label-small-line-height) var(--md-ref-typeface-plain);
 }
 
-/* ---------- Light theme: baseline-палитра ---------- */
+/* ---------- Light theme: палитра SchemeTonalSpot (seed #0099dc) ---------- */
 :root,
 [data-theme='light'] {
-  --md-sys-color-primary: #6750a4; /* главные действия */
+  --md-sys-color-primary: #0099dc; /* главные действия */
   --md-sys-color-on-primary: #ffffff; /* текст на primary */
-  --md-sys-color-primary-container: #eaddff; /* акцентные контейнеры, FAB */
-  --md-sys-color-on-primary-container: #21005d; /* текст на акцентном фоне */
-  --md-sys-color-secondary: #625b71; /* вторичные действия */
+  --md-sys-color-primary-container: #a8d7fd; /* акцентные контейнеры, FAB */
+  --md-sys-color-on-primary-container: #164c6b; /* текст на акцентном фоне */
+  --md-sys-color-secondary: #596066; /* вторичные действия */
   --md-sys-color-on-secondary: #ffffff; /* текст на secondary */
-  --md-sys-color-secondary-container: #e8def8; /* тональные кнопки, чипы */
-  --md-sys-color-on-secondary-container: #1d192b; /* текст тональных элементов */
-  --md-sys-color-tertiary: #7d5260; /* точечный доп-акцент */
+  --md-sys-color-secondary-container: #d3e5f5; /* тональные кнопки, чипы */
+  --md-sys-color-on-secondary-container: #435461; /* текст тональных элементов */
+  --md-sys-color-tertiary: #705b4c; /* точечный доп-акцент */
   --md-sys-color-on-tertiary: #ffffff; /* текст на tertiary */
-  --md-sys-color-tertiary-container: #ffd8e4; /* фон доп-акцента, аватары */
-  --md-sys-color-on-tertiary-container: #31111d; /* текст на доп-фоне */
-  --md-sys-color-error: #b3261e; /* ошибки и destructive */
-  --md-sys-color-on-error: #ffffff; /* текст на ошибке */
-  --md-sys-color-error-container: #f9dedc; /* фон ошибки */
-  --md-sys-color-on-error-container: #410e0b; /* текст на фоне ошибки */
-  --md-sys-color-surface: #fef7ff; /* базовая поверхность */
-  --md-sys-color-surface-dim: #ded8e1; /* приглушённый край */
-  --md-sys-color-surface-bright: #fef7ff; /* яркий край */
+  --md-sys-color-tertiary-container: #f0cab2; /* фон доп-акцента, аватары */
+  --md-sys-color-on-tertiary-container: #643f23; /* текст на доп-фоне */
+  --md-sys-color-error: #a83836; /* ошибки и destructive */
+  --md-sys-color-on-error: #fff7f6; /* текст на ошибке */
+  --md-sys-color-error-container: #fa746f; /* фон ошибки */
+  --md-sys-color-on-error-container: #6e0a12; /* текст на фоне ошибки */
+  --md-sys-color-surface: #fef8f5; /* базовая поверхность */
+  --md-sys-color-surface-dim: #dfd9d6; /* приглушённый край */
+  --md-sys-color-surface-bright: #fef8f5; /* яркий край */
   --md-sys-color-surface-container-lowest: #ffffff; /* самый низкий уровень */
-  --md-sys-color-surface-container-low: #f7f2fa; /* низкий уровень, elevated-кнопки */
-  --md-sys-color-surface-container: #f3edf7; /* базовый контейнер */
-  --md-sys-color-surface-container-high: #ece6f0; /* повышенный уровень */
-  --md-sys-color-surface-container-highest: #e6e0e9; /* самый высокий уровень */
-  --md-sys-color-on-surface: #1d1b20; /* основной текст */
-  --md-sys-color-on-surface-variant: #49454f; /* вторичный текст и иконки */
-  --md-sys-color-outline: #79747e; /* значимые границы, поля */
-  --md-sys-color-outline-variant: #cac4d0; /* разделители */
-  --md-sys-color-inverse-surface: #322f35; /* инверсный фон, снекбар */
-  --md-sys-color-inverse-on-surface: #f5eff7; /* текст инверсного фона */
-  --md-sys-color-inverse-primary: #d0bcff; /* акцент на инверсии */
-  --md-sys-color-surface-tint: #6750a4; /* оттенок тонирования */
+  --md-sys-color-surface-container-low: #f9f3ef; /* низкий уровень, elevated-кнопки */
+  --md-sys-color-surface-container: #f3ece9; /* базовый контейнер */
+  --md-sys-color-surface-container-high: #ede7e4; /* повышенный уровень */
+  --md-sys-color-surface-container-highest: #e7e1de; /* самый высокий уровень */
+  --md-sys-color-on-surface: #343230; /* основной текст */
+  --md-sys-color-on-surface-variant: #655e58; /* вторичный текст и иконки */
+  --md-sys-color-outline: #817973; /* значимые границы, поля */
+  --md-sys-color-outline-variant: #bab1a9; /* разделители */
+  --md-sys-color-inverse-surface: #2e2c2a; /* инверсный фон, снекбар */
+  --md-sys-color-inverse-on-surface: #f6efec; /* текст инверсного фона */
+  --md-sys-color-inverse-primary: #acd7f9; /* акцент на инверсии */
+  --md-sys-color-surface-tint: #0099dc; /* оттенок тонирования */
   --md-sys-color-shadow: #000000; /* тени */
   --md-sys-color-scrim: #000000; /* затемнение модалок */
-  --md-sys-color-primary-fixed: #eaddff; /* фиксированный primary вне темы */
-  --md-sys-color-primary-fixed-dim: #d0bcff; /* приглушённый фикс. primary */
-  --md-sys-color-on-primary-fixed: #21005d; /* текст на фикс. primary */
-  --md-sys-color-on-primary-fixed-variant: #4f378b; /* вторичный текст фикса */
-  --md-sys-color-secondary-fixed: #e8def8; /* фиксированный secondary вне темы */
-  --md-sys-color-secondary-fixed-dim: #ccc2dc; /* приглушённый фикс. secondary */
-  --md-sys-color-on-secondary-fixed: #1d192b; /* текст на фикс. secondary */
-  --md-sys-color-on-secondary-fixed-variant: #4a4458; /* вторичный текст фикса */
-  --md-sys-color-tertiary-fixed: #ffd8e4; /* фиксированный tertiary вне темы */
-  --md-sys-color-tertiary-fixed-dim: #efb8c8; /* приглушённый фикс. tertiary */
-  --md-sys-color-on-tertiary-fixed: #31111d; /* текст на фикс. tertiary */
-  --md-sys-color-on-tertiary-fixed-variant: #633b48; /* вторичный текст фикса */
+  --md-sys-color-primary-fixed: #a8d7fd; /* фиксированный primary вне темы */
+  --md-sys-color-primary-fixed-dim: #9bc9ee; /* приглушённый фикс. primary */
+  --md-sys-color-on-primary-fixed: #003854; /* текст на фикс. primary */
+  --md-sys-color-on-primary-fixed-variant: #235575; /* вторичный текст фикса */
+  --md-sys-color-secondary-fixed: #d3e5f5; /* фиксированный secondary вне темы */
+  --md-sys-color-secondary-fixed-dim: #c5d7e7; /* приглушённый фикс. secondary */
+  --md-sys-color-on-secondary-fixed: #31414e; /* текст на фикс. secondary */
+  --md-sys-color-on-secondary-fixed-variant: #4d5d6b; /* вторичный текст фикса */
+  --md-sys-color-tertiary-fixed: #f0cab2; /* фиксированный tertiary вне темы */
+  --md-sys-color-tertiary-fixed-dim: #ddbda8; /* приглушённый фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed: #4d2c12; /* текст на фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed-variant: #6a4931; /* вторичный текст фикса */
 }
 
+/* ---------- Dark theme: палитра SchemeTonalSpot (seed #0099dc) ---------- */
 [data-theme='dark'] {
-  --md-sys-color-primary: #d0bcff; /* главные действия */
-  --md-sys-color-on-primary: #381e72; /* текст на primary */
-  --md-sys-color-primary-container: #4f378b; /* акцентные контейнеры, FAB */
-  --md-sys-color-on-primary-container: #eaddff; /* текст на акцентном фоне */
-  --md-sys-color-secondary: #ccc2dc; /* вторичные действия */
-  --md-sys-color-on-secondary: #332d41; /* текст на secondary */
-  --md-sys-color-secondary-container: #4a4458; /* тональные кнопки, чипы */
-  --md-sys-color-on-secondary-container: #e8def8; /* текст тональных элементов */
-  --md-sys-color-tertiary: #efb8c8; /* точечный доп-акцент */
-  --md-sys-color-on-tertiary: #492532; /* текст на tertiary */
-  --md-sys-color-tertiary-container: #633b48; /* фон доп-акцента, аватары */
-  --md-sys-color-on-tertiary-container: #ffd8e4; /* текст на доп-фоне */
-  --md-sys-color-error: #f2b8b5; /* ошибки и destructive */
-  --md-sys-color-on-error: #601410; /* текст на ошибке */
-  --md-sys-color-error-container: #8c1d18; /* фон ошибки */
-  --md-sys-color-on-error-container: #f9dedc; /* текст на фоне ошибки */
-  --md-sys-color-surface: #141218; /* базовая поверхность */
-  --md-sys-color-surface-dim: #141218; /* приглушённый край */
-  --md-sys-color-surface-bright: #3b383e; /* яркий край */
-  --md-sys-color-surface-container-lowest: #0f0d13; /* самый низкий уровень */
-  --md-sys-color-surface-container-low: #1d1b20; /* низкий уровень, elevated-кнопки */
-  --md-sys-color-surface-container: #211f26; /* базовый контейнер */
-  --md-sys-color-surface-container-high: #2b2930; /* повышенный уровень */
-  --md-sys-color-surface-container-highest: #36343b; /* самый высокий уровень */
-  --md-sys-color-on-surface: #e6e0e9; /* основной текст */
-  --md-sys-color-on-surface-variant: #cac4d0; /* вторичный текст и иконки */
-  --md-sys-color-outline: #938f99; /* значимые границы, поля */
-  --md-sys-color-outline-variant: #49454f; /* разделители */
-  --md-sys-color-inverse-surface: #e6e0e9; /* инверсный фон, снекбар */
-  --md-sys-color-inverse-on-surface: #322f35; /* текст инверсного фона */
-  --md-sys-color-inverse-primary: #6750a4; /* акцент на инверсии */
-  --md-sys-color-surface-tint: #d0bcff; /* оттенок тонирования */
+  --md-sys-color-primary: #0099dc; /* главные действия */
+  --md-sys-color-on-primary: #ffffff; /* текст на primary */
+  --md-sys-color-primary-container: #34566f; /* акцентные контейнеры, FAB */
+  --md-sys-color-on-primary-container: #cbe7ff; /* текст на акцентном фоне */
+  --md-sys-color-secondary: #b7c9d9; /* вторичные действия */
+  --md-sys-color-on-secondary: #32424f; /* текст на secondary */
+  --md-sys-color-secondary-container: #2d3d4a; /* тональные кнопки, чипы */
+  --md-sys-color-on-secondary-container: #b0c1d1; /* текст тональных элементов */
+  --md-sys-color-tertiary: #f4dbcc; /* точечный доп-акцент */
+  --md-sys-color-on-tertiary: #5b4d44; /* текст на tertiary */
+  --md-sys-color-tertiary-container: #e9ccba; /* фон доп-акцента, аватары */
+  --md-sys-color-on-tertiary-container: #554439; /* текст на доп-фоне */
+  --md-sys-color-error: #fa746f; /* ошибки и destructive */
+  --md-sys-color-on-error: #490006; /* текст на ошибке */
+  --md-sys-color-error-container: #871f21; /* фон ошибки */
+  --md-sys-color-on-error-container: #ff9993; /* текст на фоне ошибки */
+  --md-sys-color-surface: #211f1d; /* базовая поверхность */
+  --md-sys-color-surface-dim: #1d1b1a; /* приглушённый край */
+  --md-sys-color-surface-bright: #3b3937; /* яркий край */
+  --md-sys-color-surface-container-lowest: #151311; /* самый низкий уровень */
+  --md-sys-color-surface-container-low: #1d1b1a; /* низкий уровень, elevated-кнопки */
+  --md-sys-color-surface-container: #23211f; /* базовый контейнер */
+  --md-sys-color-surface-container-high: #2c2928; /* повышенный уровень */
+  --md-sys-color-surface-container-highest: #373432; /* самый высокий уровень */
+  --md-sys-color-on-surface: #e7e1de; /* основной текст */
+  --md-sys-color-on-surface-variant: #b5aca5; /* вторичный текст и иконки */
+  --md-sys-color-outline: #807872; /* значимые границы, поля */
+  --md-sys-color-outline-variant: #4c4640; /* разделители */
+  --md-sys-color-inverse-surface: #fff8f5; /* инверсный фон, снекбар */
+  --md-sys-color-inverse-on-surface: #3e3b39; /* текст инверсного фона */
+  --md-sys-color-inverse-primary: #41637c; /* акцент на инверсии */
+  --md-sys-color-surface-tint: #0099dc; /* оттенок тонирования */
   --md-sys-color-shadow: #000000; /* тени */
   --md-sys-color-scrim: #000000; /* затемнение модалок */
-  --md-sys-color-primary-fixed: #eaddff; /* фиксированный primary вне темы */
-  --md-sys-color-primary-fixed-dim: #d0bcff; /* приглушённый фикс. primary */
-  --md-sys-color-on-primary-fixed: #21005d; /* текст на фикс. primary */
-  --md-sys-color-on-primary-fixed-variant: #4f378b; /* вторичный текст фикса */
-  --md-sys-color-secondary-fixed: #e8def8; /* фиксированный secondary вне темы */
-  --md-sys-color-secondary-fixed-dim: #ccc2dc; /* приглушённый фикс. secondary */
-  --md-sys-color-on-secondary-fixed: #1d192b; /* текст на фикс. secondary */
-  --md-sys-color-on-secondary-fixed-variant: #4a4458; /* вторичный текст фикса */
-  --md-sys-color-tertiary-fixed: #ffd8e4; /* фиксированный tertiary вне темы */
-  --md-sys-color-tertiary-fixed-dim: #efb8c8; /* приглушённый фикс. tertiary */
-  --md-sys-color-on-tertiary-fixed: #31111d; /* текст на фикс. tertiary */
-  --md-sys-color-on-tertiary-fixed-variant: #633b48; /* вторичный текст фикса */
+  --md-sys-color-primary-fixed: #bee1ff; /* фиксированный primary вне темы */
+  --md-sys-color-primary-fixed-dim: #b0d3f0; /* приглушённый фикс. primary */
+  --md-sys-color-on-primary-fixed: #1b3f57; /* текст на фикс. primary */
+  --md-sys-color-on-primary-fixed-variant: #395b74; /* вторичный текст фикса */
+  --md-sys-color-secondary-fixed: #d3e5f5; /* фиксированный secondary вне темы */
+  --md-sys-color-secondary-fixed-dim: #c5d7e7; /* приглушённый фикс. secondary */
+  --md-sys-color-on-secondary-fixed: #31414e; /* текст на фикс. secondary */
+  --md-sys-color-on-secondary-fixed-variant: #4d5d6b; /* вторичный текст фикса */
+  --md-sys-color-tertiary-fixed: #f0cab2; /* фиксированный tertiary вне темы */
+  --md-sys-color-tertiary-fixed-dim: #ddbda8; /* приглушённый фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed: #4d2c12; /* текст на фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed-variant: #6a4931; /* вторичный текст фикса */
 }
