@@ -18,8 +18,12 @@
   color: var(--color-text-primary);
 }
 
-@media (max-width: 1023px) {
+.hideOnMobile {
+  display: none;
+}
+
+@media (min-width: 1024px) {
   .hideOnMobile {
-    display: none;
+    display: flex;
   }
 }

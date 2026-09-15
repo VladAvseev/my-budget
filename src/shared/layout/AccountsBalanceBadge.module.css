@@ -44,6 +44,15 @@
   padding-top: var(--space-xs);
 }
 
+/* В desktop-шапке бейдж стоит у правого края: поповер прижимаем вправо,
+   чтобы не вылезал за вьюпорт. Mobile-разметка не меняется. */
+@media (min-width: 1024px) {
+  .popover {
+    left: auto;
+    right: 0;
+  }
+}
+
 .panel {
   max-height: min(
     calc((var(--font-size-m) * var(--line-height-normal) + var(--space-s) * 2) * 5),

@@ -14,13 +14,13 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: center;
   gap: var(--space-xl);
 }
 
-@media (max-width: 600px) {
+@media (min-width: 601px) {
   .chartWrapper {
-    justify-content: center;
+    justify-content: flex-start;
   }
 }
 

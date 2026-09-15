@@ -54,7 +54,7 @@
 .hero {
   border-bottom: 1px solid var(--color-border);
   background-image: radial-gradient(ellipse at top, var(--color-accent-alpha), transparent 65%);
-  background-size: 100% 100%;
+  background-size: 200% 100%;
 }
 
 .heroInner {
@@ -385,8 +385,8 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (min-width: 641px) {
   .hero {
-    background-size: 200% 100%;
+    background-size: 100% 100%;
   }
 }

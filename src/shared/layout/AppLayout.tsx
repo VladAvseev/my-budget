@@ -12,7 +12,6 @@ import {
   type IconProps,
 } from '@/shared/icons';
 import { useAuth } from '@/shared/api/authProvider';
-import { VCard } from '@/shared/ui/VCard';
 import { AccountsBalanceBadge } from '@/shared/layout/AccountsBalanceBadge';
 import {
   useEffect,
@@ -61,43 +60,46 @@ const ProfileLink = () => {
   );
 };
 
-const SidebarContent = () => {
+const DesktopHeader = () => {
   const { isAdmin } = useAdminStatus();
 
   return (
-    <>
-      <div className={styles.brand}>
-        <BanknotesIcon size={24} />
-        <span className={styles.brandTitle}>Мои финансы</span>
-      </div>
+    <header className={styles.desktopHeader}>
+      <div className={styles.desktopHeaderInner}>
+        <div className={styles.brand}>
+          <BanknotesIcon size={24} />
+          <span className={styles.brandTitle}>Мои финансы</span>
+        </div>
 
-      <AccountsBalanceBadge />
-
-      <ProfileLink />
-
-      <nav className={styles.nav}>
-        {NAV_ITEMS.map((item) => (
-          <NavLink key={item.to} to={item.to} end={item.end} className={styles.navLink}>
-            <span className={styles.navLinkContent}>
-              <item.icon size={18} />
-              {item.label}
-            </span>
-          </NavLink>
-        ))}
-
-        {isAdmin && (
-          <>
-            <div className={styles.adminBorder} />
-            <NavLink to="/admin" className={styles.navLink}>
+        <nav className={styles.desktopNav} aria-label="Основная навигация">
+          {NAV_ITEMS.map((item) => (
+            <NavLink key={item.to} to={item.to} end={item.end} className={styles.navLink}>
               <span className={styles.navLinkContent}>
-                <SettingsIcon size={18} />
-                Админ-панель
+                <item.icon size={18} />
+                {item.label}
               </span>
             </NavLink>
-          </>
-        )}
-      </nav>
-    </>
+          ))}
+
+          {isAdmin && (
+            <>
+              <div className={styles.adminDivider} aria-hidden="true" />
+              <NavLink to="/admin" className={styles.navLink}>
+                <span className={styles.navLinkContent}>
+                  <SettingsIcon size={18} />
+                  Админ-панель
+                </span>
+              </NavLink>
+            </>
+          )}
+        </nav>
+
+        <div className={styles.desktopActions}>
+          <AccountsBalanceBadge />
+          <ProfileLink />
+        </div>
+      </div>
+    </header>
   );
 };
 
@@ -214,17 +216,11 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   if (isDesktop) {
     return (
       <div className={styles.desktopRoot}>
-        <div className={styles.desktopFrame}>
-          <div className={styles.sidebar}>
-            <VCard className={styles.sidebarCard}>
-              <SidebarContent />
-            </VCard>
-          </div>
+        <DesktopHeader />
 
-          <main ref={mainRef} className={styles.mainDesktop}>
-            {children}
-          </main>
-        </div>
+        <main ref={mainRef} className={styles.mainDesktop}>
+          <div className={styles.desktopContent}>{children}</div>
+        </main>
       </div>
     );
   }
