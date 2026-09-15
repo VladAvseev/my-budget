@@ -35,32 +35,49 @@ export interface BuildCapitalChartDataArgs {
   months: CapitalMonth[];
   /** База кривой: сумма initial_balance всех счетов. */
   base: number;
+  /** Сегодня (переопределяется в ручных проверках границ). */
+  now?: Date;
 }
 
 /**
  * Кумулятивный график капитала: первая точка — база (сумма стартовых балансов
  * всех счетов) + дельта первого периода, каждая следующая — предыдущая +
- * дельта следующего периода. Здесь остаётся только кумуляция и подписи.
+ * дельта следующего периода.
+ *
+ * Диапазон — от месяца первой точки (месяц первого периода точнее помесячный
+ * эндпоинт не даёт) по текущий месяц включительно: дубли одного месяца
+ * суммируются, месяцы без периодов наследуют последнее значение, будущие
+ * месяцы отбрасываются.
  */
 export const buildCapitalChartData = ({
   months,
   base,
+  now = new Date(),
 }: BuildCapitalChartDataArgs): ChartPoint[] => {
-  const now = startOfMonth(new Date());
+  const lastMonth = startOfMonth(now);
+
+  const deltas = new Map<number, number>();
+  for (const entry of months) {
+    const cursor = parseMonth(entry.month);
+    if (!cursor || cursor > lastMonth || !Number.isFinite(entry.delta)) continue;
+    const key = cursor.getTime();
+    deltas.set(key, (deltas.get(key) ?? 0) + entry.delta);
+  }
+
+  if (deltas.size === 0) return [];
+
+  let cursor = new Date(Math.min(...deltas.keys()));
 
   const points: ChartPoint[] = [];
   let cumulativeValue = 0;
-
-  for (const entry of months) {
-    const cursor = parseMonth(entry.month);
-    if (!cursor || cursor > now) continue;
-
-    cumulativeValue += entry.delta;
+  while (cursor <= lastMonth) {
+    cumulativeValue += deltas.get(cursor.getTime()) ?? 0;
     points.push({
-      month: cursor,
+      month: new Date(cursor),
       label: formatLabel(cursor),
       value: base + cumulativeValue,
     });
+    cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
   }
 
   return points;

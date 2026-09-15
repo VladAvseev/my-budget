@@ -13,6 +13,15 @@ export const getPeriodEnd =
   (start: Date): Date =>
     new Date(start.getFullYear(), start.getMonth() + AGGREGATION_SIZE[aggregation], 1);
 
+export const getPeriodStart =
+  (aggregation: GrowthAggregation) =>
+  (date: Date): Date => {
+    if (aggregation === 'M') return new Date(date.getFullYear(), date.getMonth(), 1);
+    const size = AGGREGATION_SIZE[aggregation];
+    const startMonth = Math.floor(date.getMonth() / size) * size;
+    return new Date(date.getFullYear(), startMonth, 1);
+  };
+
 export const trimIncompletePeriod = (
   points: ChartPoint[],
   periodEnd: (start: Date) => Date,
@@ -25,13 +34,29 @@ export const trimIncompletePeriod = (
 
 // Первый агрегированный период неполный, если серия начинается не с первого
 // календарного месяца своего периода (для кв/пг/год): прирост в нём занижен.
+// Когда известна дата начала активности точнее месяца (регистрация), период
+// неполный и если активность началась внутри него (середина месяца).
 export const trimLeadingPartialPeriod = (
   points: ChartPoint[],
   aggregation: GrowthAggregation,
+  firstActivityDate?: Date | null,
 ): ChartPoint[] => {
-  if (aggregation === 'M' || points.length === 0) return points;
-  const size = AGGREGATION_SIZE[aggregation];
-  return points[0].month.getMonth() % size !== 0 ? points.slice(1) : points;
+  if (points.length === 0) return points;
+  const first = points[0];
+  if (aggregation !== 'M') {
+    const size = AGGREGATION_SIZE[aggregation];
+    if (first.month.getMonth() % size !== 0) return points.slice(1);
+  }
+  if (firstActivityDate) {
+    const periodStart = getPeriodStart(aggregation)(first.month);
+    const activityDay = new Date(
+      firstActivityDate.getFullYear(),
+      firstActivityDate.getMonth(),
+      firstActivityDate.getDate(),
+    );
+    if (activityDay > periodStart) return points.slice(1);
+  }
+  return points;
 };
 
 export interface PointChange {

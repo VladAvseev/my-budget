@@ -7,6 +7,7 @@ import { BrowserRouter, Routes } from 'react-router-dom';
 import { login } from '@/modules/_login';
 import { profile } from '@/modules/_profile';
 import { reports } from '@/modules/_reports';
+import { capital } from '@/modules/_capital';
 import { overview } from '@/modules/_overview';
 import { home } from '@/modules/_home';
 import { admin } from '@/modules/_admin';
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             {home({ guest: <LandingPage /> })}
             {profile()}
             {reports()}
+            {capital()}
             {overview()}
             {admin()}
             {legal()}

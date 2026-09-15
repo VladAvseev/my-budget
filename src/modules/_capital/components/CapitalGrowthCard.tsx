@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useAccounts, useCapitalDynamics } from '@/shared/api/hooks';
+import { useAccounts, useCapitalDynamics, useProfile } from '@/shared/api/hooks';
 import { convertAmount } from '@/shared/utils';
 import {
   aggregatePoints,
@@ -7,28 +7,31 @@ import {
   type ChartPoint,
   type GrowthAggregation,
 } from '@/shared/utils/chartPoints';
+import {
+  buildCapitalChartData,
+  type GrowthChartMode,
+} from '@/shared/utils/buildCapitalChartData';
+import { buildGrowthStats } from '@/shared/utils/buildGrowthStats';
 import { VGrowthDynamicsCard } from '@/shared/ui/VGrowthDynamicsCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import commonStyles from '@/shared/styles/common.module.css';
-import { buildCapitalChartData, type GrowthChartMode } from '../utils/buildCapitalChartData';
-import { buildGrowthStats } from '../utils/buildGrowthStats';
 
-export interface GrowthDynamicsCardCurrency {
+export interface CapitalGrowthCardCurrency {
   displayCurrency: string | null;
   defaultCurrency: string | null;
   rates?: Record<string, number> | null;
   displaySymbol?: string;
 }
 
-interface GrowthDynamicsCardProps {
+interface CapitalGrowthCardProps {
   userId: string;
   title: string;
-  currency: GrowthDynamicsCardCurrency;
+  currency: CapitalGrowthCardCurrency;
 }
 
 const EMPTY_ARRAY: never[] = [];
 
-export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCardProps) => {
+export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCardProps) => {
   const [mode, setMode] = useState<GrowthChartMode>('total');
   const [aggregation, setAggregation] = useState<GrowthAggregation>('M');
 
@@ -36,8 +39,9 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
 
   const dynamicsQuery = useCapitalDynamics();
   const accountsQuery = useAccounts(userId);
+  const profileQuery = useProfile();
 
-  const isLoading = dynamicsQuery.isLoading || accountsQuery.isLoading;
+  const isLoading = dynamicsQuery.isLoading || accountsQuery.isLoading || profileQuery.isLoading;
   const isError = dynamicsQuery.isError || accountsQuery.isError;
 
   // База кривой — сумма initial_balance ВСЕХ счетов (и открытых, и закрытых),
@@ -73,6 +77,15 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
     return convertAmount(rawBase, defaultCurrency, displayCurrency, rates);
   }, [rawBase, displayCurrency, rates, defaultCurrency]);
 
+  // Дата регистрации точнее месяца отсекает неполный первый период из среднего.
+  // Профиль уже закэширован useDisplayCurrency, отдельного запроса обычно нет.
+  const firstActivityDate = useMemo(() => {
+    const raw = profileQuery.data?.created_at;
+    if (!raw) return null;
+    const parsed = new Date(raw);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }, [profileQuery.data?.created_at]);
+
   const chartData = useMemo(
     () => aggregatePoints(convertedChartData, aggregation),
     [convertedChartData, aggregation],
@@ -84,8 +97,8 @@ export const GrowthDynamicsCard = ({ userId, title, currency }: GrowthDynamicsCa
   );
 
   const stats = useMemo(
-    () => buildGrowthStats(chartData, aggregation, base, mode),
-    [chartData, aggregation, base, mode],
+    () => buildGrowthStats(chartData, aggregation, base, mode, { firstActivityDate }),
+    [chartData, aggregation, base, mode, firstActivityDate],
   );
 
   if (isError) {

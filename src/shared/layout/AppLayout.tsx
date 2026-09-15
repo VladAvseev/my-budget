@@ -6,6 +6,7 @@ import {
   HomeIcon,
   OverviewIcon,
   ReportsIcon,
+  SavingsIcon,
   SettingsIcon,
   UserIcon,
   type IconProps,
@@ -38,6 +39,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Главная', icon: HomeIcon, end: true },
   { to: '/reports', label: 'Периоды', icon: ReportsIcon },
+  { to: '/capital', label: 'Капитал', icon: SavingsIcon },
   { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
 ];
 

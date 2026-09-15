@@ -1,5 +1,3 @@
-import { useCapital } from '@/shared/api/hooks';
-import { formatAmount } from '@/shared/utils';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
@@ -28,7 +26,6 @@ import {
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
 import { CategoryDistributionChart } from './components/CategoryDistributionChart';
-import { GrowthDynamicsCard } from './components/GrowthDynamicsCard';
 import { PeriodCompareSelect } from './components/PeriodCompareSelect';
 import { ReportsFilter } from './components/ReportsFilter';
 import { SummaryCard } from './components/SummaryCard';
@@ -46,19 +43,11 @@ export const Page: React.FC = () => {
   const { isDesktop } = useBreakpoint();
   const userId = user?.id ?? '';
   const reportsQuery = useReports(userId);
-  const capitalQuery = useCapital(userId);
   const [selectedIds] = useAtom(selectedReportIdsAtom);
   const [comparedId] = useAtom(comparedReportIdAtom);
   const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
   const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
-  const {
-    defaultCurrency,
-    isCurrencyDisabled,
-    displayCurrency,
-    rates,
-    displaySymbol,
-    convertOptions,
-  } = useDisplayCurrency();
+  const { defaultCurrency, isCurrencyDisabled, displayCurrency, rates } = useDisplayCurrency();
 
   useEffect(() => {
     if (defaultCurrency) {
@@ -141,34 +130,6 @@ export const Page: React.FC = () => {
           {currencySwitcher}
         </div>
       )}
-
-      {capitalQuery.isError ? (
-        <VErrorCard
-          title="Не удалось загрузить капитал"
-          error={capitalQuery.error}
-          onRetry={() => void capitalQuery.refetch()}
-          isRetrying={capitalQuery.isFetching}
-        />
-      ) : capitalQuery.capital === null ? (
-        <VSkeletonCard compact title={false} lines={2} />
-      ) : (
-        <VCard>
-          <div className={commonStyles.titleXl}>
-            Капитал: {formatAmount(capitalQuery.capital, displaySymbol, convertOptions)}
-          </div>
-          <div className={commonStyles.textSecondary}>Текущий баланс всех счетов</div>
-        </VCard>
-      )}
-
-      <GrowthDynamicsCard
-        userId={userId}
-        title="Рост капитала"
-        currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
-      />
-
-      <div className={commonStyles.row}>
-        <div className={commonStyles.titleXl}>Отчёт по периодам</div>
-      </div>
 
       <div className={commonStyles.animateCard}>
         <ReportsFilter reports={reports} />

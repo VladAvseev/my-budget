@@ -112,16 +112,27 @@ export const buildWindowedMonthlyStats = (
   return { abs, pct };
 };
 
+export interface BuildGrowthStatsOptions {
+  /** Дата начала активности (регистрация): точнее месяца отсекает неполный первый период. */
+  firstActivityDate?: Date | null;
+  /** Сегодня (переопределяется в ручных проверках границ). */
+  now?: Date;
+}
+
 export const buildGrowthStats = (
   filteredData: ChartPoint[],
   aggregation: GrowthAggregation = 'M',
   base = 0,
   mode: GrowthChartMode = 'total',
+  options: BuildGrowthStatsOptions = {},
 ): VGrowthStatsData => {
-  const now = new Date();
+  const now = options.now ?? new Date();
+  // Края из среднего исключаются, на графике точки остаются: незавершённый
+  // текущий период и первый период, начавшийся не с первого дня/месяца.
   const trimmed = trimLeadingPartialPeriod(
     trimIncompletePeriod(filteredData, getPeriodEnd(aggregation), now),
     aggregation,
+    options.firstActivityDate,
   );
 
   // Строка «за последний год» считается только для помесячной группировки.

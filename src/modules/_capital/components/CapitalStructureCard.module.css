@@ -1,0 +1,89 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+
+.title {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.chartWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-xl);
+}
+
+@media (max-width: 600px) {
+  .chartWrapper {
+    justify-content: center;
+  }
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) 56px 104px;
+  align-items: center;
+  column-gap: var(--space-m);
+  row-gap: var(--space-m);
+  width: 100%;
+  min-width: 0;
+  flex: 1 300px;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-round);
+}
+
+.dotSegment {
+  background-color: var(--segment-color);
+}
+
+.textBold {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.textMedium {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+}
+
+.justifyEnd {
+  justify-self: end;
+}
+
+.message {
+  color: var(--color-text-secondary);
+}
+
+.skeletonChart {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.skeletonLegend {
+  display: flex;
+  flex: 1 300px;
+  flex-direction: column;
+  gap: var(--space-m);
+}
