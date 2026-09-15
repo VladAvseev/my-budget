@@ -1,5 +1,5 @@
-import { useBreakpoint } from '@/shared/hooks';
 import { useAdminStatus } from '@/shared/api/hooks';
+import { useAuth } from '@/shared/api/authProvider';
 import {
   ChevronRightIcon,
   HomeIcon,
@@ -10,17 +10,9 @@ import {
   UserIcon,
   type IconProps,
 } from '@/shared/icons';
-import { useAuth } from '@/shared/api/authProvider';
 import { VBrand } from '@/shared/ui/VBrand';
 import { AccountsBalanceBadge } from '@/shared/layout/AccountsBalanceBadge';
-import {
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type ComponentType,
-  type ReactNode,
-} from 'react';
+import { useEffect, useRef, type ComponentType, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import styles from './AppLayout.module.css';
 
@@ -42,6 +34,10 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
 ];
 
+// Ширина, на которой нижняя навигация сменяется ссылками в шапке.
+// Совпадает с min-width: 840px в AppLayout.module.css.
+const TOP_NAV_QUERY = '(min-width: 840px)';
+
 const ProfileLink = () => {
   const { user } = useAuth();
 
@@ -51,191 +47,132 @@ const ProfileLink = () => {
 
   return (
     <NavLink to="/profile" className={styles.profileLink}>
-      <div className={styles.profileAvatar}>{initial}</div>
+      <div className={styles.profileAvatar} aria-hidden="true">
+        {initial}
+      </div>
       <span className={styles.profileName}>{name}</span>
-      <span className={styles.profileChevron}>
+      <span className={styles.profileChevron} aria-hidden="true">
         <ChevronRightIcon size={14} />
       </span>
     </NavLink>
   );
 };
 
-const DesktopHeader = () => {
-  const { isAdmin } = useAdminStatus();
-
-  return (
-    <header className={styles.desktopHeader}>
-      <div className={styles.desktopHeaderInner}>
-        <VBrand className={styles.headerBrand} />
-
-        <nav className={styles.desktopNav} aria-label="Основная навигация">
-          {NAV_ITEMS.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.end} className={styles.navLink}>
-              <span className={styles.navLinkContent}>
-                <item.icon size={18} />
-                {item.label}
-              </span>
-            </NavLink>
-          ))}
-
-          {isAdmin && (
-            <>
-              <div className={styles.adminDivider} aria-hidden="true" />
-              <NavLink to="/admin" className={styles.navLink}>
-                <span className={styles.navLinkContent}>
-                  <SettingsIcon size={18} />
-                  Админ-панель
-                </span>
-              </NavLink>
-            </>
-          )}
-        </nav>
-
-        <div className={styles.desktopActions}>
-          <AccountsBalanceBadge />
-          <ProfileLink />
-        </div>
-      </div>
-    </header>
-  );
-};
-
 const MobileProfileLink = () => (
-  <NavLink to="/profile" aria-label="Профиль" className={styles.mobileProfileLink}>
+  <NavLink
+    to="/profile"
+    aria-label="Профиль"
+    className={styles.mobileProfileLink}
+  >
     <UserIcon size={22} />
   </NavLink>
 );
 
-interface EdgeOverflow {
-  first: boolean;
-  last: boolean;
-}
-
-const MobileFooter = () => {
-  const { isAdmin } = useAdminStatus();
-  const navRef = useRef<HTMLDivElement>(null);
-  const firstLabelRef = useRef<HTMLSpanElement>(null);
-  const lastLabelRef = useRef<HTMLSpanElement>(null);
-  const [edgeOverflow, setEdgeOverflow] = useState<EdgeOverflow>({ first: false, last: false });
-
-  useLayoutEffect(() => {
-    const measure = () => {
-      const checkOverflow = (label: HTMLSpanElement | null) =>
-        Boolean(label?.parentElement && label.scrollWidth > label.parentElement.clientWidth);
-
-      setEdgeOverflow((prev) => {
-        const next = {
-          first: checkOverflow(firstLabelRef.current),
-          last: checkOverflow(lastLabelRef.current),
-        };
-        return prev.first === next.first && prev.last === next.last ? prev : next;
-      });
-    };
-
-    measure();
-
-    const nav = navRef.current;
-    const observer = new ResizeObserver(measure);
-    if (nav) {
-      observer.observe(nav);
-    }
-    window.addEventListener('resize', measure);
-    document.fonts?.ready.then(measure);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', measure);
-    };
-  }, [isAdmin]);
-
-  const lastRegularIndex = NAV_ITEMS.length - 1;
-
-  const getLabelClassName = (isFirst: boolean, isLast: boolean) => {
-    if (isFirst && edgeOverflow.first) {
-      return `${styles.mobileNavLabel} ${styles.mobileNavLabelStart}`;
-    }
-    if (isLast && edgeOverflow.last) {
-      return `${styles.mobileNavLabel} ${styles.mobileNavLabelEnd}`;
-    }
-    return styles.mobileNavLabel;
-  };
-
-  return (
-    <nav className={styles.mobileFooter}>
-      <div className={styles.mobileNav} ref={navRef}>
-        {NAV_ITEMS.map((item, index) => {
-          const isFirst = index === 0;
-          const isLast = !isAdmin && index === lastRegularIndex;
-
-          return (
-            <NavLink key={item.to} to={item.to} end={item.end} className={styles.mobileNavItem}>
-              <span className={styles.mobileNavIcon}>
-                <item.icon size={22} />
-              </span>
-              <span
-                ref={isFirst ? firstLabelRef : isLast ? lastLabelRef : undefined}
-                className={getLabelClassName(isFirst, isLast)}
-              >
-                {item.label}
-              </span>
-            </NavLink>
-          );
-        })}
-
-        {isAdmin && (
-          <NavLink to="/admin" className={styles.mobileNavItem}>
-            <span className={styles.mobileNavIcon}>
-              <SettingsIcon size={22} />
-            </span>
-            <span ref={lastLabelRef} className={getLabelClassName(false, true)}>
-              Админ
-            </span>
-          </NavLink>
-        )}
-      </div>
-    </nav>
-  );
-};
-
 export const AppLayout = ({ children }: AppLayoutProps) => {
-  const { isDesktop } = useBreakpoint();
-  const mainRef = useRef<HTMLElement>(null);
+  const { isAdmin } = useAdminStatus();
   const location = useLocation();
+  const topNavRef = useRef<HTMLElement>(null);
+  const bottomNavRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (isDesktop) {
-      mainRef.current?.scrollTo(0, 0);
-    } else {
-      window.scrollTo(0, 0);
-    }
-  }, [location.pathname, isDesktop]);
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
-  if (isDesktop) {
-    return (
-      <div className={styles.desktopRoot}>
-        <DesktopHeader />
-
-        <main ref={mainRef} className={styles.mainDesktop}>
-          <div className={styles.desktopContent}>{children}</div>
-        </main>
-      </div>
-    );
-  }
+  // Обе навигации смонтированы всегда, видима одна (переключение чистым CSS).
+  // Если фокус был в навигации, скрытой ресайзом, переносим его на ту же
+  // ссылку в ставшей видимой навигации, чтобы не ронять фокус в body.
+  useEffect(() => {
+    const query = window.matchMedia(TOP_NAV_QUERY);
+    const transferFocus = () => {
+      const active = document.activeElement as HTMLElement | null;
+      const to = active?.dataset?.navTo;
+      if (!to) return;
+      const visible = query.matches ? topNavRef.current : bottomNavRef.current;
+      if (!visible || visible.contains(active)) return;
+      visible.querySelector<HTMLElement>(`[data-nav-to="${to}"]`)?.focus({ preventScroll: true });
+    };
+    query.addEventListener('change', transferFocus);
+    return () => query.removeEventListener('change', transferFocus);
+  }, []);
 
   return (
-    <div className={styles.mobileRoot}>
-      <header className={styles.mobileHeader}>
-        <div className={styles.mobileStats}>
-          <AccountsBalanceBadge />
+    <div className={styles.root}>
+      <a href="#main-content" className={styles.skipLink}>
+        К содержимому
+      </a>
+
+      <header className={styles.topbar}>
+        <div className={styles.topbarInner}>
+          <VBrand className={styles.brand} />
+
+          <nav ref={topNavRef} className={styles.topNav} aria-label="Основная навигация">
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                data-nav-to={item.to}
+                className={styles.navLink}
+              >
+                <span className={styles.navLinkContent}>
+                  <item.icon size={18} />
+                  {item.label}
+                </span>
+              </NavLink>
+            ))}
+
+            {isAdmin && (
+              <>
+                <div className={styles.adminDivider} aria-hidden="true" />
+                <NavLink to="/admin" data-nav-to="/admin" className={styles.navLink}>
+                  <span className={styles.navLinkContent}>
+                    <SettingsIcon size={18} />
+                    Админ-панель
+                  </span>
+                </NavLink>
+              </>
+            )}
+          </nav>
+
+          <div className={styles.actions}>
+            <AccountsBalanceBadge />
+            <ProfileLink />
+            <MobileProfileLink />
+          </div>
         </div>
-        <MobileProfileLink />
       </header>
 
-      <main ref={mainRef} className={styles.mainMobile}>
+      <main id="main-content" tabIndex={-1} className={styles.main}>
         {children}
       </main>
 
-      <MobileFooter />
+      <nav ref={bottomNavRef} className={styles.bottomNav} aria-label="Основная навигация">
+        <div className={styles.bottomNavList}>
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              data-nav-to={item.to}
+              className={styles.bottomNavItem}
+            >
+              <span className={styles.pill} aria-hidden="true">
+                <item.icon size={22} />
+              </span>
+              <span className={styles.bottomNavLabel}>{item.label}</span>
+            </NavLink>
+          ))}
+
+          {isAdmin && (
+            <NavLink to="/admin" data-nav-to="/admin" className={styles.bottomNavItem}>
+              <span className={styles.pill} aria-hidden="true">
+                <SettingsIcon size={22} />
+              </span>
+              <span className={styles.bottomNavLabel}>Админ</span>
+            </NavLink>
+          )}
+        </div>
+      </nav>
     </div>
   );
 };

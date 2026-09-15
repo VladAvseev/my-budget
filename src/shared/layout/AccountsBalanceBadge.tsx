@@ -66,18 +66,14 @@ export const AccountsBalanceBadge = () => {
   }, [expanded]);
 
   const badge = (
-    <VBadge variant="accent" className={styles.badge}>
+    <VBadge variant="accent">
       Капитал <CurrencyText>{amount}</CurrencyText>
       {expandable && (
-        <span aria-hidden="true" className={styles.arrow}>
-          <ChevronDownIcon
-            size={16}
-            color="currentColor"
-            style={{
-              transform: expanded ? 'rotate(180deg)' : 'none',
-              transition: 'transform 0.15s ease',
-            }}
-          />
+        <span
+          aria-hidden="true"
+          className={expanded ? `${styles.arrow} ${styles.arrowOpen}` : styles.arrow}
+        >
+          <ChevronDownIcon size={16} color="currentColor" />
         </span>
       )}
     </VBadge>

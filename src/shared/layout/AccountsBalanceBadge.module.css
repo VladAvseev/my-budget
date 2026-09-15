@@ -1,13 +1,16 @@
 .root {
   position: relative;
+  flex: 0 1 auto;
   min-width: 0;
   max-width: 100%;
   font-variant-numeric: tabular-nums;
 }
 
 .trigger {
-  display: block;
+  display: inline-flex;
+  align-items: center;
   max-width: 100%;
+  min-height: 40px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -22,17 +25,18 @@
   outline-offset: 2px;
 }
 
-.root .badge {
-  font-size: var(--md-sys-typescale-label-large-size);
-  color: var(--md-sys-color-on-surface);
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 15%, transparent);
-  border-color: var(--md-sys-color-primary);
-}
-
 .arrow {
   display: inline-flex;
   align-items: center;
   margin-left: 4px;
+}
+
+.arrow svg {
+  transition: transform var(--md-sys-motion-expressive-fast-spatial);
+}
+
+.arrowOpen svg {
+  transform: rotate(180deg);
 }
 
 .popover {
@@ -44,9 +48,10 @@
   padding-top: 4px;
 }
 
-/* В desktop-шапке бейдж стоит у правого края: поповер прижимаем вправо,
-   чтобы не вылезал за вьюпорт. Mobile-разметка не меняется. */
-@media (min-width: 1360px) {
+/* Бейдж стоит у правого края шапки: поповер прижимаем вправо,
+   чтобы не вылезал за вьюпорт. Нужно уже с expanded (840px),
+   а не только на desktop-ширине. */
+@media (min-width: 840px) {
   .popover {
     left: auto;
     right: 0;
@@ -62,7 +67,7 @@
   overscroll-behavior: contain;
   background-color: var(--md-sys-color-surface-container);
   border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-small);
+  border-radius: var(--md-sys-shape-corner-large);
   box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
 }
 
@@ -93,4 +98,10 @@
   max-width: 60%;
   text-align: right;
   overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow svg {
+    transition: none;
+  }
 }
