@@ -44,7 +44,7 @@ export const LastReportCard = () => {
 
   return (
     <Link to={`/reports/${lastReport.id}`} className={`${styles.link} ${styles.heroLink}`}>
-      <div className={`${styles.hero} ${styles.animateCard}`}>
+      <div className={styles.hero}>
         <div className={styles.titleRow}>
           <span className={`${styles.titleChip} ${styles.titleChipOnPrimary}`}>
             <ReportsIcon size={18} />

@@ -66,7 +66,7 @@ export const AccountsBalanceBadge = () => {
   }, [expanded]);
 
   const badge = (
-    <VBadge variant="accent">
+    <VBadge variant="accent" className={styles.badge}>
       Капитал <CurrencyText>{amount}</CurrencyText>
       {expandable && (
         <span

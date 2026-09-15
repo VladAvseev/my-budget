@@ -6,102 +6,119 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Локальное переопределение VBadge, включая его nowrap и плотность. */
+.badge.badge {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-large);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font: var(--md-sys-typescale-title-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  transition: background-color var(--md-sys-motion-expressive-fast-effects);
+}
+
 .trigger {
   display: inline-flex;
   align-items: center;
   max-width: 100%;
-  min-height: 40px;
+  min-height: 48px;
   padding: 0;
   border: 0;
+  border-radius: var(--md-sys-shape-corner-large);
   background: transparent;
   color: inherit;
   font: inherit;
+  text-align: left;
   cursor: pointer;
 }
 
 .trigger:focus-visible,
 .panel:focus-visible {
-  outline: 2px solid var(--md-sys-color-primary);
-  outline-offset: 2px;
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 3px;
+}
+
+.trigger[aria-expanded='true'] .badge {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
 }
 
 .arrow {
   display: inline-flex;
   align-items: center;
   margin-left: 4px;
+  vertical-align: middle;
 }
 
-.arrow svg {
-  transition: transform var(--md-sys-motion-expressive-fast-spatial);
-}
-
-.arrowOpen svg {
-  transform: rotate(180deg);
-}
+.arrow svg { transition: transform var(--md-sys-motion-expressive-fast-spatial); }
+.arrowOpen svg { transform: rotate(180deg); }
 
 .popover {
   position: absolute;
   top: 100%;
   left: 0;
   z-index: 10;
-  width: min(calc(32px * 10), calc(100vw - 32px * 2));
-  padding-top: 4px;
-}
-
-/* Бейдж стоит у правого края шапки: поповер прижимаем вправо,
-   чтобы не вылезал за вьюпорт. Нужно уже с expanded (840px),
-   а не только на desktop-ширине. */
-@media (min-width: 840px) {
-  .popover {
-    left: auto;
-    right: 0;
-  }
+  width: min(360px, calc(100vw - 64px));
+  padding-top: 8px;
 }
 
 .panel {
   max-height: min(
-    calc((var(--md-sys-typescale-body-medium-size) * 1.5 + 8px * 2) * 5),
+    calc((var(--md-sys-typescale-body-medium-line-height) + 24px) * 5),
     calc(var(--available-height, 50dvh) - 16px)
   );
   overflow-y: auto;
   overscroll-behavior: contain;
-  background-color: var(--md-sys-color-surface-container);
+  background-color: var(--md-sys-color-surface-container-high);
   border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-large);
-  box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
+  border-radius: var(--md-sys-shape-corner-large-increased);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--md-sys-color-shadow) 18%, transparent);
 }
 
-.list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+.list { margin: 0; padding: 4px 16px; list-style: none; }
 
 .row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  padding: 8px 12px;
-  font-size: var(--md-sys-typescale-body-medium-size);
-  line-height: 1.5;
+  padding-block: 12px;
+  font: var(--md-sys-typescale-body-medium);
   color: var(--md-sys-color-on-surface);
 }
 
-.name {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
+.row + .row { border-top: 1px solid var(--md-sys-color-outline-variant); }
+.name { min-width: 0; overflow-wrap: anywhere; }
 
 .accountAmount {
   flex-shrink: 0;
   max-width: 60%;
   text-align: right;
+  font-weight: var(--md-sys-typescale-body-medium-emphasized-weight);
   overflow-wrap: anywhere;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .arrow svg {
-    transition: none;
+@media (hover: hover) and (pointer: fine) {
+  .trigger:hover .badge {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary-container) 92%, var(--md-sys-color-on-primary-container) 8%);
   }
+  .trigger[aria-expanded='true']:hover .badge {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary) 8%);
+  }
+}
+
+@media (min-width: 840px) {
+  .popover { left: auto; right: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge.badge,
+  .arrow svg { transition: none; }
 }

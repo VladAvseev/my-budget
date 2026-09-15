@@ -8,7 +8,6 @@ import {
   type UseBootstrapResponse,
 } from '@/shared/api/hooks';
 import { ChevronRightIcon, OverviewIcon } from '@/shared/icons';
-import summaryStyles from '@/shared/styles/summary.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount, percentOfIncome } from '@/shared/utils';
 import { Link } from 'react-router-dom';
@@ -36,6 +35,7 @@ export const OverviewCard = () => {
   if (capitalQuery.isError) {
     return (
       <VErrorCard
+        className={styles.errorCard}
         title="Не удалось загрузить капитал"
         error={capitalQuery.error}
         onRetry={() => void capitalQuery.refetch()}
@@ -68,9 +68,9 @@ export const OverviewCard = () => {
           <span className={styles.titleChip}>
             <OverviewIcon size={18} />
           </span>
-          <div className={summaryStyles.title}>Аналитика</div>
+          <div className={styles.title}>Аналитика</div>
         </div>
-        <div className={summaryStyles.subtitle}>
+        <div className={styles.subtitle}>
           Доходы и расходы за всё время · капитал по всем счетам
         </div>
         <div className={styles.capitalBlock}>
@@ -81,13 +81,13 @@ export const OverviewCard = () => {
             <CurrencyText>{formatAmount(capital, currency?.symbol)}</CurrencyText>
           </div>
         </div>
-        <div className={summaryStyles.grid}>
+        <div className={styles.summaryGrid}>
           {items.flatMap((item) => [
-            <div key={`${item.label}-label`} className={summaryStyles.label}>
+            <div key={`${item.label}-label`} className={styles.summaryLabel}>
               {item.label}
             </div>,
             item.percent != null ? (
-              <div key={`${item.label}-percent`} className={summaryStyles.percent}>
+              <div key={`${item.label}-percent`} className={styles.summaryPercent}>
                 {item.percent}% от доходов
               </div>
             ) : (
@@ -95,7 +95,7 @@ export const OverviewCard = () => {
             ),
             <div
               key={`${item.label}-value`}
-              className={summaryStyles.value}
+              className={styles.summaryValue}
               style={{ color: item.color }}
             >
               <CurrencyText>{item.value}</CurrencyText>

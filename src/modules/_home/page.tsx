@@ -1,7 +1,6 @@
 import { useBootstrap } from '@/shared/api/hooks';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
-import commonStyles from '@/shared/styles/common.module.css';
 import styles from './homeCard.module.css';
 import { LastReportCard } from './components/LastReportCard';
 import { NewReportCard } from './components/NewReportCard';
@@ -14,12 +13,12 @@ export const Page: React.FC = () => {
   const { error, refetch, isFetching } = useBootstrap();
 
   return (
-    <div className={commonStyles.page}>
-      <VPageHeader title="Главная" hideOnMobile />
-      <div className={commonStyles.cardList}>
+    <div className={styles.page}>
+      <VPageHeader title="Главная" hideOnMobile className={styles.pageHeader} />
+      <div className={styles.cardList}>
         {error ? (
           <VErrorCard
-            className={`${styles.cardGrow} ${styles.animateCard}`}
+            className={`${styles.errorCard} ${styles.pageError}`}
             title="Не удалось загрузить данные главной"
             error={error}
             onRetry={refetch}

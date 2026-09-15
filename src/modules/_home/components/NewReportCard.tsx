@@ -21,7 +21,7 @@ export const NewReportCard = () => {
 
   return (
     <Link to="/reports" className={styles.link}>
-      <VCard interactive className={styles.card}>
+      <VCard interactive className={`${styles.card} ${styles.newReportCard}`}>
         <div className={styles.titleRow}>
           <span className={styles.titleChip}>
             <ReportsIcon size={18} />
