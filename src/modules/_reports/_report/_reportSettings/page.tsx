@@ -5,7 +5,6 @@ import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReport } from '../api/useReport';
 import { CategoryLimitsCard } from './components/CategoryLimitsCard';
-import { DailyExpensesCard } from './components/DailyExpensesCard';
 import { RemoveReportCard } from './components/RemoveReportCard';
 
 export const Page: React.FC = () => {
@@ -38,9 +37,6 @@ export const Page: React.FC = () => {
       {!isLoading && !error && report && (
         <>
           <div className={commonStyles.animateCard}>
-            <DailyExpensesCard report={report} />
-          </div>
-          <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
             <CategoryLimitsCard report={report} />
           </div>
           <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>

@@ -17,8 +17,6 @@ export interface AdminUserRow {
   operationsCount: number;
   categoriesCount: number;
   incomeCount: number;
-  dailyCount: number;
-  dailyReportsCount: number;
   expenseCount: number;
 }
 

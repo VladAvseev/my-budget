@@ -12,7 +12,7 @@ export const invalidateReportCache = (
   queryClient.invalidateQueries({ queryKey: ['accounts'] });
   queryClient.invalidateQueries({ queryKey: ['overview', 'category-summary'] });
   queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
-  // Динамика капитала в аналитике считается сервером из income/expense/daily
+  // Динамика капитала в аналитике считается сервером из income/expense
   // операций отчётов — любые правки операций её двигают.
   queryClient.invalidateQueries({ queryKey: capitalDynamicsQueryKey, exact: true });
   invalidateHomeCaches(queryClient);

@@ -61,7 +61,7 @@ export const useCreateOperation = (reportId: string) => {
           : {
               type: input.type,
               account_id: input.account_id,
-              ...(input.type === 'daily' ? {} : { categoryId: input.categoryId ?? null }),
+              categoryId: input.categoryId ?? null,
             }),
         description: input.description ?? null,
         date: input.date ?? null,
@@ -86,8 +86,7 @@ export const useCreateOperation = (reportId: string) => {
         from_account_id: input.type === 'transfer' ? input.from_account_id : null,
         to_account_id: input.type === 'transfer' ? input.to_account_id : null,
         amount: input.amount,
-        category_id:
-          input.type === 'transfer' || input.type === 'daily' ? null : (input.categoryId ?? null),
+        category_id: input.type === 'transfer' ? null : (input.categoryId ?? null),
         description: trimStrings(input.description ?? null),
         date: input.date ?? null,
         created_at: now,

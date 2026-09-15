@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { CardSkeleton } from './CardSkeleton';
 import styles from '../homeCard.module.css';
 
-const EMPTY_SUMMARY = { income: 0, expense: 0, daily: 0 };
+const EMPTY_SUMMARY = { income: 0, expense: 0 };
 
 export const LastReportCard = () => {
   const { data, isLoading } = useBootstrap();
@@ -45,7 +45,7 @@ export const LastReportCard = () => {
     );
   }
 
-  const expenses = summary.expense + summary.daily;
+  const expenses = summary.expense;
   const balance = summary.income - expenses;
   const items = [
     {

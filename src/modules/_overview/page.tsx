@@ -203,7 +203,7 @@ export const Page: React.FC = () => {
               ) : (
                 <>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
-                    <SummaryCard income={totals.income} expenses={totals.expense + totals.daily} />
+                    <SummaryCard income={totals.income} expenses={totals.expense} />
                   </div>
                   <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
                     <CategoryDistributionChart summaryByReport={summaryByReport} />

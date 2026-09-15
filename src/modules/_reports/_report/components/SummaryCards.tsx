@@ -6,7 +6,7 @@ export const SummaryCards = ({ summary }: { summary: OperationSummary | undefine
   return (
     <PeriodSummary
       income={summary?.income ?? 0}
-      expenses={(summary?.expense ?? 0) + (summary?.daily ?? 0)}
+      expenses={summary?.expense ?? 0}
       currencySymbol={currency?.symbol}
     />
   );

@@ -25,22 +25,15 @@ interface Column {
 const COLUMNS: Column[] = [
   { key: 'login', label: 'Пользователь', sortType: 'string' },
   { key: 'last_active_at', label: 'Активность', sortType: 'date' },
-  { key: 'reportsCount', label: 'Периоды (еж)', sortType: 'number' },
+  { key: 'reportsCount', label: 'Периоды', sortType: 'number' },
   { key: 'operationsCount', label: 'Опер', sortType: 'number' },
   { key: 'incomeCount', label: 'Доходы', sortType: 'number' },
-  { key: 'dailyCount', label: 'Еж. расходы', sortType: 'number' },
   { key: 'expenseCount', label: 'Расходы', sortType: 'number' },
   { key: 'categoriesCount', label: 'Категории', sortType: 'number' },
 ];
 
 const formatDate = (value: string | null): string =>
   value ? formatDisplay(value.slice(0, 10)) : '—';
-
-/** Периоды + доля периодов с ежедневными расходами: «12 (75%)». */
-const formatPeriods = (row: AdminUserRow): string =>
-  row.reportsCount > 0
-    ? `${row.reportsCount} (${Math.round((row.dailyReportsCount / row.reportsCount) * 100)}%)`
-    : String(row.reportsCount);
 
 const cellToString = (row: AdminUserRow, key: ColumnKey): string => {
   const value = row[key];
@@ -49,8 +42,6 @@ const cellToString = (row: AdminUserRow, key: ColumnKey): string => {
       return String(value).toLowerCase();
     case 'last_active_at':
       return formatDate(value as string | null).toLowerCase();
-    case 'reportsCount':
-      return formatPeriods(row).toLowerCase();
     default:
       return String(value).toLowerCase();
   }
@@ -209,10 +200,9 @@ export const Page: React.FC = () => {
                 <tr key={row.user_id}>
                   <td>{row.login}</td>
                   <td>{formatDate(row.last_active_at)}</td>
-                  <td className={styles.numCell}>{formatPeriods(row)}</td>
+                  <td className={styles.numCell}>{row.reportsCount}</td>
                   <td className={styles.numCell}>{row.operationsCount}</td>
                   <td className={styles.numCell}>{row.incomeCount}</td>
-                  <td className={styles.numCell}>{row.dailyCount}</td>
                   <td className={styles.numCell}>{row.expenseCount}</td>
                   <td className={styles.numCell}>{row.categoriesCount}</td>
                   <td className={styles.actionCell}>

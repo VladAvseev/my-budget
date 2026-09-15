@@ -16,18 +16,10 @@ import { VButton } from '@/shared/ui/VButton';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
-import { VTextInput } from '@/shared/ui/VTextInput';
-import { VToggle } from '@/shared/ui/VToggle';
 import { ChevronLeftIcon, ChevronRightIcon } from '@/shared/icons';
 import { useCreateReport } from '../api/useCreateReport';
 import { useReports } from '../api/useReports';
-import {
-  dailyBudgetAtom,
-  hasDailyBudgetAtom,
-  hasDailyExpensesAtom,
-  selectedMonthAtom,
-  selectedYearAtom,
-} from '../atoms/reports';
+import { selectedMonthAtom, selectedYearAtom } from '../atoms/reports';
 import styles from './CreateReportModal.module.css';
 
 interface CreateReportModalProps {
@@ -50,11 +42,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
   const userId = user?.id ?? '';
   const [selectedMonth, setSelectedMonth] = useAtom(selectedMonthAtom);
   const [selectedYear, setSelectedYear] = useAtom(selectedYearAtom);
-  const [hasDailyExpenses, setHasDailyExpenses] = useAtom(hasDailyExpensesAtom);
-  const [hasDailyBudget, setHasDailyBudget] = useAtom(hasDailyBudgetAtom);
-  const [dailyBudget, setDailyBudget] = useAtom(dailyBudgetAtom);
 
-  const [budgetError, setBudgetError] = React.useState<string>();
   const [submitError, setSubmitError] = React.useState<string>();
 
   const create = useCreateReport();
@@ -101,39 +89,15 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
     const now = new Date();
     setSelectedMonth(now.getMonth());
     setSelectedYear(now.getFullYear());
-    setHasDailyExpenses(false);
-    setHasDailyBudget(false);
-    setDailyBudget('');
-    setBudgetError(undefined);
     setSubmitError(undefined);
     onClose();
   };
 
   const handleSubmit = () => {
     setSubmitError(undefined);
-    let isValid = true;
 
     if (codeExists) {
       setSubmitError('Такой период уже существует');
-      return;
-    }
-
-    const trimmedBudget = dailyBudget.trim();
-    const budgetValue = Number(trimmedBudget);
-    // Порог > 0, как на сервере (requireAmount strict для dailyBudget).
-    if (hasDailyExpenses) {
-      if (
-        hasDailyBudget &&
-        (trimmedBudget === '' || !Number.isFinite(budgetValue) || budgetValue <= 0)
-      ) {
-        setBudgetError('Укажите положительный ежедневный бюджет');
-        isValid = false;
-      } else {
-        setBudgetError(undefined);
-      }
-    }
-
-    if (!isValid) {
       return;
     }
 
@@ -141,8 +105,6 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
       {
         name,
         code,
-        hasDailyExpenses,
-        dailyBudget: hasDailyExpenses && hasDailyBudget ? budgetValue : null,
         periodStart,
         periodEnd,
       },
@@ -213,39 +175,6 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
 
         {codeExists && !create.isPending && (
           <VBanner type="error" visible message="Такой период уже существует" />
-        )}
-
-        <VToggle
-          label="Ежедневные расходы"
-          checked={hasDailyExpenses}
-          disabled={create.isPending}
-          onChange={setHasDailyExpenses}
-        />
-
-        {hasDailyExpenses && (
-          <>
-            <VToggle
-              label="Ежедневный бюджет"
-              checked={hasDailyBudget}
-              disabled={create.isPending}
-              onChange={(value) => {
-                setHasDailyBudget(value);
-                setBudgetError(undefined);
-              }}
-            />
-            <VTextInput
-              label="Ежедневный бюджет"
-              numeric
-              placeholder="0.00"
-              value={dailyBudget}
-              error={budgetError}
-              disabled={!hasDailyBudget || create.isPending}
-              onChange={(value) => {
-                setDailyBudget(value);
-                setBudgetError(undefined);
-              }}
-            />
-          </>
         )}
       </div>
     </VModal>

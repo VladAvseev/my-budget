@@ -9,7 +9,7 @@
  * TanStack Query (`shared/api/hooks/*`, `modules/_<раздел>/api/*`) и
  * надстраиваются над этими типами.
  *
- * Поля amount/daily_budget типизированы числом — как их отдаёт серверные DTO
+ * Поля amount типизированы числом — как их отдаёт серверные DTO
  * (numeric из pg приводится через toNumber в *_repository.ts). В формы-инпуты
  * значения попадают через String(...) — useState для <input> держит строку.
  */
@@ -35,8 +35,6 @@ export interface Report {
   user_id: string;
   name: string;
   code: string;
-  has_daily_expenses: boolean;
-  daily_budget: number | null;
   period_start: string;
   period_end: string;
   created_at: string;
@@ -81,9 +79,9 @@ export interface Profile {
 }
 
 /** Типы, принимаемые текущим API операций. */
-export type ApiOperationType = 'income' | 'expense' | 'daily' | 'transfer';
+export type ApiOperationType = 'income' | 'expense' | 'transfer';
 /** Типы операций в списках и сводках периодов. */
-export type OperationType = 'income' | 'expense' | 'daily';
+export type OperationType = 'income' | 'expense';
 export type CategoryType = 'expense' | 'income';
 
 /** Счёт: точная форма AccountDto из API /accounts. Валюта хранится в профиле. */

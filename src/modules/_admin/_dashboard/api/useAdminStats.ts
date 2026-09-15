@@ -32,13 +32,11 @@ export interface AdminDashboardStats {
   };
   reports: {
     total: number;
-    withDailyExpenses: number;
   };
   operations: {
     total: number;
     income: number;
     expense: number;
-    daily: number;
   };
 }
 

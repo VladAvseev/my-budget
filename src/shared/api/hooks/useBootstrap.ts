@@ -51,7 +51,7 @@ const EMPTY_BOOTSTRAP: UseBootstrapResponse = {
   profile: { currency: null, onboarded: false },
   onboarding: { categories: 0, reports: 0, operations: 0 },
   lastReport: null,
-  globalTotals: { income: 0, expense: 0, daily: 0 },
+  globalTotals: { income: 0, expense: 0 },
 };
 
 export const bootstrapQueryKey = ['bootstrap'] as const;

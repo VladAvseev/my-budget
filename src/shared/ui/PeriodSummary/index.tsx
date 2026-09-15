@@ -9,7 +9,7 @@ interface PeriodSummaryProps {
   convertOptions?: ConvertOptions;
 }
 
-/** Сводка периода по всем счетам: расходы включают daily, переводы исключены сервером. */
+/** Сводка периода по всем счетам: переводы исключены сервером. */
 export const PeriodSummary = ({
   income,
   expenses,

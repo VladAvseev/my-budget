@@ -1,13 +1,11 @@
 import { useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/shared/api/authProvider';
-import { ApiError, api } from '@/shared/api/http';
+import { ApiError } from '@/shared/api/http';
 import { useAccounts } from '@/shared/api/hooks/useAccounts';
 import type { ApiOperationType, Operation, Report } from '@/shared/api/types/domain';
 import { useCreateOperation } from '../../../api/useCreateOperation';
 import { useUpdateOperation } from '../../../api/useUpdateOperation';
 import { useRemoveOperation } from '../../../api/useRemoveOperation';
-import { operationsQueryKey } from '../../../api/keys';
 import { VButton } from '@/shared/ui/VButton';
 import { VDatePicker } from '@/shared/ui/VDatePicker';
 import { VIconButton } from '@/shared/ui/VIconButton';
@@ -15,13 +13,13 @@ import { VModal } from '@/shared/ui/VModal';
 import { VSelect } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { TrashIcon } from '@/shared/icons';
-import { capitalizeFirst, formatDisplay, getErrorMessage, getNextFreeDate } from '@/shared/utils';
+import { capitalizeFirst, formatDisplay, getErrorMessage } from '@/shared/utils';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { CategorySelect } from './CategorySelect';
 import { getAmountError } from './amountValidation';
 
 const isCurrentType = (value: string): value is ApiOperationType =>
-  value === 'income' || value === 'expense' || value === 'daily' || value === 'transfer';
+  value === 'income' || value === 'expense' || value === 'transfer';
 
 const closedMessage =
   'Операцию закрытого счёта нельзя изменить или удалить. Сначала откройте счёт.';
@@ -31,7 +29,6 @@ interface OperationFormProps {
   operation?: Operation;
   report: Report;
   onClose: () => void;
-  isDeletable?: boolean;
 }
 
 export const OperationForm = ({
@@ -39,7 +36,6 @@ export const OperationForm = ({
   operation,
   report,
   onClose,
-  isDeletable = true,
 }: OperationFormProps) => {
   const { user } = useAuth();
   const accountsQuery = useAccounts(user?.id ?? '');
@@ -88,37 +84,11 @@ export const OperationForm = ({
     updateOperation.isPending ||
     removeOperation.isPending;
   const fieldsDisabled = isPending || isClosed || unsupported;
-  const needsDailyDate = type === 'daily' && operation?.type !== 'daily';
-  const dailyQuery = useQuery({
-    queryKey: operationsQueryKey(report.id, 'daily'),
-    enabled: needsDailyDate && report.has_daily_expenses,
-    queryFn: ({ signal }) =>
-      api.get<Operation[]>(`/operations?reportId=${report.id}&type=daily`, { signal }),
-  });
-  const freeDate = getNextFreeDate(
-    (dailyQuery.data ?? [])
-      .filter((item) => item.id !== operation?.id)
-      .map((item) => item.date ?? ''),
-    report.period_start,
-    report.period_end,
-  );
-  const displayDate = needsDailyDate ? freeDate : date;
   const accountStatusError = accountsQuery.isPending
     ? 'Загрузка счетов…'
     : accountsQuery.isError
       ? `Не удалось загрузить счета: ${getErrorMessage(accountsQuery.error)}`
       : undefined;
-  const dailyError = needsDailyDate
-    ? !report.has_daily_expenses
-      ? 'Ежедневные расходы не настроены для этого периода.'
-      : dailyQuery.isPending
-        ? 'Загрузка дат ежедневных расходов…'
-        : dailyQuery.isError
-          ? `Не удалось загрузить ежедневные расходы: ${getErrorMessage(dailyQuery.error)}`
-          : !freeDate
-            ? 'Нет свободных дат в периоде.'
-            : undefined
-    : undefined;
   const accountError =
     !accountStatusError && !isClosed
       ? openAccounts.length === 0
@@ -132,8 +102,8 @@ export const OperationForm = ({
     : unsupported
       ? 'Этот тип операции больше не поддерживается.'
       : undefined;
-  const canSave = !fieldsDisabled && !accountStatusError && !accountError && !dailyError;
-  const canDelete = Boolean(operation) && isDeletable && !fieldsDisabled && !accountStatusError;
+  const canSave = !fieldsDisabled && !accountStatusError && !accountError;
+  const canDelete = Boolean(operation) && !fieldsDisabled && !accountStatusError;
 
   const handleClose = () => {
     if (!submitting.current && !isPending) onClose();
@@ -180,19 +150,7 @@ export const OperationForm = ({
     submitting.current = true;
     setIsPreparing(true);
     try {
-      let requestDate = date || null;
-      if (needsDailyDate) {
-        const refreshed = await dailyQuery.refetch();
-        if (refreshed.isError) throw refreshed.error;
-        requestDate = getNextFreeDate(
-          (refreshed.data ?? [])
-            .filter((item) => item.id !== operation?.id)
-            .map((item) => item.date ?? ''),
-          report.period_start,
-          report.period_end,
-        );
-        if (!requestDate) throw new Error('Нет свободных дат в периоде');
-      }
+      const requestDate = date || null;
       if (requestDate && (requestDate < report.period_start || requestDate > report.period_end)) {
         throw new Error(
           `Дата должна быть в пределах периода (${formatDisplay(report.period_start)} — ${formatDisplay(report.period_end)})`,
@@ -210,12 +168,12 @@ export const OperationForm = ({
               ...common,
               type,
               account_id: accountId,
-              ...(type === 'daily' ? {} : { categoryId: categoryId || null }),
+              categoryId: categoryId || null,
             };
       if (operation) {
         await updateOperation.mutateAsync({
           id: operation.id,
-          input: type === 'daily' ? { ...input, categoryId: null } : input,
+          input,
         });
       } else {
         await createOperation.mutateAsync(input);
@@ -255,7 +213,7 @@ export const OperationForm = ({
       visible
       title={operation ? 'Изменить операцию' : 'Новая операция'}
       onClose={handleClose}
-      error={blockedMessage ?? submitError ?? accountStatusError ?? accountError ?? dailyError}
+      error={blockedMessage ?? submitError ?? accountStatusError ?? accountError}
       footer={
         <div className={modalStyles.footerSplit}>
           {operation && (
@@ -292,15 +250,6 @@ export const OperationForm = ({
             isDisabled={isPending}
           >
             Повторить загрузку счетов
-          </VButton>
-        )}
-        {needsDailyDate && dailyQuery.isError && (
-          <VButton
-            variant="secondary"
-            onClick={() => void dailyQuery.refetch()}
-            isDisabled={isPending}
-          >
-            Повторить загрузку дат
           </VButton>
         )}
         {type === 'transfer' ? (
@@ -363,23 +312,14 @@ export const OperationForm = ({
             onChange={setCategoryId}
           />
         )}
-        {type === 'daily' ? (
-          <div className={modalStyles.dateLabel}>{displayDate && formatDisplay(displayDate)}</div>
-        ) : (
-          <VDatePicker
-            label="Дата"
-            value={date}
-            disabled={fieldsDisabled}
-            onChange={setDate}
-            minDate={report.period_start}
-            maxDate={report.period_end}
-          />
-        )}
-        {operation && !isDeletable && (
-          <div className={modalStyles.dateLabel}>
-            Сначала удалите последний созданный ежедневный расход.
-          </div>
-        )}
+        <VDatePicker
+          label="Дата"
+          value={date}
+          disabled={fieldsDisabled}
+          onChange={setDate}
+          minDate={report.period_start}
+          maxDate={report.period_end}
+        />
       </div>
     </VModal>
   );

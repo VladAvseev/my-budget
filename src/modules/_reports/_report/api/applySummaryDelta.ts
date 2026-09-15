@@ -6,7 +6,7 @@ import { summaryQueryKey } from './keys';
 /**
  * Оптимистичный сдвиг сводки отчёта вместо refetch после мутаций операций.
  * Правило вклада зеркаляет FILTER-агрегат серверного getSummary
- * (server/src/modules/_reports/repository.ts): income/expense/daily —
+ * (server/src/modules/_reports/repository.ts): income/expense —
  * прямые суммы; переводы между счетами не меняют сводку.
  */
 
@@ -15,7 +15,7 @@ export interface SummaryOperationRef {
   amount: number;
 }
 
-const ZERO: OperationSummary = { income: 0, expense: 0, daily: 0 };
+const ZERO: OperationSummary = { income: 0, expense: 0 };
 
 const contribution = ({ type, amount }: SummaryOperationRef): OperationSummary => {
   const delta = { ...ZERO };
@@ -25,9 +25,6 @@ const contribution = ({ type, amount }: SummaryOperationRef): OperationSummary =
       break;
     case 'expense':
       delta.expense = amount;
-      break;
-    case 'daily':
-      delta.daily = amount;
       break;
   }
   return delta;
@@ -40,7 +37,6 @@ const combine = (
 ): OperationSummary => ({
   income: base.income + add.income - sub.income,
   expense: base.expense + add.expense - sub.expense,
-  daily: base.daily + add.daily - sub.daily,
 });
 
 /**

@@ -5,7 +5,6 @@ interface EditOperationModalProps {
   operation: Operation;
   report: Report;
   onClose: () => void;
-  isDeletable?: boolean;
 }
 
 export const EditOperationModal = (props: EditOperationModalProps) => <OperationForm {...props} />;

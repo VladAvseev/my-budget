@@ -66,7 +66,7 @@ export const Page: React.FC = () => {
             )}
           </div>
           <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
-            <OperationsTabs reportId={reportId} report={report ?? undefined} />
+            <OperationsTabs reportId={reportId} />
           </div>
           {report &&
             (operationModal?.operation ? (
@@ -75,7 +75,6 @@ export const Page: React.FC = () => {
                 operation={operationModal.operation}
                 report={report}
                 onClose={() => setOperationModal(null)}
-                isDeletable={operationModal.isDeletable}
               />
             ) : (
               operationModal && (

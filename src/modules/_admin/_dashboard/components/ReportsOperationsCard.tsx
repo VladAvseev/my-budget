@@ -1,17 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import commonStyles from '@/shared/styles/common.module.css';
 import type { AdminDashboardStats } from '../api/useAdminStats';
 import { VCard } from '@/shared/ui/VCard';
-import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import styles from './ReportsOperationsCard.module.css';
-
-type StructureTab = 'periods' | 'operations';
-
-const TAB_OPTIONS: VButtonGroupOption[] = [
-  { value: 'periods', label: 'Периоды' },
-  { value: 'operations', label: 'Операции' },
-];
 
 const percent = (value: number, total: number): number =>
   total === 0 ? 0 : Math.round((value / total) * 100);
@@ -28,37 +20,20 @@ interface StructureItem {
   value: number;
 }
 
-const PERIOD_ITEMS: StructureItem[] = [
-  { key: 'withDaily', label: 'С еж. расходами', color: 'var(--color-success)', value: 0 },
-  { key: 'withoutDaily', label: 'Без еж. расходов', color: 'var(--color-accent)', value: 0 },
-];
-
 const OPERATION_ITEMS: StructureItem[] = [
   { key: 'income', label: 'Доходы', color: 'var(--color-success)', value: 0 },
   { key: 'expense', label: 'Расходы', color: 'var(--color-error)', value: 0 },
-  { key: 'daily', label: 'Ежедневные', color: 'var(--color-accent)', value: 0 },
 ];
 
 export const ReportsOperationsCard: React.FC<ReportsOperationsCardProps> = ({
   reports,
   operations,
 }) => {
-  const [tab, setTab] = useState<StructureTab>('periods');
-
   const segments = useMemo(() => {
-    const items =
-      tab === 'periods'
-        ? PERIOD_ITEMS.map((item) => ({
-            ...item,
-            value:
-              item.key === 'withDaily'
-                ? reports.withDailyExpenses
-                : reports.total - reports.withDailyExpenses,
-          }))
-        : OPERATION_ITEMS.map((item) => ({
-            ...item,
-            value: operations[item.key as keyof typeof operations],
-          }));
+    const items = OPERATION_ITEMS.map((item) => ({
+      ...item,
+      value: operations[item.key as keyof typeof operations],
+    }));
 
     const total = items.reduce((sum, item) => sum + item.value, 0);
 
@@ -80,19 +55,16 @@ export const ReportsOperationsCard: React.FC<ReportsOperationsCardProps> = ({
       cursor += pct;
     }
     return result;
-  }, [tab, reports, operations]);
+  }, [operations]);
 
   const total = segments.reduce((sum, s) => sum + s.total, 0);
 
   return (
     <VCard className={styles.card}>
       <div className={styles.header}>
-        <div className={commonStyles.cardTitle}>Структура периодов и операций</div>
-        <VButtonGroup
-          options={TAB_OPTIONS}
-          value={tab}
-          onChange={(v) => setTab(v as StructureTab)}
-        />
+        <div className={commonStyles.cardTitle}>
+          Структура операций · периодов: {reports.total}
+        </div>
       </div>
 
       {total === 0 ? (

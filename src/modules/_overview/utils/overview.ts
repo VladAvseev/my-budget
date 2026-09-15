@@ -46,7 +46,7 @@ export const sumCategorySummary = (
     for (const row of rows) {
       const type = row.type as OperationType;
       const amount = Number(row.amount) || 0;
-      if (type === 'income' || type === 'expense' || type === 'daily') {
+      if (type === 'income' || type === 'expense') {
         total[type as keyof OperationAmounts] += amount;
       }
     }
@@ -140,7 +140,6 @@ export const buildChartData = (
   summaryByReport: Map<string, CategorySummaryRow[]>,
   typeFilter: OperationType[],
   categories: Category[],
-  includeDailyAsSeparate: boolean,
 ): ChartData => {
   const categoryById = new Map(categories.map((category) => [category.id, category]));
 
@@ -154,15 +153,6 @@ export const buildChartData = (
     for (const row of rows) {
       if (!typeFilter.includes(row.type as OperationType)) continue;
       add(row.category_id ?? 'none', summaryAmount(row));
-    }
-  }
-
-  if (includeDailyAsSeparate) {
-    for (const rows of summaryByReport.values()) {
-      for (const row of rows) {
-        if (row.type !== 'daily') continue;
-        add('daily', summaryAmount(row));
-      }
     }
   }
 
@@ -182,10 +172,7 @@ export const buildChartData = (
     let label: string;
     let color: string;
 
-    if (key === 'daily') {
-      label = 'Ежедневные расходы';
-      color = 'var(--color-accent)';
-    } else if (key === 'none') {
+    if (key === 'none') {
       label = 'Без категории';
       color = 'var(--color-border)';
     } else {

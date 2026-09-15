@@ -50,12 +50,52 @@ assert.equal(forecastAchievement(1000, Number.MIN_VALUE, now), null);
 assert.equal(buildGoalForecast(goal, 100, now).requiredMonthly, 300);
 assert.equal(buildGoalForecast({ ...goal, target_date: '2026-12-02' }, 100, now).requiredMonthly, 225);
 assert.equal(buildGoalForecast({ ...goal, target_date: '2026-01-01' }, 100, now).requiredMonthly, null);
-const operations = [
-  { type: 'transfer', amount: 200, from_account_id: 'a', to_account_id: 'b' },
-  { type: 'transfer', amount: 300, from_account_id: 'c', to_account_id: 'a' },
-  { type: 'income', amount: 150, account_id: 'b' },
-  { type: 'expense', amount: 40, account_id: 'a' },
-  { type: 'daily', amount: 10, account_id: 'b' },
-] as Operation[];
-assert.equal(currentGoalContributions(operations, new Set(['a', 'b'])), 400);
+const operationBase = {
+  report_id: 'r',
+  user_id: 'u',
+  category_id: null,
+  description: null,
+  date: null,
+  created_at: '',
+  updated_at: '',
+} as const;
+const operations: Operation[] = [
+  {
+    ...operationBase,
+    id: 'op1',
+    type: 'transfer',
+    amount: 200,
+    account_id: null,
+    from_account_id: 'a',
+    to_account_id: 'b',
+  },
+  {
+    ...operationBase,
+    id: 'op2',
+    type: 'transfer',
+    amount: 300,
+    account_id: null,
+    from_account_id: 'c',
+    to_account_id: 'a',
+  },
+  {
+    ...operationBase,
+    id: 'op3',
+    type: 'income',
+    amount: 150,
+    account_id: 'b',
+    from_account_id: null,
+    to_account_id: null,
+  },
+  {
+    ...operationBase,
+    id: 'op4',
+    type: 'expense',
+    amount: 40,
+    account_id: 'a',
+    from_account_id: null,
+    to_account_id: null,
+  },
+];
+assert.equal(currentGoalContributions(operations, new Set(['a', 'b'])), 410);
 console.warn('Проверки целей: история 0/1/11/12/13 месяцев, окно, стартовый баланс, неполные и нулевые месяцы, прогресс, даты и нетто переводов — успешно.');

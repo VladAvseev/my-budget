@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
 import { useOverviewCategories } from '../api/useOverviewCategories';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
-import { buildCategoryGroups, buildReportGroups, type ReportAmount } from '../utils/overview';
+import { buildCategoryGroups, type ReportAmount } from '../utils/overview';
 import styles from './CategoryBreakdown.module.css';
 
 interface CategoryBreakdownProps {
@@ -111,7 +111,6 @@ export const CategoryBreakdown = ({
   const expensesLoading = expenseCategories.isLoading;
   const incomesLoading = incomeCategories.isLoading;
 
-  const dailyGroups = buildReportGroups(reports, summaryByReport, ['daily']);
   const expenseGroups = buildCategoryGroups(
     reports,
     summaryByReport,
@@ -123,7 +122,6 @@ export const CategoryBreakdown = ({
   ]);
 
   const comparedReports = comparedReport ? [comparedReport] : [];
-  const comparedDaily = buildReportGroups(comparedReports, comparedSummaryByReport, ['daily']);
   const comparedExpenseGroups = buildCategoryGroups(
     comparedReports,
     comparedSummaryByReport,
@@ -137,7 +135,6 @@ export const CategoryBreakdown = ({
     ['income'],
   );
 
-  const comparedDailyTotal = comparedDaily.reduce((sum, item) => sum + item.amount, 0);
   const comparedGroupValue = (
     groups: ReturnType<typeof buildCategoryGroups>,
     key: string,
@@ -217,47 +214,19 @@ export const CategoryBreakdown = ({
     );
   };
 
-  const totalDaily = dailyGroups.reduce((sum, item) => sum + item.amount, 0);
   const totalOf = (groups: ReturnType<typeof buildCategoryGroups>) =>
     groups.reduce((sum, group) => sum + group.total, 0);
   const sectionAverage = (total: number) => (reports.length > 0 ? total / reports.length : 0);
-  const hasExpenseOrDaily =
-    expenseGroups.length > 0 ||
-    dailyGroups.length > 0 ||
-    hasOperations(summaryByReport, ['expense']);
+  const hasExpense = expenseGroups.length > 0 || hasOperations(summaryByReport, ['expense']);
 
   return (
     <div className={styles.root}>
-      {hasExpenseOrDaily && (
+      {hasExpense && (
         <div className={styles.section}>
           {sectionTitle(
             'Расходы',
-            sectionAverage(totalDaily + totalOf(expenseGroups)),
-            periodInfo(comparedDailyTotal + comparedTotalOf(comparedExpenseGroups), true),
-          )}
-          {dailyGroups.length > 0 && (
-            <VAccordion
-              header={
-                <span className={styles.accordionHeader}>
-                  <span
-                    className={styles.accordionDot}
-                    style={{ backgroundColor: 'var(--color-accent)' }}
-                  />
-                  <span className={styles.accordionGrow}>Ежедневные расходы</span>
-                  <AccordionSummary
-                    total={totalDaily}
-                    reportCount={reports.length}
-                    period={periodInfo(comparedDailyTotal, true)}
-                  />
-                </span>
-              }
-            >
-              <div className={styles.accordionRow}>
-                {dailyGroups.map((item) => (
-                  <ReportLinkRow key={item.report.id} report={item.report} amount={item.amount} />
-                ))}
-              </div>
-            </VAccordion>
+            sectionAverage(totalOf(expenseGroups)),
+            periodInfo(comparedTotalOf(comparedExpenseGroups), true),
           )}
           {categoryAccordions(
             expenseGroups,

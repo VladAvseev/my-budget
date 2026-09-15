@@ -6,8 +6,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
  * POST /reports: body в camelCase; сервер сам решает
- * уникальность кода ('Такой период уже существует' → 409) и то, что бюджет
- * пишется только при включённом daily-режиме. Оптимистичная вставка прежняя.
+ * уникальность кода ('Такой период уже существует' → 409).
+ * Оптимистичная вставка прежняя.
  */
 const createReportMutationKey = ['createReport'] as const;
 
@@ -15,8 +15,6 @@ const createReportMutationKey = ['createReport'] as const;
 export interface UseCreateReportRequest {
   name: string;
   code?: string;
-  hasDailyExpenses?: boolean;
-  dailyBudget?: number | null;
   periodStart: string;
   periodEnd: string;
 }
@@ -28,8 +26,6 @@ export type UseCreateReportResponse = Report;
 interface CreateReportBody {
   name: string;
   code: string;
-  hasDailyExpenses: boolean;
-  dailyBudget: number | null;
   periodStart: string;
   periodEnd: string;
 }
@@ -43,8 +39,6 @@ export const useCreateReport = () => {
       const body: CreateReportBody = {
         name: input.name.trim(),
         code: input.code ?? '',
-        hasDailyExpenses: input.hasDailyExpenses ?? false,
-        dailyBudget: input.dailyBudget ?? null,
         periodStart: input.periodStart,
         periodEnd: input.periodEnd,
       };
@@ -55,14 +49,11 @@ export const useCreateReport = () => {
       const previous = queryClient.getQueryData<Report[]>(key) ?? [];
 
       const now = new Date().toISOString();
-      const hasDailyExpenses = input.hasDailyExpenses ?? false;
       const optimistic: Report & OptimisticItem = {
         id: createOptimisticId(),
         user_id: '',
         name: input.name,
         code: input.code ?? '',
-        has_daily_expenses: hasDailyExpenses,
-        daily_budget: hasDailyExpenses && input.dailyBudget != null ? input.dailyBudget : null,
         period_start: input.periodStart,
         period_end: input.periodEnd,
         created_at: now,

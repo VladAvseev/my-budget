@@ -44,20 +44,18 @@ export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistribut
   }, [selectedType, expenseCategories.isLoading, incomeCategories.isLoading]);
 
   const chartData: ChartData = useMemo(() => {
-    let typeFilter: Array<'expense' | 'income' | 'daily'>;
-    let includeDaily = false;
+    let typeFilter: Array<'expense' | 'income'>;
 
     switch (selectedType) {
       case 'expense':
         typeFilter = ['expense'];
-        includeDaily = true;
         break;
       case 'income':
         typeFilter = ['income'];
         break;
     }
 
-    return buildChartData(summaryByReport, typeFilter, categories, includeDaily);
+    return buildChartData(summaryByReport, typeFilter, categories);
   }, [selectedType, summaryByReport, categories]);
 
   if (loading) {

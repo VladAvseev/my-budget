@@ -13,5 +13,5 @@ export const useGoalPeriodOperations = ({ reportId }: UseGoalPeriodOperationsReq
     queryKey: ['reports', reportId, 'operations', 'goal-period'],
     enabled: Boolean(reportId),
     queryFn: ({ signal }) =>
-      api.get<UseGoalPeriodOperationsResponse>(`/operations?reportId=${reportId}&type=income,expense,daily,transfer`, { signal }),
+      api.get<UseGoalPeriodOperationsResponse>(`/operations?reportId=${reportId}&type=income,expense,transfer`, { signal }),
   });
