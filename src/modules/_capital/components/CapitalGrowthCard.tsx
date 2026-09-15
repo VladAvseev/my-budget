@@ -11,7 +11,7 @@ import { buildCapitalChartData, type GrowthChartMode } from '@/shared/utils/buil
 import { buildGrowthStats } from '@/shared/utils/buildGrowthStats';
 import { VGrowthDynamicsCard } from '@/shared/ui/VGrowthDynamicsCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
-import commonStyles from '@/shared/styles/common.module.css';
+import styles from './CapitalGrowthCard.module.css';
 
 export interface CapitalGrowthCardCurrency {
   displayCurrency: string | null;
@@ -100,7 +100,7 @@ export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCard
 
   if (isError) {
     return (
-      <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
+      <div className={styles.root} role="region" aria-label={title}>
         <VErrorCard
           title="Не удалось загрузить динамику капитала"
           error={dynamicsQuery.error ?? accountsQuery.error}
@@ -115,7 +115,7 @@ export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCard
   }
 
   return (
-    <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
+    <div className={styles.root} role="region" aria-label={title}>
       <VGrowthDynamicsCard
         title={title}
         isLoading={isLoading}

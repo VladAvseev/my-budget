@@ -7,7 +7,6 @@ import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { VCard } from '@/shared/ui/VCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
-import commonStyles from '@/shared/styles/common.module.css';
 import type { CapitalGrowthCardCurrency } from './CapitalGrowthCard';
 import { buildCapitalStructureData } from '../utils/capitalStructure';
 import styles from './CapitalStructureCard.module.css';
@@ -59,7 +58,7 @@ export const CapitalStructureCard = ({ userId, title, currency }: CapitalStructu
 
   if (accountsQuery.isLoading) {
     return (
-      <div className={commonStyles.animateCard} style={{ animationDelay: '0.2s' }}>
+      <div className={styles.root}>
         <VCard className={styles.content} aria-busy="true">
           <VSkeleton width={220} height={24} />
           <div className={styles.skeletonChart}>
@@ -77,7 +76,7 @@ export const CapitalStructureCard = ({ userId, title, currency }: CapitalStructu
 
   if (accountsQuery.isError) {
     return (
-      <div className={commonStyles.animateCard} style={{ animationDelay: '0.2s' }}>
+      <div className={styles.root}>
         <VErrorCard
           title="Не удалось загрузить структуру капитала"
           error={accountsQuery.error}
@@ -93,9 +92,9 @@ export const CapitalStructureCard = ({ userId, title, currency }: CapitalStructu
   const { segments, total, hasNegative } = structure;
 
   return (
-    <div className={commonStyles.animateCard} style={{ animationDelay: '0.2s' }}>
+    <div className={styles.root}>
       <VCard className={styles.content}>
-        <div className={styles.title}>{title}</div>
+        <h2 className={styles.title}>{title}</h2>
 
         {segments.length === 0 || hasNegative || total <= 0 ? (
           <div className={styles.message}>
@@ -103,41 +102,34 @@ export const CapitalStructureCard = ({ userId, title, currency }: CapitalStructu
           </div>
         ) : (
           <div className={styles.chartWrapper}>
-            <DonutChart
-              segments={donutSegments}
-              total={total}
-              displayTotal={convertedTotal}
-              displaySymbol={displaySymbol}
-            />
-
-            <div className={styles.legend}>
-              {donutSegments.flatMap((segment) => [
-                <span
-                  key={`${segment.key}-dot`}
-                  className={`${styles.dot} ${styles.dotSegment}`}
-                  style={{ ['--segment-color' as string]: segment.color }}
-                />,
-                <span key={`${segment.key}-label`} className={styles.ellipsis}>
-                  {segment.label}
-                </span>,
-                <span
-                  key={`${segment.key}-percent`}
-                  className={`${styles.textMedium} ${styles.justifyEnd}`}
-                >
-                  {segment.percent.toFixed(1)}%
-                </span>,
-                <span
-                  key={`${segment.key}-amount`}
-                  className={`${styles.textBold} ${styles.justifyEnd}`}
-                >
-                  <Amount
-                    value={segment.total}
-                    currencySymbol={displaySymbol}
-                    convert={convertOptions}
-                  />
-                </span>,
-              ])}
+            <div className={styles.diagram}>
+              <DonutChart
+                segments={donutSegments}
+                total={total}
+                displayTotal={convertedTotal}
+                displaySymbol={displaySymbol}
+              />
             </div>
+            <ul className={styles.legend}>
+              {donutSegments.map((segment) => (
+                <li key={segment.key} className={styles.legendRow}>
+                  <span
+                    aria-hidden="true"
+                    className={styles.dot}
+                    style={{ ['--segment-color' as string]: segment.color }}
+                  />
+                  <span className={styles.accountName}>{segment.label}</span>
+                  <span className={styles.percentage}>{segment.percent.toFixed(1)}%</span>
+                  <span className={styles.amount}>
+                    <Amount
+                      value={segment.total}
+                      currencySymbol={displaySymbol}
+                      convert={convertOptions}
+                    />
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </VCard>

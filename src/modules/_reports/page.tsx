@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
-import commonStyles from '@/shared/styles/common.module.css';
+import styles from './reports.module.css';
 import { CreateReportModal } from './components/CreateReportModal';
 import { ReportsList } from './components/ReportsList';
 import { createModalOpenAtom } from './atoms/reports';
@@ -11,13 +11,8 @@ export const Page: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(createModalOpenAtom);
 
   return (
-    <div className={commonStyles.page}>
-      <VPageHeader
-        title="Периоды"
-        onBack={() => navigate('/')}
-        backAriaLabel="Назад на главную"
-        hideOnMobile
-      />
+    <div className={styles.page}>
+      <VPageHeader title="Периоды" onBack={() => navigate('/')} backAriaLabel="Назад на главную" />
 
       <ReportsList />
 

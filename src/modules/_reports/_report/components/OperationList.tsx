@@ -12,7 +12,6 @@ import { VToggle } from '@/shared/ui/VToggle';
 import { CurrencyText } from '@/shared/ui/Amount';
 import { formatAmount } from '@/shared/utils';
 import { useCurrency } from '@/shared/api/hooks';
-import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { groupedByTypeAtom, operationModalAtom } from '../atoms/report';
 import { categoryTypeForOperation } from '../api/categoryTypeForOperation';
@@ -153,12 +152,8 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
 
       {!operationsLoading && operations.length > 0 && !isGrouped && (
         <div className={styles.list}>
-          {operations.map((operation, index) => (
-            <div
-              key={operation.id}
-              className={commonStyles.animateCard}
-              style={{ animationDelay: `${index * 0.03}s` }}
-            >
+          {operations.map((operation) => (
+            <div key={operation.id}>
               <OperationCard
                 operation={operation}
                 pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
@@ -171,7 +166,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
 
       {!operationsLoading && isGrouped && (
         <div className={styles.list}>
-          {groups.map((group, groupIndex) => {
+          {groups.map((group) => {
             const limit = limitsByCategory.get(group.key);
             const groupTotal = group.operations.reduce(
               (sum, op) => sum + (Number(op.amount) || 0),
@@ -186,11 +181,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
               : 'var(--md-sys-color-on-surface)';
 
             return (
-              <div
-                key={group.key}
-                className={commonStyles.animateCard}
-                style={{ animationDelay: `${groupIndex * 0.03}s` }}
-              >
+              <div key={group.key}>
                 <VAccordion
                   header={
                     <span className={styles.accordionHeader}>

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
 import { useGoals } from '@/shared/api/hooks';
-import modalStyles from '@/shared/styles/modal.module.css';
+import modalStyles from './GoalModal.module.css';
 import commonStyles from '@/shared/styles/common.module.css';
 import { getErrorMessage, toISODate } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
@@ -88,6 +88,7 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
   return (
     <VModal
       visible
+      className={modalStyles.dialog}
       title="Новая цель"
       onClose={handleClose}
       error={submitError}
@@ -124,18 +125,20 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
                 setAccountIdError(undefined);
               }}
             />
-            <VTextInput
-              label="Сумма"
-              numeric
-              placeholder="0.00"
-              value={amount}
-              error={amountError}
-              disabled={createGoal.isPending}
-              onChange={(value) => {
-                setAmount(value);
-                setAmountError(undefined);
-              }}
-            />
+            <div className={modalStyles.amountField}>
+              <VTextInput
+                label="Сумма"
+                numeric
+                placeholder="0.00"
+                value={amount}
+                error={amountError}
+                disabled={createGoal.isPending}
+                onChange={(value) => {
+                  setAmount(value);
+                  setAmountError(undefined);
+                }}
+              />
+            </div>
             <VDatePicker
               label="Желаемая дата достижения (необязательно)"
               value={targetDate}

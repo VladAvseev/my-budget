@@ -1,3 +1,4 @@
+import layout from '../../../../reports.module.css';
 import { useRef, useState } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
 import { ApiError } from '@/shared/api/http';
@@ -210,6 +211,7 @@ export const OperationForm = ({
 
   return (
     <VModal
+      className={layout.dialog}
       visible
       title={operation ? 'Изменить операцию' : 'Новая операция'}
       onClose={handleClose}

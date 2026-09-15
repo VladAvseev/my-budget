@@ -1,13 +1,63 @@
-.currencyRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.page {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+  width: 100%;
+  margin-inline: auto;
 }
-
+.header,
+.currencyRow,
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 16px;
+  min-width: 0;
+}
+.header,
+.currencyRow {
+  justify-content: space-between;
+}
+.currencyRow {
+  padding-block: 4px;
+}
+.analytics {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  align-items: start;
+}
+.page button {
+  min-width: 48px;
+  min-height: 48px;
+}
+.page :is(button, [role='button'], [tabindex]):focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 3px;
+}
+@media (min-width: 600px) {
+  .page {
+    gap: 32px;
+  }
+  .analytics {
+    gap: 24px;
+  }
+}
+@media (min-width: 1200px) {
+  .analytics {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+}
+@media (min-width: 1600px) {
+  .page {
+    max-width: 1440px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page *,
+  .page *::before,
+  .page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

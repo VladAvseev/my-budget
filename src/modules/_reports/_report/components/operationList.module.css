@@ -66,3 +66,19 @@
   --positive-ink: light-dark(#167b43, #1bc5bd);
   --caution-ink: light-dark(#795600, #fea135);
 }
+
+.toolbar {
+  flex-wrap: wrap;
+  padding-block: 8px;
+}
+.list {
+  gap: 4px;
+}
+.accordionHeader {
+  flex-wrap: wrap;
+}
+.accordionTotal {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+  flex-shrink: 1;
+}

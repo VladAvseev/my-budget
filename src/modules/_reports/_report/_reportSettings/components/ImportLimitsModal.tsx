@@ -1,3 +1,4 @@
+import layout from '../../../reports.module.css';
 import { Amount } from '@/shared/ui/Amount';
 import { useAuth } from '@/shared/api/authProvider';
 import type { Report } from '@/shared/api/types/domain';
@@ -80,6 +81,7 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
 
   return (
     <VModal
+      className={layout.dialog}
       visible={visible}
       title="Импорт бюджета"
       onClose={onClose}

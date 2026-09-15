@@ -14,20 +14,29 @@ import { OperationsTabs } from './components/OperationsTabs';
 import { CreateOperationModal } from './components/CreateOperationModal';
 import { EditOperationModal } from './components/EditOperationModal';
 import styles from './pageSkeleton.module.css';
+import layout from '../reports.module.css';
+import { VErrorCard } from '@/shared/ui/VErrorCard';
+import { formatDisplay } from '@/shared/utils';
 
 export const Page: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const reportId = id ?? '';
-  const { data: report, isLoading, error } = useReport(reportId);
-  const { data: summary, isLoading: summaryLoading } = useSummary(reportId);
+  const { data: report, isLoading, error, refetch, isFetching } = useReport(reportId);
+  const {
+    data: summary,
+    isLoading: summaryLoading,
+    error: summaryError,
+    refetch: refetchSummary,
+    isFetching: summaryFetching,
+  } = useSummary(reportId);
   const [operationModal, setOperationModal] = useAtom(operationModalAtom);
 
   const notFound = !isLoading && (Boolean(error) || report === null);
 
   return (
-    <div className={commonStyles.page}>
-      <div className={commonStyles.pageHeaderRow}>
+    <div className={layout.page}>
+      <div className={layout.header}>
         <VPageHeader
           title={report?.name ?? 'Период'}
           onBack={() => navigate('/reports')}
@@ -44,7 +53,20 @@ export const Page: React.FC = () => {
         )}
       </div>
 
-      {notFound && (
+      {report && (
+        <p className={layout.dates}>
+          {formatDisplay(report.period_start)} — {formatDisplay(report.period_end)}
+        </p>
+      )}
+      {error && (
+        <VErrorCard
+          title="Не удалось загрузить период"
+          error={error}
+          onRetry={() => void refetch()}
+          isRetrying={isFetching}
+        />
+      )}
+      {notFound && !error && (
         <VCard>
           <div className={commonStyles.textSecondary}>Период не найден</div>
         </VCard>
@@ -54,20 +76,27 @@ export const Page: React.FC = () => {
         <>
           {/* Вкладки монтируются сразу: операции/категории/лимиты запрашиваются
               параллельно с отчётом, а не дождавшись его. */}
-          <div className={commonStyles.animateCard}>
+          <div>
             {summaryLoading ? (
               <div className={styles.summaryGrid}>
-                {[0, 1, 2, 3].map((i) => (
+                {[0, 1, 2].map((i) => (
                   <VSkeletonCard key={i} compact title={false} lines={2} delay={`${i * 0.05}s`} />
                 ))}
               </div>
+            ) : summaryError ? (
+              <VErrorCard
+                title="Не удалось загрузить сводку"
+                error={summaryError}
+                onRetry={() => void refetchSummary()}
+                isRetrying={summaryFetching}
+              />
             ) : (
               <SummaryCards summary={summary} />
             )}
           </div>
-          <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
+          <section aria-label="Операции периода">
             <OperationsTabs reportId={reportId} />
-          </div>
+          </section>
           {report &&
             (operationModal?.operation ? (
               <EditOperationModal

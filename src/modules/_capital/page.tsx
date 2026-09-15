@@ -56,9 +56,9 @@ export const Page: React.FC = () => {
   );
 
   return (
-    <div className={commonStyles.page}>
+    <div className={styles.page}>
       {isDesktop && (
-        <div className={commonStyles.pageHeaderRow}>
+        <div className={styles.header}>
           <VPageHeader
             title="Капитал"
             onBack={() => navigate('/')}
@@ -82,17 +82,19 @@ export const Page: React.FC = () => {
         </div>
       )}
 
-      <CapitalGrowthCard
-        userId={userId}
-        title="Рост капитала"
-        currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
-      />
+      <div className={styles.analytics}>
+        <CapitalGrowthCard
+          userId={userId}
+          title="Рост капитала"
+          currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
+        />
 
-      <CapitalStructureCard
-        userId={userId}
-        title="Структура капитала"
-        currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
-      />
+        <CapitalStructureCard
+          userId={userId}
+          title="Структура капитала"
+          currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
+        />
+      </div>
       <GoalsSection />
     </div>
   );

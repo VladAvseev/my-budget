@@ -184,7 +184,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
     <VCard>
       <div className={styles.content}>
         <div className={styles.titleRow}>
-          <div className={styles.title}>Бюджет</div>
+          <h2 className={styles.title}>Бюджет по категориям</h2>
           <VIconButton
             ariaLabel="Импортировать лимиты"
             onClick={() => setIsImportOpen(true)}
@@ -223,6 +223,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
             <div key={limit.id} className={styles.fieldGroupTop}>
               <div className={styles.fieldGrow}>
                 <VSelect
+                  label="Категория"
                   options={optionsByRow[index]}
                   value={limit.categoryId}
                   error={rowErrors[limit.id]}
@@ -232,6 +233,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
               </div>
               <div className={styles.fieldFixed}>
                 <VTextInput
+                  label="Лимит"
                   numeric
                   placeholder="0.00"
                   value={limit.amount}

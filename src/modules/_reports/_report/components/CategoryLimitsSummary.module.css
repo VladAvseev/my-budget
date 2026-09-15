@@ -83,3 +83,23 @@
   --positive-ink: light-dark(#167b43, #1bc5bd);
   --caution-ink: light-dark(#795600, #fea135);
 }
+
+.row {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.rowLabel {
+  min-width: 0;
+}
+.name {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.value {
+  font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+  .barFill {
+    transition: none;
+  }
+}

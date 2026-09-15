@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import React, { useMemo } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
 import modalStyles from '@/shared/styles/modal.module.css';
-import { getErrorMessage } from '@/shared/utils';
+import { getErrorMessage, formatDisplay } from '@/shared/utils';
 import {
   buildCode,
   buildName,
@@ -118,7 +118,8 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
   return (
     <VModal
       visible={visible}
-      title={`Новый период ${name}`}
+      title="Создать период"
+      className={styles.dialog}
       onClose={handleClose}
       error={submitError}
       footer={
@@ -127,13 +128,18 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
             Отмена
           </VButton>
           <VButton onClick={handleSubmit} isLoading={create.isPending} isDisabled={codeExists}>
-            Сохранить
+            Создать период
           </VButton>
         </>
       }
     >
       <div className={modalStyles.content}>
-        <div className={styles.sectionTitle}>Период</div>
+        <div className={styles.preview} aria-live="polite">
+          <strong>{name}</strong>
+          <span>
+            {formatDisplay(periodStart)} — {formatDisplay(periodEnd)}
+          </span>
+        </div>
         <div className={styles.periodSelector}>
           <VIconButton
             ariaLabel="Предыдущий месяц"
@@ -146,6 +152,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
           <div className={styles.selectsRow}>
             <div className={styles.selectGrow}>
               <VSelect
+                label="Месяц"
                 options={MONTH_OPTIONS}
                 value={String(selectedMonth)}
                 disabled={create.isPending}
@@ -155,6 +162,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
             </div>
             <div className={styles.selectFixed}>
               <VSelect
+                label="Год"
                 options={YEAR_OPTIONS}
                 value={String(selectedYear)}
                 disabled={create.isPending}

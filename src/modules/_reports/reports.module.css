@@ -1,0 +1,83 @@
+.page {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+}
+.page h1 {
+  overflow-wrap: anywhere;
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.header > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+.dates {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-medium);
+  font-variant-numeric: tabular-nums;
+}
+.settings {
+  display: grid;
+  gap: 24px;
+  align-items: start;
+  min-width: 0;
+}
+.page :is(button, [role='combobox']) {
+  min-height: 48px;
+}
+.page button {
+  min-width: 44px;
+}
+.page :is(button, a, [role='button'], [role='combobox']):focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 3px;
+}
+@media (min-width: 600px) {
+  .page {
+    gap: 28px;
+  }
+}
+@media (min-width: 1200px) {
+  .settings {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.48fr);
+  }
+}
+@media (min-width: 1600px) {
+  .page {
+    max-width: 1200px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page *,
+  .page *::before,
+  .page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.dialog :is(button, input, [role='combobox'], [role='option']) {
+  min-height: 48px;
+}
+.dialog button {
+  min-width: 44px;
+}
+.dialog :focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dialog * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

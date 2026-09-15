@@ -20,7 +20,6 @@ import { VCard } from '@/shared/ui/VCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
-import commonStyles from '@/shared/styles/common.module.css';
 import { useMemo, useState } from 'react';
 import { useAverageMonthlyGrowth } from '../hooks/useAverageMonthlyGrowth';
 import { useReports } from '../api/useReports';
@@ -135,9 +134,9 @@ export const GoalsSection = () => {
     (account) => !account.is_closed && !goals.some((goal) => goal.account_id === account.id),
   );
   return (
-    <div className={styles.root}>
+    <section className={styles.root} aria-label="Цели">
       <div className={styles.header}>
-        <div className={commonStyles.titleXl}>Цели</div>
+        <h2 className={styles.heading}>Цели</h2>
         <VIconButton
           ariaLabel="Установить цель"
           onClick={() => setGoalModal({ goal: null })}
@@ -195,11 +194,12 @@ export const GoalsSection = () => {
       )}
       {!isLoading && !accountsQuery.error && progressList.length > 0 && (
         <>
-          <div className={commonStyles.animateCard}>
+          <div>
             <VCard className={styles.overall}>
               <div className={styles.overallTitle}>Общий прогресс</div>
               <div
                 className={styles.track}
+                aria-label="Общий прогресс целей"
                 role="progressbar"
                 aria-valuemin={0}
                 aria-valuemax={100}
@@ -254,7 +254,7 @@ export const GoalsSection = () => {
           </div>
 
           <div className={styles.list}>
-            {progressList.map((progress, index) => {
+            {progressList.map((progress) => {
               const goal: Goal = progress.goal;
               const account = accountById.get(goal.account_id)!;
               const pending = Boolean((goal as { _optimistic?: boolean })._optimistic);
@@ -279,11 +279,10 @@ export const GoalsSection = () => {
                       setGoalModal({ goal });
                     }
                   }}
-                  className={`${commonStyles.animateCard} ${styles.card}`}
-                  style={{ animationDelay: `${index * 0.03}s` }}
+                  className={styles.card}
+                  aria-busy={pending}
                 >
                   <div className={styles.cardTop}>
-                    <span className={styles.dot} />
                     <span className={styles.cardTitle}>{account.name}</span>
                     {goal.target_date && (
                       <span className={styles.targetDate}>{formatDisplay(goal.target_date)}</span>
@@ -294,6 +293,7 @@ export const GoalsSection = () => {
 
                   <div
                     className={styles.track}
+                    aria-label={`Прогресс цели: ${account.name}`}
                     role="progressbar"
                     aria-valuemin={0}
                     aria-valuemax={100}
@@ -352,6 +352,6 @@ export const GoalsSection = () => {
         ) : (
           <CreateGoalModal onClose={() => setGoalModal(null)} />
         ))}
-    </div>
+    </section>
   );
 };

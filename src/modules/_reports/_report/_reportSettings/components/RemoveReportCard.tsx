@@ -31,7 +31,7 @@ export const RemoveReportCard = ({ report }: RemoveReportCardProps) => {
   return (
     <VCard className={styles.dangerZone}>
       <div className={styles.content}>
-        <div className={styles.title}>Удаление периода</div>
+        <h2 className={styles.title}>Удаление периода</h2>
         <div className={styles.text}>
           Период «{report.name}» и все его операции будут безвозвратно удалены.
         </div>

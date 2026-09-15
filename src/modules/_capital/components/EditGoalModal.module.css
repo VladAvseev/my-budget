@@ -1,27 +1,20 @@
 .accountRow {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  background: var(--md-sys-color-surface-container);
+  border-radius: 16px;
 }
-
 .accountLabel {
-  font-size: var(--md-sys-typescale-label-large-size);
+  font: var(--md-sys-typescale-label-large);
   color: var(--md-sys-color-on-surface-variant);
 }
-
 .accountValue {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: var(--md-sys-typescale-body-medium-size);
+  font: var(--md-sys-typescale-title-medium-emphasized);
   color: var(--md-sys-color-on-surface);
   min-width: 0;
+  overflow-wrap: anywhere;
 }
-
 .accountDot {
-  width: 12px;
-  height: 12px;
-  flex-shrink: 0;
-  border-radius: var(--md-sys-shape-corner-full);
-  background-color: var(--md-sys-color-outline-variant);
+  display: none;
 }
