@@ -2,9 +2,7 @@ import { Amount } from '@/shared/ui/Amount';
 import type { OperationType } from '@/shared/api/types/domain';
 import type { Report } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
-import { VCard } from '@/shared/ui/VCard';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
-import commonStyles from '@/shared/styles/common.module.css';
 import { Link } from 'react-router-dom';
 import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
 import { useOverviewCategories } from '../api/useOverviewCategories';
@@ -25,13 +23,11 @@ const ReportLinkRow = ({ report, amount }: ReportAmount) => {
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   return (
-    <Link to={`/reports/${report.id}`} className={styles.linkRow}>
-      <VCard interactive className={styles.linkRowCard}>
-        <span className={styles.linkRowName}>{report.name}</span>
-        <span className={styles.linkRowAmount}>
-          <Amount value={amount} currencySymbol={displaySymbol} convert={convertOptions} />
-        </span>
-      </VCard>
+    <Link to={`/reports/${report.id}`} className={styles.reportLink}>
+      <span className={styles.reportName}>{report.name}</span>
+      <span className={styles.reportAmount}>
+        <Amount value={amount} currencySymbol={displaySymbol} convert={convertOptions} />
+      </span>
     </Link>
   );
 };
@@ -149,7 +145,7 @@ export const CategoryBreakdown = ({
 
   const sectionTitle = (label: string, average: number, period: PeriodInfo | null) => (
     <div className={styles.sectionHeader}>
-      <div className={styles.sectionLabel}>{label}</div>
+      <h2 className={styles.sectionLabel}>{label}</h2>
       <div className={styles.sectionSummary}>
         {period && <PeriodLine {...period} average={average} />}
         <div className={styles.sectionAverage}>
@@ -177,19 +173,17 @@ export const CategoryBreakdown = ({
     }
     return (
       <div className={styles.accordionList}>
-        {groups.map((group, groupIndex) => (
-          <div
-            key={group.key}
-            className={commonStyles.animateCard}
-            style={{ animationDelay: `${groupIndex * 0.03}s` }}
-          >
+        {groups.map((group) => (
+          <div key={group.key} className={styles.category}>
             <VAccordion
               header={
                 <span className={styles.accordionHeader}>
                   <span
                     className={styles.accordionDot}
+                    aria-hidden="true"
                     style={{
-                      backgroundColor: group.color ?? 'var(--md-sys-color-outline-variant)',
+                      ['--category-color' as string]:
+                        group.color ?? 'var(--md-sys-color-outline-variant)',
                     }}
                   />
                   <span className={styles.accordionGrow}>{group.label}</span>
@@ -224,7 +218,7 @@ export const CategoryBreakdown = ({
   return (
     <div className={styles.root}>
       {hasExpense && (
-        <div className={styles.section}>
+        <section className={styles.section}>
           {sectionTitle(
             'Расходы',
             sectionAverage(totalOf(expenseGroups)),
@@ -237,11 +231,11 @@ export const CategoryBreakdown = ({
             ['expense'],
             true,
           )}
-        </div>
+        </section>
       )}
 
       {(incomeGroups.length > 0 || hasOperations(summaryByReport, ['income'])) && (
-        <div className={styles.section}>
+        <section className={styles.section}>
           {sectionTitle(
             'Доходы',
             sectionAverage(totalOf(incomeGroups)),
@@ -254,7 +248,7 @@ export const CategoryBreakdown = ({
             ['income'],
             false,
           )}
-        </div>
+        </section>
       )}
     </div>
   );

@@ -31,11 +31,17 @@ export const PeriodCompareSelect = ({ reports, isLoading }: PeriodCompareSelectP
         value={comparedId}
         onChange={setComparedId}
       />
-      {isLoading && (
-        <span className={styles.loader} title="Загружаются данные по выбранному периоду">
-          <VLoader size={20} />
-        </span>
-      )}
+      <span className={styles.loader}>
+        {isLoading && (
+          <span
+            role="status"
+            aria-label="Загружаются данные по выбранному периоду"
+            title="Загружаются данные по выбранному периоду"
+          >
+            <VLoader size={20} />
+          </span>
+        )}
+      </span>
     </div>
   );
 };

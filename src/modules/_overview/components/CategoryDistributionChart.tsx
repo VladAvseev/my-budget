@@ -92,9 +92,11 @@ export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistribut
 
   return (
     <VCard className={styles.content}>
-      <div className={styles.title}>Структура операций</div>
+      <div className={styles.header}>
+        <h2 className={styles.heading}>Структура операций</h2>
 
-      <VButtonGroup options={typeOptions} value={selectedType} onChange={setSelectedType} />
+        <VButtonGroup options={typeOptions} value={selectedType} onChange={setSelectedType} />
+      </div>
 
       {segments.length === 0 || hasNegative || total <= 0 ? (
         <div className={styles.message}>
@@ -102,41 +104,35 @@ export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistribut
         </div>
       ) : (
         <div className={styles.chartWrapper}>
-          <DonutChart
-            segments={donutSegments}
-            total={total}
-            displayTotal={convertedTotal}
-            displaySymbol={displaySymbol}
-          />
-
-          <div className={styles.legend}>
-            {donutSegments.flatMap((segment) => [
-              <span
-                key={`${segment.key}-dot`}
-                className={`${styles.dot} ${styles.dotSegment}`}
-                style={{ ['--segment-color' as string]: segment.color }}
-              />,
-              <span key={`${segment.key}-label`} className={styles.ellipsis}>
-                {segment.label}
-              </span>,
-              <span
-                key={`${segment.key}-percent`}
-                className={`${styles.textMedium} ${styles.justifyEnd}`}
-              >
-                {segment.percent.toFixed(1)}%
-              </span>,
-              <span
-                key={`${segment.key}-amount`}
-                className={`${styles.textBold} ${styles.justifyEnd}`}
-              >
-                <Amount
-                  value={segment.total}
-                  currencySymbol={displaySymbol}
-                  convert={convertOptions}
-                />
-              </span>,
-            ])}
+          <div className={styles.diagram}>
+            <DonutChart
+              segments={donutSegments}
+              total={total}
+              displayTotal={convertedTotal}
+              displaySymbol={displaySymbol}
+            />
           </div>
+
+          <ul className={styles.legend}>
+            {donutSegments.map((segment) => (
+              <li key={segment.key} className={styles.legendRow}>
+                <span
+                  className={styles.dot}
+                  aria-hidden="true"
+                  style={{ ['--segment-color' as string]: segment.color }}
+                />
+                <span className={styles.categoryName}>{segment.label}</span>
+                <span className={styles.percent}>{segment.percent.toFixed(1)}%</span>
+                <span className={styles.amount}>
+                  <Amount
+                    value={segment.total}
+                    currencySymbol={displaySymbol}
+                    convert={convertOptions}
+                  />
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </VCard>

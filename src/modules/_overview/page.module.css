@@ -1,19 +1,39 @@
-.currencyRow {
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  min-width: 0;
+  width: 100%;
+  margin-inline: auto;
+}
+.header,
+.currencyRow,
+.headerActions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
+  min-width: 0;
 }
-
+.headerActions {
+  margin-left: auto;
+}
+.block {
+  min-width: 0;
+}
 .summaryGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
 }
-
-.headerActions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
+@media (min-width: 600px) {
+  .page {
+    gap: 32px;
+  }
+}
+@media (min-width: 1600px) {
+  .page {
+    max-width: 1440px;
+  }
 }

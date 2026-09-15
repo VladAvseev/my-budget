@@ -105,9 +105,9 @@ export const Page: React.FC = () => {
   );
 
   return (
-    <div className={commonStyles.page}>
+    <div className={styles.page}>
       {isDesktop && (
-        <div className={commonStyles.pageHeaderRow}>
+        <div className={styles.header}>
           <VPageHeader
             title="Аналитика"
             onBack={() => navigate('/')}
@@ -131,7 +131,7 @@ export const Page: React.FC = () => {
         </div>
       )}
 
-      <div className={commonStyles.animateCard}>
+      <div className={styles.block}>
         <ReportsFilter reports={reports} />
       </div>
 
@@ -187,13 +187,7 @@ export const Page: React.FC = () => {
                 <>
                   <div className={styles.summaryGrid}>
                     {[0, 1, 2].map((i) => (
-                      <VSkeletonCard
-                        key={i}
-                        compact
-                        title={false}
-                        lines={2}
-                        delay={`${i * 0.05}s`}
-                      />
+                      <VSkeletonCard key={i} compact title={false} lines={2} />
                     ))}
                   </div>
                   <VSkeletonCard compact lines={4} />
@@ -202,16 +196,16 @@ export const Page: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <div className={commonStyles.animateCard} style={{ animationDelay: '0.06s' }}>
+                  <div className={styles.block}>
                     <SummaryCard income={totals.income} expenses={totals.expense} />
                   </div>
-                  <div className={commonStyles.animateCard} style={{ animationDelay: '0.12s' }}>
+                  <div className={styles.block}>
                     <CategoryDistributionChart summaryByReport={summaryByReport} />
                   </div>
-                  <div className={commonStyles.animateCard} style={{ animationDelay: '0.15s' }}>
+                  <div className={styles.block}>
                     <PeriodCompareSelect reports={reports} isLoading={comparedSummaryLoading} />
                   </div>
-                  <div className={commonStyles.animateCard} style={{ animationDelay: '0.18s' }}>
+                  <div className={styles.block}>
                     <CategoryBreakdown
                       reports={selectedReports}
                       summaryByReport={summaryByReport}

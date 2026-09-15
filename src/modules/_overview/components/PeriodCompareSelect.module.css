@@ -1,20 +1,27 @@
 .row {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  align-items: end;
+  gap: 8px;
+  padding: 16px;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container);
 }
-
 .select {
-  flex: 1 1 auto;
   min-width: 0;
 }
-
 .loader {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
-  width: 32px;
-  padding-bottom: 12px;
+  height: 48px;
   color: var(--md-sys-color-on-surface-variant);
+}
+.loader > span {
+  display: flex;
+}
+@media (min-width: 600px) {
+  .row {
+    padding: 20px;
+  }
 }
