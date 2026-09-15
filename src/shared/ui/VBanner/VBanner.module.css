@@ -1,56 +1,65 @@
+/* VBanner — M3 Expressive tonal banner (web-адаптация).
+ * Base = compact: borderless tonal, radius medium, body-medium.
+ * success/warning — локальные компонентные переменные (глобальные роли не вводим). */
+
 .banner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 16px;
-  border-radius: var(--md-sys-shape-corner-small);
-  border: 1px solid;
-  font-size: var(--md-sys-typescale-body-medium-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
-  animation: vbanner-in var(--md-sys-motion-standard-fast-spatial);
+  padding: 12px 12px 12px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--md-sys-shape-corner-medium);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+  animation: vbanner-in var(--md-sys-motion-expressive-fast-spatial);
 }
 
 .success {
   --positive-ink: light-dark(#167b43, #1bc5bd);
   --positive-fill: light-dark(#e2f5ea, #19312f);
-  --positive-outline: light-dark(#bce5cd, #27514d);
   color: var(--positive-ink);
   background-color: var(--positive-fill);
-  border-color: var(--positive-outline);
+  border-color: transparent;
 }
 
 .warning {
   --caution-ink: light-dark(#795600, #fea135);
   --caution-fill: light-dark(#fff4d6, #332c24);
-  --caution-outline: light-dark(#f5dca8, #5a4529);
   color: var(--caution-ink);
   background-color: var(--caution-fill);
-  border-color: var(--caution-outline);
+  border-color: transparent;
 }
 
 .error {
   color: var(--md-sys-color-on-error-container);
   background-color: var(--md-sys-color-error-container);
-  border-color: var(--md-sys-color-error);
+  border-color: transparent;
 }
 
 .close {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: none;
-  border-radius: var(--md-sys-shape-corner-extra-small);
+  border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
+  color: inherit;
   cursor: pointer;
-  flex-shrink: 0;
-  transition: background-color var(--md-sys-motion-standard-fast-effects);
+  transition: background-color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .close:hover {
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.close:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 @keyframes vbanner-in {
@@ -61,5 +70,21 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (min-width: 600px) {
+  .banner {
+    padding: 12px 12px 12px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner {
+    animation: none;
+  }
+
+  .close {
+    transition: none;
   }
 }

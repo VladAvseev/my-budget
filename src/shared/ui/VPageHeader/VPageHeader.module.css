@@ -1,20 +1,28 @@
+/* VPageHeader — заголовок экрана.
+ * Продуктовый акцент: emphasized headline-small. Раскрытие на expanded (840px). */
+
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
+  min-height: 48px;
 }
 
 .left {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .title {
-  font-size: var(--md-sys-typescale-headline-small-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: break-word;
+  font: var(--md-sys-typescale-headline-small-emphasized);
+  letter-spacing: var(--md-sys-typescale-headline-small-emphasized-tracking);
   color: var(--md-sys-color-on-surface);
 }
 
@@ -22,7 +30,7 @@
   display: none;
 }
 
-@media (min-width: 1360px) {
+@media (min-width: 840px) {
   .hideOnMobile {
     display: flex;
   }

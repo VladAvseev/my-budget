@@ -1,5 +1,13 @@
 import { ChevronDownIcon, ClearIcon } from '@/shared/icons';
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+} from 'react';
 import styles from './VSelect.module.css';
 
 export interface VSelectOption {
@@ -36,6 +44,7 @@ export const VSelect = ({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const labelId = useId();
 
   const hasError = Boolean(error);
   const hasValue = value !== '';
@@ -67,23 +76,45 @@ export const VSelect = ({
     onChange?.(optionValue);
   };
 
+  const handleTriggerKeyDown = (event: ReactKeyboardEvent) => {
+    if (disabled) {
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setIsOpen((prev) => !prev);
+    } else if (event.key === 'Escape') {
+      setIsOpen(false);
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setIsOpen(true);
+    }
+  };
+
   return (
     <div
       ref={containerRef}
       className={`${styles.root}${className ? ` ${className}` : ''}`}
       style={style}
     >
-      {label && <label className={styles.label}>{label}</label>}
+      {label && (
+        <label id={labelId} className={styles.label}>
+          {label}
+        </label>
+      )}
       <div
         role="combobox"
         aria-expanded={isOpen}
         aria-invalid={hasError}
         aria-haspopup="listbox"
+        aria-labelledby={label ? labelId : undefined}
+        tabIndex={disabled ? -1 : 0}
         onClick={() => {
           if (!disabled) {
             setIsOpen((prev) => !prev);
           }
         }}
+        onKeyDown={handleTriggerKeyDown}
         className={styles.trigger}
         data-has-value={hasValue ? 'true' : undefined}
         data-open={isOpen ? 'true' : undefined}
@@ -108,10 +139,7 @@ export const VSelect = ({
               <ClearIcon size={16} color="currentColor" />
             </button>
           )}
-          <span
-            className={styles.chevron}
-            style={{ transform: isOpen ? 'rotate(180deg)' : 'none' }}
-          >
+          <span className={styles.chevron}>
             <ChevronDownIcon size={16} color="currentColor" />
           </span>
         </span>
@@ -144,7 +172,14 @@ const Option = ({ option, isSelected, onClick }: OptionProps) => {
     <div
       role="option"
       aria-selected={isSelected}
+      tabIndex={0}
       onClick={onClick}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onClick();
+        }
+      }}
       className={styles.option}
       data-selected={isSelected ? 'true' : undefined}
     >

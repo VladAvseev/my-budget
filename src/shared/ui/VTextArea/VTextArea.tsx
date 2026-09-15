@@ -24,6 +24,7 @@ export const VTextArea = ({
   ...rest
 }: VTextAreaProps) => {
   const errorId = useId();
+  const inputId = useId();
   const hasError = Boolean(error);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -32,9 +33,14 @@ export const VTextArea = ({
 
   return (
     <div className={`${styles.root}${className ? ` ${className}` : ''}`} style={style}>
-      {label && <label className={styles.label}>{label}</label>}
+      {label && (
+        <label htmlFor={inputId} className={styles.label}>
+          {label}
+        </label>
+      )}
       <div className={styles.wrapper}>
         <textarea
+          id={inputId}
           value={value}
           onChange={handleChange}
           onFocus={onFocus}

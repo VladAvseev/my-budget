@@ -1,7 +1,10 @@
+/* VSkeleton — плейсхолдеры загрузки.
+ * Base = compact: surface-container-highest, скругления по shape scale. */
+
 .block {
   display: block;
   border-radius: var(--md-sys-shape-corner-extra-small);
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: var(--md-sys-color-surface-container-highest);
   animation: skeletonPulse 1.4s ease-in-out infinite;
 }
 
@@ -13,8 +16,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 24px;
-  animation: skeletonFadeUp var(--md-sys-motion-standard-fast-spatial) both;
+  padding: 16px;
+  animation: skeletonFadeUp var(--md-sys-motion-expressive-default-spatial) both;
 }
 
 .cardCompact {
@@ -23,7 +26,7 @@
 
 .cardTitle {
   width: 60%;
-  height: 12px;
+  height: 16px;
 }
 
 .cardLineShort {
@@ -55,6 +58,12 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (min-width: 600px) {
+  .card {
+    padding: 24px;
   }
 }
 

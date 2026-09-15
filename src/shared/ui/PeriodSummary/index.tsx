@@ -19,12 +19,12 @@ export const PeriodSummary = ({
 }: PeriodSummaryProps) => {
   const balance = income - expenses;
   const items = [
-    { label: 'Расходы', value: expenses, color: 'var(--md-sys-color-on-surface)' },
-    { label: 'Доходы', value: income, color: 'var(--positive-ink)' },
+    { label: 'Расходы', value: expenses, tone: 'neutral' as const },
+    { label: 'Доходы', value: income, tone: 'positive' as const },
     {
       label: 'Остаток',
       value: balance,
-      color: balance >= 0 ? 'var(--positive-ink)' : 'var(--md-sys-color-error)',
+      tone: (balance >= 0 ? 'positive' : 'negative') as 'positive' | 'negative',
     },
   ];
   return (
@@ -34,7 +34,7 @@ export const PeriodSummary = ({
         return (
           <VCard key={item.label} className={styles.card}>
             <div className={styles.label}>{item.label}</div>
-            <div className={styles.value} style={{ color: item.color }}>
+            <div className={styles.value} data-tone={item.tone}>
               <Amount value={item.value} currencySymbol={currencySymbol} convert={convertOptions} />
             </div>
             <div className={styles.percent}>

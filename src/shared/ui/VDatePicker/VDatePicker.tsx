@@ -1,8 +1,10 @@
 import {
   useEffect,
+  useId,
   useRef,
   useState,
   type CSSProperties,
+  type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from 'react';
@@ -54,6 +56,7 @@ export const VDatePicker = ({
 }: VDatePickerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const labelId = useId();
 
   const hasError = Boolean(error);
   const hasValue = Boolean(value);
@@ -74,6 +77,21 @@ export const VDatePicker = ({
     }
   };
 
+  const handleTriggerKeyDown = (event: ReactKeyboardEvent) => {
+    if (disabled) {
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleOpen();
+    } else if (event.key === 'Escape') {
+      setIsOpen(false);
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setIsOpen(true);
+    }
+  };
+
   const handleClear = (event: ReactMouseEvent) => {
     event.stopPropagation();
     onChange?.('');
@@ -90,13 +108,20 @@ export const VDatePicker = ({
       className={`${styles.root}${className ? ` ${className}` : ''}`}
       style={style}
     >
-      {label && <label className={styles.label}>{label}</label>}
+      {label && (
+        <label id={labelId} className={styles.label}>
+          {label}
+        </label>
+      )}
       <div
         role="combobox"
         aria-expanded={isOpen}
         aria-invalid={hasError}
         aria-haspopup="dialog"
+        aria-labelledby={label ? labelId : undefined}
+        tabIndex={disabled ? -1 : 0}
         onClick={toggleOpen}
+        onKeyDown={handleTriggerKeyDown}
         className={styles.trigger}
         data-has-value={hasValue ? 'true' : undefined}
         data-open={isOpen ? 'true' : undefined}

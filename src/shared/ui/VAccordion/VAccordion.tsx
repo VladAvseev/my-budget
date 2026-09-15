@@ -36,31 +36,51 @@ export const VAccordion = ({
     setIsOpen((prev) => !prev);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (disabled) {
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setIsOpen((prev) => !prev);
+    }
+  };
+
   const disabledAttr = disabled ? 'true' : undefined;
 
   return (
-    <div className={`${styles.accordion}${className ? ` ${className}` : ''}`} style={style}>
-      <div className={styles.header} data-disabled={disabledAttr} onClick={handleToggle}>
+    <div
+      className={`${styles.accordion}${className ? ` ${className}` : ''}`}
+      style={style}
+      data-open={isOpen ? 'true' : undefined}
+    >
+      <div
+        className={styles.header}
+        data-disabled={disabledAttr}
+        onClick={handleToggle}
+        onKeyDown={handleKeyDown}
+        role="button"
+        tabIndex={disabled ? -1 : 0}
+        aria-expanded={isOpen}
+        aria-disabled={disabled}
+      >
         <div className={styles.label} data-disabled={disabledAttr}>
           {header}
         </div>
         <button
           type="button"
           disabled={disabled}
+          tabIndex={-1}
           onClick={(event) => {
             event.stopPropagation();
             handleToggle();
           }}
           className={styles.chevron}
+          aria-hidden="true"
         >
-          <ChevronDownIcon
-            size={16}
-            color="currentColor"
-            style={{
-              transform: isOpen ? 'rotate(180deg)' : 'none',
-              transition: 'transform 0.15s ease',
-            }}
-          />
+          <span className={styles.chevronIcon}>
+            <ChevronDownIcon size={16} color="currentColor" />
+          </span>
         </button>
       </div>
       <div

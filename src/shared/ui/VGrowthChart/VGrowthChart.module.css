@@ -1,3 +1,6 @@
+/* VGrowthChart — линейный график динамики.
+ * Сетка 1px outline-variant, тултип — инверсная пара, change-тон через data-tone. */
+
 .wrapper {
   display: flex;
   position: relative;
@@ -13,16 +16,18 @@
   visibility: hidden;
   white-space: nowrap;
   color: var(--md-sys-color-on-surface-variant);
-  font-size: var(--md-sys-typescale-label-medium-size);
-  font-family: var(--md-ref-typeface-plain);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  font-variant-numeric: tabular-nums;
 }
 
 .labelY {
   position: absolute;
   left: 0;
   color: var(--md-sys-color-on-surface-variant);
-  font-size: var(--md-sys-typescale-label-medium-size);
-  font-family: var(--md-ref-typeface-plain);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  font-variant-numeric: tabular-nums;
   text-align: left;
   white-space: nowrap;
 }
@@ -50,24 +55,25 @@
   align-items: center;
   justify-content: center;
   min-height: 160px;
+  padding: 24px;
   color: var(--md-sys-color-on-surface-variant);
-  font-size: var(--md-sys-typescale-body-medium-size);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
 }
 
 .gridLine {
   stroke: var(--md-sys-color-outline-variant);
-  stroke-width: 1.5;
-  stroke-dasharray: 6 6;
+  stroke-width: 1;
 }
 
 .axisLine {
   stroke: var(--md-sys-color-outline-variant);
-  stroke-width: 1.5;
+  stroke-width: 1;
 }
 
 .labelX {
   fill: var(--md-sys-color-on-surface-variant);
-  font-size: var(--md-sys-typescale-label-medium-size);
+  font: var(--md-sys-typescale-label-medium);
   font-family: var(--md-ref-typeface-plain);
   text-anchor: end;
 }
@@ -75,43 +81,54 @@
 .dot {
   stroke-width: 2;
   cursor: pointer;
-  transition: r var(--md-sys-motion-standard-fast-spatial);
+  transition: r var(--md-sys-motion-expressive-fast-spatial);
 }
 
 .dot:hover {
   r: 7.5;
 }
 
+.dot:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
 .tooltip {
   position: absolute;
   pointer-events: none;
-  background-color: var(--md-sys-color-surface-container);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-inverse-surface);
   border-radius: var(--md-sys-shape-corner-small);
   padding: 8px 12px;
-  font-size: var(--md-sys-typescale-body-large-size);
-  color: var(--md-sys-color-on-surface);
+  color: var(--md-sys-color-inverse-on-surface);
   white-space: nowrap;
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
-  z-index: 10;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  z-index: 60;
 }
 
 .tooltipValue {
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  font: var(--md-sys-typescale-body-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-medium-emphasized-tracking);
+  font-variant-numeric: tabular-nums;
 }
 
 .tooltipLabel {
-  font-size: var(--md-sys-typescale-label-medium-size);
-  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  color: color-mix(in srgb, var(--md-sys-color-inverse-on-surface) 70%, transparent);
 }
 
 .tooltipChange {
-  font-size: var(--md-sys-typescale-body-small-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  font: var(--md-sys-typescale-body-small-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-small-emphasized-tracking);
+  font-variant-numeric: tabular-nums;
   margin-top: 2px;
+  /* Тон (рост/падение) передаётся знаком и процентами в тексте:
+   * на инверсном фоне тултипа тоновые ink-цвета страниц не держат контраст. */
+  color: var(--md-sys-color-inverse-on-surface);
 }
 
-.wrapper {
-  --positive-ink: light-dark(#167b43, #1bc5bd);
-  --caution-ink: light-dark(#795600, #fea135);
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    transition: none;
+  }
 }

@@ -149,7 +149,7 @@ export const VGrowthChart = ({
   );
 
   const handleDotEnter = useCallback(
-    (_e: React.MouseEvent, point: ChartPoint) => {
+    (point: ChartPoint) => {
       const idx = data.indexOf(point);
       setTooltip({
         x: getDotX(idx),
@@ -254,8 +254,13 @@ export const VGrowthChart = ({
                   r={4}
                   fill={color}
                   stroke="var(--md-sys-color-surface)"
-                  onMouseEnter={(e) => handleDotEnter(e, point)}
+                  tabIndex={0}
+                  role="img"
+                  aria-label={`${point.label}: ${format(point.value)}`}
+                  onMouseEnter={() => handleDotEnter(point)}
                   onMouseLeave={handleDotLeave}
+                  onFocus={() => handleDotEnter(point)}
+                  onBlur={handleDotLeave}
                 />
               );
             })}
@@ -313,15 +318,9 @@ export const VGrowthChart = ({
             (() => {
               const change = getPointChange(data, data.indexOf(tooltip.point), base);
               if (!change) return null;
-              const changeColor =
-                change.abs > 0
-                  ? 'var(--positive-ink)'
-                  : change.abs < 0
-                    ? 'var(--md-sys-color-error)'
-                    : 'var(--caution-ink)';
               const sign = change.abs > 0 ? '+' : change.abs < 0 ? '' : '±';
               return (
-                <div className={styles.tooltipChange} style={{ color: changeColor }}>
+                <div className={styles.tooltipChange}>
                   {sign}
                   <CurrencyText>{format(change.abs)}</CurrencyText>
                   {change.pct !== null &&

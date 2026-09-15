@@ -1,8 +1,13 @@
+/* VButtonGroup — M3 Expressive segmented/filter chips (web-адаптация).
+ * Base = compact: wrap-ряд пилюль, без клиппинга focus-ring.
+ * Selected — secondary-container, без залитого primary. */
+
 .container {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   width: fit-content;
+  max-width: 100%;
 }
 
 .fullWidth {
@@ -11,73 +16,101 @@
 
 .buttons {
   display: flex;
-  overflow: hidden;
-  border-radius: var(--md-sys-shape-corner-small);
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 100%;
 }
 
 .buttonsFullWidth .button {
   flex: 1 1 auto;
   min-width: 0;
   white-space: normal;
-  padding: 8px 0;
 }
 
 .label {
-  font-size: var(--md-sys-typescale-label-medium-size);
-  font-weight: var(--md-sys-typescale-body-medium-weight);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .button {
-  padding: 8px 8px;
-  border: 1px solid var(--md-sys-color-outline-variant);
-  background-color: var(--md-sys-color-surface-container);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: transparent;
   color: var(--md-sys-color-on-surface-variant);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-body-medium-weight);
+  font: var(--md-sys-typescale-label-large);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
   font-family: inherit;
+  text-transform: none;
   cursor: pointer;
-  transition:
-    background-color var(--md-sys-motion-standard-fast-effects),
-    color var(--md-sys-motion-standard-fast-effects),
-    border-color var(--md-sys-motion-standard-fast-effects);
   white-space: nowrap;
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects),
+    border-radius var(--md-sys-motion-expressive-fast-spatial);
 }
 
 .button:hover:not(:disabled):not(.active) {
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface-variant) 8%,
+    transparent
+  );
+  color: var(--md-sys-color-on-surface);
 }
 
-.button:first-child {
-  border-top-left-radius: var(--md-sys-shape-corner-small);
-  border-bottom-left-radius: var(--md-sys-shape-corner-small);
+.button:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
-.button:last-child {
-  border-top-right-radius: var(--md-sys-shape-corner-small);
-  border-bottom-right-radius: var(--md-sys-shape-corner-small);
-}
-
-.button + .button {
-  margin-left: -1px;
+.button:active:not(:disabled) {
+  border-radius: var(--md-sys-shape-corner-small);
 }
 
 .button:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.38;
 }
 
 .active {
-  position: relative;
-  z-index: 1;
-  border-color: var(--md-sys-color-primary);
-  background-color: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-  font-weight: var(--md-sys-typescale-body-medium-weight);
+  border-color: transparent;
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font: var(--md-sys-typescale-label-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-label-large-emphasized-tracking);
+}
+
+.active:hover:not(:disabled) {
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-secondary-container) 92%,
+    var(--md-sys-color-on-secondary-container) 8%
+  );
 }
 
 .prefix {
   display: inline-flex;
-  margin-right: 4px;
   flex-shrink: 0;
+  margin-right: 4px;
+  align-items: center;
+}
+
+@media (min-width: 600px) {
+  .buttons {
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
 }

@@ -1,6 +1,17 @@
+/* VErrorCard — состояние ошибки внутри VCard.
+ * Base = compact: колонка на всю ширину (кнопка повтора — лёгкая мишень).
+ * На medium+ контент прижимается к началу, кнопка — по содержимому. */
+
 .card {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  align-items: flex-start;
+  align-items: stretch;
+}
+
+@media (min-width: 600px) {
+  .card {
+    gap: 16px;
+    align-items: flex-start;
+  }
 }

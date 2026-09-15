@@ -1,28 +1,46 @@
+/* VMultiSelect — M3 Expressive menu select (web-адаптация).
+ * Единый паттерн с VSelect: триггер 48px, меню surface-container-low. */
+
 .root {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
 }
 
 .label {
-  font-size: var(--md-sys-typescale-label-medium-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
+}
+
+.root:has(.trigger[data-invalid='true']) .label {
+  color: var(--md-sys-color-error);
 }
 
 .trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
-  border-radius: var(--md-sys-shape-corner-small);
-  font-size: var(--md-sys-typescale-body-medium-size);
-  background-color: var(--md-sys-color-surface-container);
-  color: var(--md-sys-color-on-surface-variant);
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 12px 12px 16px;
   border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-large);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
+  font-family: inherit;
+  text-align: left;
   cursor: pointer;
   user-select: none;
-  transition: border-color var(--md-sys-motion-standard-fast-effects);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects),
+    box-shadow var(--md-sys-motion-expressive-fast-effects);
 }
 
 .trigger[data-has-value='true'] {
@@ -31,20 +49,31 @@
 
 .trigger[data-open='true'] {
   border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 1px var(--md-sys-color-primary);
 }
 
 .trigger[data-invalid='true'] {
   border-color: var(--md-sys-color-error);
 }
 
+.trigger[data-invalid='true'][data-open='true'] {
+  box-shadow: 0 0 0 1px var(--md-sys-color-error);
+}
+
 .trigger:hover:not([data-disabled='true']):not([data-invalid='true']):not([data-open='true']) {
   border-color: var(--md-sys-color-on-surface-variant);
 }
 
+.trigger:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
 .trigger[data-disabled='true'] {
-  background-color: transparent;
+  border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 4%, transparent);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .triggerText {
@@ -52,6 +81,8 @@
   align-items: center;
   gap: 8px;
   overflow: hidden;
+  min-width: 0;
+  flex: 1;
 }
 
 .triggerTextValue {
@@ -63,77 +94,111 @@
 .triggerActions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 .clearButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border: none;
-  border-radius: var(--md-sys-shape-corner-extra-small);
+  border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
   color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  transition: background-color var(--md-sys-motion-standard-fast-effects);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .clearButton:hover {
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface-variant) 8%,
+    transparent
+  );
+  color: var(--md-sys-color-on-surface);
+}
+
+.clearButton:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .chevron {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   color: var(--md-sys-color-on-surface-variant);
-  transition: transform var(--md-sys-motion-standard-fast-spatial);
+  transition: transform var(--md-sys-motion-expressive-fast-spatial);
+}
+
+.trigger[data-open='true'] .chevron {
+  transform: rotate(180deg);
 }
 
 .dropdown {
-  background-color: var(--md-sys-color-surface-container);
-  border-radius: var(--md-sys-shape-corner-small);
-  box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
+  padding: 8px;
+  background-color: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
   max-height: 240px;
   overflow-y: auto;
-  z-index: 10;
+  z-index: 20;
+  animation: vmultiselect-in var(--md-sys-motion-expressive-fast-spatial);
 }
 
 .separator {
   height: 1px;
   background-color: var(--md-sys-color-outline-variant);
-  margin: 4px 0;
+  margin: 8px 0;
 }
 
 .option {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  font-size: var(--md-sys-typescale-label-large-size);
+  min-height: 48px;
+  padding: 12px 16px;
+  border-radius: var(--md-sys-shape-corner-small);
+  font: var(--md-sys-typescale-body-large);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
   color: var(--md-sys-color-on-surface);
   cursor: pointer;
   transition:
-    background-color var(--md-sys-motion-standard-fast-effects),
-    color var(--md-sys-motion-standard-fast-effects);
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .option[data-selected='true'] {
-  color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font: var(--md-sys-typescale-body-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-large-emphasized-tracking);
 }
 
-.option:hover {
-  color: var(--md-sys-color-on-primary-container);
-  background-color: var(--md-sys-color-primary-container);
+.option:hover:not([data-selected='true']) {
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) 8%,
+    transparent
+  );
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: -2px;
 }
 
 .checkmark {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
   margin-left: auto;
 }
@@ -145,6 +210,37 @@
 }
 
 .error {
-  font-size: var(--md-sys-typescale-body-small-size);
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
   color: var(--md-sys-color-error);
+}
+
+@keyframes vmultiselect-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 600px) {
+  .dropdown {
+    max-height: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .chevron,
+  .clearButton,
+  .option {
+    transition: none;
+  }
+
+  .dropdown {
+    animation: none;
+  }
 }

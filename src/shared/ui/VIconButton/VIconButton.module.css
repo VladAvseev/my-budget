@@ -1,17 +1,53 @@
+/* VIconButton — M3 Expressive icon button (web-адаптация).
+ * Нейтральный служебный вариант; визуал 40px, хит-зона 48px через ::before. */
+
 .button {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
   border: none;
-  border-radius: var(--md-sys-shape-corner-extra-small);
+  border-radius: var(--md-sys-shape-corner-full);
   background-color: transparent;
+  color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  transition: background-color var(--md-sys-motion-standard-fast-effects);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects),
+    border-radius var(--md-sys-motion-expressive-fast-spatial);
+}
+
+/* Расширенная touch-зона до 48px без изменения визуала */
+.button::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
 }
 
 .button:hover:not(:disabled) {
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface-variant) 8%,
+    transparent
+  );
+  color: var(--md-sys-color-on-surface);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.button:active:not(:disabled) {
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface-variant) 12%,
+    transparent
+  );
 }
 
 .button:disabled {
@@ -19,5 +55,11 @@
 }
 
 .button:disabled:not([aria-busy='true']) {
-  opacity: 0.5;
+  opacity: 0.38;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
 }

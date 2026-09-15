@@ -1,19 +1,31 @@
+/* DonutChart — кольцевая диаграмма.
+ * Base = compact: total title-large-emphasized, тултип — инверсная пара. */
+
 .wrapper {
   position: relative;
   flex-shrink: 0;
+  max-width: 100%;
 }
 
 .chart {
   display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .segment {
   cursor: pointer;
-  transition: opacity var(--md-sys-motion-standard-fast-effects);
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
 }
 
 .segment:hover {
   opacity: 0.8;
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+  opacity: 1;
 }
 
 .hole {
@@ -22,15 +34,16 @@
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: var(--md-sys-shape-corner-full);
-  background-color: var(--md-sys-color-surface-container);
+  background-color: var(--md-sys-color-surface-container-low);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .total {
-  font-size: var(--md-sys-typescale-body-large-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  font: var(--md-sys-typescale-title-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-large-emphasized-tracking);
+  font-variant-numeric: tabular-nums;
   color: var(--md-sys-color-on-surface);
   text-align: center;
   word-break: break-word;
@@ -40,31 +53,42 @@
 .tooltip {
   position: absolute;
   pointer-events: none;
-  background-color: var(--md-sys-color-surface-container);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-inverse-surface);
   border-radius: var(--md-sys-shape-corner-small);
   padding: 8px 12px;
-  font-size: var(--md-sys-typescale-body-medium-size);
-  color: var(--md-sys-color-on-surface);
+  color: var(--md-sys-color-inverse-on-surface);
   white-space: nowrap;
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
-  z-index: 10;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  z-index: 60;
 }
 
 .tooltipLabel {
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
   margin-bottom: 2px;
 }
 
 .tooltipRow {
   display: flex;
+  align-items: baseline;
   gap: 12px;
 }
 
 .tooltipValue {
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  font: var(--md-sys-typescale-body-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-medium-emphasized-tracking);
+  font-variant-numeric: tabular-nums;
 }
 
 .tooltipPercent {
-  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--md-sys-color-inverse-on-surface) 70%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segment {
+    transition: none;
+  }
 }

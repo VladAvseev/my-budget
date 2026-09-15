@@ -24,6 +24,7 @@ export const VTextInput = ({
   ...rest
 }: VTextInputProps) => {
   const errorId = useId();
+  const inputId = useId();
   const hasError = Boolean(error);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -36,9 +37,14 @@ export const VTextInput = ({
 
   return (
     <div className={`${styles.root}${className ? ` ${className}` : ''}`} style={style}>
-      {label && <label className={styles.label}>{label}</label>}
+      {label && (
+        <label htmlFor={inputId} className={styles.label}>
+          {label}
+        </label>
+      )}
       <div className={styles.wrapper}>
         <input
+          id={inputId}
           value={value}
           onChange={handleChange}
           onFocus={onFocus}

@@ -1,63 +1,107 @@
+/* VToggle — M3 Expressive switch (web-адаптация).
+ * Трек 52×32 pill, ручка 16→24, анимация через left/size spatial-токеном. */
+
 .root {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-height: 48px;
 }
 
 .track {
   position: relative;
-  width: 36px;
-  height: 20px;
+  width: 52px;
+  height: 32px;
   flex-shrink: 0;
   padding: 0;
-  border: none;
-  border-radius: var(--md-sys-shape-corner-small);
-  background-color: var(--md-sys-color-outline-variant);
+  border: 2px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-surface-container-highest);
   cursor: pointer;
-  transition: background-color var(--md-sys-motion-standard-fast-effects);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .track:hover:not(:disabled) {
-  background-color: var(--md-sys-color-on-surface-variant);
+  border-color: var(--md-sys-color-on-surface);
+}
+
+.track:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .trackChecked {
+  border-color: var(--md-sys-color-primary);
   background-color: var(--md-sys-color-primary);
 }
 
 .trackChecked:hover:not(:disabled) {
   background-color: color-mix(
     in srgb,
-    var(--md-sys-color-primary),
+    var(--md-sys-color-primary) 92%,
+    var(--md-sys-color-on-primary) 8%
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 92%,
     var(--md-sys-color-on-primary) 8%
   );
 }
 
 .track:disabled {
+  border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .handle {
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 14px;
-  height: 14px;
+  top: 50%;
+  left: 8px;
+  width: 16px;
+  height: 16px;
   border-radius: var(--md-sys-shape-corner-full);
-  background-color: var(--md-sys-color-surface-container);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
+  background-color: var(--md-sys-color-outline);
+  transform: translateY(-50%);
   transition:
-    left var(--md-sys-motion-standard-fast-spatial),
-    background-color var(--md-sys-motion-standard-fast-effects);
+    left var(--md-sys-motion-expressive-fast-spatial),
+    width var(--md-sys-motion-expressive-fast-spatial),
+    height var(--md-sys-motion-expressive-fast-spatial),
+    background-color var(--md-sys-motion-expressive-fast-effects);
+}
+
+.track:hover:not(:disabled) .handle:not(.handleChecked) {
+  background-color: var(--md-sys-color-on-surface-variant);
 }
 
 .handleChecked {
-  left: 19px;
+  left: 20px;
+  width: 24px;
+  height: 24px;
   background-color: var(--md-sys-color-on-primary);
 }
 
+.track:disabled .handle {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
 .label {
-  font-size: var(--md-sys-typescale-label-large-size);
+  flex: 1;
+  min-width: 0;
+  font: var(--md-sys-typescale-body-large);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
   color: var(--md-sys-color-on-surface);
+}
+
+.root:has(.track:disabled) .label {
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .handle {
+    transition: none;
+  }
 }

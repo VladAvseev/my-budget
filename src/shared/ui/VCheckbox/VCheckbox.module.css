@@ -1,26 +1,112 @@
+/* VCheckbox — M3 Expressive checkbox (web-адаптация) поверх нативного input.
+ * Кастомный квадрат 20px: рамка 2px, checked — primary-заливка с галкой. */
+
 .root {
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  min-height: 48px;
+  padding-block: 12px;
+  box-sizing: border-box;
   cursor: pointer;
 }
 
 .input {
-  width: 18px;
-  height: 18px;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
-  margin-top: 2px;
-  accent-color: var(--md-sys-color-primary);
+  margin: 2px;
+  border: 2px solid var(--md-sys-color-on-surface-variant);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: transparent;
   cursor: inherit;
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects),
+    box-shadow var(--md-sys-motion-expressive-fast-effects);
+}
+
+.input:hover:not(:disabled) {
+  border-color: var(--md-sys-color-on-surface);
+  box-shadow: 0 0 0 8px
+    color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.input:checked {
+  border-color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-primary);
+}
+
+.input:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--md-sys-color-on-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.input:indeterminate {
+  border-color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-primary);
+}
+
+.input:indeterminate::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 7px;
+  width: 10px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--md-sys-color-on-primary);
 }
 
 .input:disabled {
+  border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
   cursor: not-allowed;
-  opacity: 0.5;
+  box-shadow: none;
+}
+
+.input:disabled:checked,
+.input:disabled:indeterminate {
+  border-color: transparent;
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
+.input:disabled:checked::after {
+  border-color: var(--md-sys-color-surface);
 }
 
 .label {
-  font-size: var(--md-sys-typescale-label-large-size);
-  line-height: 1.45;
+  flex: 1;
+  min-width: 0;
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   color: var(--md-sys-color-on-surface);
+}
+
+.root:has(.input:disabled) {
+  cursor: not-allowed;
+}
+
+.root:has(.input:disabled) .label {
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input {
+    transition: none;
+  }
 }

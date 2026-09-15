@@ -1,12 +1,17 @@
+/* GrowthStats — строки статистики под заголовком динамики.
+ * Значения — tabular-nums; тон — существующими классами positive/negative. */
+
 .stats {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .stat {
-  font-size: var(--md-sys-typescale-body-small-size);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+  font-variant-numeric: tabular-nums;
   color: var(--md-sys-color-on-surface-variant);
 }
 

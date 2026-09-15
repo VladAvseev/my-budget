@@ -1,4 +1,9 @@
+/* PeriodSummary — три карточки сводки; значения — hero-цифры title-large-emphasized.
+ * Тон значения — через data-tone из TSX (без инлайн-цветов в коде). */
+
 .grid {
+  --positive-ink: light-dark(#167b43, #1bc5bd);
+  --caution-ink: light-dark(#795600, #fea135);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
@@ -7,29 +12,44 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .label {
-  font-size: var(--md-sys-typescale-label-medium-size);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.value {
-  font-size: var(--md-sys-typescale-body-large-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-}
-
-.percent {
-  font-size: var(--md-sys-typescale-body-small-size);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .value {
   overflow-wrap: anywhere;
+  font: var(--md-sys-typescale-title-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-large-emphasized-tracking);
+  font-variant-numeric: tabular-nums;
+  color: var(--md-sys-color-on-surface);
 }
 
-.grid {
-  --positive-ink: light-dark(#167b43, #1bc5bd);
-  --caution-ink: light-dark(#795600, #fea135);
+.value[data-tone='positive'] {
+  color: var(--positive-ink);
+}
+
+.value[data-tone='negative'] {
+  color: var(--md-sys-color-error);
+}
+
+.value[data-tone='neutral'] {
+  color: var(--md-sys-color-on-surface);
+}
+
+.percent {
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+  font-variant-numeric: tabular-nums;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+@media (min-width: 600px) {
+  .grid {
+    gap: 16px;
+  }
 }

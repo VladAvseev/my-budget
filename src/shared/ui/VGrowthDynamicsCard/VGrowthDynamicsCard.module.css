@@ -1,10 +1,13 @@
+/* VGrowthDynamicsCard — карточка динамики: заголовок + переключатели + статистика + график.
+ * mobileCompact оставлен как класс-носитель тоновых переменных (отступы — у VCard). */
+
 .header {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .title {
-  font-size: var(--md-sys-typescale-title-medium-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  font: var(--md-sys-typescale-title-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-medium-emphasized-tracking);
   color: var(--md-sys-color-on-surface);
 }
 
@@ -12,20 +15,8 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   gap: 8px;
-}
-
-.mobileCompact {
-  padding-left: 4px !important;
-  padding-right: 4px !important;
-}
-
-@media (min-width: 601px) {
-  .mobileCompact {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
 }
 
 .mobileCompact {

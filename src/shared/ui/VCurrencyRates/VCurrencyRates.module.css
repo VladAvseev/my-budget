@@ -1,15 +1,19 @@
+/* VCurrencyRates — строки курсов валют, только типографика поверх контекста. */
+
 .container {
   display: flex;
   align-items: center;
   min-width: 0;
   color: var(--md-sys-color-on-surface-variant);
-  font-size: var(--md-sys-typescale-body-small-size);
-  line-height: 1.2;
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+  font-variant-numeric: tabular-nums;
 }
 
 .row {
   flex-direction: row;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 4px 12px;
 }
 
 .stack {
@@ -27,7 +31,8 @@
 
 .from {
   color: var(--md-sys-color-on-surface);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-body-small-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-small-emphasized-tracking);
 }
 
 .equals {
@@ -36,5 +41,6 @@
 
 .value {
   color: var(--md-sys-color-on-surface);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-body-small-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-small-emphasized-tracking);
 }

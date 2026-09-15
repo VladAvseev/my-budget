@@ -1,18 +1,21 @@
+/* VCard — M3 Expressive filled card (web-адаптация).
+ * Base = compact: surface-container-low, radius medium, padding 16.
+ * Глубина — через тональные контейнеры, тень только у interactive hover. */
+
 .card {
-  background-color: var(--md-sys-color-surface-container);
-  border-radius: var(--md-sys-shape-corner-small);
-  box-shadow: 0 4px 6px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  padding: 8px;
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-medium);
+  padding: 16px;
   transition:
-    background-color var(--md-sys-motion-standard-fast-effects),
-    box-shadow var(--md-sys-motion-standard-fast-effects);
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    box-shadow var(--md-sys-motion-expressive-fast-effects),
+    border-radius var(--md-sys-motion-expressive-fast-spatial);
 }
 
-@media (min-width: 601px) {
+@media (min-width: 600px) {
   .card {
-    padding: 12px;
-    border-radius: var(--md-sys-shape-corner-medium);
+    padding: 20px;
+    border-radius: var(--md-sys-shape-corner-large);
   }
 }
 
@@ -22,5 +25,20 @@
 
 .interactive:hover {
   background-color: var(--md-sys-color-surface-container-high);
-  box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+}
+
+.interactive:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.interactive:active {
+  background-color: var(--md-sys-color-surface-container-highest);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
 }

@@ -1,14 +1,36 @@
+/* VButton — M3 Expressive common buttons (web-адаптация).
+ * Base = compact/mobile: pill 40px, label-large. Desktop не растягиваем,
+ * только чуть больше горизонтальные отступы через min-width. */
+
 .base {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
   padding: 8px 16px;
-  border-radius: var(--md-sys-shape-corner-small);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  border-radius: var(--md-sys-shape-corner-full);
+  font: var(--md-sys-typescale-label-large);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
   font-family: inherit;
+  text-transform: none;
   cursor: pointer;
   transition:
-    background-color var(--md-sys-motion-standard-fast-effects),
-    color var(--md-sys-motion-standard-fast-effects);
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects),
+    border-radius var(--md-sys-motion-expressive-fast-spatial),
+    box-shadow var(--md-sys-motion-expressive-fast-effects);
+}
+
+.base:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.base:active:not(:disabled) {
+  border-radius: var(--md-sys-shape-corner-small);
 }
 
 .base:disabled {
@@ -16,7 +38,7 @@
 }
 
 .base:disabled:not([aria-busy='true']) {
-  opacity: 0.5;
+  opacity: 0.38;
 }
 
 .primary {
@@ -28,20 +50,39 @@
 .primary:hover:not(:disabled) {
   background-color: color-mix(
     in srgb,
-    var(--md-sys-color-primary),
+    var(--md-sys-color-primary) 92%,
     var(--md-sys-color-on-primary) 8%
   );
 }
 
+.primary:active:not(:disabled) {
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 88%,
+    var(--md-sys-color-on-primary) 12%
+  );
+}
+
 .secondary {
-  border: 1px solid var(--md-sys-color-primary);
+  border: 1px solid var(--md-sys-color-outline);
   background-color: transparent;
   color: var(--md-sys-color-primary);
 }
 
 .secondary:hover:not(:disabled) {
-  color: var(--md-sys-color-on-primary-container);
-  background-color: var(--md-sys-color-primary-container);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 8%,
+    transparent
+  );
+}
+
+.secondary:active:not(:disabled) {
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 12%,
+    transparent
+  );
 }
 
 .danger {
@@ -51,12 +92,25 @@
 }
 
 .danger:hover:not(:disabled) {
-  background-color: color-mix(in srgb, var(--md-sys-color-error), var(--md-sys-color-on-error) 8%);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-error) 92%,
+    var(--md-sys-color-on-error) 8%
+  );
+}
+
+.danger:active:not(:disabled) {
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-error) 88%,
+    var(--md-sys-color-on-error) 12%
+  );
 }
 
 .content {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
 }
 
 .contentHidden {
@@ -73,4 +127,16 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
+}
+
+@media (min-width: 600px) {
+  .base {
+    padding-inline: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .base {
+    transition: none;
+  }
 }

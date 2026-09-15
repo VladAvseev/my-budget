@@ -1,5 +1,13 @@
 import { CheckIcon, ChevronDownIcon, ChevronRightIcon, ClearIcon } from '@/shared/icons';
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+} from 'react';
 import styles from './VTreeSelect.module.css';
 
 export interface VTreeSelectLeaf {
@@ -77,6 +85,7 @@ export const VTreeSelect = ({
 
   const [collapsed, setCollapsed] = useState<Set<number>>(() => getGroupIndices(items));
   const containerRef = useRef<HTMLDivElement>(null);
+  const labelId = useId();
 
   const hasError = Boolean(error);
   const hasValue = value.length > 0;
@@ -150,19 +159,43 @@ export const VTreeSelect = ({
     }
   };
 
+  const handleTriggerKeyDown = (event: ReactKeyboardEvent) => {
+    if (disabled) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleOpen();
+    } else if (event.key === 'Escape') {
+      setIsOpen(false);
+      onClose?.();
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (!isOpen) {
+        setIsOpen(true);
+        onOpen?.();
+      }
+    }
+  };
+
   return (
     <div
       ref={containerRef}
       className={`${styles.root}${className ? ` ${className}` : ''}`}
       style={style}
     >
-      {label && <label className={styles.label}>{label}</label>}
+      {label && (
+        <label id={labelId} className={styles.label}>
+          {label}
+        </label>
+      )}
       <div
         role="combobox"
         aria-expanded={isOpen}
         aria-invalid={hasError}
         aria-haspopup="tree"
+        aria-labelledby={label ? labelId : undefined}
+        tabIndex={disabled ? -1 : 0}
         onClick={toggleOpen}
+        onKeyDown={handleTriggerKeyDown}
         className={styles.trigger}
         data-has-value={hasValue ? 'true' : undefined}
         data-open={isOpen ? 'true' : undefined}
@@ -183,10 +216,7 @@ export const VTreeSelect = ({
               <ClearIcon size={16} color="currentColor" />
             </button>
           )}
-          <span
-            className={styles.chevron}
-            style={{ transform: isOpen ? 'rotate(180deg)' : 'none' }}
-          >
+          <span className={styles.chevron}>
             <ChevronDownIcon size={16} color="currentColor" />
           </span>
         </span>
@@ -253,9 +283,16 @@ const TreeItem = ({
       <div
         role="treeitem"
         aria-selected={isSelected}
+        tabIndex={0}
         onClick={() => onToggleLeaf(item.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onToggleLeaf(item.value);
+          }
+        }}
         className={styles.leaf}
-        style={{ paddingLeft: `calc(12px + ${level * 32}px)` }}
+        style={{ '--level': level } as CSSProperties}
         data-selected={isSelected ? 'true' : undefined}
       >
         {item.prefix}
@@ -273,24 +310,33 @@ const TreeItem = ({
 
   return (
     <div className={styles.group} data-collapsed={isCollapsed ? 'true' : undefined}>
-      <div className={styles.groupRow} style={{ paddingLeft: `calc(12px + ${level * 32}px)` }}>
+      <div
+        className={styles.groupRow}
+        style={{ '--level': level } as CSSProperties}
+        data-collapsed={isCollapsed ? 'true' : undefined}
+      >
         <button
           type="button"
           className={styles.groupArrow}
           onClick={onToggleCollapse}
           aria-label={isCollapsed ? 'Развернуть' : 'Свернуть'}
+          aria-expanded={!isCollapsed}
         >
-          <span
-            className={styles.arrowIcon}
-            style={{ transform: isCollapsed ? 'none' : 'rotate(90deg)' }}
-          >
+          <span className={styles.arrowIcon}>
             <ChevronRightIcon size={14} color="currentColor" />
           </span>
         </button>
         <div
           role="treeitem"
           aria-selected={groupState !== 'none'}
+          tabIndex={0}
           onClick={() => onToggleGroup(item)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onToggleGroup(item);
+            }
+          }}
           className={styles.groupLabel}
           data-selected={groupState === 'selected' ? 'true' : undefined}
           data-indeterminate={groupState === 'indeterminate' ? 'true' : undefined}

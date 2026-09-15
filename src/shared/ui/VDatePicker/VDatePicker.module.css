@@ -1,14 +1,22 @@
+/* VDatePicker — M3 Expressive date field + calendar (web-адаптация).
+ * Триггер как outlined-поле 48px; календарь — surface-container-low, дни pill 40px. */
+
 .root {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
 }
 
 .label {
-  font-size: var(--md-sys-typescale-label-medium-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
+}
+
+.root:has(.trigger[data-invalid='true']) .label {
+  color: var(--md-sys-color-error);
 }
 
 .trigger {
@@ -16,15 +24,24 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 8px;
-  border-radius: var(--md-sys-shape-corner-small);
-  font-size: var(--md-sys-typescale-body-medium-size);
-  background-color: var(--md-sys-color-surface-container);
-  color: var(--md-sys-color-on-surface-variant);
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 12px 12px 16px;
   border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-large);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
+  font-family: inherit;
+  text-align: left;
   cursor: pointer;
   user-select: none;
-  transition: border-color var(--md-sys-motion-standard-fast-effects);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects),
+    box-shadow var(--md-sys-motion-expressive-fast-effects);
 }
 
 .trigger[data-has-value='true'] {
@@ -33,6 +50,7 @@
 
 .trigger[data-open='true'] {
   border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 1px var(--md-sys-color-primary);
 }
 
 .trigger[data-invalid='true'] {
@@ -43,62 +61,86 @@
   border-color: var(--md-sys-color-on-surface-variant);
 }
 
+.trigger:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
 .trigger[data-disabled='true'] {
-  background-color: transparent;
+  border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 4%, transparent);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .triggerText {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;
+  min-width: 0;
 }
 
 .triggerActions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 .clearButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border: none;
-  border-radius: var(--md-sys-shape-corner-extra-small);
+  border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
   color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  transition: background-color var(--md-sys-motion-standard-fast-effects);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .clearButton:hover {
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface-variant) 8%,
+    transparent
+  );
+  color: var(--md-sys-color-on-surface);
+}
+
+.clearButton:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .calendarIcon {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .error {
-  font-size: var(--md-sys-typescale-body-small-size);
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
   color: var(--md-sys-color-error);
 }
 
 .dropdown {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   margin-top: 4px;
-  padding: 12px;
-  background-color: var(--md-sys-color-surface-container);
+  padding: 16px;
+  background-color: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-medium);
-  box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
+  animation: vdatepicker-in var(--md-sys-motion-expressive-fast-spatial);
 }
 
 .navRow {
@@ -109,111 +151,163 @@
 }
 
 .navButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   border: none;
-  border-radius: var(--md-sys-shape-corner-extra-small);
+  border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
-  color: var(--md-sys-color-on-surface);
+  color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  transition: background-color var(--md-sys-motion-standard-fast-effects);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .navButton:hover {
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface-variant) 8%,
+    transparent
+  );
+  color: var(--md-sys-color-on-surface);
+}
+
+.navButton:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .monthButton {
-  padding: 0;
+  padding: 8px 12px;
   border: none;
+  border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
-  font-size: var(--md-sys-typescale-body-medium-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-title-small);
+  letter-spacing: var(--md-sys-typescale-title-small-tracking);
   color: var(--md-sys-color-on-surface);
   cursor: pointer;
+  transition: background-color var(--md-sys-motion-expressive-fast-effects);
+}
+
+.monthButton:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) 8%,
+    transparent
+  );
+}
+
+.monthButton:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .calendarGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
+  justify-items: center;
 }
 
 .weekday {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 28px;
-  font-size: var(--md-sys-typescale-body-small-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  width: 40px;
+  height: 32px;
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .day {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  border-radius: var(--md-sys-shape-corner-extra-small);
-  font-size: var(--md-sys-typescale-body-medium-size);
-  font-weight: var(--md-sys-typescale-body-medium-weight);
+  border: 1px solid transparent;
+  border-radius: var(--md-sys-shape-corner-full);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   color: var(--md-sys-color-on-surface);
   background-color: transparent;
-  border: none;
   cursor: pointer;
   transition:
-    background-color var(--md-sys-motion-standard-fast-effects),
-    color var(--md-sys-motion-standard-fast-effects);
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects);
 }
 
-.day:hover:not(.daySelected) {
-  color: var(--md-sys-color-on-primary-container);
+.day:hover:not(.daySelected):not(:disabled) {
   background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.day:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .daySelected {
   color: var(--md-sys-color-on-primary);
   background-color: var(--md-sys-color-primary);
-  font-weight: var(--md-sys-typescale-label-large-weight);
-}
-
-.dayToday {
-  border: 1px solid var(--md-sys-color-primary);
+  font: var(--md-sys-typescale-body-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-medium-emphasized-tracking);
 }
 
 .dayToday:not(.daySelected) {
+  border-color: var(--md-sys-color-primary);
   color: var(--md-sys-color-primary);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-body-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-medium-emphasized-tracking);
 }
 
 .dayOutOfMonth {
-  opacity: 0.5;
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.dayOutOfMonth.dayToday {
-  color: var(--md-sys-color-primary);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 55%, transparent);
 }
 
 .dayDisabled {
-  opacity: 0.3;
-  color: var(--md-sys-color-on-surface-variant);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
   cursor: not-allowed;
   background-color: transparent;
 }
 
 .dayDisabled:hover {
   background-color: transparent;
-  color: var(--md-sys-color-on-surface-variant);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 
 .dayDisabled.dayToday {
   border-color: var(--md-sys-color-outline-variant);
+}
+
+@keyframes vdatepicker-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .clearButton,
+  .navButton,
+  .monthButton,
+  .day {
+    transition: none;
+  }
+
+  .dropdown {
+    animation: none;
+  }
 }

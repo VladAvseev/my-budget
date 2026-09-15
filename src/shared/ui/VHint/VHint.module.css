@@ -1,3 +1,6 @@
+/* VHint — M3 Expressive plain tooltip (web-адаптация).
+ * Инверсная пара, показ по hover и focus-within (клавиатура/touch через фокус). */
+
 .wrapper {
   position: relative;
   display: inline-flex;
@@ -9,84 +12,91 @@
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity var(--md-sys-motion-standard-fast-effects),
-    visibility 0.15s ease;
-  background-color: var(--md-sys-color-surface-container);
-  border: 1px solid var(--md-sys-color-outline-variant);
+    opacity var(--md-sys-motion-expressive-fast-effects),
+    visibility var(--md-sys-motion-expressive-fast-effects);
+  background-color: var(--md-sys-color-inverse-surface);
   border-radius: var(--md-sys-shape-corner-small);
-  padding: 4px 8px;
-  font-size: var(--md-sys-typescale-body-small-size);
-  color: var(--md-sys-color-on-surface);
+  padding: 8px 12px;
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+  color: var(--md-sys-color-inverse-on-surface);
   width: fit-content;
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
-  z-index: 10;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  z-index: 60;
 }
 
-.wrapper:hover > .tooltip {
+.wrapper:hover > .tooltip,
+.wrapper:focus-within > .tooltip {
   opacity: 1;
   visibility: visible;
 }
 
 .top-start {
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + 8px);
   left: 0;
 }
 
 .top-center {
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
 }
 
 .top-end {
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + 8px);
   right: 0;
 }
 
 .right-start {
-  left: calc(100% + 4px);
+  left: calc(100% + 8px);
   top: 0;
 }
 
 .right-center {
-  left: calc(100% + 4px);
+  left: calc(100% + 8px);
   top: 50%;
   transform: translateY(-50%);
 }
 
 .right-end {
-  left: calc(100% + 4px);
+  left: calc(100% + 8px);
   bottom: 0;
 }
 
 .bottom-start {
-  top: calc(100% + 4px);
+  top: calc(100% + 8px);
   left: 0;
 }
 
 .bottom-center {
-  top: calc(100% + 4px);
+  top: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
 }
 
 .bottom-end {
-  top: calc(100% + 4px);
+  top: calc(100% + 8px);
   right: 0;
 }
 
 .left-start {
-  right: calc(100% + 4px);
+  right: calc(100% + 8px);
   top: 0;
 }
 
 .left-center {
-  right: calc(100% + 4px);
+  right: calc(100% + 8px);
   top: 50%;
   transform: translateY(-50%);
 }
 
 .left-end {
-  right: calc(100% + 4px);
+  right: calc(100% + 8px);
   bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    transition: none;
+  }
 }

@@ -24,7 +24,7 @@ export const VPageHeader = ({
     >
       <div className={styles.left}>
         {onBack && <BackButton ariaLabel={backAriaLabel ?? 'Назад'} onClick={onBack} />}
-        <div className={styles.title}>{title}</div>
+        <h1 className={styles.title}>{title}</h1>
       </div>
     </div>
   );

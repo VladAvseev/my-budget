@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { cloneElement, isValidElement, useId, type CSSProperties, type ReactNode } from 'react';
 import styles from './VHint.module.css';
 
 export type VHintPosition =
@@ -41,11 +41,26 @@ export const VHint = ({
     minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth,
     maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth,
   };
+  const tooltipId = useId();
+
+  // Связываем триггер с тултипом для скринридеров, не меняя DOM-структуру.
+  const describedChildren = isValidElement<{ 'aria-describedby'?: string }>(children)
+    ? cloneElement(children, {
+        'aria-describedby': [children.props['aria-describedby'], tooltipId]
+          .filter(Boolean)
+          .join(' '),
+      })
+    : children;
 
   return (
     <span className={`${styles.wrapper}${className ? ` ${className}` : ''}`} style={style}>
-      {children}
-      <span className={`${styles.tooltip} ${styles[position]}`} role="tooltip" style={tooltipStyle}>
+      {describedChildren}
+      <span
+        id={tooltipId}
+        className={`${styles.tooltip} ${styles[position]}`}
+        role="tooltip"
+        style={tooltipStyle}
+      >
         {hint}
       </span>
     </span>

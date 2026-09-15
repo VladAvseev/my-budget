@@ -1,9 +1,12 @@
+/* VAccordion — M3 Expressive expansion (web-адаптация).
+ * Base = compact: filled surface-container-low, radius medium.
+ * Поворот шеврона и высота тела управляются из TSX через data-open на корне. */
+
 .accordion {
   width: 100%;
-  border-radius: var(--md-sys-shape-corner-small);
-  background-color: var(--md-sys-color-surface-container);
-  box-shadow: 0 4px 6px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
-  transition: background-color var(--md-sys-motion-standard-fast-effects);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background-color: var(--md-sys-color-surface-container-low);
+  transition: background-color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .accordion:hover {
@@ -14,8 +17,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   width: 100%;
+  min-height: 56px;
+  padding: 8px 8px 8px 16px;
+  border-radius: var(--md-sys-shape-corner-medium);
   cursor: pointer;
+}
+
+.header:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .header[data-disabled='true'] {
@@ -25,57 +37,106 @@
 .label {
   flex: 1;
   min-width: 0;
-  padding: 8px 0 8px 8px;
-  font-size: var(--md-sys-typescale-label-large-size);
+  font: var(--md-sys-typescale-title-small);
+  letter-spacing: var(--md-sys-typescale-title-small-tracking);
   color: var(--md-sys-color-on-surface);
 }
 
 .label[data-disabled='true'] {
-  opacity: 0.5;
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 
 .chevron {
   flex-shrink: 0;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  margin: 8px;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0;
   padding: 0;
   border: none;
+  border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
   font: inherit;
   cursor: pointer;
   color: var(--md-sys-color-on-surface-variant);
-  transition: color var(--md-sys-motion-standard-fast-effects);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects);
+}
+
+.chevron:hover:not(:disabled) {
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface-variant) 8%,
+    transparent
+  );
+}
+
+.chevron:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .chevron:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.38;
 }
 
 .accordion:hover .chevron:not(:disabled) {
   color: var(--md-sys-color-primary);
 }
 
+.chevronIcon {
+  display: inline-flex;
+  align-items: center;
+  transition: transform var(--md-sys-motion-expressive-fast-spatial);
+}
+
+.accordion[data-open='true'] .chevronIcon {
+  transform: rotate(180deg);
+}
+
 .body {
   height: 0;
   overflow: hidden;
-  transition: height var(--md-sys-motion-standard-fast-spatial);
+  transition: height var(--md-sys-motion-expressive-default-spatial);
 }
 
 .bodyInner {
-  padding: 8px;
-  font-size: var(--md-sys-typescale-body-medium-size);
+  padding: 0 16px 16px;
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
-  border-radius: 0 0 var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small);
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
 }
 
-@media (min-width: 601px) {
-  .label {
-    padding-left: 12px;
+.body[data-open='true'] .bodyInner {
+  opacity: 1;
+}
+
+@media (min-width: 600px) {
+  .header {
+    padding-left: 20px;
   }
 
   .bodyInner {
-    padding: 8px 12px 12px 12px;
+    padding: 0 20px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion,
+  .chevron,
+  .chevronIcon,
+  .body,
+  .bodyInner {
+    transition: none;
+  }
+
+  .bodyInner {
+    opacity: 1;
   }
 }

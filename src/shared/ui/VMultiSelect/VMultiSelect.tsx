@@ -1,5 +1,13 @@
 import { CheckIcon, ChevronDownIcon, ClearIcon } from '@/shared/icons';
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+} from 'react';
 import styles from './VMultiSelect.module.css';
 
 export interface VMultiSelectOption {
@@ -43,6 +51,7 @@ export const VMultiSelect = ({
 }: VMultiSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const labelId = useId();
 
   const hasError = Boolean(error);
   const hasValue = value.length > 0;
@@ -89,19 +98,43 @@ export const VMultiSelect = ({
     onChange?.([]);
   };
 
+  const handleTriggerKeyDown = (event: ReactKeyboardEvent) => {
+    if (disabled) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleOpen();
+    } else if (event.key === 'Escape') {
+      setIsOpen(false);
+      onClose?.();
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (!isOpen) {
+        setIsOpen(true);
+        onOpen?.();
+      }
+    }
+  };
+
   return (
     <div
       ref={containerRef}
       className={`${styles.root}${className ? ` ${className}` : ''}`}
       style={style}
     >
-      {label && <label className={styles.label}>{label}</label>}
+      {label && (
+        <label id={labelId} className={styles.label}>
+          {label}
+        </label>
+      )}
       <div
         role="combobox"
         aria-expanded={isOpen}
         aria-invalid={hasError}
         aria-haspopup="listbox"
+        aria-labelledby={label ? labelId : undefined}
+        tabIndex={disabled ? -1 : 0}
         onClick={toggleOpen}
+        onKeyDown={handleTriggerKeyDown}
         className={styles.trigger}
         data-has-value={hasValue ? 'true' : undefined}
         data-open={isOpen ? 'true' : undefined}
@@ -122,10 +155,7 @@ export const VMultiSelect = ({
               <ClearIcon size={16} color="currentColor" />
             </button>
           )}
-          <span
-            className={styles.chevron}
-            style={{ transform: isOpen ? 'rotate(180deg)' : 'none' }}
-          >
+          <span className={styles.chevron}>
             <ChevronDownIcon size={16} color="currentColor" />
           </span>
         </span>
@@ -168,7 +198,14 @@ const Option = ({ option, isSelected, onClick }: OptionProps) => {
     <div
       role="option"
       aria-selected={isSelected}
+      tabIndex={0}
       onClick={onClick}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onClick();
+        }
+      }}
       className={styles.option}
       data-selected={isSelected ? 'true' : undefined}
     >

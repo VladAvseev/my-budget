@@ -82,7 +82,7 @@ export const DonutChart = ({
   const midR = (outerR + innerR) / 2;
 
   const handleSegmentEnter = useCallback(
-    (_e: React.MouseEvent, segment: DonutSegment) => {
+    (segment: DonutSegment) => {
       const midAngleDeg = ((segment.start + segment.end) / 2 / 100) * FULL_CIRCLE;
       const midPoint = polarToCartesian(cx, cy, midR, midAngleDeg);
 
@@ -115,8 +115,13 @@ export const DonutChart = ({
               className={styles.segment}
               d={d}
               fill={segment.color}
-              onMouseEnter={(e) => handleSegmentEnter(e, segment)}
+              tabIndex={0}
+              role="img"
+              aria-label={`${segment.label}: ${segment.percent.toFixed(1)}%`}
+              onMouseEnter={() => handleSegmentEnter(segment)}
               onMouseLeave={handleSegmentLeave}
+              onFocus={() => handleSegmentEnter(segment)}
+              onBlur={handleSegmentLeave}
             />
           );
         })}
