@@ -40,3 +40,5 @@ export {
   type BootstrapProfile,
   type UseBootstrapResponse,
 } from './useBootstrap';
+
+export { useGoals, goalsQueryKey } from './useGoals';

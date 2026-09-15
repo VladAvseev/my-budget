@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { selectedDisplayCurrencyAtom } from './atoms/capital';
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
+import { GoalsSection } from './components/GoalsSection';
 import { CapitalGrowthCard } from './components/CapitalGrowthCard';
 import { CapitalStructureCard } from './components/CapitalStructureCard';
 
@@ -27,13 +28,8 @@ export const Page: React.FC = () => {
   const userId = user?.id ?? '';
   const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
   const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
-  const {
-    defaultCurrency,
-    isCurrencyDisabled,
-    displayCurrency,
-    rates,
-    displaySymbol,
-  } = useDisplayCurrency();
+  const { defaultCurrency, isCurrencyDisabled, displayCurrency, rates, displaySymbol } =
+    useDisplayCurrency();
 
   useEffect(() => {
     if (defaultCurrency) {
@@ -97,6 +93,7 @@ export const Page: React.FC = () => {
         title="Структура капитала"
         currency={{ displayCurrency, defaultCurrency, rates, displaySymbol }}
       />
+      <GoalsSection />
     </div>
   );
 };

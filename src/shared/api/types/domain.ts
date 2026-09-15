@@ -98,3 +98,14 @@ export interface Account {
   created_at: string;
   updated_at: string;
 }
+
+/** Цель по счёту: зеркало GoalDto сервера. */
+export interface Goal {
+  id: string;
+  user_id: string;
+  account_id: string;
+  amount: number;
+  target_date: string | null;
+  created_at: string;
+  updated_at: string;
+}

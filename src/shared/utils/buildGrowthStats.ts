@@ -31,10 +31,10 @@ const CURRENT_PERIOD_LABELS: Record<GrowthAggregation, string> = {
   Y: 'За текущий год',
 };
 
-export const buildMonthlyStats = (data: ChartPoint[]): MonthlyStats | null => {
-  if (data.length < 2) return null;
+export const buildMonthlyStats = (data: ChartPoint[], base = 0): MonthlyStats | null => {
+  if (data.length === 0) return null;
 
-  let absSum = data[0].value;
+  let absSum = data[0].value - base;
   for (let i = 1; i < data.length; i++) {
     absSum += data[i].value - data[i - 1].value;
   }
@@ -119,6 +119,26 @@ export interface BuildGrowthStatsOptions {
   now?: Date;
 }
 
+/** Единое окно прогноза и графика: только полные месяцы, без стартового капитала. */
+export const buildRecentMonthlyGrowth = (
+  data: ChartPoint[],
+  base = 0,
+  options: BuildGrowthStatsOptions = {},
+): { avg: number | null; months: number } => {
+  const completed = trimLeadingPartialPeriod(
+    trimIncompletePeriod(data, getPeriodEnd('M'), options.now ?? new Date()),
+    'M',
+    options.firstActivityDate,
+  ).slice(-RECENT_WINDOW_MONTHS);
+  if (!completed.length) return { avg: null, months: 0 };
+  const firstIndex = data.indexOf(completed[0]);
+  const previous = firstIndex > 0 ? data[firstIndex - 1].value : base;
+  return {
+    avg: (completed[completed.length - 1].value - previous) / completed.length,
+    months: completed.length,
+  };
+};
+
 export const buildGrowthStats = (
   filteredData: ChartPoint[],
   aggregation: GrowthAggregation = 'M',
@@ -135,16 +155,23 @@ export const buildGrowthStats = (
     options.firstActivityDate,
   );
 
+  const firstIndex = trimmed.length ? filteredData.indexOf(trimmed[0]) : 0;
+  const trimmedBase = firstIndex > 0 ? filteredData[firstIndex - 1].value : base;
   // Строка «за последний год» считается только для помесячной группировки.
   const recent =
-    aggregation === 'M' ? buildWindowedMonthlyStats(trimmed, RECENT_WINDOW_MONTHS) : null;
+    aggregation === 'M' && trimmed.length > RECENT_WINDOW_MONTHS
+      ? {
+          abs: buildRecentMonthlyGrowth(filteredData, base, options).avg!,
+          pct: buildWindowedMonthlyStats(trimmed, RECENT_WINDOW_MONTHS)?.pct ?? null,
+        }
+      : null;
 
   if (mode === 'period') {
     return {
       monthly:
         trimmed.length > 0
           ? {
-              abs: (trimmed[trimmed.length - 1].value - base) / trimmed.length,
+              abs: (trimmed[trimmed.length - 1].value - trimmedBase) / trimmed.length,
               pct: null,
             }
           : null,
@@ -165,7 +192,7 @@ export const buildGrowthStats = (
   }
 
   return {
-    monthly: buildMonthlyStats(trimmed),
+    monthly: buildMonthlyStats(trimmed, trimmedBase),
     recent,
     periodLabel: AGGREGATION_LABELS[aggregation],
     currentPeriod:

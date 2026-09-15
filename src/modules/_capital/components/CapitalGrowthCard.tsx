@@ -7,10 +7,7 @@ import {
   type ChartPoint,
   type GrowthAggregation,
 } from '@/shared/utils/chartPoints';
-import {
-  buildCapitalChartData,
-  type GrowthChartMode,
-} from '@/shared/utils/buildCapitalChartData';
+import { buildCapitalChartData, type GrowthChartMode } from '@/shared/utils/buildCapitalChartData';
 import { buildGrowthStats } from '@/shared/utils/buildGrowthStats';
 import { VGrowthDynamicsCard } from '@/shared/ui/VGrowthDynamicsCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';

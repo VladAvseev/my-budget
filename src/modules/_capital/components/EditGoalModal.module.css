@@ -1,0 +1,27 @@
+.accountRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.accountLabel {
+  font-size: var(--font-size-m);
+  color: var(--color-text-secondary);
+}
+
+.accountValue {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  font-size: var(--font-size-m);
+  color: var(--color-text-primary);
+  min-width: 0;
+}
+
+.accountDot {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  border-radius: var(--radius-round);
+  background-color: var(--color-border);
+}
