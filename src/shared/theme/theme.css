@@ -192,99 +192,99 @@
 /* ---------- Light theme: TonalSpot palette ---------- */
 :root,
 [data-theme='light'] {
-  --md-sys-color-primary: #346484;
-  --md-sys-color-on-primary: #f5f9ff;
-  --md-sys-color-primary-container: #a8d7fd;
-  --md-sys-color-on-primary-container: #164c6b;
-  --md-sys-color-secondary: #50616f;
-  --md-sys-color-on-secondary: #f5f9ff;
-  --md-sys-color-secondary-container: #d3e5f5;
-  --md-sys-color-on-secondary-container: #435461;
-  --md-sys-color-tertiary: #585c85;
-  --md-sys-color-on-tertiary: #fbf8ff;
-  --md-sys-color-tertiary-container: #cbcefe;
-  --md-sys-color-on-tertiary-container: #41446c;
-  --md-sys-color-error: #a83836;
-  --md-sys-color-on-error: #fff7f6;
-  --md-sys-color-error-container: #fa746f;
-  --md-sys-color-on-error-container: #6e0a12;
-  --md-sys-color-surface: #f8f9fd;
-  --md-sys-color-surface-dim: #d4dbe2;
-  --md-sys-color-surface-bright: #f8f9fd;
-  --md-sys-color-surface-container-lowest: #ffffff;
-  --md-sys-color-surface-container-low: #f1f4f9;
-  --md-sys-color-surface-container: #eaeef4;
-  --md-sys-color-surface-container-high: #e4e9ef;
-  --md-sys-color-surface-container-highest: #dde3eb;
-  --md-sys-color-on-surface: #2d3339;
-  --md-sys-color-on-surface-variant: #596066;
-  --md-sys-color-outline: #757b82;
-  --md-sys-color-outline-variant: #acb3ba;
-  --md-sys-color-inverse-surface: #0b0f11;
-  --md-sys-color-inverse-on-surface: #9b9da1;
-  --md-sys-color-inverse-primary: #a8d7fd;
-  --md-sys-color-surface-tint: #346484;
-  --md-sys-color-shadow: #000000;
-  --md-sys-color-scrim: #000000;
-  --md-sys-color-primary-fixed: #a8d7fd;
-  --md-sys-color-primary-fixed-dim: #9bc9ee;
-  --md-sys-color-on-primary-fixed: #003854;
-  --md-sys-color-on-primary-fixed-variant: #235575;
-  --md-sys-color-secondary-fixed: #d3e5f5;
-  --md-sys-color-secondary-fixed-dim: #c5d7e7;
-  --md-sys-color-on-secondary-fixed: #31414e;
-  --md-sys-color-on-secondary-fixed-variant: #4d5d6b;
-  --md-sys-color-tertiary-fixed: #cbcefe;
-  --md-sys-color-tertiary-fixed-dim: #bdc0ef;
-  --md-sys-color-on-tertiary-fixed: #2d3157;
-  --md-sys-color-on-tertiary-fixed-variant: #4a4d76;
+  --md-sys-color-primary: #346484; /* главные действия */
+  --md-sys-color-on-primary: #f5f9ff; /* текст на primary */
+  --md-sys-color-primary-container: #a8d7fd; /* акцентные контейнеры, FAB */
+  --md-sys-color-on-primary-container: #164c6b; /* текст на акцентном фоне */
+  --md-sys-color-secondary: #50616f; /* вторичные действия */
+  --md-sys-color-on-secondary: #f5f9ff; /* текст на secondary */
+  --md-sys-color-secondary-container: #d3e5f5; /* тональные кнопки, чипы */
+  --md-sys-color-on-secondary-container: #435461; /* текст тональных элементов */
+  --md-sys-color-tertiary: #585c85; /* точечный доп-акцент */
+  --md-sys-color-on-tertiary: #fbf8ff; /* текст на tertiary */
+  --md-sys-color-tertiary-container: #cbcefe; /* фон доп-акцента, аватары */
+  --md-sys-color-on-tertiary-container: #41446c; /* текст на доп-фоне */
+  --md-sys-color-error: #a83836; /* ошибки и destructive */
+  --md-sys-color-on-error: #fff7f6; /* текст на ошибке */
+  --md-sys-color-error-container: #fa746f; /* фон ошибки */
+  --md-sys-color-on-error-container: #6e0a12; /* текст на фоне ошибки */
+  --md-sys-color-surface: #f8f9fd; /* базовая поверхность */
+  --md-sys-color-surface-dim: #d4dbe2; /* приглушённый край */
+  --md-sys-color-surface-bright: #f8f9fd; /* яркий край */
+  --md-sys-color-surface-container-lowest: #ffffff; /* самый низкий уровень */
+  --md-sys-color-surface-container-low: #f1f4f9; /* низкий уровень, elevated-кнопки */
+  --md-sys-color-surface-container: #eaeef4; /* базовый контейнер */
+  --md-sys-color-surface-container-high: #e4e9ef; /* повышенный уровень */
+  --md-sys-color-surface-container-highest: #dde3eb; /* самый высокий уровень */
+  --md-sys-color-on-surface: #2d3339; /* основной текст */
+  --md-sys-color-on-surface-variant: #596066; /* вторичный текст и иконки */
+  --md-sys-color-outline: #757b82; /* значимые границы, поля */
+  --md-sys-color-outline-variant: #acb3ba; /* разделители */
+  --md-sys-color-inverse-surface: #0b0f11; /* инверсный фон, снекбар */
+  --md-sys-color-inverse-on-surface: #9b9da1; /* текст инверсного фона */
+  --md-sys-color-inverse-primary: #a8d7fd; /* акцент на инверсии */
+  --md-sys-color-surface-tint: #346484; /* оттенок тонирования */
+  --md-sys-color-shadow: #000000; /* тени */
+  --md-sys-color-scrim: #000000; /* затемнение модалок */
+  --md-sys-color-primary-fixed: #a8d7fd; /* фиксированный primary вне темы */
+  --md-sys-color-primary-fixed-dim: #9bc9ee; /* приглушённый фикс. primary */
+  --md-sys-color-on-primary-fixed: #003854; /* текст на фикс. primary */
+  --md-sys-color-on-primary-fixed-variant: #235575; /* вторичный текст фикса */
+  --md-sys-color-secondary-fixed: #d3e5f5; /* фиксированный secondary вне темы */
+  --md-sys-color-secondary-fixed-dim: #c5d7e7; /* приглушённый фикс. secondary */
+  --md-sys-color-on-secondary-fixed: #31414e; /* текст на фикс. secondary */
+  --md-sys-color-on-secondary-fixed-variant: #4d5d6b; /* вторичный текст фикса */
+  --md-sys-color-tertiary-fixed: #cbcefe; /* фиксированный tertiary вне темы */
+  --md-sys-color-tertiary-fixed-dim: #bdc0ef; /* приглушённый фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed: #2d3157; /* текст на фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed-variant: #4a4d76; /* вторичный текст фикса */
 }
 
 [data-theme='dark'] {
-  --md-sys-color-primary: #a8cbe8;
-  --md-sys-color-on-primary: #20435b;
-  --md-sys-color-primary-container: #34566f;
-  --md-sys-color-on-primary-container: #cbe7ff;
-  --md-sys-color-secondary: #b7c9d9;
-  --md-sys-color-on-secondary: #32424f;
-  --md-sys-color-secondary-container: #2d3d4a;
-  --md-sys-color-on-secondary-container: #b0c1d1;
-  --md-sys-color-tertiary: #dcddff;
-  --md-sys-color-on-tertiary: #494d75;
-  --md-sys-color-tertiary-container: #cbcefe;
-  --md-sys-color-on-tertiary-container: #41446c;
-  --md-sys-color-error: #fa746f;
-  --md-sys-color-on-error: #490006;
-  --md-sys-color-error-container: #871f21;
-  --md-sys-color-on-error-container: #ff9993;
-  --md-sys-color-surface: #0b0f11;
-  --md-sys-color-surface-dim: #0b0f11;
-  --md-sys-color-surface-bright: #262d33;
-  --md-sys-color-surface-container-lowest: #000000;
-  --md-sys-color-surface-container-low: #101418;
-  --md-sys-color-surface-container: #151a1f;
-  --md-sys-color-surface-container-high: #1b2025;
-  --md-sys-color-surface-container-highest: #20272c;
-  --md-sys-color-on-surface: #e0e6ee;
-  --md-sys-color-on-surface-variant: #a5acb3;
-  --md-sys-color-outline: #6f767d;
-  --md-sys-color-outline-variant: #42494f;
-  --md-sys-color-inverse-surface: #f8f9fd;
-  --md-sys-color-inverse-on-surface: #525559;
-  --md-sys-color-inverse-primary: #41637c;
-  --md-sys-color-surface-tint: #a8cbe8;
-  --md-sys-color-shadow: #000000;
-  --md-sys-color-scrim: #000000;
-  --md-sys-color-primary-fixed: #bee1ff;
-  --md-sys-color-primary-fixed-dim: #b0d3f0;
-  --md-sys-color-on-primary-fixed: #1b3f57;
-  --md-sys-color-on-primary-fixed-variant: #395b74;
-  --md-sys-color-secondary-fixed: #d3e5f5;
-  --md-sys-color-secondary-fixed-dim: #c5d7e7;
-  --md-sys-color-on-secondary-fixed: #31414e;
-  --md-sys-color-on-secondary-fixed-variant: #4d5d6b;
-  --md-sys-color-tertiary-fixed: #cbcefe;
-  --md-sys-color-tertiary-fixed-dim: #bdc0ef;
-  --md-sys-color-on-tertiary-fixed: #2d3157;
-  --md-sys-color-on-tertiary-fixed-variant: #4a4d76;
+  --md-sys-color-primary: #a8cbe8; /* главные действия */
+  --md-sys-color-on-primary: #20435b; /* текст на primary */
+  --md-sys-color-primary-container: #34566f; /* акцентные контейнеры, FAB */
+  --md-sys-color-on-primary-container: #cbe7ff; /* текст на акцентном фоне */
+  --md-sys-color-secondary: #b7c9d9; /* вторичные действия */
+  --md-sys-color-on-secondary: #32424f; /* текст на secondary */
+  --md-sys-color-secondary-container: #2d3d4a; /* тональные кнопки, чипы */
+  --md-sys-color-on-secondary-container: #b0c1d1; /* текст тональных элементов */
+  --md-sys-color-tertiary: #dcddff; /* точечный доп-акцент */
+  --md-sys-color-on-tertiary: #494d75; /* текст на tertiary */
+  --md-sys-color-tertiary-container: #cbcefe; /* фон доп-акцента, аватары */
+  --md-sys-color-on-tertiary-container: #41446c; /* текст на доп-фоне */
+  --md-sys-color-error: #fa746f; /* ошибки и destructive */
+  --md-sys-color-on-error: #490006; /* текст на ошибке */
+  --md-sys-color-error-container: #871f21; /* фон ошибки */
+  --md-sys-color-on-error-container: #ff9993; /* текст на фоне ошибки */
+  --md-sys-color-surface: #0b0f11; /* базовая поверхность */
+  --md-sys-color-surface-dim: #0b0f11; /* приглушённый край */
+  --md-sys-color-surface-bright: #262d33; /* яркий край */
+  --md-sys-color-surface-container-lowest: #000000; /* самый низкий уровень */
+  --md-sys-color-surface-container-low: #101418; /* низкий уровень, elevated-кнопки */
+  --md-sys-color-surface-container: #151a1f; /* базовый контейнер */
+  --md-sys-color-surface-container-high: #1b2025; /* повышенный уровень */
+  --md-sys-color-surface-container-highest: #20272c; /* самый высокий уровень */
+  --md-sys-color-on-surface: #e0e6ee; /* основной текст */
+  --md-sys-color-on-surface-variant: #a5acb3; /* вторичный текст и иконки */
+  --md-sys-color-outline: #6f767d; /* значимые границы, поля */
+  --md-sys-color-outline-variant: #42494f; /* разделители */
+  --md-sys-color-inverse-surface: #f8f9fd; /* инверсный фон, снекбар */
+  --md-sys-color-inverse-on-surface: #525559; /* текст инверсного фона */
+  --md-sys-color-inverse-primary: #41637c; /* акцент на инверсии */
+  --md-sys-color-surface-tint: #a8cbe8; /* оттенок тонирования */
+  --md-sys-color-shadow: #000000; /* тени */
+  --md-sys-color-scrim: #000000; /* затемнение модалок */
+  --md-sys-color-primary-fixed: #bee1ff; /* фиксированный primary вне темы */
+  --md-sys-color-primary-fixed-dim: #b0d3f0; /* приглушённый фикс. primary */
+  --md-sys-color-on-primary-fixed: #1b3f57; /* текст на фикс. primary */
+  --md-sys-color-on-primary-fixed-variant: #395b74; /* вторичный текст фикса */
+  --md-sys-color-secondary-fixed: #d3e5f5; /* фиксированный secondary вне темы */
+  --md-sys-color-secondary-fixed-dim: #c5d7e7; /* приглушённый фикс. secondary */
+  --md-sys-color-on-secondary-fixed: #31414e; /* текст на фикс. secondary */
+  --md-sys-color-on-secondary-fixed-variant: #4d5d6b; /* вторичный текст фикса */
+  --md-sys-color-tertiary-fixed: #cbcefe; /* фиксированный tertiary вне темы */
+  --md-sys-color-tertiary-fixed-dim: #bdc0ef; /* приглушённый фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed: #2d3157; /* текст на фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed-variant: #4a4d76; /* вторичный текст фикса */
 }
