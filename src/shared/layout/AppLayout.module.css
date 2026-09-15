@@ -148,7 +148,7 @@
 }
 
 /* ---------- Desktop: одна строка «лого — навигация — капитал/профиль» ---------- */
-/* Рендерится только при isDesktop (min-width: 1024px в useBreakpoint),
+/* Рендерится только при isDesktop (min-width: 1360px в useBreakpoint),
    поэтому это отдельная ветка после mobile-базы, а не override. */
 
 .desktopRoot {
@@ -172,7 +172,7 @@
   align-items: center;
   gap: var(--space-l);
   width: 100%;
-  max-width: 1280px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: var(--space-s) var(--space-xl);
 }
@@ -346,7 +346,7 @@
 
 .desktopContent {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: var(--space-xl);
 }

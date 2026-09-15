@@ -46,7 +46,7 @@
 
 /* В desktop-шапке бейдж стоит у правого края: поповер прижимаем вправо,
    чтобы не вылезал за вьюпорт. Mobile-разметка не меняется. */
-@media (min-width: 1024px) {
+@media (min-width: 1360px) {
   .popover {
     left: auto;
     right: 0;

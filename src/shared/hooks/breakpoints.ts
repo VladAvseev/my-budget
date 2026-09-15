@@ -1,1 +1,4 @@
-export const breakpoints = { sm: 640, md: 768, lg: 1024, xl: 1280 } as const;
+// lg=1360: ширина desktop-шапки в худшем кейсе (админ, ник 20 символов,
+// капитал −123 456 789,12) — ~1295px по замерам advances Roboto + 3% запас.
+// Порог с запасом: 1360. xl поднят, чтобы шкала осталась упорядоченной.
+export const breakpoints = { sm: 640, md: 768, lg: 1360, xl: 1600 } as const;
