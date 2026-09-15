@@ -14,7 +14,6 @@ import { VToggle } from '@/shared/ui/VToggle';
 import { useTheme } from '@/shared/theme';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { formatDisplay, getErrorMessage } from '@/shared/utils';
-import commonStyles from '@/shared/styles/common.module.css';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -76,44 +75,54 @@ export const AccountCard = () => {
   };
 
   return (
-    <VCard>
-      <div className={commonStyles.columnL}>
-        <div className={commonStyles.titleXl}>Аккаунт</div>
-
-        <div className={styles.accountHeader}>
-          <div className={commonStyles.avatar}>{initial}</div>
-          <div className={styles.accountInfo}>
-            <span className={commonStyles.infoLabel}>Логин</span>
-            <span className={styles.accountLogin}>{login}</span>
-            {createdAt && <span className={commonStyles.infoLabel}>На сайте с {createdAt}</span>}
+    <VCard className={styles.card}>
+      <div className={styles.root}>
+        <div className={styles.hero}>
+          <div className={styles.heroMain}>
+            <div className={styles.avatar} aria-hidden="true">
+              {initial}
+            </div>
+            <div className={styles.heroText}>
+              <span className={styles.heroLabel}>Логин</span>
+              <h2 className={styles.login}>{login}</h2>
+              {createdAt && <span className={styles.heroMeta}>На сайте с {createdAt}</span>}
+            </div>
           </div>
         </div>
 
-        <VToggle
-          label="Тёмная тема"
-          checked={theme === 'dark'}
-          onChange={(checked) => setTheme(checked ? 'dark' : 'light')}
-        />
+        <section aria-label="Оформление и пароль" className={styles.settingsGroup}>
+          <VToggle
+            className={styles.themeToggle}
+            label={
+              <span className={styles.themeText}>
+                <span className={styles.themeLabel}>Тёмная тема</span>
+                <span className={styles.themeHint}>Светлое или тёмное оформление приложения</span>
+              </span>
+            }
+            checked={theme === 'dark'}
+            onChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+          />
 
-        <div className={styles.actionsRow}>
-          <VButton variant="secondary" onClick={() => setIsChangePasswordOpen(true)}>
-            Сменить пароль
-          </VButton>
-          <VButton
-            variant="danger"
-            onClick={() => setIsLogoutConfirmOpen(true)}
-            isDisabled={isSigningOut}
-            className={styles.logoutButton}
-          >
-            Выйти
-          </VButton>
-        </div>
+          <div className={styles.quickActions}>
+            <VButton variant="secondary" onClick={() => setIsChangePasswordOpen(true)}>
+              Сменить пароль
+            </VButton>
+            <VButton
+              variant="danger"
+              onClick={() => setIsLogoutConfirmOpen(true)}
+              isDisabled={isSigningOut}
+            >
+              Выйти
+            </VButton>
+          </div>
+        </section>
 
-        <div className={commonStyles.columnL}>
-          <span className={commonStyles.infoLabel}>
+        <section aria-label="Опасная зона" className={styles.danger}>
+          <h3 className={styles.dangerTitle}>Опасная зона</h3>
+          <p className={styles.dangerHint}>
             Отзыв согласия или удаление аккаунта обезличивают все данные безвозвратно (в юридическом
             журнале остаются только факт и дата событий).
-          </span>
+          </p>
           {consentError && (
             <VBanner
               type="error"
@@ -122,7 +131,7 @@ export const AccountCard = () => {
               onClose={() => setConsentError(undefined)}
             />
           )}
-          <div className={styles.actionsRow}>
+          <div className={styles.dangerActions}>
             <VButton
               variant="secondary"
               onClick={() => setIsRevokeConfirmOpen(true)}
@@ -138,13 +147,13 @@ export const AccountCard = () => {
               Удалить аккаунт
             </VButton>
           </div>
-        </div>
+        </section>
 
         {/* Правовые документы (п.2 требований): все тексты живут в БД, отсюда
             только ссылки. Версия принятого согласия ведёт на историческую
             версию политики — «какой текст я видел, когда соглашался». */}
         <div className={styles.legalSection}>
-          <span className={commonStyles.infoLabel}>Правовые документы</span>
+          <span className={styles.legalTitle}>Правовые документы</span>
           <LegalLinks className={styles.legalNav} itemClassName={styles.legalLink} />
           {consentStatus?.grantedVersion && (
             <span className={styles.consentLine}>

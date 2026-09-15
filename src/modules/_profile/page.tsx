@@ -1,22 +1,15 @@
 import { VPageHeader } from '@/shared/ui/VPageHeader';
-import commonStyles from '@/shared/styles/common.module.css';
-import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AccountCard } from './components/AccountCard';
 import { CategorySection } from './components/CategorySection';
 import { AccountsSection } from './components/AccountsSection';
-
-const AnimatedItem = ({ delay, children }: { delay: string; children: ReactNode }) => (
-  <div className={commonStyles.animateCard} style={{ animationDelay: delay }}>
-    {children}
-  </div>
-);
+import styles from './page.module.css';
 
 export const Page: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={commonStyles.page}>
+    <div className={styles.page}>
       <VPageHeader
         title="Профиль"
         onBack={() => navigate('/')}
@@ -24,15 +17,15 @@ export const Page: React.FC = () => {
         hideOnMobile
       />
 
-      <AnimatedItem delay="0s">
+      <section aria-label="Аккаунт" className={styles.account}>
         <AccountCard />
-      </AnimatedItem>
-      <AnimatedItem delay="0.06s">
+      </section>
+      <section aria-label="Счета" className={styles.accounts}>
         <AccountsSection />
-      </AnimatedItem>
-      <AnimatedItem delay="0.12s">
+      </section>
+      <section aria-label="Категории операций" className={styles.categories}>
         <CategorySection />
-      </AnimatedItem>
+      </section>
     </div>
   );
 };

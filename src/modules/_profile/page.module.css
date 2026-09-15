@@ -1,0 +1,56 @@
+/* Профиль — mobile-first сетка. База compact: одна колонка.
+ * Расширения только через min-width. DOM-порядок не меняется. */
+
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'account'
+    'accounts'
+    'categories';
+  gap: 16px;
+  align-items: start;
+  min-width: 0;
+}
+
+.account {
+  grid-area: account;
+  min-width: 0;
+}
+
+.accounts {
+  grid-area: accounts;
+  min-width: 0;
+}
+
+.categories {
+  grid-area: categories;
+  min-width: 0;
+}
+
+@media (min-width: 600px) {
+  .page {
+    gap: 20px;
+  }
+}
+
+/* Expanded: две колонки — счета и категории рядом, аккаунт сверху полосой. */
+@media (min-width: 840px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'account account'
+      'accounts categories';
+    gap: 20px;
+  }
+}
+
+/* Large / XL: та же структура, ограничиваем читаемую ширину. */
+@media (min-width: 1200px) {
+  .page {
+    width: min(100%, 1120px);
+    margin-inline: auto;
+    grid-template-columns: minmax(340px, 0.9fr) minmax(0, 1.1fr);
+    gap: 24px;
+  }
+}

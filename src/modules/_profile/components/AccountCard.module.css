@@ -1,59 +1,241 @@
-.accountHeader {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* AccountCard — M3E hero + настройки + опасная зона.
+ * База compact без media query. Hero крупнее обычных секций (shape-иерархия).
+ * Цвета только из --md-sys-*, плотность — локальные --profile-*. */
+
+.card {
+  /* Hero-карта выделяется формой среди секций (VCard по умолчанию medium/large). */
+  border-radius: var(--md-sys-shape-corner-extra-large);
 }
 
-.accountInfo {
+.root {
+  --profile-gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--profile-gap);
+}
+
+/* ---------- Hero: единственный сильный акцент ---------- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--md-sys-shape-corner-large-increased);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.heroMain {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  font: var(--md-sys-typescale-headline-small-emphasized);
+  letter-spacing: var(--md-sys-typescale-headline-small-emphasized-tracking);
+}
+
+.heroText {
   display: flex;
   flex-direction: column;
   gap: 4px;
   min-width: 0;
 }
 
-.accountLogin {
-  font-size: var(--md-sys-typescale-title-small-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  color: var(--md-sys-color-on-surface);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.heroLabel {
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  color: var(--md-sys-color-on-primary-container);
+  opacity: 0.8;
 }
 
-.actionsRow {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+.login {
+  margin: 0;
+  font: var(--md-sys-typescale-headline-small-emphasized);
+  letter-spacing: var(--md-sys-typescale-headline-small-emphasized-tracking);
+  color: var(--md-sys-color-on-primary-container);
+  overflow-wrap: anywhere;
 }
 
-.logoutButton {
-  margin-left: auto;
+.heroMeta {
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+  color: var(--md-sys-color-on-primary-container);
+  opacity: 0.8;
 }
 
-.legalSection {
+/* ---------- Настройки ---------- */
+
+.settingsGroup {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
+.themeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  padding-block: 8px;
+}
+
+.themeText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.themeLabel {
+  font: var(--md-sys-typescale-body-large);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
+  color: var(--md-sys-color-on-surface);
+}
+
+.themeHint {
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Сви тч слева текст, справа: инвертируем порядок VToggle (трек слева по умолчанию). */
+.themeToggle {
+  width: 100%;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  min-height: 56px;
+  padding-block: 4px;
+}
+
+.quickActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quickActions > * {
+  flex: 1 1 140px;
+}
+
+/* ---------- Опасная зона: внизу, отдельным контуром ---------- */
+
+.danger {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--md-sys-color-error);
+  border-radius: var(--md-sys-shape-corner-large);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-error-container) 28%,
+    var(--md-sys-color-surface-container-low) 72%
+  );
+}
+
+.dangerTitle {
+  margin: 0;
+  font: var(--md-sys-typescale-label-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-label-large-emphasized-tracking);
+  color: var(--md-sys-color-error);
+}
+
+.dangerHint {
+  margin: 0;
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.dangerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.dangerActions > * {
+  flex: 1 1 160px;
+}
+
+/* ---------- Правовые документы ---------- */
+
+.legalSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.legalTitle {
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
 .legalNav {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 12px;
-  font-size: var(--md-sys-typescale-body-medium-size);
+  gap: 4px 16px;
 }
 
 .legalLink {
-  font-size: var(--md-sys-typescale-body-medium-size);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   color: var(--md-sys-color-primary);
   text-decoration: none;
+  border-radius: var(--md-sys-shape-corner-extra-small);
 }
 
 .legalLink:hover {
   text-decoration: underline;
 }
 
+.legalLink:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
 .consentLine {
-  font-size: var(--md-sys-typescale-body-small-size);
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
   color: var(--md-sys-color-on-surface-variant);
+}
+
+@media (min-width: 600px) {
+  .card {
+    border-radius: var(--md-sys-shape-corner-extra-large-increased);
+  }
+
+  .root {
+    --profile-gap: 20px;
+  }
+
+  .hero {
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .legalLink {
+    transition: none;
+  }
 }

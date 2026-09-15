@@ -48,19 +48,28 @@ export const AccountsSection = () => {
   return (
     <VCard>
       <section className={commonStyles.columnL} aria-label="Счета">
-        <div className={styles.header}>
-          <h2 className={commonStyles.titleXl}>Счета</h2>
+        <div className={styles.sectionHeader}>
+          <div className={styles.titleGroup}>
+            <h2 className={styles.title}>Счета</h2>
+            {accounts.data != null && (
+              <span className={styles.count} aria-label={`Всего счетов: ${accounts.data.length}`}>
+                {accounts.data.length}
+              </span>
+            )}
+          </div>
           <VButton onClick={() => openEditor(null)} isDisabled={busy}>
             Создать счёт
           </VButton>
         </div>
-        <VSelect
-          label="Валюта"
-          options={currencyOptions}
-          value={profile.data?.currency ?? ''}
-          disabled={currency.isPending || !profile.data}
-          onChange={(value) => currency.mutate(value || null)}
-        />
+        <div className={styles.currencyRow}>
+          <VSelect
+            label="Валюта"
+            options={currencyOptions}
+            value={profile.data?.currency ?? ''}
+            disabled={currency.isPending || !profile.data}
+            onChange={(value) => currency.mutate(value || null)}
+          />
+        </div>
         {profile.error && (
           <VErrorCard
             title="Не удалось загрузить профиль"
@@ -97,7 +106,7 @@ export const AccountsSection = () => {
         <ul className={styles.list} aria-busy={busy}>
           {accounts.data?.map((account) => (
             <li key={account.id} className={styles.account}>
-              <div className={styles.header}>
+              <div className={styles.accountHead}>
                 <div className={styles.identity}>
                   <h3 className={styles.name}>{account.name}</h3>
                   <div className={styles.badges}>
@@ -106,7 +115,7 @@ export const AccountsSection = () => {
                   </div>
                 </div>
                 <div className={styles.balance}>
-                  <span className={commonStyles.infoLabel}>Текущий баланс</span>
+                  <span className={styles.balanceLabel}>Текущий баланс</span>
                   <span className={styles.amount}>
                     <Amount value={account.balance} currencySymbol={currencySymbol} />
                   </span>

@@ -1,13 +1,48 @@
-.header {
+/* AccountsSection — M3E список счетов.
+ * База compact без media query. Строки разделены дивайдерами, глубина без теней.
+ * Цвета только из --md-sys-*, плотность — локальные значения. */
+
+.sectionHeader {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
 }
 
-.header h2 {
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.title {
   margin: 0;
+  font: var(--md-sys-typescale-title-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-large-emphasized-tracking);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Счётчик счетов — единственный pill-акцент секции. */
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+  padding-inline: 12px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font: var(--md-sys-typescale-label-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-label-medium-emphasized-tracking);
+  font-variant-numeric: tabular-nums;
+}
+
+.currencyRow {
+  width: 100%;
+  max-width: 320px;
 }
 
 .list {
@@ -20,25 +55,36 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-block: 24px;
+  padding-block: 16px;
   border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .account:last-child {
   padding-bottom: 0;
 }
+
+.accountHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .identity {
   min-width: 0;
+  flex: 1 1 160px;
 }
+
 .name {
   margin: 0 0 8px;
-  font-size: var(--md-sys-typescale-body-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-body-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-large-emphasized-tracking);
+  color: var(--md-sys-color-on-surface);
   overflow-wrap: anywhere;
 }
 
-.badges,
-.actions {
+.badges {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -47,20 +93,44 @@
 .balance {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   min-width: 0;
+  text-align: end;
+}
+
+.balanceLabel {
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .amount {
-  --heading-size: 20px;
-  font-size: var(--heading-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-title-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-large-emphasized-tracking);
   font-variant-numeric: tabular-nums;
+  color: var(--md-sys-color-on-surface);
   overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.actions > * {
+  flex: 1 1 140px;
 }
 
 .hint {
   margin: 0;
   color: var(--md-sys-color-on-surface-variant);
-  font-size: var(--md-sys-typescale-body-medium-size);
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+}
+
+@media (min-width: 600px) {
+  .account {
+    padding-block: 20px;
+  }
 }

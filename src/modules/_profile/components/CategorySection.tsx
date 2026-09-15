@@ -52,11 +52,13 @@ export const CategorySection = () => {
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        <div className={commonStyles.titleXl}>Категории операций</div>
+        <h2 className={styles.title}>Категории операций</h2>
       </div>
 
       <div className={styles.toolbar}>
-        <VButtonGroup options={TABS} value={activeType} onChange={setActiveType} fullWidth />
+        <div className={styles.segment}>
+          <VButtonGroup options={TABS} value={activeType} onChange={setActiveType} fullWidth />
+        </div>
         <VIconButton
           ariaLabel="Добавить категорию"
           onClick={() => setIsAddOpen(true)}
@@ -97,25 +99,21 @@ export const CategorySection = () => {
       )}
 
       {!categoriesQuery.isLoading && categories.length > 0 && (
-        <div className={styles.list}>
-          {categories.map((category, index) => {
+        <ul className={styles.list}>
+          {categories.map((category) => {
             const isOptimistic = Boolean((category as { _optimistic?: boolean })._optimistic);
 
             return (
-              <div
-                key={category.id}
-                className={commonStyles.animateCard}
-                style={{ animationDelay: `${index * 0.03}s` }}
-              >
+              <li key={category.id} className={styles.item}>
                 <CategoryCard
                   category={category}
                   pending={isOptimistic}
                   onClick={() => setEditingCategory(category)}
                 />
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
 
       <AddCategoryModal type={activeType} visible={isAddOpen} onClose={() => setIsAddOpen(false)} />
