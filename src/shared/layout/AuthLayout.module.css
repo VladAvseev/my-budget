@@ -1,0 +1,203 @@
+/* AuthLayout — каркас входа/регистрации (web-адаптация M3).
+ * Base = compact: одна центрированная колонка с формой. Сплит включается
+ * только через min-width (expanded и шире): слева форма, справа
+ * декоративная панель. Никакого условного рендера — ввод и фокус живут. */
+
+.root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background-color: var(--md-sys-color-surface);
+}
+
+.inner {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ---------- Панель формы (compact) ---------- */
+
+.formPane {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.brand {
+  align-self: center;
+}
+
+.formCard {
+  padding: 24px;
+}
+
+.title {
+  margin: 0;
+  margin-bottom: 16px;
+  font-size: var(--md-sys-typescale-title-large-size);
+  line-height: var(--md-sys-typescale-title-large-line-height);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* ---------- Декоративная панель: только expanded и шире ---------- */
+
+.promoPane {
+  display: none;
+}
+
+@media (min-width: 840px) {
+  .root {
+    padding: 24px;
+  }
+
+  .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: stretch;
+    max-width: 1080px;
+  }
+
+  .brand {
+    align-self: flex-start;
+  }
+
+  .formCard {
+    padding: 32px;
+  }
+
+  .promoPane {
+    display: flex;
+    min-width: 0;
+  }
+
+  .promoCard {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    padding: 32px;
+    border-radius: var(--md-sys-shape-corner-extra-large);
+    background-color: var(--md-sys-color-surface-container);
+  }
+
+  .promoTitle {
+    margin: 0;
+    font-size: var(--md-sys-typescale-title-large-size);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .promoText {
+    margin: 0;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .promoList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .promoItem {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 0;
+    border-top: 1px solid var(--md-sys-color-outline-variant);
+  }
+
+  .promoItem:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .promoItemTitle {
+    font-size: var(--md-sys-typescale-title-small-size);
+    line-height: var(--md-sys-typescale-title-small-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .promoItemText {
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .demoCard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+    padding: 20px;
+    border-radius: var(--md-sys-shape-corner-large);
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+  }
+
+  .demoRows {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .demoRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .demoLabel {
+    font-size: var(--md-sys-typescale-label-large-size);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    opacity: 0.8;
+  }
+
+  .demoValue {
+    margin: 0;
+    font-size: var(--md-sys-typescale-title-medium-size);
+    line-height: var(--md-sys-typescale-title-medium-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .demoProgressTrack {
+    height: 8px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-surface-container-highest);
+    overflow: hidden;
+  }
+
+  .demoProgressFill {
+    width: 68%;
+    height: 100%;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-primary);
+  }
+
+  .demoCaption {
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    opacity: 0.8;
+  }
+}
+
+@media (min-width: 1200px) {
+  .inner {
+    gap: 32px;
+    max-width: 1120px;
+  }
+}

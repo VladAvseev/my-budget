@@ -177,20 +177,8 @@
   padding: 8px 24px;
 }
 
-.brand {
-  display: flex;
+.headerBrand {
   flex-shrink: 0;
-  align-items: center;
-  gap: 8px;
-  color: var(--md-sys-color-primary);
-}
-
-.brandTitle {
-  white-space: nowrap;
-  --heading-size: 20px;
-  font-size: var(--heading-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  color: var(--md-sys-color-on-surface);
 }
 
 .desktopNav {

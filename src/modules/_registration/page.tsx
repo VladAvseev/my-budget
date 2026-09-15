@@ -1,19 +1,13 @@
+import { AuthLayout } from '@/shared/layout/AuthLayout';
 import { Provider } from 'jotai';
-import { VCard } from '@/shared/ui/VCard';
-import commonStyles from '@/shared/styles/common.module.css';
 import { RegistrationForm } from './components/RegistrationForm';
 
 export const Page: React.FC = () => {
   return (
     <Provider>
-      <div className={commonStyles.centeredContent}>
-        <div className={commonStyles.centeredCard}>
-          <VCard>
-            <h1 className={commonStyles.cardTitle}>Регистрация</h1>
-            <RegistrationForm />
-          </VCard>
-        </div>
-      </div>
+      <AuthLayout title="Регистрация">
+        <RegistrationForm />
+      </AuthLayout>
     </Provider>
   );
 };

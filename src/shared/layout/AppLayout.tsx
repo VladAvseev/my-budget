@@ -1,7 +1,6 @@
 import { useBreakpoint } from '@/shared/hooks';
 import { useAdminStatus } from '@/shared/api/hooks';
 import {
-  BanknotesIcon,
   ChevronRightIcon,
   HomeIcon,
   OverviewIcon,
@@ -12,6 +11,7 @@ import {
   type IconProps,
 } from '@/shared/icons';
 import { useAuth } from '@/shared/api/authProvider';
+import { VBrand } from '@/shared/ui/VBrand';
 import { AccountsBalanceBadge } from '@/shared/layout/AccountsBalanceBadge';
 import {
   useEffect,
@@ -66,10 +66,7 @@ const DesktopHeader = () => {
   return (
     <header className={styles.desktopHeader}>
       <div className={styles.desktopHeaderInner}>
-        <div className={styles.brand}>
-          <BanknotesIcon size={24} />
-          <span className={styles.brandTitle}>Мои финансы</span>
-        </div>
+        <VBrand className={styles.headerBrand} />
 
         <nav className={styles.desktopNav} aria-label="Основная навигация">
           {NAV_ITEMS.map((item) => (

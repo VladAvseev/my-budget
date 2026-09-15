@@ -1,0 +1,26 @@
+/* VBrand — единый бренд «Мои финансы» (web-адаптация M3).
+ * Паритет с бывшим .brand из AppLayout: иконка 24px в primary, текст 20px
+ * title-medium-emphasized в on-surface, gap 8px. */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  border-radius: var(--md-sys-shape-corner-small);
+}
+
+.brand:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.title {
+  white-space: nowrap;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  letter-spacing: var(--md-sys-typescale-title-medium-tracking);
+  color: var(--md-sys-color-on-surface);
+}

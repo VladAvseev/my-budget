@@ -1,3 +1,9 @@
+/* Лендинг — M3 Expressive, уровень Excellent (web-адаптация).
+ * Base = compact (одна колонка): шапка → hero-текст → primary action →
+ * демо-карта баланса (единственный hero-момент) → списки → CTA → футер.
+ * Расширение — только через min-width; desktop добавляет контекст рядом,
+ * а не растягивает мобильную колонку. */
+
 .landing {
   display: flex;
   flex-direction: column;
@@ -10,8 +16,10 @@
   width: 100%;
   max-width: 1080px;
   margin: 0 auto;
-  padding: 0 12px;
+  padding: 0 16px;
 }
+
+/* ---------- Шапка ---------- */
 
 .header {
   position: sticky;
@@ -27,21 +35,8 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  padding-top: 16px;
-  padding-bottom: 16px;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--md-sys-color-primary);
-}
-
-.logoName {
-  font-size: var(--md-sys-typescale-body-large-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  color: var(--md-sys-color-on-surface);
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 .headerActions {
@@ -51,70 +46,55 @@
   gap: 8px;
 }
 
+/* ---------- Hero ---------- */
+
 .hero {
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
-  background-image: radial-gradient(
-    ellipse at top,
-    color-mix(in srgb, var(--md-sys-color-primary) 15%, transparent),
-    transparent 65%
-  );
-  background-size: 200% 100%;
 }
 
 .heroInner {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 32px;
-  padding-top: calc(32px * 2.5);
-  padding-bottom: calc(32px * 2.5);
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .heroContent {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 24px;
-  flex: 1 1 320px;
+  gap: 16px;
   min-width: 0;
 }
 
 .heroBadge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 12px;
-  border-radius: var(--md-sys-shape-corner-small);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 15%, transparent);
-  color: var(--md-sys-color-on-surface-variant);
-  font-size: var(--md-sys-typescale-body-small-size);
+  padding: 6px 16px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font-size: var(--md-sys-typescale-label-large-size);
+  line-height: var(--md-sys-typescale-label-large-line-height);
   font-weight: var(--md-sys-typescale-label-large-weight);
 }
 
 .heroTitle {
   margin: 0;
-  max-width: 560px;
-  font-size: clamp(
-    calc(20px * 1.6),
-    4.5vw,
-    calc(var(--md-sys-typescale-headline-small-size) * 1.75)
-  );
-  line-height: 1.2;
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  max-width: 20ch;
+  font-size: var(--md-sys-typescale-headline-medium-size);
+  line-height: var(--md-sys-typescale-headline-medium-line-height);
+  font-weight: var(--md-sys-typescale-headline-medium-emphasized-weight, 500);
+  letter-spacing: var(--md-sys-typescale-headline-medium-tracking);
   color: var(--md-sys-color-on-surface);
-}
-
-.heroTitleAccent {
-  color: var(--md-sys-color-primary);
 }
 
 .heroText {
   margin: 0;
-  max-width: 480px;
+  max-width: 52ch;
   font-size: var(--md-sys-typescale-body-large-size);
-  line-height: 1.5;
+  line-height: var(--md-sys-typescale-body-large-line-height);
   color: var(--md-sys-color-on-surface-variant);
 }
 
@@ -127,75 +107,100 @@
 
 .heroNote {
   font-size: var(--md-sys-typescale-body-small-size);
+  line-height: var(--md-sys-typescale-body-small-line-height);
   color: var(--md-sys-color-on-surface-variant);
 }
+
+/* ---------- Демо-карта: hero-момент ---------- */
 
 .demoCard {
   display: flex;
   flex-direction: column;
   gap: 16px;
   width: 100%;
-  max-width: 340px;
-  flex: 0 1 340px;
   padding: 24px;
-  box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  animation: demoEnter var(--md-sys-motion-expressive-default-spatial) both;
+}
+
+.demoRows {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .demoRow {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 12px;
 }
 
 .demoLabel {
   font-size: var(--md-sys-typescale-label-large-size);
-  color: var(--md-sys-color-on-surface-variant);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  opacity: 0.8;
 }
 
 .demoValue {
-  font-size: var(--md-sys-typescale-body-large-size);
+  margin: 0;
+  font-size: var(--md-sys-typescale-title-medium-size);
+  line-height: var(--md-sys-typescale-title-medium-line-height);
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  color: var(--md-sys-color-on-surface);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
-.demoValueIncome {
-  --positive-ink: light-dark(#167b43, #1bc5bd);
-  color: var(--positive-ink);
-}
-
-.demoValueExpense {
-  color: var(--md-sys-color-error);
+.demoValueBalance {
+  font-size: var(--md-sys-typescale-headline-small-size);
+  line-height: var(--md-sys-typescale-headline-small-line-height);
 }
 
 .demoProgress {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .demoProgressTrack {
-  height: calc(8px);
-  border-radius: var(--md-sys-shape-corner-extra-small);
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 15%, transparent);
+  height: 8px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-surface-container-highest);
   overflow: hidden;
 }
 
 .demoProgressFill {
   width: 68%;
   height: 100%;
-  border-radius: var(--md-sys-shape-corner-extra-small);
+  border-radius: var(--md-sys-shape-corner-full);
   background-color: var(--md-sys-color-primary);
 }
 
 .demoCaption {
   font-size: var(--md-sys-typescale-body-small-size);
-  color: var(--md-sys-color-on-surface-variant);
+  line-height: var(--md-sys-typescale-body-small-line-height);
+  opacity: 0.8;
 }
 
+@keyframes demoEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Секции ---------- */
+
 .section {
-  padding-top: calc(32px * 2);
-  padding-bottom: calc(32px * 2);
+  padding-top: 48px;
+  padding-bottom: 48px;
 }
 
 .sectionAlt {
@@ -207,42 +212,48 @@
 .sectionHead {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
-  margin-bottom: 32px;
-  text-align: center;
+  margin-bottom: 24px;
 }
 
 .sectionTitle {
   margin: 0;
-  font-size: calc(var(--md-sys-typescale-headline-small-size) * 1.25);
-  line-height: 1.2;
+  font-size: var(--md-sys-typescale-title-large-size);
+  line-height: var(--md-sys-typescale-title-large-line-height);
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   color: var(--md-sys-color-on-surface);
 }
 
 .sectionText {
   margin: 0;
-  max-width: 580px;
+  max-width: 52ch;
   font-size: var(--md-sys-typescale-body-large-size);
-  line-height: 1.5;
+  line-height: var(--md-sys-typescale-body-large-line-height);
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.featuresGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 16px;
-}
+/* ---------- Возможности: строки с иконками, не карточки ---------- */
 
-.featureCard {
+.featuresList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
   display: flex;
   flex-direction: column;
+}
+
+.featureItem {
+  display: flex;
+  gap: 16px;
   align-items: flex-start;
-  gap: 12px;
-  padding: 24px;
-  height: 100%;
-  box-sizing: border-box;
+  padding: 16px 0;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.featureItem:first-child {
+  border-top: none;
+  padding-top: 0;
 }
 
 .featureIcon {
@@ -252,14 +263,22 @@
   width: 48px;
   height: 48px;
   flex-shrink: 0;
-  border-radius: var(--md-sys-shape-corner-full);
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 15%, transparent);
-  color: var(--md-sys-color-primary);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.featureBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
 .featureTitle {
   margin: 0;
-  font-size: var(--md-sys-typescale-body-large-size);
+  font-size: var(--md-sys-typescale-title-small-size);
+  line-height: var(--md-sys-typescale-title-small-line-height);
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   color: var(--md-sys-color-on-surface);
 }
@@ -267,36 +286,36 @@
 .featureText {
   margin: 0;
   font-size: var(--md-sys-typescale-body-medium-size);
-  line-height: 1.5;
+  line-height: var(--md-sys-typescale-body-medium-line-height);
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.advantagesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 16px;
+/* ---------- Преимущества:-editorial список без нумерации ----------
+ * Нумерация 01/02/03 убрана осознанно: это не последовательность и не
+ * процесс, а равнозначные свойства — цифры здесь были бы декором. */
+
+.advantagesList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 720px;
 }
 
 .advantageItem {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 24px;
-  border-radius: var(--md-sys-shape-corner-medium);
-  border: 1px dashed var(--md-sys-color-outline-variant);
-}
-
-.advantageNumber {
-  font-size: calc(var(--md-sys-typescale-headline-small-size) * 1.5);
-  line-height: 1.2;
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  color: var(--md-sys-color-primary);
+  gap: 4px;
+  padding-left: 16px;
+  border-left: 2px solid var(--md-sys-color-primary);
 }
 
 .advantageTitle {
   margin: 0;
-  font-size: var(--md-sys-typescale-body-large-size);
+  font-size: var(--md-sys-typescale-title-small-size);
+  line-height: var(--md-sys-typescale-title-small-line-height);
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   color: var(--md-sys-color-on-surface);
 }
@@ -304,37 +323,47 @@
 .advantageText {
   margin: 0;
   font-size: var(--md-sys-typescale-body-medium-size);
-  line-height: 1.5;
+  line-height: var(--md-sys-typescale-body-medium-line-height);
   color: var(--md-sys-color-on-surface-variant);
 }
+
+/* ---------- CTA ---------- */
 
 .ctaPanel {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
-  max-width: 720px;
-  margin: 0 auto;
-  padding: calc(32px * 1.5) 24px;
-  text-align: center;
-  border-radius: var(--md-sys-shape-corner-medium);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 15%, transparent);
+  padding: 24px;
+  border-radius: var(--md-sys-shape-corner-large);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.ctaTitle {
+  margin: 0;
+  font-size: var(--md-sys-typescale-title-large-size);
+  line-height: var(--md-sys-typescale-title-large-line-height);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+}
+
+.ctaText {
+  margin: 0;
+  max-width: 52ch;
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  opacity: 0.85;
 }
 
 .ctaButtons {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
-.ctaHint {
-  font-size: var(--md-sys-typescale-body-small-size);
-  color: var(--md-sys-color-on-surface-variant);
-}
+/* ---------- Футер ---------- */
 
 .footer {
   border-top: 1px solid var(--md-sys-color-outline-variant);
@@ -353,6 +382,7 @@
 
 .footerCopy {
   font-size: var(--md-sys-typescale-body-small-size);
+  line-height: var(--md-sys-typescale-body-small-line-height);
   color: var(--md-sys-color-on-surface-variant);
 }
 
@@ -365,37 +395,89 @@
 
 .footerLink {
   font-size: var(--md-sys-typescale-body-small-size);
+  line-height: var(--md-sys-typescale-body-small-line-height);
   color: var(--md-sys-color-primary);
   text-decoration: none;
+  border-radius: var(--md-sys-shape-corner-extra-small);
 }
 
 .footerLink:hover {
   text-decoration: underline;
 }
 
-.animate {
-  animation: fadeUp var(--md-sys-motion-standard-fast-spatial) both;
+.footerLink:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
+/* ---------- Расширения через min-width ---------- */
+
+@media (min-width: 600px) {
+  .heroInner {
+    padding-top: 56px;
+    padding-bottom: 56px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .section {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .ctaPanel {
+    padding: 32px;
+  }
+}
+
+@media (min-width: 840px) {
+  .heroInner {
+    flex-direction: row;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .heroContent {
+    flex: 1 1 0;
+  }
+
+  .heroTitle {
+    font-size: var(--md-sys-typescale-display-small-size);
+    line-height: var(--md-sys-typescale-display-small-line-height);
+    letter-spacing: var(--md-sys-typescale-display-small-tracking);
+  }
+
+  .demoCard {
+    flex: 0 1 400px;
+  }
+
+  .featuresList {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px 32px;
+  }
+
+  .featureItem {
+    border-top: none;
+    padding: 12px 0;
+  }
+
+  .featureItem:first-child {
+    padding-top: 12px;
+  }
+
+  .ctaPanel {
+    align-items: flex-start;
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1120px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate {
+  .demoCard {
     animation: none;
-  }
-}
-
-@media (min-width: 641px) {
-  .hero {
-    background-size: 100% 100%;
   }
 }
