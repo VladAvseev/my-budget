@@ -210,18 +210,18 @@
   --md-sys-color-on-error: #fff7f6; /* текст на ошибке */
   --md-sys-color-error-container: #fa746f; /* фон ошибки */
   --md-sys-color-on-error-container: #6e0a12; /* текст на фоне ошибки */
-  --md-sys-color-surface: #fef8f5; /* базовая поверхность */
+  --md-sys-color-surface: #fff8f5; /* базовая поверхность */
   --md-sys-color-surface-dim: #dfd9d6; /* приглушённый край */
-  --md-sys-color-surface-bright: #fef8f5; /* яркий край */
+  --md-sys-color-surface-bright: #fff8f5; /* яркий край */
   --md-sys-color-surface-container-lowest: #ffffff; /* самый низкий уровень */
-  --md-sys-color-surface-container-low: #f9f3ef; /* низкий уровень, elevated-кнопки */
-  --md-sys-color-surface-container: #f3ece9; /* базовый контейнер */
-  --md-sys-color-surface-container-high: #ede7e4; /* повышенный уровень */
-  --md-sys-color-surface-container-highest: #e7e1de; /* самый высокий уровень */
-  --md-sys-color-on-surface: #343230; /* основной текст */
-  --md-sys-color-on-surface-variant: #655e58; /* вторичный текст и иконки */
+  --md-sys-color-surface-container-low: #f9f2f0; /* низкий уровень, elevated-кнопки */
+  --md-sys-color-surface-container: #f3ecea; /* базовый контейнер */
+  --md-sys-color-surface-container-high: #eee7e4; /* повышенный уровень */
+  --md-sys-color-surface-container-highest: #e8e1de; /* самый высокий уровень */
+  --md-sys-color-on-surface: #353230; /* основной текст */
+  --md-sys-color-on-surface-variant: #655e59; /* вторичный текст и иконки */
   --md-sys-color-outline: #817973; /* значимые границы, поля */
-  --md-sys-color-outline-variant: #bab1a9; /* разделители */
+  --md-sys-color-outline-variant: #bab0aa; /* разделители */
   --md-sys-color-inverse-surface: #2e2c2a; /* инверсный фон, снекбар */
   --md-sys-color-inverse-on-surface: #f6efec; /* текст инверсного фона */
   --md-sys-color-inverse-primary: #acd7f9; /* акцент на инверсии */
@@ -260,18 +260,18 @@
   --md-sys-color-on-error: #490006; /* текст на ошибке */
   --md-sys-color-error-container: #871f21; /* фон ошибки */
   --md-sys-color-on-error-container: #ff9993; /* текст на фоне ошибки */
-  --md-sys-color-surface: #211f1d; /* базовая поверхность */
+  --md-sys-color-surface: #211f1e; /* базовая поверхность */
   --md-sys-color-surface-dim: #1d1b1a; /* приглушённый край */
-  --md-sys-color-surface-bright: #3b3937; /* яркий край */
-  --md-sys-color-surface-container-lowest: #151311; /* самый низкий уровень */
+  --md-sys-color-surface-bright: #3c3937; /* яркий край */
+  --md-sys-color-surface-container-lowest: #151312; /* самый низкий уровень */
   --md-sys-color-surface-container-low: #1d1b1a; /* низкий уровень, elevated-кнопки */
-  --md-sys-color-surface-container: #23211f; /* базовый контейнер */
+  --md-sys-color-surface-container: #242120; /* базовый контейнер */
   --md-sys-color-surface-container-high: #2c2928; /* повышенный уровень */
   --md-sys-color-surface-container-highest: #373432; /* самый высокий уровень */
-  --md-sys-color-on-surface: #e7e1de; /* основной текст */
-  --md-sys-color-on-surface-variant: #b5aca5; /* вторичный текст и иконки */
+  --md-sys-color-on-surface: #e8e1de; /* основной текст */
+  --md-sys-color-on-surface-variant: #b6aca6; /* вторичный текст и иконки */
   --md-sys-color-outline: #807872; /* значимые границы, поля */
-  --md-sys-color-outline-variant: #4c4640; /* разделители */
+  --md-sys-color-outline-variant: #4c4541; /* разделители */
   --md-sys-color-inverse-surface: #fff8f5; /* инверсный фон, снекбар */
   --md-sys-color-inverse-on-surface: #3e3b39; /* текст инверсного фона */
   --md-sys-color-inverse-primary: #41637c; /* акцент на инверсии */
