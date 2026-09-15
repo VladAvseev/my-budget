@@ -1,3 +1,4 @@
+import { Amount } from '@/shared/ui/Amount';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount, percentOfIncome, type ConvertOptions } from '@/shared/utils';
 import styles from './PeriodSummary.module.css';
@@ -18,12 +19,12 @@ export const PeriodSummary = ({
 }: PeriodSummaryProps) => {
   const balance = income - expenses;
   const items = [
-    { label: 'Расходы', value: expenses, color: 'var(--color-text-primary)' },
-    { label: 'Доходы', value: income, color: 'var(--color-success)' },
+    { label: 'Расходы', value: expenses, color: 'var(--md-sys-color-on-surface)' },
+    { label: 'Доходы', value: income, color: 'var(--positive-ink)' },
     {
       label: 'Остаток',
       value: balance,
-      color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
+      color: balance >= 0 ? 'var(--positive-ink)' : 'var(--md-sys-color-error)',
     },
   ];
   return (
@@ -34,7 +35,7 @@ export const PeriodSummary = ({
           <VCard key={item.label} className={styles.card}>
             <div className={styles.label}>{item.label}</div>
             <div className={styles.value} style={{ color: item.color }}>
-              {formatAmount(item.value, currencySymbol, convertOptions)}
+              <Amount value={item.value} currencySymbol={currencySymbol} convert={convertOptions} />
             </div>
             <div className={styles.percent}>
               {percent === null

@@ -120,7 +120,7 @@ export const Page: React.FC = () => {
   if (usersQuery.isLoading) {
     return (
       <div className={commonStyles.page}>
-        <VSkeleton width={360} height={38} radius="var(--radius-m)" />
+        <VSkeleton width={360} height={38} radius="var(--md-sys-shape-corner-small)" />
         <div className={styles.tableWrapper}>
           <table className={styles.table} aria-busy="true">
             <thead>
@@ -209,7 +209,7 @@ export const Page: React.FC = () => {
                     {row.user_id !== current?.id && (
                       <VIconButton
                         ariaLabel={`Удалить ${row.login}`}
-                        color="var(--color-error)"
+                        color="var(--md-sys-color-error)"
                         onClick={() => setDeletingUser(row)}
                       >
                         <TrashIcon size={18} color="currentColor" />

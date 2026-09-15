@@ -3,15 +3,15 @@
 }
 
 .code {
-  font-size: var(--font-size-xxl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-accent);
-  margin-bottom: var(--space-s);
+  font-size: var(--md-sys-typescale-headline-small-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-primary);
+  margin-bottom: 8px;
 }
 
 .text {
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-l);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface);
+  margin-bottom: 16px;
 }

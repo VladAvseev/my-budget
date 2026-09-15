@@ -21,8 +21,8 @@ interface StructureItem {
 }
 
 const OPERATION_ITEMS: StructureItem[] = [
-  { key: 'income', label: 'Доходы', color: 'var(--color-success)', value: 0 },
-  { key: 'expense', label: 'Расходы', color: 'var(--color-error)', value: 0 },
+  { key: 'income', label: 'Доходы', color: 'var(--positive-ink)', value: 0 },
+  { key: 'expense', label: 'Расходы', color: 'var(--md-sys-color-error)', value: 0 },
 ];
 
 export const ReportsOperationsCard: React.FC<ReportsOperationsCardProps> = ({
@@ -62,9 +62,7 @@ export const ReportsOperationsCard: React.FC<ReportsOperationsCardProps> = ({
   return (
     <VCard className={styles.card}>
       <div className={styles.header}>
-        <div className={commonStyles.cardTitle}>
-          Структура операций · периодов: {reports.total}
-        </div>
+        <div className={commonStyles.cardTitle}>Структура операций · периодов: {reports.total}</div>
       </div>
 
       {total === 0 ? (

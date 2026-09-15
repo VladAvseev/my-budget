@@ -1,16 +1,16 @@
 .body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .confirmText {
   margin: 0;
-  color: var(--color-text-primary);
+  color: var(--md-sys-color-on-surface);
 }
 
 .login {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-error);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-error);
   word-break: break-all;
 }

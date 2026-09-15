@@ -255,7 +255,7 @@ const TreeItem = ({
         aria-selected={isSelected}
         onClick={() => onToggleLeaf(item.value)}
         className={styles.leaf}
-        style={{ paddingLeft: `calc(var(--space-m) + ${level * 32}px)` }}
+        style={{ paddingLeft: `calc(12px + ${level * 32}px)` }}
         data-selected={isSelected ? 'true' : undefined}
       >
         {item.prefix}
@@ -273,10 +273,7 @@ const TreeItem = ({
 
   return (
     <div className={styles.group} data-collapsed={isCollapsed ? 'true' : undefined}>
-      <div
-        className={styles.groupRow}
-        style={{ paddingLeft: `calc(var(--space-m) + ${level * 32}px)` }}
-      >
+      <div className={styles.groupRow} style={{ paddingLeft: `calc(12px + ${level * 32}px)` }}>
         <button
           type="button"
           className={styles.groupArrow}

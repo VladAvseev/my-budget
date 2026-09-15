@@ -1,3 +1,4 @@
+import { CurrencyText } from '@/shared/ui/Amount';
 import { useMemo, useState, useCallback, useRef, useEffect, useLayoutEffect } from 'react';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 import { getPointChange } from '@/shared/utils/chartPoints';
@@ -252,7 +253,7 @@ export const VGrowthChart = ({
                   cy={y}
                   r={4}
                   fill={color}
-                  stroke="var(--color-bg-primary)"
+                  stroke="var(--md-sys-color-surface)"
                   onMouseEnter={(e) => handleDotEnter(e, point)}
                   onMouseLeave={handleDotLeave}
                 />
@@ -280,7 +281,9 @@ export const VGrowthChart = ({
 
       <div className={styles.yAxis} style={{ height: svgHeight }}>
         <span className={styles.labelYGhost}>
-          {format(ticks.length > 0 ? Math.max(...ticks.map((t) => Math.abs(t))) : 0)}
+          <CurrencyText>
+            {format(ticks.length > 0 ? Math.max(...ticks.map((t) => Math.abs(t))) : 0)}
+          </CurrencyText>
         </span>
         {[...ticks].reverse().map((tick, i) => (
           <span
@@ -288,7 +291,7 @@ export const VGrowthChart = ({
             className={styles.labelY}
             style={{ top: getY(tick), transform: 'translateY(-50%)' }}
           >
-            {format(tick)}
+            <CurrencyText>{format(tick)}</CurrencyText>
           </span>
         ))}
       </div>
@@ -303,22 +306,24 @@ export const VGrowthChart = ({
             transform: 'translate(-50%, -100%)',
           }}
         >
-          <span className={styles.tooltipValue}>{format(tooltip.point.value)}</span>
+          <span className={styles.tooltipValue}>
+            <CurrencyText>{format(tooltip.point.value)}</CurrencyText>
+          </span>
           {showChange &&
             (() => {
               const change = getPointChange(data, data.indexOf(tooltip.point), base);
               if (!change) return null;
               const changeColor =
                 change.abs > 0
-                  ? 'var(--color-success)'
+                  ? 'var(--positive-ink)'
                   : change.abs < 0
-                    ? 'var(--color-error)'
-                    : 'var(--color-warning)';
+                    ? 'var(--md-sys-color-error)'
+                    : 'var(--caution-ink)';
               const sign = change.abs > 0 ? '+' : change.abs < 0 ? '' : '±';
               return (
                 <div className={styles.tooltipChange} style={{ color: changeColor }}>
                   {sign}
-                  {format(change.abs)}
+                  <CurrencyText>{format(change.abs)}</CurrencyText>
                   {change.pct !== null &&
                     ` (${change.pct > 0 ? '+' : ''}${change.pct.toFixed(1)}%)`}
                 </div>

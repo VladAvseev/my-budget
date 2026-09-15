@@ -1,20 +1,20 @@
 .accountHeader {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .accountInfo {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
   min-width: 0;
 }
 
 .accountLogin {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-title-small-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -22,7 +22,7 @@
 
 .actionsRow {
   display: flex;
-  gap: var(--space-s);
+  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -33,19 +33,19 @@
 .legalSection {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .legalNav {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-xs) var(--space-m);
-  font-size: var(--font-size-m);
+  gap: 4px 12px;
+  font-size: var(--md-sys-typescale-body-medium-size);
 }
 
 .legalLink {
-  font-size: var(--font-size-m);
-  color: var(--color-accent);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-primary);
   text-decoration: none;
 }
 
@@ -54,6 +54,6 @@
 }
 
 .consentLine {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }

@@ -1,7 +1,7 @@
 .root {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .track {
@@ -11,22 +11,26 @@
   flex-shrink: 0;
   padding: 0;
   border: none;
-  border-radius: var(--radius-m);
-  background-color: var(--color-border);
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: var(--md-sys-color-outline-variant);
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color var(--md-sys-motion-standard-fast-effects);
 }
 
 .track:hover:not(:disabled) {
-  background-color: var(--color-text-secondary);
+  background-color: var(--md-sys-color-on-surface-variant);
 }
 
 .trackChecked {
-  background-color: var(--color-accent);
+  background-color: var(--md-sys-color-primary);
 }
 
 .trackChecked:hover:not(:disabled) {
-  background-color: var(--color-accent-hover);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary),
+    var(--md-sys-color-on-primary) 8%
+  );
 }
 
 .track:disabled {
@@ -40,20 +44,20 @@
   left: 3px;
   width: 14px;
   height: 14px;
-  border-radius: var(--radius-round);
-  background-color: var(--color-bg-surface);
-  box-shadow: var(--shadow-s);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-surface-container);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
   transition:
-    left 0.15s ease,
-    background-color 0.15s ease;
+    left var(--md-sys-motion-standard-fast-spatial),
+    background-color var(--md-sys-motion-standard-fast-effects);
 }
 
 .handleChecked {
   left: 19px;
-  background-color: var(--color-text-on-accent);
+  background-color: var(--md-sys-color-on-primary);
 }
 
 .label {
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-label-large-size);
+  color: var(--md-sys-color-on-surface);
 }

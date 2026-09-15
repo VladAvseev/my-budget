@@ -13,7 +13,7 @@ export const BackButton = ({ ariaLabel, onClick, className }: BackButtonProps) =
       ariaLabel={ariaLabel}
       onClick={onClick}
       className={className}
-      color="var(--color-text-primary)"
+      color="var(--md-sys-color-on-surface)"
     >
       <ChevronLeftIcon size={24} color="currentColor" />
     </VIconButton>

@@ -188,7 +188,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
           <VIconButton
             ariaLabel="Импортировать лимиты"
             onClick={() => setIsImportOpen(true)}
-            color="var(--color-accent)"
+            color="var(--md-sys-color-primary)"
           >
             <ImportIcon size={24} color="currentColor" />
           </VIconButton>
@@ -244,7 +244,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
                 ariaLabel="Удалить лимит"
                 onClick={() => removeLimit(limit.id)}
                 isDisabled={setLimits.isPending}
-                color="var(--color-error)"
+                color="var(--md-sys-color-error)"
               >
                 <TrashIcon size={24} color="currentColor" />
               </VIconButton>

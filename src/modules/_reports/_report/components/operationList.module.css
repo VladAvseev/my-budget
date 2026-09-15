@@ -1,55 +1,55 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .empty {
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .emptyState {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .emptyTitle {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .emptyHint {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .accordionHeader {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .accordionDot {
   width: 12px;
   height: 12px;
   flex-shrink: 0;
-  border-radius: var(--radius-round);
-  background-color: var(--color-border);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-outline-variant);
 }
 
 .accordionLabel {
@@ -58,6 +58,11 @@
 }
 
 .accordionTotal {
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   flex-shrink: 0;
+}
+
+.root {
+  --positive-ink: light-dark(#167b43, #1bc5bd);
+  --caution-ink: light-dark(#795600, #fea135);
 }

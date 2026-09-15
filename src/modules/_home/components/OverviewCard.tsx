@@ -1,3 +1,4 @@
+import { CurrencyText } from '@/shared/ui/Amount';
 import { useAuth } from '@/shared/api/authProvider';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import {
@@ -50,19 +51,19 @@ export const OverviewCard = () => {
       label: 'Доходы',
       value: formatAmount(income, currency?.symbol),
       percent: null,
-      color: 'var(--color-success)',
+      color: 'var(--positive-ink)',
     },
     {
       label: 'Расходы',
       value: formatAmount(expense, currency?.symbol),
       percent: percentOfIncome(expense, income),
-      color: 'var(--color-error)',
+      color: 'var(--md-sys-color-error)',
     },
     {
       label: 'Капитал',
       value: formatAmount(capital, currency?.symbol),
       percent: null,
-      color: capital >= 0 ? 'var(--color-success)' : 'var(--color-error)',
+      color: capital >= 0 ? 'var(--positive-ink)' : 'var(--md-sys-color-error)',
     },
   ];
 
@@ -99,7 +100,7 @@ export const OverviewCard = () => {
               className={summaryStyles.value}
               style={{ color: item.color }}
             >
-              {item.value}
+              <CurrencyText>{item.value}</CurrencyText>
             </div>,
           ])}
         </div>

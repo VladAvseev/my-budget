@@ -12,17 +12,17 @@
   display: block;
   visibility: hidden;
   white-space: nowrap;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-s);
-  font-family: var(--font-family);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-family: var(--md-ref-typeface-plain);
 }
 
 .labelY {
   position: absolute;
   left: 0;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-s);
-  font-family: var(--font-family);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-family: var(--md-ref-typeface-plain);
   text-align: left;
   white-space: nowrap;
 }
@@ -50,32 +50,32 @@
   align-items: center;
   justify-content: center;
   min-height: 160px;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-m);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-body-medium-size);
 }
 
 .gridLine {
-  stroke: var(--color-border);
+  stroke: var(--md-sys-color-outline-variant);
   stroke-width: 1.5;
   stroke-dasharray: 6 6;
 }
 
 .axisLine {
-  stroke: var(--color-border);
+  stroke: var(--md-sys-color-outline-variant);
   stroke-width: 1.5;
 }
 
 .labelX {
-  fill: var(--color-text-secondary);
-  font-size: var(--font-size-s);
-  font-family: var(--font-family);
+  fill: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-family: var(--md-ref-typeface-plain);
   text-anchor: end;
 }
 
 .dot {
   stroke-width: 2;
   cursor: pointer;
-  transition: r 0.15s ease;
+  transition: r var(--md-sys-motion-standard-fast-spatial);
 }
 
 .dot:hover {
@@ -85,28 +85,33 @@
 .tooltip {
   position: absolute;
   pointer-events: none;
-  background-color: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
-  padding: var(--space-s) var(--space-m);
-  font-size: var(--font-size-l);
-  color: var(--color-text-primary);
+  background-color: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 8px 12px;
+  font-size: var(--md-sys-typescale-body-large-size);
+  color: var(--md-sys-color-on-surface);
   white-space: nowrap;
-  box-shadow: var(--shadow-s);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
   z-index: 10;
 }
 
 .tooltipValue {
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
 }
 
 .tooltipLabel {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .tooltipChange {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   margin-top: 2px;
+}
+
+.wrapper {
+  --positive-ink: light-dark(#167b43, #1bc5bd);
+  --caution-ink: light-dark(#795600, #fea135);
 }

@@ -102,11 +102,13 @@ export const OperationsDynamicsCard = () => {
         <OperationsDynamicsStats stats={stats} />
 
         {isLoading ? (
-          <VSkeleton width="100%" height={280} radius="var(--radius-m)" />
+          <VSkeleton width="100%" height={280} radius="var(--md-sys-shape-corner-small)" />
         ) : (
           <VGrowthChart
             data={chartData}
-            color={effectiveMode === 'cumulative' ? 'var(--color-success)' : 'var(--color-accent)'}
+            color={
+              effectiveMode === 'cumulative' ? 'var(--positive-ink)' : 'var(--md-sys-color-primary)'
+            }
             formatValue={formatCount}
             showChange={effectiveMode === 'cumulative'}
           />

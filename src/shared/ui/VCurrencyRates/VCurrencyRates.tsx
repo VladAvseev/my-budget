@@ -1,3 +1,4 @@
+import { CurrencyText } from '@/shared/ui/Amount';
 import { getCurrencyByCode } from '@/shared/constants/currencies';
 import { formatCurrencyRate, getOtherCurrencyRates } from '@/shared/utils';
 import styles from './VCurrencyRates.module.css';
@@ -30,10 +31,12 @@ export const VCurrencyRates = ({
     >
       {items.map(({ from, value }) => (
         <div key={from.code} className={styles.item}>
-          <span className={styles.from}>1&nbsp;{from.symbol}</span>
+          <span className={styles.from}>
+            1&nbsp;<CurrencyText>{from.symbol}</CurrencyText>
+          </span>
           <span className={styles.equals}>=</span>
           <span className={styles.value}>
-            {formatCurrencyRate(value)}&nbsp;{target.symbol}
+            {formatCurrencyRate(value)}&nbsp;<CurrencyText>{target.symbol}</CurrencyText>
           </span>
         </div>
       ))}

@@ -1,3 +1,4 @@
+import { CurrencyText } from '@/shared/ui/Amount';
 import type { Category, CategoryLimit, Operation } from '@/shared/api/types/domain';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount } from '@/shared/utils';
@@ -6,9 +7,9 @@ import { useMemo } from 'react';
 import styles from './CategoryLimitsSummary.module.css';
 
 export const getLimitColor = (spent: number, limit: number): string => {
-  if (spent > limit) return 'var(--color-error)';
-  if (spent === limit) return 'var(--color-warning)';
-  return 'var(--color-text-primary)';
+  if (spent > limit) return 'var(--md-sys-color-error)';
+  if (spent === limit) return 'var(--caution-ink)';
+  return 'var(--md-sys-color-on-surface)';
 };
 
 export const formatLimitValue = (
@@ -60,21 +61,25 @@ export const CategoryLimitsSummary = ({
             const percentage = limitAmount > 0 ? Math.round((spent / limitAmount) * 100) : 0;
             const barColor =
               spent > limitAmount
-                ? 'var(--color-error)'
+                ? 'var(--md-sys-color-error)'
                 : spent === limitAmount
-                  ? 'var(--color-warning)'
-                  : 'var(--color-success)';
+                  ? 'var(--caution-ink)'
+                  : 'var(--positive-ink)';
             return (
               <div key={limit.id} className={styles.rowItem}>
                 <div className={styles.row}>
                   <div className={styles.rowLabel}>
                     <span
                       className={styles.dot}
-                      style={{ backgroundColor: category?.color ?? 'var(--color-border)' }}
+                      style={{
+                        backgroundColor: category?.color ?? 'var(--md-sys-color-outline-variant)',
+                      }}
                     />
                     <span className={styles.name}>{category?.name ?? 'Категория'}</span>
                     <div className={styles.value} style={{ color }}>
-                      {formatLimitValue(spent, limitAmount, currency?.symbol)}
+                      <CurrencyText>
+                        {formatLimitValue(spent, limitAmount, currency?.symbol)}
+                      </CurrencyText>
                     </div>
                   </div>
                   <span className={styles.percent}>{percentage}%</span>

@@ -20,7 +20,7 @@ export const VBadge = ({ children, variant = 'neutral', color, style, className 
       <span
         className={`${styles.badge}${extraClass}`}
         style={{
-          color: 'var(--color-text-primary)',
+          color: 'var(--md-sys-color-on-surface)',
           backgroundColor: withAlpha(color, COLOR_PALETTE_BG_ALPHA),
           borderColor: color,
           ...style,

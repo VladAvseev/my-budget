@@ -98,7 +98,7 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
             onClick={handleDelete}
             isLoading={removeGoal.isPending}
             isDisabled={isPending}
-            color="var(--color-error)"
+            color="var(--md-sys-color-error)"
           >
             <TrashIcon size={24} color="currentColor" />
           </VIconButton>

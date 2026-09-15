@@ -18,21 +18,21 @@
 
 .trigger:focus-visible,
 .panel:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }
 
 .root .badge {
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
-  background-color: var(--color-accent-alpha);
-  border-color: var(--color-accent);
+  font-size: var(--md-sys-typescale-label-large-size);
+  color: var(--md-sys-color-on-surface);
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 15%, transparent);
+  border-color: var(--md-sys-color-primary);
 }
 
 .arrow {
   display: inline-flex;
   align-items: center;
-  margin-left: var(--space-xs);
+  margin-left: 4px;
 }
 
 .popover {
@@ -40,8 +40,8 @@
   top: 100%;
   left: 0;
   z-index: 10;
-  width: min(calc(var(--space-xxl) * 10), calc(100vw - var(--space-xxl) * 2));
-  padding-top: var(--space-xs);
+  width: min(calc(32px * 10), calc(100vw - 32px * 2));
+  padding-top: 4px;
 }
 
 /* В desktop-шапке бейдж стоит у правого края: поповер прижимаем вправо,
@@ -55,15 +55,15 @@
 
 .panel {
   max-height: min(
-    calc((var(--font-size-m) * var(--line-height-normal) + var(--space-s) * 2) * 5),
-    calc(var(--available-height, 50dvh) - var(--space-l))
+    calc((var(--md-sys-typescale-body-medium-size) * 1.5 + 8px * 2) * 5),
+    calc(var(--available-height, 50dvh) - 16px)
   );
   overflow-y: auto;
   overscroll-behavior: contain;
-  background-color: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
-  box-shadow: var(--shadow-l);
+  background-color: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
 }
 
 .list {
@@ -76,11 +76,11 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-m);
-  padding: var(--space-s) var(--space-m);
-  font-size: var(--font-size-m);
-  line-height: var(--line-height-normal);
-  color: var(--color-text-primary);
+  gap: 12px;
+  padding: 8px 12px;
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: 1.5;
+  color: var(--md-sys-color-on-surface);
 }
 
 .name {

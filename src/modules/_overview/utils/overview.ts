@@ -174,11 +174,11 @@ export const buildChartData = (
 
     if (key === 'none') {
       label = 'Без категории';
-      color = 'var(--color-border)';
+      color = 'var(--md-sys-color-outline-variant)';
     } else {
       const category = categoryById.get(key);
       label = category?.name ?? 'Неизвестная';
-      color = category?.color ?? 'var(--color-border)';
+      color = category?.color ?? 'var(--md-sys-color-outline-variant)';
     }
 
     segments.push({

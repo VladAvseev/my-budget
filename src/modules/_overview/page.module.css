@@ -2,18 +2,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .summaryGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
+  gap: 12px;
   flex-shrink: 0;
 }

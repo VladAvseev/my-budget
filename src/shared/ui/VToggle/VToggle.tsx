@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useId, useState, type CSSProperties, type ReactNode } from 'react';
 import styles from './VToggle.module.css';
 
 export interface VToggleProps {
@@ -20,6 +20,7 @@ export const VToggle = ({
   style,
   className,
 }: VToggleProps) => {
+  const labelId = useId();
   const [internalChecked, setInternalChecked] = useState(defaultChecked ?? false);
 
   const isControlled = checked !== undefined;
@@ -42,13 +43,18 @@ export const VToggle = ({
         type="button"
         role="switch"
         aria-checked={isChecked}
+        aria-labelledby={label ? labelId : undefined}
         disabled={disabled}
         onClick={handleToggle}
         className={`${styles.track}${isChecked ? ` ${styles.trackChecked}` : ''}`}
       >
         <span className={`${styles.handle}${isChecked ? ` ${styles.handleChecked}` : ''}`} />
       </button>
-      {label && <span className={styles.label}>{label}</span>}
+      {label && (
+        <span id={labelId} className={styles.label}>
+          {label}
+        </span>
+      )}
     </div>
   );
 };

@@ -1,44 +1,44 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .label {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-s);
-  border-radius: var(--radius-m);
-  font-size: var(--font-size-m);
-  background-color: var(--color-bg-surface);
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
+  padding: 8px;
+  border-radius: var(--md-sys-shape-corner-small);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  border: 1px solid var(--md-sys-color-outline-variant);
   cursor: pointer;
   user-select: none;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--md-sys-motion-standard-fast-effects);
 }
 
 .trigger[data-has-value='true'] {
-  color: var(--color-text-primary);
+  color: var(--md-sys-color-on-surface);
 }
 
 .trigger[data-open='true'] {
-  border-color: var(--color-accent);
+  border-color: var(--md-sys-color-primary);
 }
 
 .trigger[data-invalid='true'] {
-  border-color: var(--color-error);
+  border-color: var(--md-sys-color-error);
 }
 
 .trigger:hover:not([data-disabled='true']):not([data-invalid='true']):not([data-open='true']) {
-  border-color: var(--color-text-secondary);
+  border-color: var(--md-sys-color-on-surface-variant);
 }
 
 .trigger[data-disabled='true'] {
@@ -50,7 +50,7 @@
 .triggerText {
   display: flex;
   align-items: center;
-  gap: var(--space-s);
+  gap: 8px;
   overflow: hidden;
 }
 
@@ -63,7 +63,7 @@
 .triggerActions {
   display: flex;
   align-items: center;
-  gap: var(--space-s);
+  gap: 8px;
   flex-shrink: 0;
 }
 
@@ -73,28 +73,28 @@
   justify-content: center;
   padding: 0;
   border: none;
-  border-radius: var(--radius-s);
+  border-radius: var(--md-sys-shape-corner-extra-small);
   background: transparent;
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color var(--md-sys-motion-standard-fast-effects);
 }
 
 .clearButton:hover {
-  background-color: var(--color-bg-surface-hover);
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
 .chevron {
   display: flex;
   align-items: center;
-  color: var(--color-text-secondary);
-  transition: transform 0.15s ease;
+  color: var(--md-sys-color-on-surface-variant);
+  transition: transform var(--md-sys-motion-standard-fast-spatial);
 }
 
 .dropdown {
-  background-color: var(--color-bg-surface);
-  border-radius: var(--radius-m);
-  box-shadow: var(--shadow-l);
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-small);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
   max-height: 240px;
   overflow-y: auto;
   z-index: 10;
@@ -102,30 +102,30 @@
 
 .separator {
   height: 1px;
-  background-color: var(--color-border);
-  margin: var(--space-xs) 0;
+  background-color: var(--md-sys-color-outline-variant);
+  margin: 4px 0;
 }
 
 .option {
   display: flex;
   align-items: center;
-  gap: var(--space-s);
-  padding: var(--space-s) var(--space-m);
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: var(--md-sys-typescale-label-large-size);
+  color: var(--md-sys-color-on-surface);
   cursor: pointer;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
+    background-color var(--md-sys-motion-standard-fast-effects),
+    color var(--md-sys-motion-standard-fast-effects);
 }
 
 .option[data-selected='true'] {
-  color: var(--color-accent);
+  color: var(--md-sys-color-primary);
 }
 
 .option:hover {
-  color: var(--color-accent);
-  background-color: var(--color-accent-light);
+  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-primary-container);
 }
 
 .checkmark {
@@ -145,6 +145,6 @@
 }
 
 .error {
-  font-size: var(--font-size-s);
-  color: var(--color-error);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-error);
 }

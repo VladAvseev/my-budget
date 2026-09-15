@@ -1,42 +1,42 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .title {
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .subtitle {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
-  column-gap: var(--space-m);
-  row-gap: var(--space-s);
+  column-gap: 12px;
+  row-gap: 8px;
   align-items: end;
 }
 
 .label {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .percent {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
   text-align: right;
   white-space: nowrap;
 }
 
 .value {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   text-align: right;
 }

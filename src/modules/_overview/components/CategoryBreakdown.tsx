@@ -1,9 +1,9 @@
+import { Amount } from '@/shared/ui/Amount';
 import type { OperationType } from '@/shared/api/types/domain';
 import type { Report } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VCard } from '@/shared/ui/VCard';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
-import { formatAmount } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { Link } from 'react-router-dom';
 import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
@@ -29,7 +29,7 @@ const ReportLinkRow = ({ report, amount }: ReportAmount) => {
       <VCard interactive className={styles.linkRowCard}>
         <span className={styles.linkRowName}>{report.name}</span>
         <span className={styles.linkRowAmount}>
-          {formatAmount(amount, displaySymbol, convertOptions)}
+          <Amount value={amount} currencySymbol={displaySymbol} convert={convertOptions} />
         </span>
       </VCard>
     </Link>
@@ -68,7 +68,9 @@ const PeriodLine = ({ name, value, average, lowerIsBetter }: PeriodInfo & { aver
   return (
     <span className={styles.summaryLine}>
       {name}:{' '}
-      <span className={styles.strong}>{formatAmount(value, displaySymbol, convertOptions)}</span>
+      <span className={styles.strong}>
+        <Amount value={value} currencySymbol={displaySymbol} convert={convertOptions} />
+      </span>
       {delta && <span className={deltaClass}> ({delta})</span>}
     </span>
   );
@@ -92,7 +94,7 @@ const AccordionSummary = ({
       <span className={styles.summaryLine}>
         В месяц:{' '}
         <span className={styles.strong}>
-          {formatAmount(average, displaySymbol, convertOptions)}
+          <Amount value={average} currencySymbol={displaySymbol} convert={convertOptions} />
         </span>
       </span>
     </span>
@@ -153,7 +155,7 @@ export const CategoryBreakdown = ({
         <div className={styles.sectionAverage}>
           В месяц:{' '}
           <span className={styles.strong}>
-            {formatAmount(average, displaySymbol, convertOptions)}
+            <Amount value={average} currencySymbol={displaySymbol} convert={convertOptions} />
           </span>
         </div>
       </div>
@@ -187,7 +189,7 @@ export const CategoryBreakdown = ({
                   <span
                     className={styles.accordionDot}
                     style={{
-                      backgroundColor: group.color ?? 'var(--color-border)',
+                      backgroundColor: group.color ?? 'var(--md-sys-color-outline-variant)',
                     }}
                   />
                   <span className={styles.accordionGrow}>{group.label}</span>

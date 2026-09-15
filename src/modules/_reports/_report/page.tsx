@@ -37,7 +37,7 @@ export const Page: React.FC = () => {
           <VIconButton
             ariaLabel="Настройки периода"
             onClick={() => navigate(`/reports/${report.id}/settings`)}
-            color="var(--color-text-primary)"
+            color="var(--md-sys-color-on-surface)"
           >
             <SettingsIcon size={24} color="currentColor" />
           </VIconButton>

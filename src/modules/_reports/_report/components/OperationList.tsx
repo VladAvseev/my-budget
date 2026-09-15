@@ -9,6 +9,7 @@ import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { VToggle } from '@/shared/ui/VToggle';
+import { CurrencyText } from '@/shared/ui/Amount';
 import { formatAmount } from '@/shared/utils';
 import { useCurrency } from '@/shared/api/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
@@ -111,7 +112,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
         <VIconButton
           ariaLabel="Новая операция"
           onClick={() => setModal({ type, operation: null })}
-          color="var(--color-accent)"
+          color="var(--md-sys-color-primary)"
         >
           <PlusIcon size={24} color="currentColor" />
         </VIconButton>
@@ -182,7 +183,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
               : formatAmount(groupTotal, currency?.symbol);
             const headerColor = limit
               ? getLimitColor(groupTotal, limitAmount)
-              : 'var(--color-text-primary)';
+              : 'var(--md-sys-color-on-surface)';
 
             return (
               <div
@@ -195,11 +196,13 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
                     <span className={styles.accordionHeader}>
                       <span
                         className={styles.accordionDot}
-                        style={{ backgroundColor: group.color ?? 'var(--color-border)' }}
+                        style={{
+                          backgroundColor: group.color ?? 'var(--md-sys-color-outline-variant)',
+                        }}
                       />
                       <span className={styles.accordionLabel}>{group.label}</span>
                       <span className={styles.accordionTotal} style={{ color: headerColor }}>
-                        {headerValue}
+                        <CurrencyText>{headerValue}</CurrencyText>
                       </span>
                     </span>
                   }

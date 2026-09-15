@@ -4,11 +4,8 @@ export interface Currency {
   symbol: string;
 }
 
-// Графический знак белорусского рубля (кириллическая «Б» с горизонтальной
-// чертой) — PUA-код U+E901 из официального иконочного шрифта НБ РБ «nbrb»
-// (постановление Правления НБ РБ от 27.01.2026 № 25).
-// Глиф подключается через @font-face в src/App.css.
-export const BYN_SIGN = '\uE901';
+// Текстовый код для строк; визуальный знак выводит общий компонент Amount.
+export const BYN_SIGN = 'BYN';
 
 export const QUICK_CURRENCIES = ['BYN', 'RUB', 'USD'] as const;
 

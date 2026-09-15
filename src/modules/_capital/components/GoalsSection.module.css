@@ -1,43 +1,43 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .emptyState {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .emptyTitle {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .emptyHint {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .list {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
   flex: 1 1 280px;
   min-width: 280px;
 }
@@ -45,29 +45,29 @@
 .overall {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .overallTitle {
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .periodRow {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .overallForecast {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .cardTop {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
+  gap: 12px;
   min-width: 0;
 }
 
@@ -75,16 +75,16 @@
   width: 12px;
   height: 12px;
   flex-shrink: 0;
-  border-radius: var(--radius-round);
-  background-color: var(--color-border);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-outline-variant);
 }
 
 .cardTitle {
   flex: 1;
   min-width: 0;
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -92,55 +92,55 @@
 
 .targetDate {
   flex-shrink: 0;
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .track {
-  height: var(--space-s);
-  border-radius: var(--radius-s);
-  background-color: var(--color-accent-alpha);
+  height: 8px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 15%, transparent);
   overflow: hidden;
 }
 
 .fill {
   height: 100%;
-  border-radius: var(--radius-s);
-  background-color: var(--color-accent);
-  transition: width 0.3s ease;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: var(--md-sys-color-primary);
+  transition: width var(--md-sys-motion-standard-fast-spatial);
 }
 
 .cardBottom {
   display: flex;
   align-items: baseline;
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .savedAmount {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .targetAmount {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .percent {
   margin-left: auto;
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .forecast {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .forecastRow {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }

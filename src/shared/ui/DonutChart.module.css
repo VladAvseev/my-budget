@@ -9,7 +9,7 @@
 
 .segment {
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  transition: opacity var(--md-sys-motion-standard-fast-effects);
 }
 
 .segment:hover {
@@ -21,50 +21,50 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border-radius: var(--radius-round);
-  background-color: var(--color-bg-surface);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-surface-container);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .total {
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
   text-align: center;
   word-break: break-word;
-  padding: var(--space-s);
+  padding: 8px;
 }
 
 .tooltip {
   position: absolute;
   pointer-events: none;
-  background-color: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
-  padding: var(--space-s) var(--space-m);
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  background-color: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 8px 12px;
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface);
   white-space: nowrap;
-  box-shadow: var(--shadow-s);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
   z-index: 10;
 }
 
 .tooltipLabel {
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   margin-bottom: 2px;
 }
 
 .tooltipRow {
   display: flex;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .tooltipValue {
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
 }
 
 .tooltipPercent {
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
 }

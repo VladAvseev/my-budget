@@ -1,13 +1,13 @@
 .accordion {
   width: 100%;
-  border-radius: var(--radius-m);
-  background-color: var(--color-bg-surface);
-  box-shadow: var(--shadow-m);
-  transition: background-color 0.15s ease;
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: var(--md-sys-color-surface-container);
+  box-shadow: 0 4px 6px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  transition: background-color var(--md-sys-motion-standard-fast-effects);
 }
 
 .accordion:hover {
-  background-color: var(--color-bg-surface-hover);
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
 .header {
@@ -25,9 +25,9 @@
 .label {
   flex: 1;
   min-width: 0;
-  padding: var(--space-s) 0 var(--space-s) var(--space-s);
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  padding: 8px 0 8px 8px;
+  font-size: var(--md-sys-typescale-label-large-size);
+  color: var(--md-sys-color-on-surface);
 }
 
 .label[data-disabled='true'] {
@@ -38,14 +38,14 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  margin: var(--space-s);
+  margin: 8px;
   padding: 0;
   border: none;
   background: transparent;
   font: inherit;
   cursor: pointer;
-  color: var(--color-text-secondary);
-  transition: color 0.15s ease;
+  color: var(--md-sys-color-on-surface-variant);
+  transition: color var(--md-sys-motion-standard-fast-effects);
 }
 
 .chevron:disabled {
@@ -54,28 +54,28 @@
 }
 
 .accordion:hover .chevron:not(:disabled) {
-  color: var(--color-accent);
+  color: var(--md-sys-color-primary);
 }
 
 .body {
   height: 0;
   overflow: hidden;
-  transition: height 0.2s ease;
+  transition: height var(--md-sys-motion-standard-fast-spatial);
 }
 
 .bodyInner {
-  padding: var(--space-s);
-  font-size: var(--font-size-m);
-  color: var(--color-text-secondary);
-  border-radius: 0 0 var(--radius-m) var(--radius-m);
+  padding: 8px;
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
+  border-radius: 0 0 var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small);
 }
 
 @media (min-width: 601px) {
   .label {
-    padding-left: var(--space-m);
+    padding-left: 12px;
   }
 
   .bodyInner {
-    padding: var(--space-s) var(--space-m) var(--space-m) var(--space-m);
+    padding: 8px 12px 12px 12px;
   }
 }

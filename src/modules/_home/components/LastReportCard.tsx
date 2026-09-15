@@ -1,3 +1,4 @@
+import { CurrencyText } from '@/shared/ui/Amount';
 import { useBootstrap, useCurrency } from '@/shared/api/hooks';
 import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
 import summaryStyles from '@/shared/styles/summary.module.css';
@@ -52,19 +53,19 @@ export const LastReportCard = () => {
       label: 'Доходы',
       value: formatAmount(summary.income, currency?.symbol),
       percent: null,
-      color: 'var(--color-success)',
+      color: 'var(--positive-ink)',
     },
     {
       label: 'Расходы',
       value: formatAmount(expenses, currency?.symbol),
       percent: percentOfIncome(expenses, summary.income),
-      color: 'var(--color-error)',
+      color: 'var(--md-sys-color-error)',
     },
     {
       label: 'Остаток',
       value: formatAmount(balance, currency?.symbol),
       percent: percentOfIncome(balance, summary.income),
-      color: balance >= 0 ? 'var(--color-success)' : 'var(--color-error)',
+      color: balance >= 0 ? 'var(--positive-ink)' : 'var(--md-sys-color-error)',
     },
   ];
 
@@ -99,7 +100,7 @@ export const LastReportCard = () => {
               className={summaryStyles.value}
               style={{ color: item.color }}
             >
-              {item.value}
+              <CurrencyText>{item.value}</CurrencyText>
             </div>,
           ])}
         </div>

@@ -139,7 +139,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
             ariaLabel="Предыдущий месяц"
             onClick={goToPrevMonth}
             isDisabled={isPrevDisabled}
-            color="var(--color-text-primary)"
+            color="var(--md-sys-color-on-surface)"
           >
             <ChevronLeftIcon size={20} color="currentColor" />
           </VIconButton>
@@ -167,7 +167,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
             ariaLabel="Следующий месяц"
             onClick={goToNextMonth}
             isDisabled={isNextDisabled}
-            color="var(--color-text-primary)"
+            color="var(--md-sys-color-on-surface)"
           >
             <ChevronRightIcon size={20} color="currentColor" />
           </VIconButton>

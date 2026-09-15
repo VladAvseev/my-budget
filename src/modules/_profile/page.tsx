@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { AccountCard } from './components/AccountCard';
 import { CategorySection } from './components/CategorySection';
 import { AccountsSection } from './components/AccountsSection';
-import { ThemeCard } from './components/ThemeCard';
 
 const AnimatedItem = ({ delay, children }: { delay: string; children: ReactNode }) => (
   <div className={commonStyles.animateCard} style={{ animationDelay: delay }}>
@@ -32,9 +31,6 @@ export const Page: React.FC = () => {
         <AccountsSection />
       </AnimatedItem>
       <AnimatedItem delay="0.12s">
-        <ThemeCard />
-      </AnimatedItem>
-      <AnimatedItem delay="0.18s">
         <CategorySection />
       </AnimatedItem>
     </div>

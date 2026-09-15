@@ -1,84 +1,86 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xl);
+  gap: 24px;
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .sectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .sectionLabel {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  --heading-size: 20px;
+  font-size: var(--heading-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .sectionSummary {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .sectionAverage {
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface);
   white-space: nowrap;
 }
 
 .strong {
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
 }
 
 .deltaGood {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-success);
+  --positive-ink: light-dark(#167b43, #1bc5bd);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--positive-ink);
 }
 
 .deltaBad {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-error);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-error);
 }
 
 .deltaEven {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .accordionList {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .accordionRow {
   display: flex;
   flex-direction: column;
-  gap: var(--space-s);
+  gap: 8px;
 }
 
 .accordionHeader {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .accordionDot {
   width: 12px;
   height: 12px;
   flex-shrink: 0;
-  border-radius: var(--radius-round);
-  background-color: var(--color-border);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-outline-variant);
 }
 
 .accordionGrow {
@@ -90,13 +92,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--space-xs);
+  gap: 4px;
   white-space: nowrap;
 }
 
 .summaryLine {
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface);
 }
 
 .linkRow {
@@ -108,16 +110,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .linkRowName {
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface);
 }
 
 .linkRowAmount {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface);
 }

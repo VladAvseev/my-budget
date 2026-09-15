@@ -2,15 +2,15 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: var(--space-m);
-  margin-bottom: var(--space-s);
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
 .stat {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .statValue {
-  color: var(--color-text-primary);
+  color: var(--md-sys-color-on-surface);
 }

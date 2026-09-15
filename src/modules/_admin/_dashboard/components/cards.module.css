@@ -1,27 +1,27 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .statGrid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: var(--space-xs) var(--space-m);
+  gap: 4px 12px;
   align-items: baseline;
 }
 
 .statGrid4 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: var(--space-xs) var(--space-m);
+  gap: 4px 12px;
   align-items: baseline;
 }
 
 .statGrid5 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto auto auto;
-  gap: var(--space-xs) var(--space-m);
+  gap: 4px 12px;
   align-items: baseline;
 }
 
@@ -30,40 +30,41 @@
 }
 
 .statHeaderCell {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .statSubheader {
   grid-column: 1 / -1;
-  margin-top: var(--space-s);
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+  margin-top: 8px;
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .statLabel {
   min-width: 0;
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-label-large-size);
+  color: var(--md-sys-color-on-surface);
 }
 
 .statValue {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
   justify-self: end;
 }
 
 .statPercent {
-  font-size: var(--font-size-m);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
   justify-self: end;
 }
 
 .valueWarning {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-warning);
+  --caution-ink: light-dark(#795600, #fea135);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--caution-ink);
 }

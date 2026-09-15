@@ -1,3 +1,4 @@
+import { Amount } from '@/shared/ui/Amount';
 import { useAtom, useSetAtom } from 'jotai';
 import { accountEditorAtom, deletingAccountAtom, accountFormAtom } from '../atoms/profile';
 import { useAuth } from '@/shared/api/authProvider';
@@ -13,7 +14,7 @@ import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VSelect } from '@/shared/ui/VSelect';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
-import { formatAmount, getErrorMessage } from '@/shared/utils';
+import { getErrorMessage } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
 import { useAccounts } from '@/shared/api/hooks';
 import { useUpdateAccount } from '../api/useUpdateAccount';
@@ -107,7 +108,7 @@ export const AccountsSection = () => {
                 <div className={styles.balance}>
                   <span className={commonStyles.infoLabel}>Текущий баланс</span>
                   <span className={styles.amount}>
-                    {formatAmount(account.balance, currencySymbol)}
+                    <Amount value={account.balance} currencySymbol={currencySymbol} />
                   </span>
                 </div>
               </div>

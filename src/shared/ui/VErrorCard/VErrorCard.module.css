@@ -1,6 +1,6 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
   align-items: flex-start;
 }

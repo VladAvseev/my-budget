@@ -10,6 +10,8 @@ import { LegalLinks } from '@/shared/legal/LegalLinks';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
+import { VToggle } from '@/shared/ui/VToggle';
+import { useTheme } from '@/shared/theme';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { formatDisplay, getErrorMessage } from '@/shared/utils';
 import commonStyles from '@/shared/styles/common.module.css';
@@ -21,6 +23,7 @@ import { ChangePasswordModal } from './ChangePasswordModal';
 import styles from './AccountCard.module.css';
 
 export const AccountCard = () => {
+  const { theme, setTheme } = useTheme();
   const { user } = useAuth();
   const { signOut } = useAuth();
   const { data: profile } = useProfile();
@@ -85,6 +88,12 @@ export const AccountCard = () => {
             {createdAt && <span className={commonStyles.infoLabel}>На сайте с {createdAt}</span>}
           </div>
         </div>
+
+        <VToggle
+          label="Тёмная тема"
+          checked={theme === 'dark'}
+          onChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+        />
 
         <div className={styles.actionsRow}>
           <VButton variant="secondary" onClick={() => setIsChangePasswordOpen(true)}>

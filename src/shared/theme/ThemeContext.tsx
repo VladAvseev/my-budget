@@ -2,27 +2,25 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
   type ReactNode,
 } from 'react';
-import { getStoredTheme, setStoredTheme } from './storage';
-import type { ThemeName } from './types';
+import { getStoredTheme, setStoredTheme } from '@/shared/theme/storage';
+import type { ThemeName } from '@/shared/theme/types';
 
 interface ThemeContextValue {
   theme: ThemeName;
   setTheme: (theme: ThemeName) => void;
 }
 
-const DEFAULT_THEME: ThemeName = 'dark';
-
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setThemeState] = useState<ThemeName>(() => getStoredTheme() ?? DEFAULT_THEME);
+  const [theme, setThemeState] = useState<ThemeName>(getStoredTheme);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 

@@ -1,7 +1,8 @@
+import { Amount } from '@/shared/ui/Amount';
 import { useMemo } from 'react';
 import { useAccounts } from '@/shared/api/hooks';
 import type { Account } from '@/shared/api/types/domain';
-import { convertAmount, formatAmount } from '@/shared/utils';
+import { convertAmount } from '@/shared/utils';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { VCard } from '@/shared/ui/VCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
@@ -39,14 +40,20 @@ export const CapitalStructureCard = ({ userId, title, currency }: CapitalStructu
       structure.segments.map((segment) => ({
         ...segment,
         convertedTotal: convertOptions
-          ? convertAmount(segment.total, convertOptions.from, convertOptions.to, convertOptions.rates)
+          ? convertAmount(
+              segment.total,
+              convertOptions.from,
+              convertOptions.to,
+              convertOptions.rates,
+            )
           : undefined,
       })),
     [structure.segments, convertOptions],
   );
 
   const convertedTotal = useMemo(
-    () => donutSegments.reduce((sum, segment) => sum + (segment.convertedTotal ?? segment.total), 0),
+    () =>
+      donutSegments.reduce((sum, segment) => sum + (segment.convertedTotal ?? segment.total), 0),
     [donutSegments],
   );
 
@@ -123,7 +130,11 @@ export const CapitalStructureCard = ({ userId, title, currency }: CapitalStructu
                   key={`${segment.key}-amount`}
                   className={`${styles.textBold} ${styles.justifyEnd}`}
                 >
-                  {formatAmount(segment.total, displaySymbol, convertOptions)}
+                  <Amount
+                    value={segment.total}
+                    currencySymbol={displaySymbol}
+                    convert={convertOptions}
+                  />
                 </span>,
               ])}
             </div>

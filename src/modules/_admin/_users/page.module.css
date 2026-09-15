@@ -9,37 +9,37 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--font-size-m);
+  font-size: var(--md-sys-typescale-label-large-size);
 }
 
 .table th {
-  padding: var(--space-s) var(--space-xs);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
-  font-weight: var(--font-weight-medium);
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: var(--md-sys-typescale-label-large-weight);
   text-align: left;
   white-space: nowrap;
 }
 
 .table td {
-  padding: var(--space-s) var(--space-xs);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-primary);
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface);
   white-space: nowrap;
 }
 
 .table tbody tr {
-  transition: background-color 0.15s ease;
+  transition: background-color var(--md-sys-motion-standard-fast-effects);
 }
 
 .table tbody tr:hover {
-  background-color: var(--color-bg-surface-hover);
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
 .sortButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
+  gap: 4px;
   padding: 0;
   border: none;
   background: none;
@@ -51,8 +51,8 @@
 .sortIndicator {
   display: inline-block;
   width: 1em;
-  font-size: var(--font-size-s);
-  color: var(--color-accent);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-primary);
 }
 
 .numCell {
@@ -70,7 +70,7 @@
 }
 
 .empty {
-  padding: var(--space-xl) var(--space-m);
+  padding: 24px 12px;
   text-align: center;
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
 }

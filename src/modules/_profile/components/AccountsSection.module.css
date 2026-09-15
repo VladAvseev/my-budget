@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .header h2 {
@@ -19,9 +19,9 @@
 .account {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
-  padding-block: var(--space-xl);
-  border-top: 1px solid var(--color-border);
+  gap: 12px;
+  padding-block: 24px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .account:last-child {
@@ -31,9 +31,9 @@
   min-width: 0;
 }
 .name {
-  margin: 0 0 var(--space-s);
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-medium);
+  margin: 0 0 8px;
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
   overflow-wrap: anywhere;
 }
 
@@ -41,25 +41,26 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-s);
+  gap: 8px;
 }
 
 .balance {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
   min-width: 0;
 }
 
 .amount {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-medium);
+  --heading-size: 20px;
+  font-size: var(--heading-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 
 .hint {
   margin: 0;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-m);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-body-medium-size);
 }

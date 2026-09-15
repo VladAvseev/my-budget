@@ -8,9 +8,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-s);
-  background-color: rgba(0, 0, 0, 0.5);
-  animation: vmodal-overlay-in 0.2s ease;
+  padding: 8px;
+  background-color: color-mix(in srgb, var(--md-sys-color-scrim) 50%, transparent);
+  animation: vmodal-overlay-in var(--md-sys-motion-standard-fast-effects);
 }
 
 .dialog {
@@ -20,67 +20,68 @@
   width: 100%;
   max-height: calc(100vh - 48px);
   max-height: calc(100dvh - 48px);
-  background-color: var(--color-bg-surface);
-  border-radius: var(--radius-l);
-  box-shadow: var(--shadow-l);
-  animation: vmodal-in 0.2s ease;
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-medium);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
+  animation: vmodal-in var(--md-sys-motion-standard-fast-spatial);
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
-  padding: var(--space-l) var(--space-xl);
-  border-bottom: 1px solid var(--color-border);
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  --heading-size: 20px;
+  font-size: var(--heading-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .close {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-xs);
+  padding: 4px;
   border: none;
-  border-radius: var(--radius-s);
+  border-radius: var(--md-sys-shape-corner-extra-small);
   background: transparent;
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color var(--md-sys-motion-standard-fast-effects);
 }
 
 .close:hover {
-  background-color: var(--color-bg-surface-hover);
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
 .errorArea {
-  padding: 0 var(--space-xl);
+  padding: 0 24px;
 }
 
 .errorTop {
-  padding-top: var(--space-l);
+  padding-top: 16px;
 }
 
 .body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: var(--space-l) var(--space-xl);
-  color: var(--color-text-primary);
-  font-size: var(--font-size-m);
+  padding: 16px 24px;
+  color: var(--md-sys-color-on-surface);
+  font-size: var(--md-sys-typescale-body-medium-size);
 }
 
 .footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--space-m);
-  padding: var(--space-l) var(--space-xl);
-  border-top: 1px solid var(--color-border);
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
 @keyframes vmodal-overlay-in {

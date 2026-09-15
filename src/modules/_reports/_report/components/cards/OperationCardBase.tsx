@@ -1,10 +1,11 @@
+import { Amount } from '@/shared/ui/Amount';
 import type { ReactNode } from 'react';
 import type { Category } from '@/shared/api/types/domain';
 import { useCurrency } from '@/shared/api/hooks';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
 import { VLoader } from '@/shared/ui/VLoader';
-import { formatAmount, formatDisplay } from '@/shared/utils';
+import { formatDisplay } from '@/shared/utils';
 import styles from './operationCard.module.css';
 
 interface OperationCardBaseProps {
@@ -52,7 +53,7 @@ export const OperationCardBase = ({
     >
       <div className={styles.left}>
         <div className={styles.amount} style={{ color: amountColor }}>
-          {formatAmount(amount, currency?.symbol)}
+          <Amount value={amount} currencySymbol={currency?.symbol} />
         </div>
         {description && <div className={styles.subtitle}>{description}</div>}
       </div>

@@ -1,5 +1,5 @@
+import { Amount } from '@/shared/ui/Amount';
 import { useState, useCallback } from 'react';
-import { formatAmount } from '@/shared/utils/format';
 import { useCurrency } from '@/shared/api/hooks';
 import styles from './DonutChart.module.css';
 
@@ -123,7 +123,9 @@ export const DonutChart = ({
       </svg>
 
       <div className={styles.hole} style={{ width: innerR * 2, height: innerR * 2 }}>
-        <span className={styles.total}>{formatAmount(displayTotal ?? total, symbol)}</span>
+        <span className={styles.total}>
+          <Amount value={displayTotal ?? total} currencySymbol={symbol} />
+        </span>
       </div>
 
       {tooltip && (
@@ -138,7 +140,10 @@ export const DonutChart = ({
           <div className={styles.tooltipLabel}>{tooltip.segment.label}</div>
           <div className={styles.tooltipRow}>
             <span className={styles.tooltipValue}>
-              {formatAmount(tooltip.segment.convertedTotal ?? tooltip.segment.total, symbol)}
+              <Amount
+                value={tooltip.segment.convertedTotal ?? tooltip.segment.total}
+                currencySymbol={symbol}
+              />
             </span>
             <span className={styles.tooltipPercent}>{tooltip.segment.percent.toFixed(1)}%</span>
           </div>

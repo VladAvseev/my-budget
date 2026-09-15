@@ -30,7 +30,7 @@ export const CategoryColorPalette = ({
                 style={{
                   backgroundColor: withAlpha(color, COLOR_PALETTE_BG_ALPHA),
                   border: `2px solid ${color}`,
-                  boxShadow: isSelected ? '0 0 0 2px var(--color-text-primary)' : 'none',
+                  boxShadow: isSelected ? '0 0 0 2px var(--md-sys-color-on-surface)' : 'none',
                 }}
               />
             );

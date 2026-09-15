@@ -1,3 +1,3 @@
-export { getStoredTheme, setStoredTheme } from './storage';
-export { ThemeProvider, useTheme } from './ThemeContext';
-export type { ThemeName } from './types';
+export { getStoredTheme, setStoredTheme } from '@/shared/theme/storage';
+export { ThemeProvider, useTheme } from '@/shared/theme/ThemeContext';
+export type { ThemeName } from '@/shared/theme/types';

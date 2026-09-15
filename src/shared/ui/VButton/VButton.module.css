@@ -1,14 +1,14 @@
 .base {
   position: relative;
-  padding: var(--space-s) var(--space-l);
-  border-radius: var(--radius-m);
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-medium);
+  padding: 8px 16px;
+  border-radius: var(--md-sys-shape-corner-small);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
   font-family: inherit;
   cursor: pointer;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
+    background-color var(--md-sys-motion-standard-fast-effects),
+    color var(--md-sys-motion-standard-fast-effects);
 }
 
 .base:disabled {
@@ -21,32 +21,37 @@
 
 .primary {
   border: none;
-  background-color: var(--color-accent);
-  color: var(--color-text-on-accent);
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
 }
 
 .primary:hover:not(:disabled) {
-  background-color: var(--color-accent-hover);
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary),
+    var(--md-sys-color-on-primary) 8%
+  );
 }
 
 .secondary {
-  border: 1px solid var(--color-accent);
+  border: 1px solid var(--md-sys-color-primary);
   background-color: transparent;
-  color: var(--color-accent);
+  color: var(--md-sys-color-primary);
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: var(--color-accent-light);
+  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-primary-container);
 }
 
 .danger {
   border: none;
-  background-color: var(--color-error);
-  color: var(--color-text-on-accent);
+  background-color: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
 }
 
 .danger:hover:not(:disabled) {
-  background-color: var(--color-error-hover);
+  background-color: color-mix(in srgb, var(--md-sys-color-error), var(--md-sys-color-on-error) 8%);
 }
 
 .content {

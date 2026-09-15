@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
   width: fit-content;
 }
 
@@ -12,50 +12,50 @@
 .buttons {
   display: flex;
   overflow: hidden;
-  border-radius: var(--radius-m);
+  border-radius: var(--md-sys-shape-corner-small);
 }
 
 .buttonsFullWidth .button {
   flex: 1 1 auto;
   min-width: 0;
   white-space: normal;
-  padding: var(--space-s) 0;
+  padding: 8px 0;
 }
 
 .label {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .button {
-  padding: var(--space-s) var(--space-s);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-bg-surface);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-regular);
+  padding: 8px 8px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
   font-family: inherit;
   cursor: pointer;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
+    background-color var(--md-sys-motion-standard-fast-effects),
+    color var(--md-sys-motion-standard-fast-effects),
+    border-color var(--md-sys-motion-standard-fast-effects);
   white-space: nowrap;
 }
 
 .button:hover:not(:disabled):not(.active) {
-  background-color: var(--color-bg-surface-hover);
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
 .button:first-child {
-  border-top-left-radius: var(--radius-m);
-  border-bottom-left-radius: var(--radius-m);
+  border-top-left-radius: var(--md-sys-shape-corner-small);
+  border-bottom-left-radius: var(--md-sys-shape-corner-small);
 }
 
 .button:last-child {
-  border-top-right-radius: var(--radius-m);
-  border-bottom-right-radius: var(--radius-m);
+  border-top-right-radius: var(--md-sys-shape-corner-small);
+  border-bottom-right-radius: var(--md-sys-shape-corner-small);
 }
 
 .button + .button {
@@ -70,14 +70,14 @@
 .active {
   position: relative;
   z-index: 1;
-  border-color: var(--color-accent);
-  background-color: var(--color-accent);
-  color: var(--color-text-on-accent);
-  font-weight: var(--font-weight-regular);
+  border-color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
 }
 
 .prefix {
   display: inline-flex;
-  margin-right: var(--space-xs);
+  margin-right: 4px;
   flex-shrink: 0;
 }

@@ -1,8 +1,9 @@
+import { Amount } from '@/shared/ui/Amount';
 import { PlusIcon } from '@/shared/icons';
 import { useAccounts, useGoals } from '@/shared/api/hooks';
 import { useAuth } from '@/shared/api/authProvider';
 import { type Goal } from '@/shared/api/types/domain';
-import { formatAmount, formatDisplay, toISODate } from '@/shared/utils';
+import { formatDisplay, toISODate } from '@/shared/utils';
 import {
   buildGoalsOverallProgress,
   buildGoalsProgress,
@@ -146,7 +147,7 @@ export const GoalsSection = () => {
             !!goalsQuery.error ||
             availableAccounts.length === 0
           }
-          color="var(--color-accent)"
+          color="var(--md-sys-color-primary)"
         >
           <PlusIcon size={24} color="currentColor" />
         </VIconButton>
@@ -208,18 +209,37 @@ export const GoalsSection = () => {
               </div>
               <div className={styles.cardBottom}>
                 <span className={styles.savedAmount}>
-                  {formatAmount(overallProgress.totalSaved, displaySymbol, convertOptions)}
+                  <Amount
+                    value={overallProgress.totalSaved}
+                    currencySymbol={displaySymbol}
+                    convert={convertOptions}
+                  />
                 </span>
                 <span className={styles.targetAmount}>
-                  из {formatAmount(overallProgress.totalTarget, displaySymbol, convertOptions)}
+                  из{' '}
+                  <Amount
+                    value={overallProgress.totalTarget}
+                    currencySymbol={displaySymbol}
+                    convert={convertOptions}
+                  />
                 </span>
                 <span className={styles.percent}>{overallProgress.percent}%</span>
               </div>
               {showPeriodProgress && periodReady && (
                 <div className={styles.periodRow}>
                   Пополнено в текущем периоде:{' '}
-                  {formatAmount(currentPeriodSaved, displaySymbol, convertOptions)} из{' '}
-                  {formatAmount(monthlyPlan, displaySymbol, convertOptions)} ({periodPlanPercent}%)
+                  <Amount
+                    value={currentPeriodSaved}
+                    currencySymbol={displaySymbol}
+                    convert={convertOptions}
+                  />{' '}
+                  из{' '}
+                  <Amount
+                    value={monthlyPlan}
+                    currencySymbol={displaySymbol}
+                    convert={convertOptions}
+                  />{' '}
+                  ({periodPlanPercent}%)
                 </div>
               )}
               {!periodReady && (
@@ -284,10 +304,19 @@ export const GoalsSection = () => {
 
                   <div className={styles.cardBottom}>
                     <span className={styles.savedAmount}>
-                      {formatAmount(progress.savedAmount, displaySymbol, convertOptions)}
+                      <Amount
+                        value={progress.savedAmount}
+                        currencySymbol={displaySymbol}
+                        convert={convertOptions}
+                      />
                     </span>
                     <span className={styles.targetAmount}>
-                      из {formatAmount(targetAmount, displaySymbol, convertOptions)}
+                      из{' '}
+                      <Amount
+                        value={targetAmount}
+                        currencySymbol={displaySymbol}
+                        convert={convertOptions}
+                      />
                     </span>
                     <span className={styles.percent}>{progress.percent}%</span>
                   </div>
@@ -297,7 +326,12 @@ export const GoalsSection = () => {
                       {requiredMonthly > 0 && (
                         <div className={styles.forecast}>
                           Рекомендуется пополнять на{' '}
-                          {formatAmount(requiredMonthly, displaySymbol, convertOptions)} в месяц
+                          <Amount
+                            value={requiredMonthly}
+                            currencySymbol={displaySymbol}
+                            convert={convertOptions}
+                          />{' '}
+                          в месяц
                         </div>
                       )}
                       <AchievementInfo

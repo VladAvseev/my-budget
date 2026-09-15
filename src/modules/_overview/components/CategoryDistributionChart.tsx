@@ -1,9 +1,10 @@
+import { Amount } from '@/shared/ui/Amount';
 import { useState, useMemo } from 'react';
 import { VCard } from '@/shared/ui/VCard';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VButtonGroup } from '@/shared/ui/VButtonGroup';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
-import { formatAmount, convertAmount } from '@/shared/utils';
+import { convertAmount } from '@/shared/utils';
 import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
 import { useOverviewCategories } from '../api/useOverviewCategories';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
@@ -128,7 +129,11 @@ export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistribut
                 key={`${segment.key}-amount`}
                 className={`${styles.textBold} ${styles.justifyEnd}`}
               >
-                {formatAmount(segment.total, displaySymbol, convertOptions)}
+                <Amount
+                  value={segment.total}
+                  currencySymbol={displaySymbol}
+                  convert={convertOptions}
+                />
               </span>,
             ])}
           </div>

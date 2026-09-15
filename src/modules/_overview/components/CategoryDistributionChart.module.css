@@ -1,13 +1,13 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .title {
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .chartWrapper {
@@ -15,7 +15,7 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: center;
-  gap: var(--space-xl);
+  gap: 24px;
 }
 
 @media (min-width: 601px) {
@@ -28,8 +28,8 @@
   display: grid;
   grid-template-columns: 16px minmax(0, 1fr) 56px 104px;
   align-items: center;
-  column-gap: var(--space-m);
-  row-gap: var(--space-m);
+  column-gap: 12px;
+  row-gap: 12px;
   width: 100%;
   min-width: 0;
   flex: 1 300px;
@@ -38,12 +38,12 @@
 .dot {
   width: 16px;
   height: 16px;
-  border-radius: var(--radius-round);
+  border-radius: var(--md-sys-shape-corner-full);
 }
 
 .dotAccent {
-  background-color: var(--color-accent);
-  box-shadow: var(--shadow-s);
+  background-color: var(--md-sys-color-primary);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
 }
 
 .dotSegment {
@@ -51,15 +51,15 @@
 }
 
 .textBold {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .textMedium {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .ellipsis {
@@ -67,8 +67,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface);
 }
 
 .justifyEnd {
@@ -76,19 +76,19 @@
 }
 
 .message {
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .skeletonChart {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-xl);
+  gap: 24px;
 }
 
 .skeletonLegend {
   display: flex;
   flex: 1 300px;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }

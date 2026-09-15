@@ -32,7 +32,7 @@ export const OnboardingCard = () => {
             </div>
             <CheckIcon
               size={18}
-              color={item.done ? 'var(--color-success)' : 'var(--color-text-secondary)'}
+              color={item.done ? 'var(--positive-ink)' : 'var(--md-sys-color-on-surface-variant)'}
             />
           </div>
         ))}

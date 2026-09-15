@@ -33,7 +33,7 @@ export const CategoryCard = ({ category, pending = false, onClick }: CategoryCar
       className={`${styles.card}${pending ? ` ${styles.pending}` : ''}`}
     >
       <div className={styles.left}>
-        <VCategoryDot color={category.color ?? 'var(--color-border)'} />
+        <VCategoryDot color={category.color ?? 'var(--md-sys-color-outline-variant)'} />
         <span className={styles.name}>{category.name}</span>
       </div>
     </VCard>

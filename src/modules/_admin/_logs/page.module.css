@@ -1,37 +1,39 @@
 .metricsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .metricCard {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
-  padding: var(--space-m);
+  gap: 4px;
+  padding: 12px;
 }
 
 .metricLabel {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .metricValue {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  --heading-size: 20px;
+  font-size: var(--heading-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .metricValueError {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-error);
+  --heading-size: 20px;
+  font-size: var(--heading-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-error);
 }
 
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-m);
+  gap: 12px;
   align-items: flex-start;
 }
 
@@ -47,7 +49,7 @@
 }
 
 .userAnonymous {
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
   font-style: italic;
 }
 
@@ -55,23 +57,23 @@
 .endpointTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--font-size-s);
+  font-size: var(--md-sys-typescale-body-small-size);
 }
 
 .seriesTable th,
 .endpointTable th {
-  padding: var(--space-xs);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
-  font-weight: var(--font-weight-medium);
+  padding: 4px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: var(--md-sys-typescale-label-large-weight);
   text-align: left;
 }
 
 .seriesTable td,
 .endpointTable td {
-  padding: var(--space-xs);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-primary);
+  padding: 4px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface);
 }
 
 /* Длинные пути эндпоинтов не переносим — таблица скроллится горизонтально. */
@@ -83,7 +85,7 @@
 .twoCol {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .tableWrapper {
@@ -94,28 +96,28 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--font-size-s);
+  font-size: var(--md-sys-typescale-label-medium-size);
 }
 
 .table th {
-  padding: var(--space-s) var(--space-xs);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
-  font-weight: var(--font-weight-medium);
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: var(--md-sys-typescale-label-large-weight);
   text-align: left;
   white-space: nowrap;
 }
 
 .table td {
-  padding: var(--space-s) var(--space-xs);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-primary);
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface);
   white-space: nowrap;
 }
 
 .table tbody tr.rowClickable {
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color var(--md-sys-motion-standard-fast-effects);
 }
 
 .sortHeader {
@@ -124,78 +126,78 @@
 }
 
 .sortHeader:hover {
-  color: var(--color-text-primary);
+  color: var(--md-sys-color-on-surface);
 }
 
 .sortIndicator {
-  margin-left: var(--space-xs);
+  margin-left: 4px;
 }
 
 .table tbody tr.rowClickable:hover {
-  background-color: var(--color-bg-surface-hover);
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
 .statusOk {
-  color: var(--color-accent);
-  font-weight: var(--font-weight-bold);
+  color: var(--md-sys-color-primary);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
 }
 
 .statusError {
-  color: var(--color-error);
-  font-weight: var(--font-weight-bold);
+  color: var(--md-sys-color-error);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
 }
 
 .detailsCell {
-  padding: var(--space-s);
-  background-color: var(--color-bg-surface);
+  padding: 8px;
+  background-color: var(--md-sys-color-surface-container);
 }
 
 .detailsBlock {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
   /* Позволяет grid-элементу сжиматься, чтобы .tableWrapper скроллился внутри карточки. */
   min-width: 0;
 }
 
 .detailsTitle {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .detailsCode {
   margin: 0;
-  padding: var(--space-s);
+  padding: 8px;
   max-height: 240px;
   overflow: auto;
-  border-radius: var(--radius-s);
-  background-color: var(--color-bg-primary);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: var(--md-sys-color-surface);
   font-family: monospace;
-  font-size: var(--font-size-s);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface);
   white-space: pre-wrap;
   word-break: break-word;
 }
 
 .errorText {
-  color: var(--color-error);
+  color: var(--md-sys-color-error);
 }
 
 .empty {
-  padding: var(--space-xl) var(--space-m);
+  padding: 24px 12px;
   text-align: center;
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .pagination {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .paginationInfo {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }

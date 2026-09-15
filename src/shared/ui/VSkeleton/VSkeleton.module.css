@@ -1,29 +1,29 @@
 .block {
   display: block;
-  border-radius: var(--radius-s);
-  background-color: var(--color-bg-surface-hover);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: var(--md-sys-color-surface-container-high);
   animation: skeletonPulse 1.4s ease-in-out infinite;
 }
 
 .circle {
-  border-radius: var(--radius-round);
+  border-radius: var(--md-sys-shape-corner-full);
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
-  padding: var(--space-xl);
-  animation: skeletonFadeUp 0.35s ease both;
+  gap: 12px;
+  padding: 24px;
+  animation: skeletonFadeUp var(--md-sys-motion-standard-fast-spatial) both;
 }
 
 .cardCompact {
-  padding: var(--space-m);
+  padding: 12px;
 }
 
 .cardTitle {
   width: 60%;
-  height: var(--space-m);
+  height: 12px;
 }
 
 .cardLineShort {
@@ -33,7 +33,7 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
   width: 100%;
 }
 

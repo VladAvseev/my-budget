@@ -1,25 +1,25 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .title {
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .total {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
   white-space: nowrap;
 }
 
@@ -28,39 +28,39 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .stats {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-s) var(--space-l);
+  gap: 8px 16px;
 }
 
 .stat {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .statValue {
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-medium);
+  color: var(--md-sys-color-on-surface);
+  font-weight: var(--md-sys-typescale-label-large-weight);
 }
 
 .skeletonWrap {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .skeletonStats {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-s) var(--space-l);
+  gap: 8px 16px;
 }
 
 /* Прошлый график под keepPreviousData: приглушаем до прихода новых данных. */
 .stale {
   opacity: 0.5;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--md-sys-motion-standard-fast-effects);
 }

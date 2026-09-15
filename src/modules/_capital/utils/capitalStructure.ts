@@ -19,14 +19,14 @@ export interface CapitalStructureData {
 // У счетов нет своих цветов, поэтому сегменты красятся циклически
 // из дизайн-токенов (работает во всех темах, без хардкода hex).
 export const CAPITAL_PALETTE = [
-  'var(--color-accent)',
-  'var(--color-warning)',
-  'var(--color-success)',
-  'var(--color-error)',
-  'var(--color-accent-hover)',
-  'var(--color-accent-light)',
-  'var(--color-success-bg)',
-  'var(--color-warning-bg)',
+  'var(--md-sys-color-primary)',
+  'var(--md-sys-color-secondary)',
+  'var(--md-sys-color-tertiary)',
+  'var(--md-sys-color-inverse-primary)',
+  'var(--md-sys-color-outline)',
+  'var(--md-sys-color-primary-container)',
+  'var(--md-sys-color-secondary-container)',
+  'var(--md-sys-color-tertiary-container)',
 ] as const;
 
 /**

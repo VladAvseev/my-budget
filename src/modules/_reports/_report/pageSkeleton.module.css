@@ -1,5 +1,5 @@
 .summaryGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--space-m);
+  gap: 12px;
 }

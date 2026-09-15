@@ -1,23 +1,24 @@
 .stats {
   display: flex;
   flex-direction: column;
-  gap: var(--space-s);
-  margin-bottom: var(--space-s);
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .stat {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .statValue {
-  color: var(--color-text-primary);
+  color: var(--md-sys-color-on-surface);
 }
 
 .positive {
-  color: var(--color-success);
+  --positive-ink: light-dark(#167b43, #1bc5bd);
+  color: var(--positive-ink);
 }
 
 .negative {
-  color: var(--color-error);
+  color: var(--md-sys-color-error);
 }

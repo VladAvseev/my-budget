@@ -1,7 +1,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .column {
@@ -12,7 +12,7 @@
 .columnL {
   display: flex;
   flex-direction: column;
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .row {
@@ -21,27 +21,27 @@
 }
 
 .gapXs {
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .gapS {
-  gap: var(--space-s);
+  gap: 8px;
 }
 
 .gapM {
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .gapL {
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .gapXl {
-  gap: var(--space-xl);
+  gap: 24px;
 }
 
 .gapXxl {
-  gap: var(--space-xxl);
+  gap: 32px;
 }
 
 .wrap {
@@ -67,67 +67,68 @@
 }
 
 .textSecondary {
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .emptyTitle {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .emptyHint {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .titleXl {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  --heading-size: 20px;
+  font-size: var(--heading-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .titleL {
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .titleM {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-title-small-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .linkRow {
   display: flex;
   justify-content: center;
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .link {
-  color: var(--color-accent);
+  color: var(--md-sys-color-primary);
   text-decoration: none;
 }
 
 .cardTitle {
   margin: 0;
-  margin-bottom: var(--space-l);
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  margin-bottom: 16px;
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .textM {
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface);
 }
 
 .centeredContent {
@@ -136,8 +137,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-l);
-  background-color: var(--color-bg-primary);
+  padding: 16px;
+  background-color: var(--md-sys-color-surface);
 }
 
 .centeredCard {
@@ -148,14 +149,14 @@
 .cardList {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-l);
+  gap: 16px;
   width: 100%;
 }
 
 .pageHeaderRow {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .pageHeaderRow > :last-child {
@@ -166,42 +167,42 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .infoLabel {
-  font-size: var(--font-size-m);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-label-large-size);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .infoValue {
-  font-size: var(--font-size-m);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface);
 }
 
 .infoValueBold {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .actions {
   display: flex;
-  gap: var(--space-s);
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .formRow {
   display: flex;
-  gap: var(--space-m);
+  gap: 12px;
   align-items: flex-end;
 }
 
 .loaderContainer {
   display: flex;
   justify-content: center;
-  padding: var(--space-xl);
+  padding: 24px;
 }
 
 .avatar {
@@ -211,15 +212,15 @@
   width: 48px;
   height: 48px;
   flex-shrink: 0;
-  border-radius: var(--radius-round);
-  background-color: var(--color-accent-light);
-  color: var(--color-accent);
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
 }
 
 .animateCard {
-  animation: fadeUp 0.35s ease both;
+  animation: fadeUp var(--md-sys-motion-standard-fast-spatial) both;
 }
 
 @keyframes fadeUp {

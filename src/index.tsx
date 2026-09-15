@@ -3,9 +3,7 @@ import { ThemeProvider } from '@/shared/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import '@fontsource/roboto/cyrillic-400.css';
-import '@fontsource/roboto/cyrillic-500.css';
-import '@fontsource/roboto/cyrillic-700.css';
+import '@fontsource-variable/roboto-flex';
 import '@/shared/theme/theme.css';
 import './App.css';
 

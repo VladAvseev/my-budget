@@ -1,30 +1,30 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .toolbar {
   display: flex;
   align-items: stretch;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .emptyState {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
 }

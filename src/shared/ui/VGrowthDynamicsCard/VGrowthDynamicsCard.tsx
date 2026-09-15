@@ -33,8 +33,8 @@ const aggregationOptions: VButtonGroupOption[] = [
 ];
 
 const modeColors: Record<VGrowthDynamicsMode, string> = {
-  total: 'var(--color-success)',
-  period: 'var(--color-accent)',
+  total: 'var(--positive-ink)',
+  period: 'var(--md-sys-color-primary)',
 };
 
 export const VGrowthDynamicsCard = ({
@@ -66,7 +66,7 @@ export const VGrowthDynamicsCard = ({
     <GrowthStats stats={stats} displaySymbol={displaySymbol} />
 
     {isLoading ? (
-      <VSkeleton width="100%" height={200} radius="var(--radius-m)" />
+      <VSkeleton width="100%" height={200} radius="var(--md-sys-shape-corner-small)" />
     ) : (
       <VGrowthChart
         data={chartData}

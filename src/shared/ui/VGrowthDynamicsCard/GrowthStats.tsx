@@ -1,3 +1,4 @@
+import { CurrencyText } from '@/shared/ui/Amount';
 import { useCurrency } from '@/shared/api/hooks';
 import { formatAmount } from '@/shared/utils/format';
 import type { VGrowthStatsData } from './types';
@@ -42,14 +43,16 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
       {monthly !== null && (
         <div className={styles.stat}>
           {periodLabel}:{' (за всё время)'}
-          <span className={`${styles.statValue} ${colorClass(monthly.abs)}`}>{monthlyLine}</span>
+          <span className={`${styles.statValue} ${colorClass(monthly.abs)}`}>
+            <CurrencyText>{monthlyLine ?? ''}</CurrencyText>
+          </span>
         </div>
       )}
       {recent !== null && (
         <div className={styles.stat}>
           В месяц (за последний год):{' '}
           <span className={`${styles.statValue} ${colorClass(recent.abs)}`}>
-            {formatChange(recent)}
+            <CurrencyText>{formatChange(recent)}</CurrencyText>
           </span>
         </div>
       )}
@@ -57,7 +60,7 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
         <div className={styles.stat}>
           {currentPeriodLabel}:{' '}
           <span className={`${styles.statValue} ${colorClass(currentPeriod.abs)}`}>
-            {currentPeriodLine}
+            <CurrencyText>{currentPeriodLine ?? ''}</CurrencyText>
           </span>
         </div>
       )}

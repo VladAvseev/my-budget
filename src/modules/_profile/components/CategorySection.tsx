@@ -60,7 +60,7 @@ export const CategorySection = () => {
         <VIconButton
           ariaLabel="Добавить категорию"
           onClick={() => setIsAddOpen(true)}
-          color="var(--color-accent)"
+          color="var(--md-sys-color-primary)"
         >
           <PlusIcon size={24} color="currentColor" />
         </VIconButton>

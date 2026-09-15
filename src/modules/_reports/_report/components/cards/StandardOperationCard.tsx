@@ -22,7 +22,7 @@ export const StandardOperationCard = ({
   return (
     <OperationCardBase
       amount={amount}
-      amountColor="var(--color-text-primary)"
+      amountColor="var(--md-sys-color-on-surface)"
       description={operation.description}
       category={category}
       date={operation.date}

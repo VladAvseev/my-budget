@@ -96,7 +96,7 @@ export const LogsDynamicsCard = () => {
               <VSkeleton key={i} width={180} height={18} />
             ))}
           </div>
-          <VSkeleton width="100%" height={240} radius="var(--radius-m)" />
+          <VSkeleton width="100%" height={240} radius="var(--md-sys-shape-corner-small)" />
         </div>
       ) : (
         <div className={isStale ? styles.stale : undefined}>
@@ -106,7 +106,7 @@ export const LogsDynamicsCard = () => {
           </div>
           <VGrowthChart
             data={built.chartData}
-            color="var(--color-accent)"
+            color="var(--md-sys-color-primary)"
             formatValue={formatCount}
           />
         </div>

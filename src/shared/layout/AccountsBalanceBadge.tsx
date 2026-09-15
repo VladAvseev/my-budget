@@ -1,3 +1,5 @@
+import { CurrencyText } from '@/shared/ui/Amount';
+import { Amount } from '@/shared/ui/Amount';
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
 import { useCapital, useCurrency } from '@/shared/api/hooks';
@@ -65,7 +67,7 @@ export const AccountsBalanceBadge = () => {
 
   const badge = (
     <VBadge variant="accent" className={styles.badge}>
-      {`Капитал ${amount}`}
+      Капитал <CurrencyText>{amount}</CurrencyText>
       {expandable && (
         <span aria-hidden="true" className={styles.arrow}>
           <ChevronDownIcon
@@ -123,7 +125,7 @@ export const AccountsBalanceBadge = () => {
                 <li key={account.id} className={styles.row}>
                   <span className={styles.name}>{account.name}</span>
                   <span className={styles.accountAmount}>
-                    {formatAmount(account.cents / 100, currency?.symbol)}
+                    <Amount value={account.cents / 100} currencySymbol={currency?.symbol} />
                   </span>
                 </li>
               ))}

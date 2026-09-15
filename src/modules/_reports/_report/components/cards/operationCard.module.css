@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
   cursor: pointer;
 }
 
@@ -14,20 +14,20 @@
   display: flex;
   flex-direction: column;
   align-self: stretch;
-  gap: var(--space-xs);
+  gap: 4px;
   min-width: 0;
 }
 
 .amount {
-  font-size: var(--font-size-l);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .subtitle {
   margin-top: auto;
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -38,20 +38,20 @@
   flex-direction: column;
   align-items: flex-end;
   align-self: stretch;
-  gap: var(--space-xs);
+  gap: 4px;
   min-width: 0;
 }
 
 .date {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
   margin-top: auto;
 }
 
 .badge {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -73,5 +73,5 @@
 }
 
 .deviation {
-  font-size: var(--font-size-l);
+  font-size: var(--md-sys-typescale-body-large-size);
 }

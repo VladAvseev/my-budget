@@ -222,7 +222,7 @@ export const OperationForm = ({
               onClick={handleDelete}
               isDisabled={!canDelete}
               isLoading={removeOperation.isPending}
-              color="var(--color-error)"
+              color="var(--md-sys-color-error)"
             >
               <TrashIcon size={24} color="currentColor" />
             </VIconButton>

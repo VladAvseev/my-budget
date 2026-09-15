@@ -1,3 +1,4 @@
+import { Amount } from '@/shared/ui/Amount';
 import { useAuth } from '@/shared/api/authProvider';
 import type { Report } from '@/shared/api/types/domain';
 import modalStyles from '@/shared/styles/modal.module.css';
@@ -6,7 +7,7 @@ import { VButton } from '@/shared/ui/VButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VModal } from '@/shared/ui/VModal';
 import { VSelect } from '@/shared/ui/VSelect';
-import { formatAmount, getErrorMessage } from '@/shared/utils';
+import { getErrorMessage } from '@/shared/utils';
 import { useCurrency } from '@/shared/api/hooks';
 import { useMemo, useState } from 'react';
 import { useReports } from '../../../api/useReports';
@@ -137,14 +138,16 @@ export const ImportLimitsModal = ({ report, visible, onClose }: ImportLimitsModa
                   <span className={settingsStyles.importName}>
                     <span
                       className={settingsStyles.importDot}
-                      style={{ backgroundColor: category?.color ?? 'var(--color-border)' }}
+                      style={{
+                        backgroundColor: category?.color ?? 'var(--md-sys-color-outline-variant)',
+                      }}
                     />
                     <span className={settingsStyles.importLabelText}>
                       {category?.name ?? 'Категория удалена'}
                     </span>
                   </span>
                   <span className={settingsStyles.importAmount}>
-                    {formatAmount(Number(limit.amount), currency?.symbol)}
+                    <Amount value={Number(limit.amount)} currencySymbol={currency?.symbol} />
                   </span>
                 </div>
               );

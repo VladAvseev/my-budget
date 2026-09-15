@@ -1,30 +1,31 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-l);
+  gap: 16px;
 }
 
 .title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  --heading-size: 20px;
+  font-size: var(--heading-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .text {
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .label {
-  font-size: var(--font-size-m);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .rowEnd {
@@ -35,12 +36,12 @@
 .rowEndGap {
   display: flex;
   justify-content: flex-end;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .fieldGroup {
   display: flex;
-  gap: var(--space-m);
+  gap: 12px;
   align-items: flex-end;
 }
 
@@ -56,70 +57,77 @@
 .fieldGroupTop {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .titleRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .titleGrow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  gap: 12px;
+  --heading-size: 20px;
+  font-size: var(--heading-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
 }
 
 .loaderWrap {
   display: flex;
   justify-content: center;
-  padding: var(--space-xl);
+  padding: 24px;
 }
 
 .skeletonRows {
   display: flex;
   flex-direction: column;
-  gap: var(--space-s);
+  gap: 8px;
 }
 
 .dangerZone {
-  border: 1px solid var(--color-error);
-  background-color: var(--color-error-bg);
+  border: 1px solid var(--md-sys-color-error);
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
+
+.dangerZone .title,
+.dangerZone .text {
+  color: var(--md-sys-color-on-error-container);
 }
 
 .importBox {
   display: flex;
   flex-direction: column;
-  gap: var(--space-m);
-  padding: var(--space-m);
-  border-radius: var(--radius-m);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-bg-surface);
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--md-sys-shape-corner-small);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface-container);
 }
 
 .importLabel {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .importRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
+  gap: 12px;
 }
 
 .importName {
   display: flex;
   align-items: center;
-  gap: var(--space-s);
+  gap: 8px;
   min-width: 0;
 }
 
@@ -127,38 +135,38 @@
   width: 12px;
   height: 12px;
   flex-shrink: 0;
-  border-radius: var(--radius-round);
-  background-color: var(--color-border);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-outline-variant);
 }
 
 .importLabelText {
-  color: var(--color-text-primary);
+  color: var(--md-sys-color-on-surface);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .importAmount {
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   flex-shrink: 0;
 }
 
 .readOnlyField {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .readOnlyLabel {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .readOnlyValue {
-  padding: var(--space-s);
-  border-radius: var(--radius-m);
-  background-color: var(--color-bg-surface);
-  color: var(--color-text-primary);
-  font-size: var(--font-size-m);
+  padding: 8px;
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+  font-size: var(--md-sys-typescale-body-medium-size);
 }

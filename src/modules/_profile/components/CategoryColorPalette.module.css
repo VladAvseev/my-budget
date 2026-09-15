@@ -1,13 +1,13 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-s);
+  gap: 8px;
 }
 
 .label {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .container {
@@ -16,7 +16,7 @@
 
 .circles {
   display: grid;
-  gap: var(--space-s);
+  gap: 8px;
   grid-template-columns: repeat(12, auto);
 }
 
@@ -31,7 +31,7 @@
   width: 28px;
   height: 28px;
   padding: 0;
-  border-radius: var(--radius-round);
+  border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
 }
 
@@ -45,15 +45,15 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-regular);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
   cursor: pointer;
 }
 
 .clearButton[data-active='true'] {
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-medium);
+  color: var(--md-sys-color-on-surface);
+  font-weight: var(--md-sys-typescale-label-large-weight);
 }
 
 .clearButton:disabled {

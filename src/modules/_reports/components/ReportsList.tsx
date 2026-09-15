@@ -52,7 +52,7 @@ export const ReportsList = () => {
           ariaLabel="Добавить период"
           onClick={() => setIsCreateOpen(true)}
           isDisabled={isLoading}
-          color="var(--color-accent)"
+          color="var(--md-sys-color-primary)"
           className={styles.addButton}
         >
           <PlusIcon size={24} color="currentColor" />
@@ -72,7 +72,7 @@ export const ReportsList = () => {
         <VSkeletonList
           count={4}
           cardProps={{ compact: true, title: false, lines: 2 }}
-          style={{ gap: 'var(--space-l)' }}
+          style={{ gap: '16px' }}
         />
       )}
 
