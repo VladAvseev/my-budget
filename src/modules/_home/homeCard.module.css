@@ -1,9 +1,27 @@
+/* Карточки главной — M3 Expressive, уровень Excellent.
+ * Base = compact (одна колонка): сначала деньги (hero-суммы), затем контекст и действия.
+ * Hero-акцент: «Последний период» — primary-container (Остаток),
+ * «Аналитика» — тональный secondary-container блок (Капитал). Остальное сдержанно:
+ * глубина через тональные контейнеры, тени только у hover интерактивных карточек. */
+
+/* --- Ссылка-карточка --- */
+
 .link {
   text-decoration: none;
   display: block;
   flex: 1 1 300px;
-  min-width: 300px;
-  position: relative;
+  min-width: min(100%, 300px);
+  border-radius: var(--md-sys-shape-corner-large);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+/* Hero-карточка занимает всю ширину ряда. */
+.heroLink {
+  flex-basis: 100%;
 }
 
 .chevron {
@@ -13,16 +31,181 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
+/* --- Заголовки карточек --- */
+
 .titleRow {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
-.titleIcon {
+/* Иконка в тональном «чипе» вместо голого цветного штриха. */
+.titleChip {
   display: inline-flex;
-  color: var(--md-sys-color-primary);
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
 }
+
+/* Чип поверх primary-container: полупрозрачная подложка из on-цвета. */
+.titleChipOnPrimary {
+  background-color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-primary-container) 14%,
+    transparent
+  );
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.title {
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-surface);
+}
+
+.subtitle {
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* --- Hero «Последний период»: Остаток на primary-container --- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  padding: 20px;
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  transition:
+    border-radius var(--md-sys-motion-expressive-fast-spatial),
+    box-shadow var(--md-sys-motion-expressive-fast-effects);
+}
+
+.heroLink:hover .hero {
+  border-radius: var(--md-sys-shape-corner-extra-large-increased);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
+}
+
+.heroTitle {
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.heroSubtitle {
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-primary-container);
+  opacity: 0.75;
+}
+
+.heroBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.heroMain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.heroKicker {
+  font-size: var(--md-sys-typescale-label-large-size);
+  color: var(--md-sys-color-on-primary-container);
+  opacity: 0.75;
+}
+
+.heroValue {
+  font-size: var(--md-sys-typescale-headline-small-size);
+  font-weight: var(--md-sys-typescale-headline-small-emphasized-weight);
+  line-height: var(--md-sys-typescale-headline-small-line-height);
+  color: var(--md-sys-color-on-primary-container);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.heroValueNegative {
+  color: var(--md-sys-color-error);
+}
+
+.heroFacts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.heroFact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.heroFactLabel {
+  font-size: var(--md-sys-typescale-label-medium-size);
+  color: var(--md-sys-color-on-primary-container);
+  opacity: 0.75;
+}
+
+.heroFactValue {
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  color: var(--md-sys-color-on-primary-container);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.heroFactSub {
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-primary-container);
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+/* --- Тональный hero «Аналитики»: Капитал на secondary-container --- */
+
+.capitalBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border-radius: var(--md-sys-shape-corner-large);
+}
+
+.capitalKicker {
+  font-size: var(--md-sys-typescale-label-large-size);
+  color: var(--md-sys-color-on-secondary-container);
+  opacity: 0.75;
+}
+
+.capitalValue {
+  font-size: var(--md-sys-typescale-headline-small-size);
+  font-weight: var(--md-sys-typescale-headline-small-emphasized-weight);
+  line-height: var(--md-sys-typescale-headline-small-line-height);
+  color: var(--md-sys-color-on-secondary-container);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.capitalValueNegative {
+  color: var(--md-sys-color-error);
+}
+
+/* --- Входной motion: один сдержанный момент на hero-суммы --- */
 
 .animateCard {
   animation: fadeUp var(--md-sys-motion-standard-fast-spatial) both;
@@ -39,10 +222,18 @@
   }
 }
 
+/* --- Скелетоны: те же габариты, что у карточек --- */
+
 .skeletonCard {
   flex: 1 1 300px;
-  min-width: 300px;
+  min-width: min(100%, 300px);
 }
+
+.skeletonWide {
+  flex-basis: 100%;
+}
+
+/* --- Supporting-карточки (VCard): содержимое --- */
 
 .card {
   display: flex;
@@ -58,24 +249,16 @@
   gap: 16px;
   height: 100%;
   flex: 1 1 300px;
-  min-width: 300px;
-}
-
-.title {
-  font-size: var(--md-sys-typescale-title-medium-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  color: var(--md-sys-color-on-surface);
-}
-
-.subtitle {
-  font-size: var(--md-sys-typescale-body-small-size);
-  color: var(--md-sys-color-on-surface-variant);
+  min-width: min(100%, 300px);
 }
 
 .checklist {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .checklistItem {
@@ -101,6 +284,7 @@
   display: flex;
   gap: 8px;
   margin-top: auto;
+  flex-wrap: wrap;
 }
 
 .fullWidthButton {
@@ -117,5 +301,41 @@
 .card,
 .cardGrow {
   --positive-ink: light-dark(#167b43, #1bc5bd);
-  --caution-ink: light-dark(#795600, #fea135);
+}
+
+/* --- Adaptive-расширение через min-width --- */
+
+@media (min-width: 600px) {
+  .hero {
+    padding: 24px;
+  }
+
+  .capitalBlock {
+    padding: 20px;
+  }
+}
+
+/* Expanded: hero-тело в две колонки — сумма слева, факты справа. */
+@media (min-width: 840px) {
+  .heroBody {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: end;
+  }
+
+  .heroFacts {
+    justify-self: end;
+    min-width: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animateCard {
+    animation: none;
+  }
+
+  .hero {
+    transition: none;
+  }
 }

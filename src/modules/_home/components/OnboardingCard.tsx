@@ -16,27 +16,30 @@ export const OnboardingCard = () => {
   }
 
   return (
-    <VCard
-      className={`${styles.cardGrow} ${styles.animateCard}`}
-      style={{ animationDelay: '0.06s' }}
-    >
+    <VCard className={styles.cardGrow}>
       <div className={styles.title}>С чего начать?</div>
 
-      <div className={styles.checklist}>
+      <ul className={styles.checklist}>
         {items.map((item) => (
-          <div key={item.id} className={styles.checklistItem}>
+          <li
+            key={item.id}
+            className={styles.checklistItem}
+            aria-current={nextItem?.id === item.id ? 'step' : undefined}
+          >
             <div
               className={`${styles.checklistLabel}${item.done ? ` ${styles.checklistLabelDone}` : ` ${styles.checklistLabelPending}`}`}
             >
               {item.label}
             </div>
-            <CheckIcon
-              size={18}
-              color={item.done ? 'var(--positive-ink)' : 'var(--md-sys-color-on-surface-variant)'}
-            />
-          </div>
+            <span aria-hidden="true">
+              <CheckIcon
+                size={18}
+                color={item.done ? 'var(--positive-ink)' : 'var(--md-sys-color-on-surface-variant)'}
+              />
+            </span>
+          </li>
         ))}
-      </div>
+      </ul>
 
       {allDone ? (
         <VButton

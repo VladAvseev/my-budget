@@ -1,5 +1,5 @@
 import { useBootstrap } from '@/shared/api/hooks';
-import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
+import { ReportsIcon } from '@/shared/icons';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { formatDisplay } from '@/shared/utils';
@@ -20,10 +20,10 @@ export const NewReportCard = () => {
   if (!isPeriodEnded) return null;
 
   return (
-    <Link to="/reports" className={`${styles.link} ${styles.animateCard}`}>
+    <Link to="/reports" className={styles.link}>
       <VCard interactive className={styles.card}>
         <div className={styles.titleRow}>
-          <span className={styles.titleIcon}>
+          <span className={styles.titleChip}>
             <ReportsIcon size={18} />
           </span>
           <div className={styles.title}>Пришло время добавить новый период</div>
@@ -34,9 +34,6 @@ export const NewReportCard = () => {
         </div>
         <VButton className={styles.fullWidthButton}>Добавить период</VButton>
       </VCard>
-      <span className={styles.chevron}>
-        <ChevronRightIcon size={18} />
-      </span>
     </Link>
   );
 };

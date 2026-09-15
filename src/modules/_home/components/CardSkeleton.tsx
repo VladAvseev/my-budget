@@ -4,7 +4,11 @@ import styles from '../homeCard.module.css';
 /**
  * Скелетон карточки главной: те же габариты, что у обычных карточек, —
  * при приходе данных карточки не «прыгают».
+ * Флаг wide — под hero-карточки на всю ширину ряда.
  */
-export const CardSkeleton = ({ delay }: { delay?: string }) => (
-  <VSkeletonCard delay={delay} className={styles.skeletonCard} />
+export const CardSkeleton = ({ delay, wide }: { delay?: string; wide?: boolean }) => (
+  <VSkeletonCard
+    delay={delay}
+    className={`${styles.skeletonCard}${wide ? ` ${styles.skeletonWide}` : ''}`}
+  />
 );

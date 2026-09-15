@@ -29,7 +29,7 @@ export const OverviewCard = () => {
   const capitalQuery = useCapital(user?.id ?? '');
 
   if (isLoading || capitalQuery.isLoading) {
-    return <CardSkeleton delay="0.12s" />;
+    return <CardSkeleton delay="0.12s" wide />;
   }
 
   const bootstrap = data ?? EMPTY_BOOTSTRAP;
@@ -59,29 +59,27 @@ export const OverviewCard = () => {
       percent: percentOfIncome(expense, income),
       color: 'var(--md-sys-color-error)',
     },
-    {
-      label: 'Капитал',
-      value: formatAmount(capital, currency?.symbol),
-      percent: null,
-      color: capital >= 0 ? 'var(--positive-ink)' : 'var(--md-sys-color-error)',
-    },
   ];
 
   return (
-    <Link
-      to="/overview"
-      className={`${styles.link} ${styles.animateCard}`}
-      style={{ animationDelay: '0.12s' }}
-    >
+    <Link to="/overview" className={styles.link}>
       <VCard interactive className={styles.card}>
         <div className={styles.titleRow}>
-          <span className={styles.titleIcon}>
+          <span className={styles.titleChip}>
             <OverviewIcon size={18} />
           </span>
           <div className={summaryStyles.title}>Аналитика</div>
         </div>
         <div className={summaryStyles.subtitle}>
           Доходы и расходы за всё время · капитал по всем счетам
+        </div>
+        <div className={styles.capitalBlock}>
+          <div className={styles.capitalKicker}>Капитал</div>
+          <div
+            className={`${styles.capitalValue}${capital < 0 ? ` ${styles.capitalValueNegative}` : ''}`}
+          >
+            <CurrencyText>{formatAmount(capital, currency?.symbol)}</CurrencyText>
+          </div>
         </div>
         <div className={summaryStyles.grid}>
           {items.flatMap((item) => [
@@ -105,7 +103,7 @@ export const OverviewCard = () => {
           ])}
         </div>
       </VCard>
-      <span className={styles.chevron}>
+      <span className={styles.chevron} aria-hidden="true">
         <ChevronRightIcon size={18} />
       </span>
     </Link>
