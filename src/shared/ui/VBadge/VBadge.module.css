@@ -18,7 +18,7 @@
 
 .neutral {
   color: var(--md-sys-color-on-surface-variant);
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: var(--md-sys-color-surface-container-highest);
   border-color: var(--md-sys-color-outline-variant);
 }
 

@@ -52,7 +52,7 @@
   height: 100%;
   padding: 12px;
   border-radius: var(--md-sys-shape-corner-extra-large);
-  background-color: var(--md-sys-color-surface-container-low);
+  background-color: var(--md-sys-color-surface-container);
   color: var(--md-sys-color-on-surface);
   box-shadow: none;
   transition: background-color var(--md-sys-motion-expressive-fast-effects);
@@ -331,8 +331,8 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .link:hover .card { background-color: var(--md-sys-color-surface-container); }
-  .link:hover .newReportCard { background-color: var(--md-sys-color-surface-container-high); }
+  .link:hover .card { background-color: var(--md-sys-color-surface-container-high); }
+  .link:hover .newReportCard { background-color: var(--md-sys-color-surface-container-highest); }
   .heroLink:hover .hero {
     background-color: color-mix(in srgb, var(--md-sys-color-primary-container) 96%, var(--md-sys-color-on-primary-container) 4%);
   }

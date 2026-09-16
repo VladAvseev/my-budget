@@ -23,7 +23,7 @@
   width: 100%;
   max-height: calc(100vh - 32px);
   max-height: calc(100dvh - 32px);
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: var(--md-sys-color-surface-container);
   border-radius: var(--md-sys-shape-corner-extra-large);
   box-shadow:
     0 8px 24px color-mix(in srgb, var(--md-sys-color-shadow) 25%, transparent);

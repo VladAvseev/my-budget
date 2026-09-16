@@ -134,7 +134,7 @@
 }
 
 .table tbody tr.rowClickable:hover {
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: var(--md-sys-color-surface-container-highest);
 }
 
 .statusOk {
@@ -156,7 +156,7 @@
 
 .detailsCell {
   padding: 8px;
-  background-color: var(--md-sys-color-surface-container);
+  background-color: var(--md-sys-color-surface-container-highest);
 }
 
 .detailsBlock {
@@ -179,7 +179,7 @@
   max-height: 240px;
   overflow: auto;
   border-radius: var(--md-sys-shape-corner-extra-small);
-  background-color: var(--md-sys-color-surface);
+  background-color: var(--md-sys-color-surface-container-lowest);
   font-family: monospace;
   font-size: var(--md-sys-typescale-body-small-size);
   color: var(--md-sys-color-on-surface);

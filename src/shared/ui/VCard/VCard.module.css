@@ -3,7 +3,7 @@
  * Глубина — через тональные контейнеры, тень только у interactive hover. */
 
 .card {
-  background-color: var(--md-sys-color-surface-container-low);
+  background-color: var(--md-sys-color-surface-container);
   border-radius: var(--md-sys-shape-corner-medium);
   padding: 10px;
   transition:
