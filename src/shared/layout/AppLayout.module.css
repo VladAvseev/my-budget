@@ -4,7 +4,7 @@
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
-  background-color: var(--md-sys-color-surface-container-lowest);
+  background-color: var(--md-sys-color-surface-container-low);
 }
 
 .skipLink {
