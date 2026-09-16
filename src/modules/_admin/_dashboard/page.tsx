@@ -32,16 +32,6 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <div className={commonStyles.pageHeaderRow}>
-        <VButton
-          variant="secondary"
-          isLoading={statsQuery.isFetching}
-          onClick={() => void queryClient.invalidateQueries({ queryKey: ['admin'] })}
-        >
-          Обновить
-        </VButton>
-      </div>
-
       <div className={styles.grid}>
         <div className={`${commonStyles.animateCard} ${styles.fullWidth}`}>
           <OperationsDynamicsCard />
