@@ -6,13 +6,13 @@
   --caution-ink: light-dark(#795600, #fea135);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .label {
@@ -50,6 +50,6 @@
 
 @media (min-width: 600px) {
   .grid {
-    gap: 16px;
+    gap: 12px;
   }
 }

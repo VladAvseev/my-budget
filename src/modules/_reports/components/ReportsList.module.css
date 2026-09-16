@@ -1,11 +1,11 @@
 .root {
   display: grid;
-  gap: 24px;
+  gap: 16px;
   min-width: 0;
 }
 .toolbar {
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 .intro {
   margin: 0;
@@ -53,8 +53,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 24px;
   gap: 8px 12px;
-  padding: 20px 16px;
-  min-height: 88px;
+  padding: 12px;
+  min-height: 64px;
   box-sizing: border-box;
   background: var(--md-sys-color-surface-container-low);
   color: var(--md-sys-color-on-surface);
@@ -112,8 +112,8 @@
 .emptyState {
   display: grid;
   justify-items: start;
-  gap: 16px;
-  padding: 24px;
+  gap: 12px;
+  padding: 16px;
 }
 .emptyState h2 {
   margin: 0;
@@ -139,7 +139,7 @@
     grid-column: 1 / -1;
   }
   .row {
-    padding: 24px;
+    padding: 16px;
   }
 }
 @media (min-width: 840px) {

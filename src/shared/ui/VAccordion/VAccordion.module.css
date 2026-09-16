@@ -19,8 +19,8 @@
   justify-content: space-between;
   gap: 8px;
   width: 100%;
-  min-height: 56px;
-  padding: 8px 8px 8px 16px;
+  min-height: 48px;
+  padding: 4px 8px 4px 12px;
   border-radius: var(--md-sys-shape-corner-medium);
   cursor: pointer;
 }
@@ -105,7 +105,7 @@
 }
 
 .bodyInner {
-  padding: 0 16px 16px;
+  padding: 0 12px 12px;
   font: var(--md-sys-typescale-body-medium);
   letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
@@ -119,11 +119,11 @@
 
 @media (min-width: 600px) {
   .header {
-    padding-left: 20px;
+    padding-left: 16px;
   }
 
   .bodyInner {
-    padding: 0 20px 20px;
+    padding: 0 16px 16px;
   }
 }
 

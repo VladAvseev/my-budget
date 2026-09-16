@@ -5,9 +5,9 @@
 .root .content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  border-radius: 28px;
-  padding: 20px;
+  gap: 12px;
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  padding: 12px;
 }
 .title {
   margin: 0;
@@ -16,7 +16,7 @@
 }
 .chartWrapper {
   display: grid;
-  gap: 20px;
+  gap: 12px;
   min-width: 0;
 }
 .diagram {
@@ -24,7 +24,7 @@
   justify-content: center;
   min-width: 0;
   padding: 12px;
-  border-radius: 24px;
+  border-radius: var(--md-sys-shape-corner-large-increased);
   background: var(--md-sys-color-surface-container);
 }
 .legend {
@@ -40,7 +40,7 @@
   grid-template-columns: 12px minmax(0, 1fr) auto;
   gap: 6px 10px;
   align-items: baseline;
-  padding-block: 14px;
+  padding-block: 10px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 .legendRow:last-child {
@@ -94,7 +94,7 @@
 }
 @media (min-width: 600px) {
   .root .content {
-    padding: 24px;
+    padding: 16px;
   }
 }
 @container (min-width:640px) {

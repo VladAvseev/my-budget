@@ -27,8 +27,8 @@
 
 .input {
   width: 100%;
-  min-height: 120px;
-  padding: 12px 16px;
+  min-height: 96px;
+  padding: 9px 12px;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-extra-small);
   background-color: var(--md-sys-color-surface-container-highest);

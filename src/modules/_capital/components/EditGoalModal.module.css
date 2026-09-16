@@ -1,9 +1,9 @@
 .accountRow {
   display: grid;
   gap: 8px;
-  padding: 16px;
+  padding: 12px;
   background: var(--md-sys-color-surface-container);
-  border-radius: 16px;
+  border-radius: var(--md-sys-shape-corner-large);
 }
 .accountLabel {
   font: var(--md-sys-typescale-label-large);

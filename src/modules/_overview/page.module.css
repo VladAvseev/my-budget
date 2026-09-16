@@ -1,7 +1,7 @@
 .page {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
+  gap: 12px;
   min-width: 0;
   width: 100%;
   margin-inline: auto;
@@ -13,7 +13,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 }
 .headerActions {
@@ -29,7 +29,7 @@
 }
 @media (min-width: 600px) {
   .page {
-    gap: 32px;
+    gap: 16px;
   }
 }
 @media (min-width: 1600px) {

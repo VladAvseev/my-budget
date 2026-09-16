@@ -24,7 +24,7 @@ export const NewReportCard = () => {
       <VCard interactive className={`${styles.card} ${styles.newReportCard}`}>
         <div className={styles.titleRow}>
           <span className={styles.titleChip}>
-            <ReportsIcon size={18} />
+            <ReportsIcon size={20} />
           </span>
           <div className={styles.title}>Пришло время добавить новый период</div>
         </div>

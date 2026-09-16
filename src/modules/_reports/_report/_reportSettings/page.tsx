@@ -17,7 +17,7 @@ export const Page: React.FC = () => {
   return (
     <div className={layout.page}>
       <VPageHeader
-        title={report ? `Настройки периода «${report.name}»` : 'Настройки периода'}
+        title={report ? `Настройки «${report.name}»` : 'Настройки периода'}
         onBack={() => navigate(`/reports/${id ?? ''}`)}
         backAriaLabel="Назад к периоду"
       />

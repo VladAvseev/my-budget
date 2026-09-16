@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  gap: 24px;
+  gap: 12px;
   min-width: 0;
   width: 100%;
   max-width: 1120px;
@@ -27,15 +27,9 @@
 }
 .settings {
   display: grid;
-  gap: 24px;
+  gap: 12px;
   align-items: start;
   min-width: 0;
-}
-.page :is(button, [role='combobox']) {
-  min-height: 48px;
-}
-.page button {
-  min-width: 44px;
 }
 .page :is(button, a, [role='button'], [role='combobox']):focus-visible {
   outline: 3px solid var(--md-sys-color-primary);
@@ -43,7 +37,7 @@
 }
 @media (min-width: 600px) {
   .page {
-    gap: 28px;
+    gap: 16px;
   }
 }
 @media (min-width: 1200px) {
@@ -65,12 +59,6 @@
   }
 }
 
-.dialog :is(button, input, [role='combobox'], [role='option']) {
-  min-height: 48px;
-}
-.dialog button {
-  min-width: 44px;
-}
 .dialog :focus-visible {
   outline: 3px solid var(--md-sys-color-primary);
   outline-offset: 2px;

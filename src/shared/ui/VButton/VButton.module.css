@@ -1,6 +1,7 @@
 /* VButton — M3 Expressive common buttons (web-адаптация).
- * Base = compact/mobile: pill 40px, label-large. Desktop не растягиваем,
- * только чуть больше горизонтальные отступы через min-width. */
+ * Base = compact/mobile: скруглённый прямоугольник 40px, label-large.
+ * Desktop не растягиваем, только чуть больше горизонтальные отступы
+ * через min-width. */
 
 .base {
   position: relative;
@@ -9,8 +10,8 @@
   justify-content: center;
   gap: 8px;
   min-height: 40px;
-  padding: 8px 16px;
-  border-radius: var(--md-sys-shape-corner-full);
+  padding: 8px 12px;
+  border-radius: var(--md-sys-shape-corner-large-increased);
   font: var(--md-sys-typescale-label-large);
   letter-spacing: var(--md-sys-typescale-label-large-tracking);
   font-family: inherit;
@@ -131,7 +132,7 @@
 
 @media (min-width: 600px) {
   .base {
-    padding-inline: 20px;
+    padding-inline: 16px;
   }
 }
 

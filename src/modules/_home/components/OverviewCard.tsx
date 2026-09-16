@@ -66,7 +66,7 @@ export const OverviewCard = () => {
       <VCard interactive className={styles.card}>
         <div className={styles.titleRow}>
           <span className={styles.titleChip}>
-            <OverviewIcon size={18} />
+            <OverviewIcon size={20} />
           </span>
           <div className={styles.title}>Аналитика</div>
         </div>
@@ -104,7 +104,7 @@ export const OverviewCard = () => {
         </div>
       </VCard>
       <span className={styles.chevron} aria-hidden="true">
-        <ChevronRightIcon size={18} />
+        <ChevronRightIcon size={20} />
       </span>
     </Link>
   );

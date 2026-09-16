@@ -44,7 +44,7 @@ export const Page: React.FC = () => {
         />
         {report && (
           <VIconButton
-            ariaLabel="Настройки периода"
+            ariaLabel="Настройки"
             onClick={() => navigate(`/reports/${report.id}/settings`)}
             color="var(--md-sys-color-on-surface)"
           >

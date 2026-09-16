@@ -16,12 +16,12 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 16px;
+  padding: 10px;
   animation: skeletonFadeUp var(--md-sys-motion-expressive-default-spatial) both;
 }
 
 .cardCompact {
-  padding: 12px;
+  padding: 10px;
 }
 
 .cardTitle {
@@ -63,7 +63,7 @@
 
 @media (min-width: 600px) {
   .card {
-    padding: 24px;
+    padding: 14px;
   }
 }
 

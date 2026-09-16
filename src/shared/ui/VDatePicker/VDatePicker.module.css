@@ -1,5 +1,5 @@
 /* VDatePicker — M3 Expressive date field + calendar (web-адаптация).
- * Триггер как outlined-поле 48px; календарь — surface-container-low, дни pill 40px. */
+ * Триггер как outlined-поле 44px; календарь — surface-container-low, дни pill 40px. */
 
 .root {
   position: relative;
@@ -25,8 +25,8 @@
   justify-content: space-between;
   gap: 8px;
   width: 100%;
-  min-height: 48px;
-  padding: 12px 12px 12px 16px;
+  min-height: 44px;
+  padding: 7px 8px 7px 12px;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-extra-small);
   background-color: var(--md-sys-color-surface-container-highest);

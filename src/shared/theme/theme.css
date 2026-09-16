@@ -17,18 +17,30 @@
   --md-ref-typeface-plain: 'Roboto Flex Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
-/* ---------- Shape scale ---------- */
+/* ---------- Shape scale: крупные поверхности уплотнены для проекта ---------- */
 :root {
   --md-sys-shape-corner-none: 0;
   --md-sys-shape-corner-extra-small: 4px;
-  --md-sys-shape-corner-small: 8px;
-  --md-sys-shape-corner-medium: 12px;
-  --md-sys-shape-corner-large: 16px;
-  --md-sys-shape-corner-large-increased: 20px;
-  --md-sys-shape-corner-extra-large: 28px;
-  --md-sys-shape-corner-extra-large-increased: 32px;
-  --md-sys-shape-corner-extra-extra-large: 48px;
+  --md-sys-shape-corner-small: 6px;
+  --md-sys-shape-corner-medium: 8px;
+  --md-sys-shape-corner-large: 10px;
+  --md-sys-shape-corner-large-increased: 12px;
+  --md-sys-shape-corner-extra-large: 16px;
+  --md-sys-shape-corner-extra-large-increased: 20px;
+  --md-sys-shape-corner-extra-extra-large: 24px;
   --md-sys-shape-corner-full: 999px;
+}
+
+/* На medium и шире те же формы получают немного больше радиуса. */
+@media (min-width: 600px) {
+  :root {
+    --md-sys-shape-corner-medium: 10px;
+    --md-sys-shape-corner-large: 12px;
+    --md-sys-shape-corner-large-increased: 16px;
+    --md-sys-shape-corner-extra-large: 20px;
+    --md-sys-shape-corner-extra-large-increased: 24px;
+    --md-sys-shape-corner-extra-extra-large: 28px;
+  }
 }
 
 /* ---------- Motion: web conversion ---------- */
@@ -47,46 +59,48 @@
   --md-sys-motion-standard-slow-effects: 300ms cubic-bezier(0.34, 0.88, 0.34, 1);
 }
 
-/* ---------- Baseline type scale ---------- */
+/* ---------- Compact type scale: проектная адаптация M3 ---------- */
+/* Крупные роли уплотнены; body/label сохраняют читаемость.
+ * Отступы и размеры действий задаются локально в CSS Modules. */
 :root {
-  --md-sys-typescale-display-large-size: 3.5625rem;
-  --md-sys-typescale-display-large-line-height: 4rem;
+  --md-sys-typescale-display-large-size: 2.25rem;
+  --md-sys-typescale-display-large-line-height: 2.75rem;
   --md-sys-typescale-display-large-weight: 400;
   --md-sys-typescale-display-large-tracking: -0.0125rem; /* -0.2px */
   --md-sys-typescale-display-large: var(--md-sys-typescale-display-large-weight) var(--md-sys-typescale-display-large-size)/var(--md-sys-typescale-display-large-line-height) var(--md-ref-typeface-brand);
 
-  --md-sys-typescale-display-medium-size: 2.8125rem;
-  --md-sys-typescale-display-medium-line-height: 3.25rem;
+  --md-sys-typescale-display-medium-size: 2rem;
+  --md-sys-typescale-display-medium-line-height: 2.5rem;
   --md-sys-typescale-display-medium-weight: 400;
   --md-sys-typescale-display-medium-tracking: 0;
   --md-sys-typescale-display-medium: var(--md-sys-typescale-display-medium-weight) var(--md-sys-typescale-display-medium-size)/var(--md-sys-typescale-display-medium-line-height) var(--md-ref-typeface-brand);
 
-  --md-sys-typescale-display-small-size: 2.25rem;
-  --md-sys-typescale-display-small-line-height: 2.75rem;
+  --md-sys-typescale-display-small-size: 1.75rem;
+  --md-sys-typescale-display-small-line-height: 2.125rem;
   --md-sys-typescale-display-small-weight: 400;
   --md-sys-typescale-display-small-tracking: 0;
   --md-sys-typescale-display-small: var(--md-sys-typescale-display-small-weight) var(--md-sys-typescale-display-small-size)/var(--md-sys-typescale-display-small-line-height) var(--md-ref-typeface-brand);
 
-  --md-sys-typescale-headline-large-size: 2rem;
-  --md-sys-typescale-headline-large-line-height: 2.5rem;
+  --md-sys-typescale-headline-large-size: 1.5rem;
+  --md-sys-typescale-headline-large-line-height: 1.875rem;
   --md-sys-typescale-headline-large-weight: 400;
   --md-sys-typescale-headline-large-tracking: 0;
   --md-sys-typescale-headline-large: var(--md-sys-typescale-headline-large-weight) var(--md-sys-typescale-headline-large-size)/var(--md-sys-typescale-headline-large-line-height) var(--md-ref-typeface-brand);
 
-  --md-sys-typescale-headline-medium-size: 1.75rem;
-  --md-sys-typescale-headline-medium-line-height: 2.25rem;
+  --md-sys-typescale-headline-medium-size: 1.375rem;
+  --md-sys-typescale-headline-medium-line-height: 1.75rem;
   --md-sys-typescale-headline-medium-weight: 400;
   --md-sys-typescale-headline-medium-tracking: 0;
   --md-sys-typescale-headline-medium: var(--md-sys-typescale-headline-medium-weight) var(--md-sys-typescale-headline-medium-size)/var(--md-sys-typescale-headline-medium-line-height) var(--md-ref-typeface-brand);
 
-  --md-sys-typescale-headline-small-size: 1.5rem;
-  --md-sys-typescale-headline-small-line-height: 2rem;
+  --md-sys-typescale-headline-small-size: 1.25rem;
+  --md-sys-typescale-headline-small-line-height: 1.625rem;
   --md-sys-typescale-headline-small-weight: 400;
   --md-sys-typescale-headline-small-tracking: 0;
   --md-sys-typescale-headline-small: var(--md-sys-typescale-headline-small-weight) var(--md-sys-typescale-headline-small-size)/var(--md-sys-typescale-headline-small-line-height) var(--md-ref-typeface-brand);
 
-  --md-sys-typescale-title-large-size: 1.375rem;
-  --md-sys-typescale-title-large-line-height: 1.75rem;
+  --md-sys-typescale-title-large-size: 1.125rem;
+  --md-sys-typescale-title-large-line-height: 1.5rem;
   --md-sys-typescale-title-large-weight: 400;
   --md-sys-typescale-title-large-tracking: 0;
   --md-sys-typescale-title-large: var(--md-sys-typescale-title-large-weight) var(--md-sys-typescale-title-large-size)/var(--md-sys-typescale-title-large-line-height) var(--md-ref-typeface-brand);

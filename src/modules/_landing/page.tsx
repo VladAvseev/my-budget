@@ -1,4 +1,4 @@
-import { MenuIcon, OverviewIcon, SavingsIcon, BanknotesIcon } from '@/shared/icons';
+import { MenuIcon, OverviewIcon, CapitalIcon, BanknotesIcon } from '@/shared/icons';
 import { LegalLinks } from '@/shared/legal/LegalLinks';
 import { VButton } from '@/shared/ui/VButton';
 import { VBrand } from '@/shared/ui/VBrand';
@@ -13,7 +13,7 @@ const FEATURES = [
     text: 'Фиксируйте операции в пару кликов и всегда знайте, куда уходят деньги.',
   },
   {
-    icon: SavingsIcon,
+    icon: CapitalIcon,
     title: 'Накопления',
     text: 'Ставьте финансовые цели и откладывайте деньги: прогресс всегда перед глазами.',
   },

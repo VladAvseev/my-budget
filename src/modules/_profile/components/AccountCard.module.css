@@ -8,7 +8,7 @@
 }
 
 .root {
-  --profile-gap: 16px;
+  --profile-gap: 12px;
   display: flex;
   flex-direction: column;
   gap: var(--profile-gap);
@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 16px;
+  padding: 12px;
   border-radius: var(--md-sys-shape-corner-large-increased);
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
@@ -89,7 +89,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  min-height: 56px;
+  min-height: 48px;
   padding-block: 8px;
 }
 
@@ -117,7 +117,7 @@
   width: 100%;
   flex-direction: row-reverse;
   justify-content: space-between;
-  min-height: 56px;
+  min-height: 48px;
   padding-block: 4px;
 }
 
@@ -137,7 +137,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 16px;
+  padding: 12px;
   border: 1px solid var(--md-sys-color-error);
   border-radius: var(--md-sys-shape-corner-large);
   background-color: color-mix(
@@ -226,11 +226,11 @@
   }
 
   .root {
-    --profile-gap: 20px;
+    --profile-gap: 16px;
   }
 
   .hero {
-    padding: 20px;
+    padding: 16px;
   }
 }
 

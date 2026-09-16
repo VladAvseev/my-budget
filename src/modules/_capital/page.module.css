@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  gap: 24px;
+  gap: 12px;
   min-width: 0;
   width: 100%;
   margin-inline: auto;
@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 }
 .header,
@@ -23,13 +23,9 @@
 }
 .analytics {
   display: grid;
-  gap: 20px;
+  gap: 12px;
   min-width: 0;
   align-items: start;
-}
-.page button {
-  min-width: 48px;
-  min-height: 48px;
 }
 .page :is(button, [role='button'], [tabindex]):focus-visible {
   outline: 3px solid var(--md-sys-color-primary);
@@ -37,10 +33,10 @@
 }
 @media (min-width: 600px) {
   .page {
-    gap: 32px;
+    gap: 16px;
   }
   .analytics {
-    gap: 24px;
+    gap: 12px;
   }
 }
 @media (min-width: 1200px) {

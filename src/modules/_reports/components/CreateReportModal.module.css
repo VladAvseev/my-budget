@@ -1,8 +1,8 @@
 .preview {
   display: grid;
   gap: 8px;
-  padding: 24px 20px;
-  border-radius: 28px 28px 12px 12px;
+  padding: 12px;
+  border-radius: var(--md-sys-shape-corner-extra-large) var(--md-sys-shape-corner-extra-large) var(--md-sys-shape-corner-medium) var(--md-sys-shape-corner-medium);
   background: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
   font-variant-numeric: tabular-nums;
@@ -34,18 +34,12 @@
 .selectFixed {
   min-width: 0;
 }
-.dialog :is(button, [role='combobox'], [role='option']) {
-  min-height: 48px;
-}
-.dialog button {
-  min-width: 44px;
-}
 .dialog :focus-visible {
   outline: 3px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }
 @media (min-width: 600px) {
   .preview {
-    padding: 28px;
+    padding: 16px;
   }
 }

@@ -3,8 +3,8 @@
  * Геометрия — spatial-токен, цвет — effects-токен. */
 
 .card {
-  min-height: 56px;
-  padding: 12px 16px;
+  min-height: 48px;
+  padding: 8px 12px;
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
     border-radius var(--md-sys-motion-expressive-fast-spatial);

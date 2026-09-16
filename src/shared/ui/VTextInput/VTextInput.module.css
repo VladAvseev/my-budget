@@ -1,5 +1,5 @@
 /* VTextInput — M3 Expressive outlined text field (web-адаптация).
- * Base = compact: высота 48px, shape extra-small, label-medium. */
+ * Base = compact: высота 44px, shape extra-small, label-medium. */
 
 .root {
   display: flex;
@@ -27,8 +27,8 @@
 
 .input {
   width: 100%;
-  min-height: 48px;
-  padding: 12px 16px;
+  min-height: 44px;
+  padding: 9px 12px;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-extra-small);
   background-color: var(--md-sys-color-surface-container-highest);

@@ -1,12 +1,17 @@
 import { useAdminStatus } from '@/shared/api/hooks';
 import { useAuth } from '@/shared/api/authProvider';
 import {
+  CapitalFilledIcon,
+  CapitalIcon,
   ChevronRightIcon,
+  HomeFilledIcon,
   HomeIcon,
   OverviewIcon,
+  ReportsFilledIcon,
   ReportsIcon,
-  SavingsIcon,
+  SettingsFilledIcon,
   SettingsIcon,
+  UserFilledIcon,
   UserIcon,
   type IconProps,
 } from '@/shared/icons';
@@ -24,13 +29,17 @@ interface NavItem {
   to: string;
   label: string;
   icon: ComponentType<IconProps>;
+  /** Залитый глиф активного пункта (M3: filled = selected). Без него пункт
+   * в активном состоянии остаётся контурным — пилюля всё равно его выделяет. */
+  activeIcon?: ComponentType<IconProps>;
   end?: boolean;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Главная', icon: HomeIcon, end: true },
-  { to: '/reports', label: 'Периоды', icon: ReportsIcon },
-  { to: '/capital', label: 'Капитал', icon: SavingsIcon },
+  { to: '/', label: 'Главная', icon: HomeIcon, activeIcon: HomeFilledIcon, end: true },
+  { to: '/reports', label: 'Периоды', icon: ReportsIcon, activeIcon: ReportsFilledIcon },
+  { to: '/capital', label: 'Капитал', icon: CapitalIcon, activeIcon: CapitalFilledIcon },
+  // У bar_chart нет отдельного filled-варианта: столбики залиты в обоих.
   { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
 ];
 
@@ -64,7 +73,7 @@ const MobileProfileLink = () => (
     aria-label="Профиль"
     className={styles.mobileProfileLink}
   >
-    <UserIcon size={22} />
+    {({ isActive }) => (isActive ? <UserFilledIcon size={22} /> : <UserIcon size={22} />)}
   </NavLink>
 );
 
@@ -114,10 +123,15 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
                 data-nav-to={item.to}
                 className={styles.navLink}
               >
-                <span className={styles.navLinkContent}>
-                  <item.icon size={18} />
-                  {item.label}
-                </span>
+                {({ isActive }) => {
+                  const Icon = isActive && item.activeIcon ? item.activeIcon : item.icon;
+                  return (
+                    <span className={styles.navLinkContent}>
+                      <Icon size={18} />
+                      {item.label}
+                    </span>
+                  );
+                }}
               </NavLink>
             ))}
 
@@ -125,10 +139,12 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
               <>
                 <div className={styles.adminDivider} aria-hidden="true" />
                 <NavLink to="/admin" data-nav-to="/admin" className={styles.navLink}>
-                  <span className={styles.navLinkContent}>
-                    <SettingsIcon size={18} />
-                    Админ-панель
-                  </span>
+                  {({ isActive }) => (
+                    <span className={styles.navLinkContent}>
+                      {isActive ? <SettingsFilledIcon size={18} /> : <SettingsIcon size={18} />}
+                      Админ-панель
+                    </span>
+                  )}
                 </NavLink>
               </>
             )}
@@ -156,19 +172,30 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
               data-nav-to={item.to}
               className={styles.bottomNavItem}
             >
-              <span className={styles.pill} aria-hidden="true">
-                <item.icon size={22} />
-              </span>
-              <span className={styles.bottomNavLabel}>{item.label}</span>
+              {({ isActive }) => {
+                const Icon = isActive && item.activeIcon ? item.activeIcon : item.icon;
+                return (
+                  <>
+                    <span className={styles.pill} aria-hidden="true">
+                      <Icon size={22} />
+                    </span>
+                    <span className={styles.bottomNavLabel}>{item.label}</span>
+                  </>
+                );
+              }}
             </NavLink>
           ))}
 
           {isAdmin && (
             <NavLink to="/admin" data-nav-to="/admin" className={styles.bottomNavItem}>
-              <span className={styles.pill} aria-hidden="true">
-                <SettingsIcon size={22} />
-              </span>
-              <span className={styles.bottomNavLabel}>Админ</span>
+              {({ isActive }) => (
+                <>
+                  <span className={styles.pill} aria-hidden="true">
+                    {isActive ? <SettingsFilledIcon size={22} /> : <SettingsIcon size={22} />}
+                  </span>
+                  <span className={styles.bottomNavLabel}>Админ</span>
+                </>
+              )}
             </NavLink>
           )}
         </div>

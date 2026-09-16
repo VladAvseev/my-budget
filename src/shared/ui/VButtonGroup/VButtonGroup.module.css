@@ -1,6 +1,6 @@
 /* VButtonGroup — M3 Expressive segmented/filter chips (web-адаптация).
- * Base = compact: wrap-ряд пилюль, без клиппинга focus-ring.
- * Selected — secondary-container, без залитого primary. */
+ * Base = compact: wrap-ряд скруглённых прямоугольников, без клиппинга
+ * focus-ring. Selected — secondary-container, без залитого primary. */
 
 .container {
   display: flex;
@@ -39,9 +39,9 @@
   justify-content: center;
   gap: 8px;
   min-height: 40px;
-  padding: 8px 16px;
+  padding: 8px 12px;
   border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: var(--md-sys-shape-corner-medium);
   background-color: transparent;
   color: var(--md-sys-color-on-surface-variant);
   font: var(--md-sys-typescale-label-large);
@@ -72,7 +72,7 @@
 }
 
 .button:active:not(:disabled) {
-  border-radius: var(--md-sys-shape-corner-small);
+  border-radius: var(--md-sys-shape-corner-extra-small);
 }
 
 .button:disabled {

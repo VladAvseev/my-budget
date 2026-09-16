@@ -26,10 +26,10 @@ const modeOptions: VButtonGroupOption[] = [
 ];
 
 const aggregationOptions: VButtonGroupOption[] = [
-  { value: 'M', label: 'мес' },
-  { value: 'Q', label: 'кв' },
-  { value: 'HY', label: 'пг' },
-  { value: 'Y', label: 'год' },
+  { value: 'M', label: 'Месяц' },
+  { value: 'Q', label: 'Квартал' },
+  { value: 'HY', label: 'Полугодие' },
+  { value: 'Y', label: 'Год' },
 ];
 
 const modeColors: Record<VGrowthDynamicsMode, string> = {

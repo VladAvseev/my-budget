@@ -1,12 +1,12 @@
-@value mobileCompact, title, controls from '../../../shared/ui/VGrowthDynamicsCard/VGrowthDynamicsCard.module.css';
-@value stats, stat, statValue, positive from '../../../shared/ui/VGrowthDynamicsCard/GrowthStats.module.css';
+@value mobileCompact, title, controls from '@/shared/ui/VGrowthDynamicsCard/VGrowthDynamicsCard.module.css';
+@value stats, stat, statValue, positive from '@/shared/ui/VGrowthDynamicsCard/GrowthStats.module.css';
 .root {
   min-width: 0;
 }
 .root .mobileCompact {
   --positive-ink: var(--md-sys-color-primary);
-  padding: 20px;
-  border-radius: 32px 32px 16px 32px;
+  padding: 12px;
+  border-radius: var(--md-sys-shape-corner-extra-large-increased) var(--md-sys-shape-corner-extra-large-increased) var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-extra-large-increased);
   background: var(--md-sys-color-surface-container);
 }
 .root .title {
@@ -15,12 +15,12 @@
 }
 .root .controls {
   gap: 12px;
-  margin-block: 20px;
+  margin-block: 12px;
 }
 .root .stats {
   gap: 12px;
-  margin-bottom: 24px;
-  padding-block: 16px;
+  margin-bottom: 16px;
+  padding-block: 12px;
   border-block: 1px solid var(--md-sys-color-outline-variant);
 }
 .root .stat {
@@ -40,6 +40,6 @@
 }
 @media (min-width: 600px) {
   .root .mobileCompact {
-    padding: 24px;
+    padding: 16px;
   }
 }

@@ -26,7 +26,7 @@ export const LastReportCard = () => {
         <VCard interactive className={styles.card}>
           <div className={styles.titleRow}>
             <span className={styles.titleChip}>
-              <ReportsIcon size={18} />
+              <ReportsIcon size={20} />
             </span>
             <div className={styles.title}>Последний период</div>
           </div>
@@ -46,9 +46,9 @@ export const LastReportCard = () => {
     <Link to={`/reports/${lastReport.id}`} className={`${styles.link} ${styles.heroLink}`}>
       <div className={styles.hero}>
         <div className={styles.titleRow}>
-          <span className={`${styles.titleChip} ${styles.titleChipOnPrimary}`}>
-            <ReportsIcon size={18} />
-          </span>
+            <span className={`${styles.titleChip} ${styles.titleChipOnPrimary}`}>
+              <ReportsIcon size={20} />
+            </span>
           <div className={styles.heroTitle}>Последний период</div>
         </div>
         <div className={styles.heroSubtitle}>{lastReport.name}</div>

@@ -1,9 +1,9 @@
 .card {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
+  gap: 8px;
   cursor: pointer;
-  border-radius: 16px;
+  border-radius: var(--md-sys-shape-corner-medium);
   box-shadow: none;
 }
 
@@ -81,8 +81,8 @@
 }
 
 .amount {
-  font: var(--md-sys-typescale-title-large);
-  font-weight: 600;
+  font: var(--md-sys-typescale-title-medium-emphasized);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }

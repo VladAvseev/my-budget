@@ -4,18 +4,10 @@ export const OverviewIcon = ({ size = 16, color = 'currentColor', style }: IconP
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke={color}
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    viewBox="0 -960 960 960"
+    fill={color}
     style={style}
   >
-    <line x1="3" y1="3" x2="3" y2="21" />
-    <line x1="3" y1="21" x2="21" y2="21" />
-    <rect x="7" y="11" width="3" height="7" rx="1" />
-    <rect x="12" y="6" width="3" height="12" rx="1" />
-    <rect x="17" y="14" width="3" height="4" rx="1" />
+    <path d="M680-160q-17 0-28.5-11.5T640-200v-200q0-17 11.5-28.5T680-440h80q17 0 28.5 11.5T800-400v200q0 17-11.5 28.5T760-160h-80Zm-240 0q-17 0-28.5-11.5T400-200v-560q0-17 11.5-28.5T440-800h80q17 0 28.5 11.5T560-760v560q0 17-11.5 28.5T520-160h-80Zm-240 0q-17 0-28.5-11.5T160-200v-360q0-17 11.5-28.5T200-600h80q17 0 28.5 11.5T320-560v360q0 17-11.5 28.5T280-160h-80Z" />
   </svg>
 );

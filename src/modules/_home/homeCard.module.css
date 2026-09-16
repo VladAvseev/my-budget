@@ -3,11 +3,11 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   min-width: 0;
   width: 100%;
   margin-inline: auto;
-  padding: 8px;
+  padding: 4px;
 }
 
 .pageHeader h1 {
@@ -18,7 +18,7 @@
 .cardList {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
+  gap: 12px;
   align-items: stretch;
 }
 
@@ -47,10 +47,10 @@
 .skeletonCard.skeletonCard {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   min-width: 0;
   height: 100%;
-  padding: 20px;
+  padding: 12px;
   border-radius: var(--md-sys-shape-corner-extra-large);
   background-color: var(--md-sys-color-surface-container-low);
   color: var(--md-sys-color-on-surface);
@@ -100,7 +100,7 @@
 
 .chevron {
   position: absolute;
-  top: 30px;
+  top: 22px;
   right: 12px;
   display: flex;
   color: var(--md-sys-color-on-surface-variant);
@@ -111,10 +111,10 @@
 .hero {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   min-width: 0;
   height: 100%;
-  padding: 24px;
+  padding: 12px;
   border-radius: var(--md-sys-shape-corner-extra-large-increased);
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
@@ -142,7 +142,7 @@
   min-width: 0;
 }
 
-.heroBody { gap: 24px; }
+.heroBody { gap: 12px; }
 .heroMain { gap: 8px; }
 .heroFacts { gap: 12px; }
 
@@ -201,7 +201,7 @@
   flex-direction: column;
   gap: 8px;
   min-width: 0;
-  padding-block: 16px;
+  padding-block: 12px;
   border-block: 1px solid var(--md-sys-color-outline-variant);
 }
 
@@ -256,8 +256,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  min-height: 48px;
-  padding: 12px;
+  min-height: 40px;
+  padding: 8px 12px;
   border-radius: var(--md-sys-shape-corner-medium);
 }
 
@@ -284,9 +284,9 @@
 .fullWidthButton.fullWidthButton,
 .cardGrow button,
 .errorCard button {
-  min-height: 48px;
+  min-height: 40px;
   max-width: 100%;
-  padding: 12px 20px;
+  padding: 8px 12px;
   font: var(--md-sys-typescale-label-large-emphasized);
   border-radius: var(--md-sys-shape-corner-full);
 }
@@ -320,11 +320,11 @@
 .pageError { grid-column: 1 / -1; }
 
 .skeletonCard.skeletonCard {
-  min-height: 240px;
+  min-height: 200px;
   animation: none;
 }
 
-.skeletonCard.skeletonWide { min-height: 360px; }
+.skeletonCard.skeletonWide { min-height: 300px; }
 .skeletonCard > span[aria-hidden='true'] {
   min-height: 16px;
   animation: none;
@@ -345,14 +345,14 @@
 }
 
 @media (min-width: 600px) {
-  .page { padding: 8px 0; gap: 24px; }
-  .cardList { gap: 20px; }
+  .page { padding: 8px 0; gap: 16px; }
+  .cardList { gap: 12px; }
   .card.card,
   .cardGrow.cardGrow,
   .errorCard.errorCard,
-  .skeletonCard.skeletonCard { padding: 24px; }
-  .hero { padding: 28px; }
-  .chevron { top: 34px; right: 16px; }
+  .skeletonCard.skeletonCard { padding: 12px; }
+  .hero { padding: 16px; }
+  .chevron { top: 22px; right: 16px; }
 }
 
 @media (min-width: 840px) {
@@ -361,7 +361,7 @@
 
 @media (min-width: 1200px) {
   .page { max-width: 1200px; }
-  .cardList { gap: 24px; }
+  .cardList { gap: 16px; }
   .heroValue { font: var(--md-sys-typescale-display-medium-emphasized); }
 }
 
