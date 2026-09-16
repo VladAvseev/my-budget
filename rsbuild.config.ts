@@ -33,8 +33,9 @@ export default defineConfig({
     open: true,
     // В dev запросы фронтенда идут на тот же путь /api/v1, что и в проде,
     // а прокси отдают локальный Express (server/, npm run dev там же).
+    // Цель прокси — через DEV_API_URL, по умолчанию localhost:5001.
     proxy: {
-      '/api': 'https://my-finance.site',
+      '/api': process.env.DEV_API_URL || 'http://localhost:5001',
     },
   },
   html: {
