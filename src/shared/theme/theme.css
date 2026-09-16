@@ -4,7 +4,9 @@
  * Baseline: официальная статическая схема M3 (Material Web v0.192).
  * Color strategy: SchemeTonalSpot от seed #0099dc (@material/material-color-utilities@0.4.0, spec 2025, phone, contrast 0.0), light/dark.
  * Brand override: primary/surface-tint = сам seed #0099dc (не тон-40/80 схемы), on-primary = белый (3.19:1, осознанный выбор продукта);
- * нейтрали прогреты (hue ~70, low chroma), tertiary — тёплый бронзово-песочный, тёмная surface приподнята до tone 12.
+ * тёмные нейтрали — как стандартная тёмная тема Chrome (источники: ui/gfx/color_palette.h Chromium: Grey900 #202124, Grey800 #3c4043; NTP/Card dark #292a2d, toolbar dark #35363a, текст #e8eaed/#9aa0a6), светлые нейтрали и tertiary — холодные стальные (B ≥ G ≥ R).
+ * Лестница lowest → low → container идёт с шагом ~ΔL 2–4 без резких ступеней (старая коллизия low == dim исправлена); выразительность — типографика/shape/motion, не кричащие фоны.
+ * Dark product override: primary-container приглушён (#24455c/#cbe7ff, 7.89:1) — hero «Последний период» и бейдж «Капитал» тёмные, не светят.
  * Typography: Roboto Flex Variable.
  * CSS custom-property names are the project's Web mapping of M3 roles.
  * ========================================================================== */
@@ -202,28 +204,28 @@
   --md-sys-color-on-secondary: #ffffff; /* текст на secondary */
   --md-sys-color-secondary-container: #d3e5f5; /* тональные кнопки, чипы */
   --md-sys-color-on-secondary-container: #435461; /* текст тональных элементов */
-  --md-sys-color-tertiary: #705b4c; /* точечный доп-акцент */
+  --md-sys-color-tertiary: #4d6076; /* точечный доп-акцент, холодный стально-синий */
   --md-sys-color-on-tertiary: #ffffff; /* текст на tertiary */
-  --md-sys-color-tertiary-container: #f0cab2; /* фон доп-акцента, аватары */
-  --md-sys-color-on-tertiary-container: #643f23; /* текст на доп-фоне */
+  --md-sys-color-tertiary-container: #d6e3f5; /* фон доп-акцента, аватары */
+  --md-sys-color-on-tertiary-container: #1e344e; /* текст на доп-фоне */
   --md-sys-color-error: #a83836; /* ошибки и destructive */
   --md-sys-color-on-error: #fff7f6; /* текст на ошибке */
   --md-sys-color-error-container: #fa746f; /* фон ошибки */
   --md-sys-color-on-error-container: #6e0a12; /* текст на фоне ошибки */
-  --md-sys-color-surface: #fff8f5; /* базовая поверхность */
-  --md-sys-color-surface-dim: #dfd9d6; /* приглушённый край */
-  --md-sys-color-surface-bright: #fff8f5; /* яркий край */
+  --md-sys-color-surface: #f4f6fa; /* базовая поверхность, холодная сталь */
+  --md-sys-color-surface-dim: #d2d8e1; /* приглушённый край */
+  --md-sys-color-surface-bright: #fbfcfe; /* яркий край */
   --md-sys-color-surface-container-lowest: #ffffff; /* самый низкий уровень */
-  --md-sys-color-surface-container-low: #f9f2f0; /* низкий уровень, elevated-кнопки */
-  --md-sys-color-surface-container: #f3ecea; /* базовый контейнер */
-  --md-sys-color-surface-container-high: #eee7e4; /* повышенный уровень */
-  --md-sys-color-surface-container-highest: #e8e1de; /* самый высокий уровень */
-  --md-sys-color-on-surface: #353230; /* основной текст */
-  --md-sys-color-on-surface-variant: #655e59; /* вторичный текст и иконки */
-  --md-sys-color-outline: #817973; /* значимые границы, поля */
-  --md-sys-color-outline-variant: #bab0aa; /* разделители */
-  --md-sys-color-inverse-surface: #2e2c2a; /* инверсный фон, снекбар */
-  --md-sys-color-inverse-on-surface: #f6efec; /* текст инверсного фона */
+  --md-sys-color-surface-container-low: #edf0f5; /* низкий уровень, elevated-кнопки */
+  --md-sys-color-surface-container: #e6eaf0; /* базовый контейнер */
+  --md-sys-color-surface-container-high: #dfe4eb; /* повышенный уровень */
+  --md-sys-color-surface-container-highest: #d7dde6; /* самый высокий уровень */
+  --md-sys-color-on-surface: #191c20; /* основной текст */
+  --md-sys-color-on-surface-variant: #43474e; /* вторичный текст и иконки */
+  --md-sys-color-outline: #73777f; /* значимые границы, поля */
+  --md-sys-color-outline-variant: #c3c7cf; /* разделители */
+  --md-sys-color-inverse-surface: #2f333a; /* инверсный фон, снекбар */
+  --md-sys-color-inverse-on-surface: #eef1f6; /* текст инверсного фона */
   --md-sys-color-inverse-primary: #acd7f9; /* акцент на инверсии */
   --md-sys-color-surface-tint: #0099dc; /* оттенок тонирования */
   --md-sys-color-shadow: #000000; /* тени */
@@ -236,44 +238,44 @@
   --md-sys-color-secondary-fixed-dim: #c5d7e7; /* приглушённый фикс. secondary */
   --md-sys-color-on-secondary-fixed: #31414e; /* текст на фикс. secondary */
   --md-sys-color-on-secondary-fixed-variant: #4d5d6b; /* вторичный текст фикса */
-  --md-sys-color-tertiary-fixed: #f0cab2; /* фиксированный tertiary вне темы */
-  --md-sys-color-tertiary-fixed-dim: #ddbda8; /* приглушённый фикс. tertiary */
-  --md-sys-color-on-tertiary-fixed: #4d2c12; /* текст на фикс. tertiary */
-  --md-sys-color-on-tertiary-fixed-variant: #6a4931; /* вторичный текст фикса */
+  --md-sys-color-tertiary-fixed: #d6e3f5; /* фиксированный tertiary вне темы */
+  --md-sys-color-tertiary-fixed-dim: #c2d3e8; /* приглушённый фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed: #1a2f47; /* текст на фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed-variant: #3d546e; /* вторичный текст фикса */
 }
 
 /* ---------- Dark theme: палитра SchemeTonalSpot (seed #0099dc) ---------- */
 [data-theme='dark'] {
   --md-sys-color-primary: #0099dc; /* главные действия */
   --md-sys-color-on-primary: #ffffff; /* текст на primary */
-  --md-sys-color-primary-container: #34566f; /* акцентные контейнеры, FAB */
-  --md-sys-color-on-primary-container: #cbe7ff; /* текст на акцентном фоне */
+  --md-sys-color-primary-container: #24455c; /* акцентные контейнеры, FAB — приглушённый тёмно-синий (7.89:1) */
+  --md-sys-color-on-primary-container: #cbe7ff; /* текст на акцентном фоне — светлый */
   --md-sys-color-secondary: #b7c9d9; /* вторичные действия */
   --md-sys-color-on-secondary: #32424f; /* текст на secondary */
   --md-sys-color-secondary-container: #2d3d4a; /* тональные кнопки, чипы */
   --md-sys-color-on-secondary-container: #b0c1d1; /* текст тональных элементов */
-  --md-sys-color-tertiary: #f4dbcc; /* точечный доп-акцент */
-  --md-sys-color-on-tertiary: #5b4d44; /* текст на tertiary */
-  --md-sys-color-tertiary-container: #e9ccba; /* фон доп-акцента, аватары */
-  --md-sys-color-on-tertiary-container: #554439; /* текст на доп-фоне */
+  --md-sys-color-tertiary: #b9cde8; /* точечный доп-акцент, холодный стально-синий */
+  --md-sys-color-on-tertiary: #23384f; /* текст на tertiary */
+  --md-sys-color-tertiary-container: #3c4f66; /* фон доп-акцента, аватары */
+  --md-sys-color-on-tertiary-container: #d9e6f7; /* текст на доп-фоне */
   --md-sys-color-error: #fa746f; /* ошибки и destructive */
   --md-sys-color-on-error: #490006; /* текст на ошибке */
   --md-sys-color-error-container: #871f21; /* фон ошибки */
   --md-sys-color-on-error-container: #ff9993; /* текст на фоне ошибки */
-  --md-sys-color-surface: #211f1e; /* базовая поверхность */
-  --md-sys-color-surface-dim: #1d1b1a; /* приглушённый край */
-  --md-sys-color-surface-bright: #3c3937; /* яркий край */
-  --md-sys-color-surface-container-lowest: #151312; /* самый низкий уровень */
-  --md-sys-color-surface-container-low: #1d1b1a; /* низкий уровень, elevated-кнопки */
-  --md-sys-color-surface-container: #242120; /* базовый контейнер */
-  --md-sys-color-surface-container-high: #2c2928; /* повышенный уровень */
-  --md-sys-color-surface-container-highest: #373432; /* самый высокий уровень */
-  --md-sys-color-on-surface: #e8e1de; /* основной текст */
-  --md-sys-color-on-surface-variant: #b6aca6; /* вторичный текст и иконки */
-  --md-sys-color-outline: #807872; /* значимые границы, поля */
-  --md-sys-color-outline-variant: #4c4541; /* разделители */
-  --md-sys-color-inverse-surface: #fff8f5; /* инверсный фон, снекбар */
-  --md-sys-color-inverse-on-surface: #3e3b39; /* текст инверсного фона */
+  --md-sys-color-surface: #232529; /* базовая поверхность, Chrome dark #202124 + шаг */
+  --md-sys-color-surface-dim: #1d1e22; /* приглушённый край */
+  --md-sys-color-surface-bright: #35363a; /* яркий край, тулбар Chrome dark */
+  --md-sys-color-surface-container-lowest: #17181c; /* самый низкий уровень */
+  --md-sys-color-surface-container-low: #202124; /* низкий уровень, базовый фон Chrome dark (Grey900) */
+  --md-sys-color-surface-container: #26272c; /* базовый контейнер */
+  --md-sys-color-surface-container-high: #292a2d; /* повышенный уровень, карточки Chrome dark */
+  --md-sys-color-surface-container-highest: #2e2f34; /* самый высокий уровень */
+  --md-sys-color-on-surface: #e8eaed; /* основной текст, Grey200 Chrome dark */
+  --md-sys-color-on-surface-variant: #9aa0a6; /* вторичный текст и иконки, Grey500 Chrome dark */
+  --md-sys-color-outline: #80868b; /* значимые границы, поля, Grey600 */
+  --md-sys-color-outline-variant: #3c4043; /* разделители, Grey800 Chrome dark */
+  --md-sys-color-inverse-surface: #e6eaf0; /* инверсный фон, снекбар */
+  --md-sys-color-inverse-on-surface: #2f333a; /* текст инверсного фона */
   --md-sys-color-inverse-primary: #41637c; /* акцент на инверсии */
   --md-sys-color-surface-tint: #0099dc; /* оттенок тонирования */
   --md-sys-color-shadow: #000000; /* тени */
@@ -286,8 +288,8 @@
   --md-sys-color-secondary-fixed-dim: #c5d7e7; /* приглушённый фикс. secondary */
   --md-sys-color-on-secondary-fixed: #31414e; /* текст на фикс. secondary */
   --md-sys-color-on-secondary-fixed-variant: #4d5d6b; /* вторичный текст фикса */
-  --md-sys-color-tertiary-fixed: #f0cab2; /* фиксированный tertiary вне темы */
-  --md-sys-color-tertiary-fixed-dim: #ddbda8; /* приглушённый фикс. tertiary */
-  --md-sys-color-on-tertiary-fixed: #4d2c12; /* текст на фикс. tertiary */
-  --md-sys-color-on-tertiary-fixed-variant: #6a4931; /* вторичный текст фикса */
+  --md-sys-color-tertiary-fixed: #d6e3f5; /* фиксированный tertiary вне темы */
+  --md-sys-color-tertiary-fixed-dim: #c2d3e8; /* приглушённый фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed: #1a2f47; /* текст на фикс. tertiary */
+  --md-sys-color-on-tertiary-fixed-variant: #3d546e; /* вторичный текст фикса */
 }
