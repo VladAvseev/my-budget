@@ -18,6 +18,10 @@ export interface AdminUserRow {
   categoriesCount: number;
   incomeCount: number;
   expenseCount: number;
+  /** Открытые счета пользователя. */
+  accountsCount: number;
+  /** Цели на открытых счетах. */
+  goalsCount: number;
 }
 
 /** Запроса нет. */

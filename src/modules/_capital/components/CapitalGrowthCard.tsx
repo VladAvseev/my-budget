@@ -1,13 +1,8 @@
 import { useMemo, useState } from 'react';
 import { useAccounts, useCapitalDynamics, useProfile } from '@/shared/api/hooks';
 import { convertAmount } from '@/shared/utils';
-import {
-  aggregatePoints,
-  toPeriodDeltas,
-  type ChartPoint,
-  type GrowthAggregation,
-} from '@/shared/utils/chartPoints';
-import { buildCapitalChartData, type GrowthChartMode } from '@/shared/utils/buildCapitalChartData';
+import { aggregatePoints, type GrowthAggregation } from '@/shared/utils/chartPoints';
+import { buildCapitalChartData } from '@/shared/utils/buildCapitalChartData';
 import { buildGrowthStats } from '@/shared/utils/buildGrowthStats';
 import { VGrowthDynamicsCard } from '@/shared/ui/VGrowthDynamicsCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
@@ -29,7 +24,6 @@ interface CapitalGrowthCardProps {
 const EMPTY_ARRAY: never[] = [];
 
 export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCardProps) => {
-  const [mode, setMode] = useState<GrowthChartMode>('total');
   const [aggregation, setAggregation] = useState<GrowthAggregation>('M');
 
   const { displayCurrency, defaultCurrency, rates, displaySymbol } = currency;
@@ -88,14 +82,9 @@ export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCard
     [convertedChartData, aggregation],
   );
 
-  const displayData: ChartPoint[] = useMemo(
-    () => (mode === 'period' ? toPeriodDeltas(chartData, base) : chartData),
-    [chartData, base, mode],
-  );
-
   const stats = useMemo(
-    () => buildGrowthStats(chartData, aggregation, base, mode, { firstActivityDate }),
-    [chartData, aggregation, base, mode, firstActivityDate],
+    () => buildGrowthStats(chartData, aggregation, base, { firstActivityDate }),
+    [chartData, aggregation, base, firstActivityDate],
   );
 
   if (isError) {
@@ -119,11 +108,9 @@ export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCard
       <VGrowthDynamicsCard
         title={title}
         isLoading={isLoading}
-        mode={mode}
         aggregation={aggregation}
-        onModeChange={setMode}
         onAggregationChange={setAggregation}
-        chartData={displayData}
+        chartData={chartData}
         stats={stats}
         base={base}
         displaySymbol={displaySymbol}

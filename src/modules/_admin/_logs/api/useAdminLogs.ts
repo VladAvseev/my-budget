@@ -1,8 +1,8 @@
 import { api } from '@/shared/api/http';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-/** Статус-фильтр списка: все / только успешные (<400) / только с ошибкой (≥400). */
-export type AdminLogsStatusFilter = 'all' | 'success' | 'error';
+/** Статус-фильтр списка по классу статуса: все / info (<400) / warning (4xx) / error (5xx). */
+export type AdminLogsStatusFilter = 'all' | 'info' | 'warning' | 'error';
 
 /** Поле и порядок сортировки строк логов (query sort/order в GET /admin/logs). */
 export type AdminLogsSortField = 'date' | 'duration';

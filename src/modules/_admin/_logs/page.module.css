@@ -147,6 +147,13 @@
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
 }
 
+.statusWarning {
+  /* Тот же предупреждающий чернила, что .warning в VBadge: глобальной warning-роли нет. */
+  --caution-ink: light-dark(#795600, #fea135);
+  color: var(--caution-ink);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+}
+
 .detailsCell {
   padding: 8px;
   background-color: var(--md-sys-color-surface-container);

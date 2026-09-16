@@ -1,6 +1,6 @@
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
-import { VGrowthChart } from '@/shared/ui/VGrowthChart';
+import { VDeltaChart } from '@/shared/ui/VDeltaChart';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
@@ -84,8 +84,8 @@ export const LogsDynamicsCard = () => {
         {!isLoading && <span className={styles.total}>Всего: {formatCount(built.total)}</span>}
       </div>
       <div className={styles.controls}>
-        <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
         <VButtonGroup options={metricOptions} value={metric} onChange={setMetric} />
+        <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
         <VButtonGroup options={bucketOptions} value={bucket} onChange={setBucket} />
       </div>
 
@@ -104,7 +104,7 @@ export const LogsDynamicsCard = () => {
             <Stat label={avgLabel} value={formatMetric(stats.avgPerBucket)} />
             <Stat label={lastLabel} value={formatMetric(stats.lastBucket)} />
           </div>
-          <VGrowthChart
+          <VDeltaChart
             data={built.chartData}
             color="var(--md-sys-color-primary)"
             formatValue={formatCount}

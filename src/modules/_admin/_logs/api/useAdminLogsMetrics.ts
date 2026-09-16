@@ -12,27 +12,23 @@ export interface AdminLogEndpointStat {
   errorCount: number;
 }
 
-/** Точка ряда метрик по интервалам. */
-export interface AdminLogsSeriesPoint {
-  /** ISO-строка начала интервала (час для периода 24h, иначе день). */
-  point: string;
-  total: number;
-  errors: number;
-}
-
-/** Ответ GET /admin/logs/metrics (агрегаты по request_logs). */
+/**
+ * Ответ GET /admin/logs/metrics (агрегаты по request_logs). Счётчики разбиты
+ * по классам статуса: info (<400), warning (4xx), error (только 5xx).
+ * Топ-листы — по 10 позиций.
+ */
 export interface AdminLogsMetrics {
   period: AdminLogsPeriod;
   total: number;
-  successCount: number;
+  infoCount: number;
+  warningCount: number;
   errorCount: number;
-  /** доля ошибок 0..1, null — запросов за период не было */
+  /** доля ошибок (только 5xx) 0..1, null — запросов за период не было */
   errorRate: number | null;
   avgDurationMs: number | null;
   p95DurationMs: number | null;
   topSlowestEndpoints: AdminLogEndpointStat[];
   topErrorEndpoints: AdminLogEndpointStat[];
-  perPoint: AdminLogsSeriesPoint[];
 }
 
 /** Параметры GET /admin/logs/metrics. */

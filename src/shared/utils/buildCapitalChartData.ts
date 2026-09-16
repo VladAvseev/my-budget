@@ -1,8 +1,6 @@
 import type { CapitalMonth } from '@/shared/api/hooks';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 
-export type GrowthChartMode = 'total' | 'period';
-
 const MONTH_LABELS = [
   'Янв',
   'Фев',

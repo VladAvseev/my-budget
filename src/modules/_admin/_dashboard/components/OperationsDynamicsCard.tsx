@@ -3,6 +3,7 @@ import { useAtom } from 'jotai';
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
+import { VDeltaChart } from '@/shared/ui/VDeltaChart';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
 import { useAdminOperationsDynamics } from '../api/useAdminOperationsDynamics';
 import {
@@ -90,8 +91,8 @@ export const OperationsDynamicsCard = () => {
         {!isLoading && <span className={styles.total}>Всего: {totalOperations}</span>}
       </div>
       <div className={styles.controls}>
-        <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
         <VButtonGroup options={metricOptions} value={metric} onChange={setMetric} />
+        <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
         {metric === 'count' && (
           <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />
         )}
@@ -103,14 +104,18 @@ export const OperationsDynamicsCard = () => {
 
         {isLoading ? (
           <VSkeleton width="100%" height={280} radius="var(--md-sys-shape-corner-small)" />
-        ) : (
+        ) : effectiveMode === 'cumulative' ? (
           <VGrowthChart
             data={chartData}
-            color={
-              effectiveMode === 'cumulative' ? 'var(--positive-ink)' : 'var(--md-sys-color-primary)'
-            }
+            color="var(--positive-ink)"
             formatValue={formatCount}
-            showChange={effectiveMode === 'cumulative'}
+            showChange={true}
+          />
+        ) : (
+          <VDeltaChart
+            data={chartData}
+            color="var(--md-sys-color-primary)"
+            formatValue={formatCount}
           />
         )}
       </div>

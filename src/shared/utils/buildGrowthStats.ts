@@ -6,7 +6,6 @@ import {
   trimIncompletePeriod,
   trimLeadingPartialPeriod,
 } from '@/shared/utils/chartPoints';
-import type { GrowthChartMode } from './buildCapitalChartData';
 
 export interface MonthlyStats {
   abs: number;
@@ -143,7 +142,6 @@ export const buildGrowthStats = (
   filteredData: ChartPoint[],
   aggregation: GrowthAggregation = 'M',
   base = 0,
-  mode: GrowthChartMode = 'total',
   options: BuildGrowthStatsOptions = {},
 ): VGrowthStatsData => {
   const now = options.now ?? new Date();
@@ -165,31 +163,6 @@ export const buildGrowthStats = (
           pct: buildWindowedMonthlyStats(trimmed, RECENT_WINDOW_MONTHS)?.pct ?? null,
         }
       : null;
-
-  if (mode === 'period') {
-    return {
-      monthly:
-        trimmed.length > 0
-          ? {
-              abs: (trimmed[trimmed.length - 1].value - trimmedBase) / trimmed.length,
-              pct: null,
-            }
-          : null,
-      recent:
-        recent === null
-          ? null
-          : {
-              abs: recent.abs,
-              pct: null,
-            },
-      periodLabel: AGGREGATION_LABELS[aggregation],
-      currentPeriod:
-        filteredData.length > 0
-          ? getPointChange(filteredData, filteredData.length - 1, base)
-          : null,
-      currentPeriodLabel: CURRENT_PERIOD_LABELS[aggregation],
-    };
-  }
 
   return {
     monthly: buildMonthlyStats(trimmed, trimmedBase),

@@ -36,5 +36,5 @@ export {
   getPointChange,
 } from './chartPoints';
 export { getOtherCurrencyRates, formatCurrencyRate, type CurrencyRateItem } from './currencyRates';
-export { buildCapitalChartData, type GrowthChartMode } from './buildCapitalChartData';
+export { buildCapitalChartData } from './buildCapitalChartData';
 export { buildGrowthStats, type BuildGrowthStatsOptions } from './buildGrowthStats';

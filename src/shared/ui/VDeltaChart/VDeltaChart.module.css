@@ -1,0 +1,123 @@
+/* VDeltaChart — столбчатый график значений за период (дельт).
+ * Сетка 1px outline-variant, тултип — инверсная пара, как у VGrowthChart. */
+
+.wrapper {
+  display: flex;
+  position: relative;
+}
+
+.yAxis {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.labelYGhost {
+  display: block;
+  visibility: hidden;
+  white-space: nowrap;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  font-variant-numeric: tabular-nums;
+}
+
+.labelY {
+  position: absolute;
+  left: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.container {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chartWrap {
+  width: max-content;
+  min-width: 100%;
+}
+
+.chart {
+  display: block;
+  margin-left: auto;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  padding: 24px;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+}
+
+.gridLine {
+  stroke: var(--md-sys-color-outline-variant);
+  stroke-width: 1;
+}
+
+.axisLine {
+  stroke: var(--md-sys-color-outline-variant);
+  stroke-width: 1;
+}
+
+.labelX {
+  fill: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium);
+  font-family: var(--md-ref-typeface-plain);
+  text-anchor: end;
+}
+
+.bar {
+  cursor: pointer;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+.bar:hover {
+  opacity: 0.85;
+}
+
+.bar:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background-color: var(--md-sys-color-inverse-surface);
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 8px 12px;
+  color: var(--md-sys-color-inverse-on-surface);
+  white-space: nowrap;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  z-index: 60;
+}
+
+.tooltipValue {
+  font: var(--md-sys-typescale-body-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-medium-emphasized-tracking);
+  font-variant-numeric: tabular-nums;
+}
+
+.tooltipLabel {
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  color: color-mix(in srgb, var(--md-sys-color-inverse-on-surface) 70%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}

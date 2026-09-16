@@ -40,8 +40,9 @@ const PERIOD_OPTIONS: VButtonGroupOption[] = [
 
 const STATUS_OPTIONS: VButtonGroupOption[] = [
   { value: 'all', label: 'Все' },
-  { value: 'success', label: 'Успешные' },
-  { value: 'error', label: 'С ошибкой' },
+  { value: 'info', label: 'Info' },
+  { value: 'warning', label: 'Warning' },
+  { value: 'error', label: 'Error' },
 ];
 
 /** Статический список методов для фильтра: сервер логирует только эти. */
@@ -63,19 +64,6 @@ const dateTimeFormatter = new Intl.DateTimeFormat('ru-RU', {
 });
 
 const formatDateTime = (iso: string): string => dateTimeFormatter.format(new Date(iso));
-
-/** Точка динамики: для 24h — «ДД.ММ ЧЧ:00», иначе «ДД.ММ». */
-const formatSeriesPoint = (iso: string, hourly: boolean): string => {
-  const date = new Date(iso);
-  const dayMonth = new Intl.DateTimeFormat('ru-RU', {
-    day: '2-digit',
-    month: '2-digit',
-  }).format(date);
-  if (!hourly) {
-    return dayMonth;
-  }
-  return `${dayMonth} ${String(date.getHours()).padStart(2, '0')}:00`;
-};
 
 const formatNumber = (value: number): string => value.toLocaleString('ru-RU');
 
@@ -273,53 +261,20 @@ export const Page: React.FC = () => {
         <>
           <div className={styles.metricsGrid}>
             <MetricCard label="Запросов" value={formatNumber(metrics.total)} />
-            <MetricCard label="Успешных" value={formatNumber(metrics.successCount)} />
+            <MetricCard label="Info" value={formatNumber(metrics.infoCount)} />
+            <MetricCard label="Warning" value={formatNumber(metrics.warningCount)} />
             <MetricCard
-              label="Ошибок"
+              label="Error"
               value={formatNumber(metrics.errorCount)}
               isError={metrics.errorCount > 0}
-            />
-            <MetricCard
-              label="Доля ошибок"
-              value={metrics.errorRate === null ? '—' : `${Math.round(metrics.errorRate * 100)}%`}
             />
             <MetricCard label="Ср. время" value={formatMetric(metrics.avgDurationMs, ' мс')} />
             <MetricCard label="p95" value={formatMetric(metrics.p95DurationMs, ' мс')} />
           </div>
 
-          {metrics.perPoint.length > 0 && (
-            <VCard className={styles.detailsBlock}>
-              <span className={styles.detailsTitle}>
-                Динамика {period === '24h' ? 'по часам' : 'по дням'} (всего / ошибок)
-              </span>
-              <div className={styles.tableWrapper}>
-                <table className={styles.seriesTable}>
-                  <thead>
-                    <tr>
-                      <th>Период</th>
-                      <th>Запросов</th>
-                      <th>Ошибок</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {metrics.perPoint.map((point) => (
-                      <tr key={point.point}>
-                        <td>{formatSeriesPoint(point.point, period === '24h')}</td>
-                        <td>{formatNumber(point.total)}</td>
-                        <td className={point.errors > 0 ? styles.errorText : undefined}>
-                          {formatNumber(point.errors)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </VCard>
-          )}
-
           <div className={styles.twoCol}>
-            <EndpointList title="Самые медленные эндпоинты" items={metrics.topSlowestEndpoints} />
-            <EndpointList title="Больше всего ошибок" items={metrics.topErrorEndpoints} />
+            <EndpointList title="Топ-10 самых медленных" items={metrics.topSlowestEndpoints} />
+            <EndpointList title="Топ-10 с частыми ошибками" items={metrics.topErrorEndpoints} />
           </div>
         </>
       )}
@@ -352,6 +307,7 @@ export const Page: React.FC = () => {
             options={METHOD_OPTIONS}
             value={methods}
             emptyText="Все методы"
+            selectAll
             onChange={(value) => {
               setMethods(value);
               setPage(1);
@@ -403,7 +359,13 @@ export const Page: React.FC = () => {
                     </tr>
                   ) : (
                     logs.items.map((row: AdminLogRow) => {
-                      const isError = row.status >= 400;
+                      // Класс статуса: info — тихо, warning (4xx) — акцент, error (5xx) — ошибка.
+                      const statusClass =
+                        row.status >= 500
+                          ? styles.statusError
+                          : row.status >= 400
+                            ? styles.statusWarning
+                            : styles.statusOk;
                       // Раскрытие строки нужно только ради текста ошибки —
                       // параметров запроса сервер не хранит.
                       const isExpanded = row.error !== null && expandedIds.has(row.id);
@@ -416,9 +378,7 @@ export const Page: React.FC = () => {
                             <td>{formatDateTime(row.createdAt)}</td>
                             <td>{row.method}</td>
                             <td>{row.path}</td>
-                            <td className={isError ? styles.statusError : styles.statusOk}>
-                              {row.status}
-                            </td>
+                            <td className={statusClass}>{row.status}</td>
                             <td>{formatNumber(row.durationMs)} мс</td>
                             <td>
                               {row.userLogin ?? (

@@ -4,26 +4,19 @@ import { VSkeleton } from '@/shared/ui/VSkeleton';
 import type { ChartPoint, GrowthAggregation } from '@/shared/utils/chartPoints';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
 import { GrowthStats } from './GrowthStats';
-import type { VGrowthDynamicsMode, VGrowthStatsData } from './types';
+import type { VGrowthStatsData } from './types';
 import styles from './VGrowthDynamicsCard.module.css';
 
 interface VGrowthDynamicsCardProps {
   title: string;
   isLoading: boolean;
-  mode: VGrowthDynamicsMode;
   aggregation: GrowthAggregation;
-  onModeChange: (mode: VGrowthDynamicsMode) => void;
   onAggregationChange: (aggregation: GrowthAggregation) => void;
   chartData: ChartPoint[];
   stats: VGrowthStatsData;
   base?: number;
   displaySymbol?: string;
 }
-
-const modeOptions: VButtonGroupOption[] = [
-  { value: 'total', label: 'Всего' },
-  { value: 'period', label: 'За период' },
-];
 
 const aggregationOptions: VButtonGroupOption[] = [
   { value: 'M', label: 'Месяц' },
@@ -32,17 +25,10 @@ const aggregationOptions: VButtonGroupOption[] = [
   { value: 'Y', label: 'Год' },
 ];
 
-const modeColors: Record<VGrowthDynamicsMode, string> = {
-  total: 'var(--positive-ink)',
-  period: 'var(--md-sys-color-primary)',
-};
-
 export const VGrowthDynamicsCard = ({
   title,
   isLoading,
-  mode,
   aggregation,
-  onModeChange,
   onAggregationChange,
   chartData,
   stats,
@@ -55,7 +41,6 @@ export const VGrowthDynamicsCard = ({
     </div>
 
     <div className={styles.controls}>
-      <VButtonGroup options={modeOptions} value={mode} onChange={onModeChange} />
       <VButtonGroup
         options={aggregationOptions}
         value={aggregation}
@@ -70,8 +55,8 @@ export const VGrowthDynamicsCard = ({
     ) : (
       <VGrowthChart
         data={chartData}
-        color={modeColors[mode]}
-        showChange={mode === 'total'}
+        color="var(--positive-ink)"
+        showChange={true}
         displaySymbol={displaySymbol}
         base={base}
       />

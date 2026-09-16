@@ -30,6 +30,8 @@ const COLUMNS: Column[] = [
   { key: 'incomeCount', label: 'Доходы', sortType: 'number' },
   { key: 'expenseCount', label: 'Расходы', sortType: 'number' },
   { key: 'categoriesCount', label: 'Категории', sortType: 'number' },
+  { key: 'accountsCount', label: 'Счета', sortType: 'number' },
+  { key: 'goalsCount', label: 'Цели', sortType: 'number' },
 ];
 
 const formatDate = (value: string | null): string =>
@@ -205,6 +207,8 @@ export const Page: React.FC = () => {
                   <td className={styles.numCell}>{row.incomeCount}</td>
                   <td className={styles.numCell}>{row.expenseCount}</td>
                   <td className={styles.numCell}>{row.categoriesCount}</td>
+                  <td className={styles.numCell}>{row.accountsCount}</td>
+                  <td className={styles.numCell}>{row.goalsCount}</td>
                   <td className={styles.actionCell}>
                     {row.user_id !== current?.id && (
                       <VIconButton

@@ -76,13 +76,6 @@ export const getPointChange = (data: ChartPoint[], index: number, base = 0): Poi
   return { abs, pct };
 };
 
-export const toPeriodDeltas = (points: ChartPoint[], base = 0): ChartPoint[] =>
-  points.map((point, index) => ({
-    month: point.month,
-    label: point.label,
-    value: index === 0 ? point.value - base : point.value - points[index - 1].value,
-  }));
-
 const QUARTER_LABELS = ['1 кв', '2 кв', '3 кв', '4 кв'];
 const HALF_LABELS = ['1 пол', '2 пол'];
 
