@@ -106,11 +106,7 @@
 }
 
 .clearButton:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface-variant) 8%,
-    transparent
-  );
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
   color: var(--md-sys-color-on-surface);
 }
 
@@ -137,7 +133,7 @@
   gap: 12px;
   margin-top: 4px;
   padding: 16px;
-  background-color: var(--md-sys-color-surface-container);
+  background-color: var(--md-sys-color-surface-container-high);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-medium);
   animation: vdatepicker-in var(--md-sys-motion-expressive-fast-spatial);
@@ -168,11 +164,7 @@
 }
 
 .navButton:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface-variant) 8%,
-    transparent
-  );
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
   color: var(--md-sys-color-on-surface);
 }
 
@@ -194,11 +186,7 @@
 }
 
 .monthButton:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface) 8%,
-    transparent
-  );
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
 }
 
 .monthButton:focus-visible {

@@ -25,7 +25,7 @@
   min-width: 0;
   padding: 12px;
   border-radius: var(--md-sys-shape-corner-large-increased);
-  background: var(--md-sys-color-surface-container);
+  background: var(--md-sys-color-surface-container-high);
 }
 .legend {
   list-style: none;

@@ -23,10 +23,9 @@
   width: 100%;
   max-height: calc(100vh - 32px);
   max-height: calc(100dvh - 32px);
-  background-color: var(--md-sys-color-surface-container);
+  background-color: var(--md-sys-color-surface-container-high);
   border-radius: var(--md-sys-shape-corner-extra-large);
-  box-shadow:
-    0 8px 24px color-mix(in srgb, var(--md-sys-color-shadow) 25%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--md-sys-color-shadow) 25%, transparent);
   animation: vmodal-in var(--md-sys-motion-expressive-fast-spatial);
 }
 
@@ -70,11 +69,7 @@
 }
 
 .close:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface-variant) 8%,
-    transparent
-  );
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
   color: var(--md-sys-color-on-surface);
 }
 

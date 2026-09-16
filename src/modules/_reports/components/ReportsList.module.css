@@ -56,7 +56,7 @@
   padding: 12px;
   min-height: 64px;
   box-sizing: border-box;
-  background: var(--md-sys-color-surface-container);
+  background: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface);
   text-decoration: none;
   border-radius: var(--md-sys-shape-corner-extra-small);

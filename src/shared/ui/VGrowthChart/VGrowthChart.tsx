@@ -1,9 +1,9 @@
+import { useCurrency } from '@/shared/api/hooks';
 import { CurrencyText } from '@/shared/ui/Amount';
-import { useMemo, useState, useCallback, useRef, useEffect, useLayoutEffect } from 'react';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 import { getPointChange } from '@/shared/utils/chartPoints';
 import { formatAmount } from '@/shared/utils/format';
-import { useCurrency } from '@/shared/api/hooks';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import styles from './VGrowthChart.module.css';
 
 interface VGrowthChartProps {
@@ -252,8 +252,8 @@ export const VGrowthChart = ({
                   cx={x}
                   cy={y}
                   r={4}
-                   fill={color}
-                   stroke="var(--md-sys-color-surface-container)"
+                  fill={color}
+                  stroke="var(--md-sys-color-surface-container-high)"
                   tabIndex={0}
                   role="img"
                   aria-label={`${point.label}: ${format(point.value)}`}
