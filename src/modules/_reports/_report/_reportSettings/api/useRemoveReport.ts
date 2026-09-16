@@ -1,4 +1,4 @@
-import { invalidateHomeCaches } from '@/shared/api/hooks';
+import { capitalDynamicsQueryKey, invalidateHomeCaches } from '@/shared/api/hooks';
 import { api } from '@/shared/api/http';
 import type { Report } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -37,9 +37,16 @@ export const useRemoveReport = (id: string) => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       queryClient.invalidateQueries({ queryKey: ['reports', id] });
+      // Операции удаляются каскадно вместе с периодом: сбрасываем их кэш,
+      // иначе список операций удалённого отчёта мог остаться в памяти.
+      queryClient.invalidateQueries({ queryKey: ['reports', id, 'operations'] });
+      queryClient.invalidateQueries({ queryKey: ['reports', id, 'summary'] });
+      queryClient.invalidateQueries({ queryKey: ['reports', id, 'limits'] });
       queryClient.invalidateQueries({ queryKey: ['userSummary'] });
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       queryClient.invalidateQueries({ queryKey: ['overview', 'category-summary'] });
+      queryClient.invalidateQueries({ queryKey: ['onboardingCounts'] });
+      queryClient.invalidateQueries({ queryKey: capitalDynamicsQueryKey, exact: true });
       invalidateHomeCaches(queryClient);
     },
   });
