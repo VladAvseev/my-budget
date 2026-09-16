@@ -24,25 +24,16 @@ export const CategoryDistributionChart = ({ summaryByReport }: CategoryDistribut
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>('expense');
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 
-  const { expenseCategories, incomeCategories } = useOverviewCategories();
+  const { expenseCategories, incomeCategories, isLoading: loading } = useOverviewCategories();
 
   const categories = useMemo(() => {
     switch (selectedType) {
       case 'expense':
-        return expenseCategories.data ?? [];
+        return expenseCategories;
       case 'income':
-        return incomeCategories.data ?? [];
+        return incomeCategories;
     }
-  }, [selectedType, expenseCategories.data, incomeCategories.data]);
-
-  const loading = useMemo(() => {
-    switch (selectedType) {
-      case 'expense':
-        return expenseCategories.isLoading;
-      case 'income':
-        return incomeCategories.isLoading;
-    }
-  }, [selectedType, expenseCategories.isLoading, incomeCategories.isLoading]);
+  }, [selectedType, expenseCategories, incomeCategories]);
 
   const chartData: ChartData = useMemo(() => {
     let typeFilter: Array<'expense' | 'income'>;

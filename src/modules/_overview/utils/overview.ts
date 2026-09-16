@@ -113,7 +113,6 @@ export const buildCategoryGroups = (
   const groups: CategoryGroup[] = [];
   for (const category of categories) {
     const key = category.id;
-    if (!totalsByKey.has(key)) continue;
     groups.push({
       key,
       category: categoryById.get(key) ?? null,

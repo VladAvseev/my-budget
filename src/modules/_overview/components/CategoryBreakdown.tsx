@@ -103,33 +103,28 @@ export const CategoryBreakdown = ({
   comparedReport,
   comparedSummaryByReport,
 }: CategoryBreakdownProps) => {
-  const { expenseCategories, incomeCategories } = useOverviewCategories();
+  const { expenseCategories, incomeCategories, isLoading } = useOverviewCategories();
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 
-  const expensesLoading = expenseCategories.isLoading;
-  const incomesLoading = incomeCategories.isLoading;
+  const expensesLoading = isLoading;
+  const incomesLoading = isLoading;
 
-  const expenseGroups = buildCategoryGroups(
-    reports,
-    summaryByReport,
-    expenseCategories.data ?? [],
-    ['expense'],
-  );
-  const incomeGroups = buildCategoryGroups(reports, summaryByReport, incomeCategories.data ?? [], [
-    'income',
+  const expenseGroups = buildCategoryGroups(reports, summaryByReport, expenseCategories, [
+    'expense',
   ]);
+  const incomeGroups = buildCategoryGroups(reports, summaryByReport, incomeCategories, ['income']);
 
   const comparedReports = comparedReport ? [comparedReport] : [];
   const comparedExpenseGroups = buildCategoryGroups(
     comparedReports,
     comparedSummaryByReport,
-    expenseCategories.data ?? [],
+    expenseCategories,
     ['expense'],
   );
   const comparedIncomeGroups = buildCategoryGroups(
     comparedReports,
     comparedSummaryByReport,
-    incomeCategories.data ?? [],
+    incomeCategories,
     ['income'],
   );
 
