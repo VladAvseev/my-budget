@@ -81,8 +81,8 @@
   height: 40px;
   flex-shrink: 0;
   border-radius: var(--md-sys-shape-corner-large);
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
 }
 
 .title,
@@ -142,9 +142,15 @@
   min-width: 0;
 }
 
-.heroBody { gap: 12px; }
-.heroMain { gap: 8px; }
-.heroFacts { gap: 12px; }
+.heroBody {
+  gap: 12px;
+}
+.heroMain {
+  gap: 8px;
+}
+.heroFacts {
+  gap: 12px;
+}
 
 .heroKicker,
 .capitalKicker {
@@ -165,10 +171,13 @@
   flex-wrap: wrap;
   gap: 4px 16px;
   padding-top: 12px;
-  border-top: 1px solid color-mix(in srgb, var(--md-sys-color-on-primary-container) 20%, transparent);
+  border-top: 1px solid
+    color-mix(in srgb, var(--md-sys-color-on-primary-container) 20%, transparent);
 }
 
-.heroFactLabel { font: var(--md-sys-typescale-body-medium); }
+.heroFactLabel {
+  font: var(--md-sys-typescale-body-medium);
+}
 
 .heroFactValue {
   min-width: 0;
@@ -205,7 +214,9 @@
   border-block: 1px solid var(--md-sys-color-outline-variant);
 }
 
-.capitalKicker { color: var(--md-sys-color-on-surface-variant); }
+.capitalKicker {
+  color: var(--md-sys-color-on-surface-variant);
+}
 
 .capitalValue {
   font: var(--md-sys-typescale-headline-small-emphasized);
@@ -262,15 +273,25 @@
 }
 
 .checklistItem[aria-current='step'] {
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
 }
 
-.checklistItem > span { flex-shrink: 0; }
-.checklistLabel { font: var(--md-sys-typescale-body-medium); }
-.checklistLabelDone { color: var(--md-sys-color-on-surface); }
-.checklistLabelPending { color: var(--md-sys-color-on-surface-variant); }
-.checklistItem[aria-current='step'] .checklistLabel { color: inherit; }
+.checklistItem > span {
+  flex-shrink: 0;
+}
+.checklistLabel {
+  font: var(--md-sys-typescale-body-medium);
+}
+.checklistLabelDone {
+  color: var(--md-sys-color-on-surface);
+}
+.checklistLabelPending {
+  color: var(--md-sys-color-on-surface-variant);
+}
+.checklistItem[aria-current='step'] .checklistLabel {
+  color: inherit;
+}
 
 .buttonRow {
   display: flex;
@@ -279,7 +300,9 @@
   margin-top: auto;
 }
 
-.buttonRow > button { flex: 1 1 auto; }
+.buttonRow > button {
+  flex: 1 1 auto;
+}
 
 .fullWidthButton.fullWidthButton,
 .cardGrow button,
@@ -296,11 +319,14 @@
   margin-top: auto;
 }
 
-.cardGrow > button { margin-top: auto; }
+.cardGrow > button {
+  margin-top: auto;
+}
 
 /* У общих кнопок отключён morph: выразительное движение оставлено навигации. */
 .page button {
-  transition: background-color var(--md-sys-motion-expressive-fast-effects),
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects);
 }
 
@@ -308,61 +334,103 @@
   border-radius: var(--md-sys-shape-corner-full);
 }
 
-.emptyMessage { font: var(--md-sys-typescale-title-medium); }
+.emptyMessage {
+  font: var(--md-sys-typescale-title-medium);
+}
 
 .errorCard.errorCard {
   height: auto;
   border: 1px solid var(--md-sys-color-outline-variant);
 }
 
-.errorCard > div:first-child { font: var(--md-sys-typescale-title-large-emphasized); }
-.errorCard > div:nth-child(2) { font: var(--md-sys-typescale-body-medium); }
-.pageError { grid-column: 1 / -1; }
+.errorCard > div:first-child {
+  font: var(--md-sys-typescale-title-large-emphasized);
+}
+.errorCard > div:nth-child(2) {
+  font: var(--md-sys-typescale-body-medium);
+}
+.pageError {
+  grid-column: 1 / -1;
+}
 
 .skeletonCard.skeletonCard {
   min-height: 200px;
   animation: none;
 }
 
-.skeletonCard.skeletonWide { min-height: 300px; }
+.skeletonCard.skeletonWide {
+  min-height: 300px;
+}
 .skeletonCard > span[aria-hidden='true'] {
   min-height: 16px;
   animation: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .link:hover .card { background-color: var(--md-sys-color-surface-container-high); }
-  .link:hover .newReportCard { background-color: var(--md-sys-color-surface-container-highest); }
+  .link:hover .card {
+    background-color: var(--md-sys-color-surface-container-high);
+  }
+  .link:hover .newReportCard {
+    background-color: var(--md-sys-color-surface-container-highest);
+  }
   .heroLink:hover .hero {
-    background-color: color-mix(in srgb, var(--md-sys-color-primary-container) 96%, var(--md-sys-color-on-primary-container) 4%);
+    background-color: color-mix(
+      in srgb,
+      var(--md-sys-color-primary-container) 96%,
+      var(--md-sys-color-on-primary-container) 4%
+    );
   }
 }
 
 /* Нейтрализуем hover общих компонентов на сенсорных устройствах локально. */
 @media (hover: none), (pointer: coarse) {
-  .page button:hover:not(:disabled) { background-color: var(--md-sys-color-primary); }
-  .buttonRow > button:first-child:hover:not(:disabled) { background-color: transparent; }
+  .page button:hover:not(:disabled) {
+    background-color: var(--md-sys-color-primary);
+  }
+  .buttonRow > button:first-child:hover:not(:disabled) {
+    background-color: transparent;
+  }
 }
 
 @media (min-width: 600px) {
-  .page { padding: 8px 0; gap: 16px; }
-  .cardList { gap: 12px; }
+  .page {
+    padding: 8px 0;
+    gap: 16px;
+  }
+  .cardList {
+    gap: 12px;
+  }
   .card.card,
   .cardGrow.cardGrow,
   .errorCard.errorCard,
-  .skeletonCard.skeletonCard { padding: 12px; }
-  .hero { padding: 16px; }
-  .chevron { top: 22px; right: 16px; }
+  .skeletonCard.skeletonCard {
+    padding: 12px;
+  }
+  .hero {
+    padding: 16px;
+  }
+  .chevron {
+    top: 22px;
+    right: 16px;
+  }
 }
 
 @media (min-width: 840px) {
-  .cardList { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cardList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 1200px) {
-  .page { max-width: 1200px; }
-  .cardList { gap: 16px; }
-  .heroValue { font: var(--md-sys-typescale-display-medium-emphasized); }
+  .page {
+    max-width: 1200px;
+  }
+  .cardList {
+    gap: 16px;
+  }
+  .heroValue {
+    font: var(--md-sys-typescale-display-medium-emphasized);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -371,5 +439,7 @@
   .card.card,
   .cardGrow.cardGrow,
   .errorCard.errorCard,
-  .skeletonCard.skeletonCard { transition: none; }
+  .skeletonCard.skeletonCard {
+    transition: none;
+  }
 }

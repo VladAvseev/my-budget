@@ -116,11 +116,7 @@
 }
 
 .clearButton:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface-variant) 8%,
-    transparent
-  );
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
   color: var(--md-sys-color-on-surface);
 }
 
@@ -168,18 +164,14 @@
 }
 
 .option[data-selected='true'] {
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
   font: var(--md-sys-typescale-body-large-emphasized);
   letter-spacing: var(--md-sys-typescale-body-large-emphasized-tracking);
 }
 
 .option:hover:not([data-selected='true']) {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface) 8%,
-    transparent
-  );
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
 }
 
 .option:focus-visible {

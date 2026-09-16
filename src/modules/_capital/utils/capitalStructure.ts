@@ -20,12 +20,12 @@ export interface CapitalStructureData {
 // из дизайн-токенов (работает во всех темах, без хардкода hex).
 export const CAPITAL_PALETTE = [
   'var(--md-sys-color-primary)',
-  'var(--md-sys-color-secondary)',
+  'var(--md-sys-color-primary)',
   'var(--md-sys-color-tertiary)',
   'var(--md-sys-color-inverse-primary)',
   'var(--md-sys-color-outline)',
   'var(--md-sys-color-primary-container)',
-  'var(--md-sys-color-secondary-container)',
+  'var(--md-sys-color-primary-container)',
   'var(--md-sys-color-tertiary-container)',
 ] as const;
 

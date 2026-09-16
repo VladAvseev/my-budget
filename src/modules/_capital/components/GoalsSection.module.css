@@ -57,8 +57,8 @@
   border-color: var(--md-sys-color-outline);
 }
 .root .overall {
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
   border-radius: var(--md-sys-shape-corner-extra-large);
 }
 .overall .savedAmount,
@@ -66,7 +66,7 @@
 .overall .percent,
 .overall .periodRow,
 .overall .forecast {
-  color: var(--md-sys-color-on-secondary-container);
+  color: var(--md-sys-color-on-primary-container);
 }
 .overallTitle {
   font: var(--md-sys-typescale-title-medium-emphasized);

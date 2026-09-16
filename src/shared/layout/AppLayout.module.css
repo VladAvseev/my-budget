@@ -27,7 +27,6 @@
   outline-offset: 2px;
 }
 
-
 /* Тональная шапка: капитал и профиль на compact, навигация с expanded. */
 .topbar {
   position: sticky;
@@ -49,7 +48,9 @@
 }
 
 .brand,
-.topNav { display: none; }
+.topNav {
+  display: none;
+}
 
 .actions {
   display: flex;
@@ -75,14 +76,15 @@
   letter-spacing: var(--md-sys-typescale-label-large-tracking);
   color: var(--md-sys-color-on-surface-variant);
   background-color: transparent;
-  transition: background-color var(--md-sys-motion-expressive-fast-effects),
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects),
     border-radius var(--md-sys-motion-expressive-fast-spatial);
 }
 
 .navLink[aria-current='page'] {
-  color: var(--md-sys-color-on-secondary-container);
-  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-primary-container);
   font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
 }
 
@@ -106,7 +108,9 @@
   background-color: var(--md-sys-color-outline-variant);
 }
 
-.profileLink { display: none; }
+.profileLink {
+  display: none;
+}
 
 .mobileProfileLink,
 .mobileAdminLink {
@@ -121,14 +125,15 @@
   border-radius: var(--md-sys-shape-corner-full);
   color: var(--md-sys-color-on-surface-variant);
   background-color: var(--md-sys-color-surface-container-highest);
-  transition: background-color var(--md-sys-motion-expressive-fast-effects),
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .mobileProfileLink[aria-current='page'],
 .mobileAdminLink[aria-current='page'] {
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
 }
 
 .profileAvatar {
@@ -139,8 +144,8 @@
   height: 36px;
   flex-shrink: 0;
   border-radius: var(--md-sys-shape-corner-full);
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
   font: var(--md-sys-typescale-label-large-emphasized);
 }
 
@@ -174,7 +179,6 @@
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: -2px;
 }
-
 
 /* Единая нижняя панель: отдельный индикатор выбранного пункта. */
 .bottomNav {
@@ -223,14 +227,15 @@
   border-radius: var(--md-sys-shape-corner-full);
   background-color: transparent;
   color: var(--md-sys-color-on-surface-variant);
-  transition: background-color var(--md-sys-motion-expressive-fast-effects),
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects),
     border-radius var(--md-sys-motion-expressive-fast-spatial);
 }
 
 .bottomNavItem[aria-current='page'] .pill {
-  color: var(--md-sys-color-on-secondary-container);
-  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-primary-container);
 }
 
 .bottomNavItem:active .pill {
@@ -278,7 +283,11 @@
   .mobileAdminLink[aria-current='page']:hover,
   .profileLink[aria-current='page']:hover,
   .bottomNavItem[aria-current='page']:hover .pill {
-    background-color: color-mix(in srgb, var(--md-sys-color-secondary-container) 92%, var(--md-sys-color-on-secondary-container) 8%);
+    background-color: color-mix(
+      in srgb,
+      var(--md-sys-color-primary-container) 92%,
+      var(--md-sys-color-on-primary-container) 8%
+    );
   }
 }
 
@@ -298,7 +307,10 @@
     gap: 8px 24px;
     padding-bottom: 8px;
   }
-  .brand { display: flex; flex-shrink: 0; }
+  .brand {
+    display: flex;
+    flex-shrink: 0;
+  }
   .topNav {
     display: flex;
     grid-column: 1 / -1;
@@ -309,10 +321,16 @@
     gap: 4px;
     min-width: 0;
   }
-  .actions { grid-column: 2; grid-row: 1; justify-content: flex-end; }
+  .actions {
+    grid-column: 2;
+    grid-row: 1;
+    justify-content: flex-end;
+  }
   .bottomNav,
   .mobileProfileLink,
-  .mobileAdminLink { display: none; }
+  .mobileAdminLink {
+    display: none;
+  }
   .profileLink {
     display: flex;
     align-items: center;
@@ -327,15 +345,15 @@
     transition: background-color var(--md-sys-motion-expressive-fast-effects);
   }
   .profileLink[aria-current='page'] {
-    background-color: var(--md-sys-color-secondary-container);
+    background-color: var(--md-sys-color-primary-container);
   }
   .profileLink[aria-current='page'] .profileAvatar {
-    background-color: var(--md-sys-color-secondary);
-    color: var(--md-sys-color-on-secondary);
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
   }
   .profileLink[aria-current='page'] .profileName,
   .profileLink[aria-current='page'] .profileChevron {
-    color: var(--md-sys-color-on-secondary-container);
+    color: var(--md-sys-color-on-primary-container);
   }
 }
 
@@ -348,8 +366,12 @@
     margin: 0 auto;
     padding: 8px 24px;
   }
-  .topNav { flex: 1 1 540px; }
-  .actions { flex: 0 1 auto; }
+  .topNav {
+    flex: 1 1 540px;
+  }
+  .actions {
+    flex: 0 1 auto;
+  }
   .main {
     width: 100%;
     max-width: 1360px;
@@ -360,7 +382,9 @@
 
 @media (min-width: 1600px) {
   .topbarInner,
-  .main { max-width: 1440px; }
+  .main {
+    max-width: 1440px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -368,5 +392,7 @@
   .mobileProfileLink,
   .mobileAdminLink,
   .profileLink,
-  .pill { transition: none; }
+  .pill {
+    transition: none;
+  }
 }
