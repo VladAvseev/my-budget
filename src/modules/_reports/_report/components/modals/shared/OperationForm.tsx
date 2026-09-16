@@ -17,6 +17,7 @@ import { TrashIcon } from '@/shared/icons';
 import { capitalizeFirst, formatDisplay, getErrorMessage } from '@/shared/utils';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { CategorySelect } from './CategorySelect';
+import { AmountAdjuster } from './AmountAdjuster';
 import { getAmountError } from './amountValidation';
 
 const isCurrentType = (value: string): value is ApiOperationType =>
@@ -298,6 +299,16 @@ export const OperationForm = ({
             setAmountError(undefined);
           }}
         />
+        {operation && (
+          <AmountAdjuster
+            amount={amount}
+            onAmountChange={(next, error) => {
+              setAmount(next);
+              setAmountError(error);
+            }}
+            controlsDisabled={!canSave}
+          />
+        )}
         <VTextInput
           label="Описание"
           placeholder="Описание операции"

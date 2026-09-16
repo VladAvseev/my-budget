@@ -108,7 +108,8 @@
 
 .profileLink { display: none; }
 
-.mobileProfileLink {
+.mobileProfileLink,
+.mobileAdminLink {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -124,7 +125,8 @@
     color var(--md-sys-motion-expressive-fast-effects);
 }
 
-.mobileProfileLink[aria-current='page'] {
+.mobileProfileLink[aria-current='page'],
+.mobileAdminLink[aria-current='page'] {
   background-color: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
 }
@@ -252,6 +254,7 @@
 
 .navLink:focus-visible,
 .mobileProfileLink:focus-visible,
+.mobileAdminLink:focus-visible,
 .profileLink:focus-visible {
   outline: 3px solid var(--md-sys-color-primary);
   outline-offset: 3px;
@@ -265,12 +268,14 @@
 @media (hover: hover) and (pointer: fine) {
   .navLink:hover,
   .mobileProfileLink:hover,
+  .mobileAdminLink:hover,
   .profileLink:hover,
   .bottomNavItem:hover .pill {
     background-color: var(--md-sys-color-surface-container-highest);
   }
   .navLink[aria-current='page']:hover,
   .mobileProfileLink[aria-current='page']:hover,
+  .mobileAdminLink[aria-current='page']:hover,
   .profileLink[aria-current='page']:hover,
   .bottomNavItem[aria-current='page']:hover .pill {
     background-color: color-mix(in srgb, var(--md-sys-color-secondary-container) 92%, var(--md-sys-color-on-secondary-container) 8%);
@@ -306,7 +311,8 @@
   }
   .actions { grid-column: 2; grid-row: 1; justify-content: flex-end; }
   .bottomNav,
-  .mobileProfileLink { display: none; }
+  .mobileProfileLink,
+  .mobileAdminLink { display: none; }
   .profileLink {
     display: flex;
     align-items: center;
@@ -360,6 +366,7 @@
 @media (prefers-reduced-motion: reduce) {
   .navLink,
   .mobileProfileLink,
+  .mobileAdminLink,
   .profileLink,
   .pill { transition: none; }
 }

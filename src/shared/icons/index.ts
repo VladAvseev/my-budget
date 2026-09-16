@@ -17,6 +17,7 @@ export { HomeIcon } from './HomeIcon';
 export { ImportIcon } from './ImportIcon';
 export { LoaderIcon } from './LoaderIcon';
 export { MenuIcon } from './MenuIcon';
+export { MinusIcon } from './MinusIcon';
 export { OverviewIcon } from './OverviewIcon';
 export { PlusIcon } from './PlusIcon';
 export { ReportsFilledIcon } from './ReportsFilledIcon';

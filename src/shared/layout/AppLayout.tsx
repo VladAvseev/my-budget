@@ -77,6 +77,16 @@ const MobileProfileLink = () => (
   </NavLink>
 );
 
+const MobileAdminLink = () => (
+  <NavLink
+    to="/admin"
+    aria-label="Админ-панель"
+    className={styles.mobileAdminLink}
+  >
+    {({ isActive }) => (isActive ? <SettingsFilledIcon size={22} /> : <SettingsIcon size={22} />)}
+  </NavLink>
+);
+
 export const AppLayout = ({ children }: AppLayoutProps) => {
   const { isAdmin } = useAdminStatus();
   const location = useLocation();
@@ -153,6 +163,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
           <div className={styles.actions}>
             <AccountsBalanceBadge />
             <ProfileLink />
+            {isAdmin && <MobileAdminLink />}
             <MobileProfileLink />
           </div>
         </div>
@@ -185,19 +196,6 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
               }}
             </NavLink>
           ))}
-
-          {isAdmin && (
-            <NavLink to="/admin" data-nav-to="/admin" className={styles.bottomNavItem}>
-              {({ isActive }) => (
-                <>
-                  <span className={styles.pill} aria-hidden="true">
-                    {isActive ? <SettingsFilledIcon size={22} /> : <SettingsIcon size={22} />}
-                  </span>
-                  <span className={styles.bottomNavLabel}>Админ</span>
-                </>
-              )}
-            </NavLink>
-          )}
         </div>
       </nav>
     </div>
