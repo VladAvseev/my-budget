@@ -1,6 +1,3 @@
-/* VTextArea — M3 Expressive outlined text area (web-адаптация).
- * Тот же outlined-паттерн, что у VTextInput; выше min-height, ресайз вертикальный. */
-
 .root {
   display: flex;
   flex-direction: column;

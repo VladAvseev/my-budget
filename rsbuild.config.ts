@@ -6,8 +6,7 @@ import CompressionPlugin from 'compression-webpack-plugin';
 export default defineConfig({
   plugins: [pluginReact(), pluginAssetsRetry()],
   tools: {
-    // В прод-сборке готовим .gz-версии текстовых ассетов заранее:
-    // nginx (gzip_static) отдаёт их сразу, без сжатия на каждый запрос.
+    // .gz заранее: nginx gzip_static отдаёт без сжатия на запрос.
     rspack: (config, { isProd }) => {
       if (isProd) {
         config.plugins.push(
@@ -31,9 +30,7 @@ export default defineConfig({
   server: {
     port: Number(process.env.DEV_PORT) || 3001,
     open: true,
-    // В dev запросы фронтенда идут на тот же путь /api/v1, что и в проде,
-    // а прокси отдают локальный Express (server/, npm run dev там же).
-    // Цель прокси — через DEV_API_URL, по умолчанию localhost:5001.
+    // Dev-прокси /api → локальный Express (DEV_API_URL, по умолчанию localhost:5001).
     proxy: {
       '/api': process.env.DEV_API_URL || 'http://localhost:5001',
     },
@@ -43,8 +40,7 @@ export default defineConfig({
     title: 'Мои финансы',
   },
   performance: {
-    // В отчёте о размерах показываем только оригиналы:
-    // их gzip-размер и так выводится в колонке Gzip
+    // В отчёте размеров — только оригиналы (gzip виден в колонке Gzip).
     printFileSize: {
       exclude: (asset) => /\.(?:map|LICENSE\.txt|d\.(?:ts|mts|cts)|gz)$/.test(asset.name),
     },

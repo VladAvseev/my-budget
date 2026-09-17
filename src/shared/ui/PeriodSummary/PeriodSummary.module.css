@@ -1,6 +1,3 @@
-/* PeriodSummary — три карточки сводки; значения — hero-цифры title-large-emphasized.
- * Тон значения — через data-tone из TSX (без инлайн-цветов в коде). */
-
 .grid {
   --positive-ink: light-dark(#167b43, #1bc5bd);
   --caution-ink: light-dark(#795600, #fea135);

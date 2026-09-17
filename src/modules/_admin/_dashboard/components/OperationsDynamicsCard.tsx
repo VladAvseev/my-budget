@@ -31,13 +31,13 @@ const aggregationOptions: VButtonGroupOption[] = [
   { value: 'Y', label: 'Год' },
 ];
 
-// Фильтр по роли автора операций: всего (user + admin) / только пользователи.
+
 const audienceOptions: VButtonGroupOption[] = [
   { value: 'all', label: 'Все' },
   { value: 'users', label: 'Без админов' },
 ];
 
-// Метрика графика: количество операций или уникальные авторы.
+
 const metricOptions: VButtonGroupOption[] = [
   { value: 'count', label: 'Операции' },
   { value: 'unique_users', label: 'Пользователи' },
@@ -51,14 +51,14 @@ export const OperationsDynamicsCard = () => {
   const [audience, setAudience] = useAtom(operationsAudienceAtom);
   const [metric, setMetric] = useAtom(operationsMetricAtom);
 
-  // Уникальных пользователей нельзя накопить суммой периодов, поэтому в этом
-  // режиме график всегда показывает значения за период.
+  
+  
   const effectiveMode: DynamicsChartMode = metric === 'unique_users' ? 'period' : mode;
 
   const operationsQuery = useAdminOperationsDynamics({ audience, metric, aggregation });
   const isLoading = operationsQuery.isLoading;
-  // keepPreviousData: на смене фильтра показываем прошлый график, приглушая его
-  // до прихода нового, вместо мигания скелетоном.
+  
+  
   const isStale = operationsQuery.isPlaceholderData;
 
   const chartData = useMemo(

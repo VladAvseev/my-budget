@@ -1,6 +1,3 @@
-/* VLoader — базовый индикатор загрузки: primary-спиннер.
- * Вращение linear (равномерное), при reduced-motion останавливается. */
-
 .wrapper {
   display: inline-flex;
   align-items: center;

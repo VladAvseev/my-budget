@@ -13,7 +13,7 @@ interface OperationCardBaseProps {
   amountColor: string;
   description?: string | null;
   category?: Category | null;
-  /** Переопределяет бейдж категории: у перевода показывается пара счетов. */
+
   badge?: ReactNode;
   date?: string | null;
   pending?: boolean;

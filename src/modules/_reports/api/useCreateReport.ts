@@ -4,14 +4,10 @@ import type { Report } from '@/shared/api/types/domain';
 import { createOptimisticId, type OptimisticItem } from '@/shared/optimistic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/**
- * POST /reports: body в camelCase; сервер сам решает
- * уникальность кода ('Такой период уже существует' → 409).
- * Оптимистичная вставка прежняя.
- */
+
 const createReportMutationKey = ['createReport'] as const;
 
-/** Запрос POST /reports — payload модалки (прежний ReportInput). */
+
 export interface UseCreateReportRequest {
   name: string;
   code?: string;
@@ -19,10 +15,10 @@ export interface UseCreateReportRequest {
   periodEnd: string;
 }
 
-/** Ответ POST /reports — созданный отчёт (201). */
+
 export type UseCreateReportResponse = Report;
 
-/** Тело на проводе (серверный CreateReportInput). */
+
 interface CreateReportBody {
   name: string;
   code: string;

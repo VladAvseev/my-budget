@@ -1,12 +1,5 @@
 import type { BuildLogsDynamicsResult } from './buildLogsDynamicsData';
 
-/**
- * Подпись-статистика под графиком логов: среднее по непрерывному ряду выбранного
- * бакета (с нулями на пустые интервалы) и значение за последний бакет.
- * Для metric=unique_users среднее считается как среднее почасовых/суточных
- * уникальных авторов, а не как total / число бакетов: один пользователь может
- * быть уникальным сразу в нескольких бакетах.
- */
 export interface LogsDynamicsStats {
   avgPerBucket: number | null;
   lastBucket: number | null;

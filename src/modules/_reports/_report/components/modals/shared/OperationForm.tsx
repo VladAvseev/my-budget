@@ -44,15 +44,15 @@ export const OperationForm = ({
   const createOperation = useCreateOperation(report.id);
   const updateOperation = useUpdateOperation(report.id);
   const removeOperation = useRemoveOperation(report.id);
-  // Тип в форме не выбирается: при создании он задан списком (initialType),
-  // при редактировании взят из операции и смене не подлежит.
+  
+  
   const type: ApiOperationType =
     operation && isCurrentType(operation.type) ? operation.type : initialType;
   const [amount, setAmount] = useState(operation ? String(operation.amount) : '');
   const [description, setDescription] = useState(operation?.description ?? '');
   const [date, setDate] = useState(operation?.date ?? '');
   const [categoryId, setCategoryId] = useState(operation?.category_id ?? '');
-  // undefined означает только ещё не выбранный пользователем дефолт при создании.
+  
   const [selectedAccount, setSelectedAccount] = useState<string | undefined>(
     operation ? (operation.account_id ?? '') : undefined,
   );
@@ -114,7 +114,7 @@ export const OperationForm = ({
   const handleError = async (error: unknown, deleting = false) => {
     setSubmitError(getErrorMessage(error));
     if (error instanceof ApiError && error.code === 'ACCOUNT_CLOSED') {
-      // При PATCH мог закрыться новый выбор, при DELETE — только исходный счёт.
+      
       if (deleting) setServerLocked(true);
       const refreshed = await accountsQuery.refetch();
       if (operation && !deleting) {

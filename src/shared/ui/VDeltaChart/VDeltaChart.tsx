@@ -11,7 +11,7 @@ interface VDeltaChartProps {
 
 const PADDING = { top: 12, right: 8, bottom: 80, left: 6 };
 const GRID_LINES = 8;
-// Шаг ряда совпадает с VGrowthChart, чтобы скролл и плотность были привычными.
+
 const BAR_STEP = 24;
 const BAR_WIDTH = 12;
 const BAR_RADIUS = 4;
@@ -23,8 +23,8 @@ interface TooltipState {
   point: ChartPoint;
 }
 
-// Столбчатый график для значений за период (дельт): каждый бакет — отдельный
-// столбец от нулевой базы. Накопленный рост продолжает рисовать VGrowthChart.
+
+
 export const VDeltaChart = ({
   data,
   color = 'var(--md-sys-color-primary)',
@@ -193,7 +193,7 @@ export const VDeltaChart = ({
             {data.map((point, i) => {
               const centerX = getCenterX(i);
               const valueY = getY(point.value);
-              // Столбец растёт от нулевой базы вверх; нулевое значение видно как метка 2px.
+              
               const barHeight = Math.max(Math.abs(valueY - baselineY), ZERO_BAR_HEIGHT);
               const y = valueY <= baselineY ? baselineY - barHeight : baselineY;
               return (

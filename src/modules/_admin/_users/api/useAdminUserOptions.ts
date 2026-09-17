@@ -1,18 +1,13 @@
 import { api } from '@/shared/api/http';
 import { useQuery } from '@tanstack/react-query';
 
-/** GET /admin/users/options: лёгкие id + login для селектов (без агрегатов). */
-
-/** Опция пользователя: только идентификатор и логин. */
 export interface AdminUserOption {
   userId: string;
   login: string;
 }
 
-/** Запроса нет. */
 export type UseAdminUserOptionsRequest = void;
 
-/** Ответ GET /admin/users/options. */
 export type UseAdminUserOptionsResponse = AdminUserOption[];
 
 export const useAdminUserOptions = () =>

@@ -1,7 +1,3 @@
-/* VButtonGroup — M3 Expressive segmented/filter chips (web-адаптация).
- * Base = compact: wrap-ряд скруглённых прямоугольников, без клиппинга
- * focus-ring. Selected — secondary-container, без залитого primary. */
-
 .container {
   display: flex;
   flex-direction: column;

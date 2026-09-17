@@ -5,15 +5,6 @@ import { toProfile } from '@/shared/api/profileMapper';
 import type { Profile } from '@/shared/api/types/domain';
 import { useQuery } from '@tanstack/react-query';
 
-/**
- * Профиль пользователя: GET /users/me.
- * Сервер отдаёт camelCase PublicUser; toProfile (profileMapper) адаптирует
- * его к прежнему snake_case формату Profile. AuthProvider сеет этот кэш из
- * сессии, поэтому на смонтированной странице запрос уходит в фон или не
- * уходит вовсе. Request нет — пользователь определяется по токену.
- */
-
-/** Данные хука: ответ GET /users/me, адаптированный к форме Profile. */
 export type UseProfileResponse = Profile | null;
 
 export const useProfile = () => {

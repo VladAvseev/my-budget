@@ -1,6 +1,3 @@
-/* Геометрия иконок — Material Symbols Rounded (Google, Apache License 2.0),
- * инлайн-SVG без внешних шрифтов и библиотек. BynIcon — собственный контур,
- * LoaderIcon — собственный спиннер. */
 export { BanknotesIcon } from './BanknotesIcon';
 export { CalendarIcon } from './CalendarIcon';
 export { CapitalFilledIcon } from './CapitalFilledIcon';

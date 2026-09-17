@@ -11,8 +11,7 @@
   line-height: 1.5;
 }
 
-/* Сам прокручиваемый блок текста поверх прокрутки тела модалки не нужен —
-   VModal.body уже overflow-y: auto; ограничим только рамку-контейнер. */
+
 .document {
   padding: 16px;
   border: 1px solid var(--md-sys-color-outline-variant);

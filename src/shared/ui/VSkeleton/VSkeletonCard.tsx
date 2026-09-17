@@ -4,24 +4,20 @@ import { VSkeleton } from './VSkeleton';
 import styles from './VSkeleton.module.css';
 
 export interface VSkeletonCardProps {
-  /** Количество строк текста под заголовком. */
+
   lines?: number;
-  /** Показывать строку-заголовок. */
+
   title?: boolean;
-  /** Задержка появления (animationDelay), как у реальных карточек. */
+
   delay?: string;
-  /** Компактный внутренний отступ (VCard padding) вместо увеличенного. */
+
   compact?: boolean;
   className?: string;
   style?: CSSProperties;
-  /** Дополнительное содержимое-заглушка (например, круг-аватар) над строками. */
+
   children?: ReactNode;
 }
 
-/**
- * Скелетон карточки: пульсирующие строки-заглушки.
- * Габариты подстраиваются через className, чтобы при приходе данных контент не «прыгал».
- */
 export const VSkeletonCard = ({
   lines = 3,
   title = true,

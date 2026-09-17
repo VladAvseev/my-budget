@@ -3,12 +3,7 @@ import type { OperationType } from '@/shared/api/types/domain';
 import type { useQueryClient } from '@tanstack/react-query';
 import { summaryQueryKey } from './keys';
 
-/**
- * Оптимистичный сдвиг сводки отчёта вместо refetch после мутаций операций.
- * Правило вклада зеркаляет FILTER-агрегат серверного getSummary
- * (server/src/modules/_reports/repository.ts): income/expense —
- * прямые суммы; переводы между счетами не меняют сводку.
- */
+
 
 export interface SummaryOperationRef {
   type: OperationType | string;
@@ -39,11 +34,7 @@ const combine = (
   expense: base.expense + add.expense - sub.expense,
 });
 
-/**
- * Снимает вклад remove и вносит вклад add в закэшированную сводку.
- * Возвращает снимок сводки ДО изменения (для отката в onError) либо
- * undefined, если сводки в кэше нет — тогда и откатывать нечего.
- */
+
 export const applySummaryDelta = (
   queryClient: ReturnType<typeof useQueryClient>,
   reportId: string,
@@ -63,7 +54,7 @@ export const applySummaryDelta = (
   return previous;
 };
 
-/** Откат onError: вернуть сводку к снимку из applySummaryDelta. */
+
 export const restoreSummary = (
   queryClient: ReturnType<typeof useQueryClient>,
   reportId: string,

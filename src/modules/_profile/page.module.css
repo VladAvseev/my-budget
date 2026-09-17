@@ -1,6 +1,3 @@
-/* Профиль — mobile-first сетка. База compact: одна колонка.
- * Расширения только через min-width. DOM-порядок не меняется. */
-
 .page {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -34,7 +31,6 @@
   }
 }
 
-/* Expanded: две колонки — счета и категории рядом, аккаунт сверху полосой. */
 @media (min-width: 840px) {
   .page {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -45,7 +41,6 @@
   }
 }
 
-/* Large / XL: та же структура, ограничиваем читаемую ширину. */
 @media (min-width: 1200px) {
   .page {
     width: min(100%, 1120px);

@@ -1,13 +1,9 @@
 import { api } from '@/shared/api/http';
 import { useQuery } from '@tanstack/react-query';
 
-/** GET /admin/users: таблица пользователей админки. */
 
-/**
- * Строка таблицы пользователей админки. Ключи смешанные
- * (user_id/last_active_at в snake_case, счётчики в camelCase) — их ожидает
- * серверный AdminUserRow (JOIN + агрегаты).
- */
+
+
 export interface AdminUserRow {
   user_id: string;
   login: string;
@@ -18,16 +14,16 @@ export interface AdminUserRow {
   categoriesCount: number;
   incomeCount: number;
   expenseCount: number;
-  /** Открытые счета пользователя. */
+  
   accountsCount: number;
-  /** Цели на открытых счетах. */
+  
   goalsCount: number;
 }
 
-/** Запроса нет. */
+
 export type UseAdminUsersRequest = void;
 
-/** Ответ GET /admin/users. */
+
 export type UseAdminUsersResponse = AdminUserRow[];
 
 export const useAdminUsers = () =>

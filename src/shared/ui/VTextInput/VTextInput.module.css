@@ -1,6 +1,3 @@
-/* VTextInput — M3 Expressive outlined text field (web-адаптация).
- * Base = compact: высота 44px, shape extra-small, label-medium. */
-
 .root {
   display: flex;
   flex-direction: column;

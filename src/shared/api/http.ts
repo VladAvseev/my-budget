@@ -1,27 +1,7 @@
-/**
- * HTTP-клиент REST-бэкенда my-budget (репозиторий `server/`, Express).
- *
- * Зоны ответственности:
- *   * обёртка над axios с единым envelope ответа сервера:
- *     успех → { data }, ошибка → { error: { message, status } };
- *   * поддержка AbortSignal в каждом методе — TanStack Query может отменить
- *     запрос (сигнал гаснет, axios бросает CanceledError, наружу отдаём
- *     signal.reason, чтобы Query корректно перевёл запрос в cancelled);
- *   * хранение пары токенов в localStorage и их автоочистка;
- *   * автообновление access-токена по истечении и при 401, с одно-полётной
- *     очередью: параллельные запросы во время refresh ждут один Promise,
- *     а не дерут /auth/refresh каждый;
- *   * события изменения сессии для auth-провайдера.
- *
- * Базовый путь '/api/v1' — same-origin: в проде nginx web-контейнера
- * проксирует /api/ на Express, в dev тот же прокси настроен в
- * rsbuild.config.ts (server.proxy). Секретов в бандле нет — только JWT.
- */
-
 import axios, { AxiosError, type GenericAbortSignal } from 'axios';
 
 export interface ApiUser {
-  /** публичный профиль из ответа сервера (camelCase, см. _users/types.ts сервера). */
+
   id: string;
   login: string;
   role: string;
@@ -32,35 +12,28 @@ export interface ApiUser {
   updatedAt: string;
 }
 
-/** Ответ /auth/register|login|refresh в терминах, понятных клиенту. */
 export interface ApiSession {
   accessToken: string;
   refreshToken: string;
-  /** секунды до истечения access-токена (сервер отдаёт как в OAuth). */
+
   expiresIn: number;
   user: ApiUser;
 }
 
-/** То же + абсолютное время жизни access-токена в ms (Date.now()-эпоха). */
 export interface StoredSession extends ApiSession {
   expiresAt: number;
 }
 
-/** Опции запроса для потребителей api.* (передаются в queryFn/mutationFn). */
 export interface ApiRequestConfig {
-  /** AbortSignal из контекста TanStack Query ({ signal }) => api.get(path, { signal }). */
+
   signal?: AbortSignal;
 }
 
 const STORAGE_KEY = '***';
 
-/** Ошибка API: HTTP-статус + текст, который сервер уже отдаёт по-русски. */
 export class ApiError extends Error {
   status: number;
-  /**
-   * Машинночитаемый код ожидаемой бизнес-ошибки из envelope
-   * { error: { code } } (например 'CONSENT_REQUIRED' — показать consent-gate).
-   */
+
   code?: string;
 
   constructor(message: string, status: number, code?: string) {
@@ -71,17 +44,6 @@ export class ApiError extends Error {
   }
 }
 
-// ── Хранилище сессии ────────────────────────────────────────────────────────
-
-/**
- * Старые строки mb_session (до перехода email → login) кэшируют профиль с
- * `email`, а не `login`: такой объект устарел, отдаём null — приложение
- * отправит на экран входа. Серверная refresh-сессия при этом жива (привязана
- * к user_id), просто пользователь перезалогинится своим логином (он же
- * локальная часть прежнего email) и кэш обновится. removeItem без
- * emitSessionChange: шина на старте ещё пуста, а эмит из середины
- * инициализации модулей наталкивает слушателей на неинициализированные let.
- */
 export function getStoredSession(): StoredSession | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -114,10 +76,6 @@ export function clearStoredSession(): void {
   emitSessionChange();
 }
 
-// ── Шина событий сессии ─────────────────────────────────────────────────────
-// Провайдер получает уведомление при любом изменении хранилища; конкретные
-// события SIGNED_IN/SIGNED_OUT надстраивает services/auth.ts.
-
 type SessionListener = () => void;
 const listeners = new Set<SessionListener>();
 
@@ -130,14 +88,8 @@ function emitSessionChange(): void {
   listeners.forEach((cb) => cb());
 }
 
-// ── Refresh с одно-полётной очередью ────────────────────────────────────────
-
 let refreshPromise: Promise<boolean> | null = null;
 
-/**
- * Обновить пару токенов. Параллельные вызовы переиспользуют один запрос.
- * false = refresh-токена нет/просрочен/отозван → сессия уничтожена.
- */
 export async function refreshSessionOnce(): Promise<boolean> {
   if (refreshPromise) return refreshPromise;
 
@@ -154,8 +106,6 @@ export async function refreshSessionOnce(): Promise<boolean> {
     } catch {
       clearStoredSession();
       return false;
-    } finally {
-      // Сбрасываем флаг асинхронно, чтобы все ждущие получили тот же результат.
     }
   })().finally(() => {
     refreshPromise = null;
@@ -164,9 +114,6 @@ export async function refreshSessionOnce(): Promise<boolean> {
   return refreshPromise;
 }
 
-// ── ядро axios ──────────────────────────────────────────────────────────────
-
-/** Причина отмены от TanStack Query / прочего AbortController, либо сам error. */
 function cancelReason(signal: GenericAbortSignal | undefined, fallback: unknown): unknown {
   const aborted = signal as AbortSignal | undefined;
   if (aborted && typeof aborted === 'object' && aborted.aborted) return aborted.reason ?? fallback;
@@ -177,15 +124,12 @@ const http = axios.create({
   baseURL: '/api/v1',
 });
 
-// Успех: снимаем envelope { data }; 204 No Content (logout, DELETE) → null.
 http.interceptors.response.use((response) => {
   if (response.status === 204) return null as never;
   const envelope = response.data as { data?: unknown } | null | undefined;
   return (envelope?.data ?? null) as never;
 });
 
-// Ошибка: AxiosError → ApiError (русский текст сервера + HTTP-статус),
-// отмена → reason сигнала, чтобы Query распознал отмену, а не ошибку.
 http.interceptors.response.use(undefined, (error: unknown) => {
   if (error instanceof AxiosError) {
     if (axios.isCancel(error)) {
@@ -200,9 +144,7 @@ http.interceptors.response.use(undefined, (error: unknown) => {
         error.response.status,
         envelope?.code,
       );
-      // Серверный requireConsent ответил 403 CONSENT_REQUIRED (срочный отзыв/
-      // публикация новой версии, пока вкладка открыта) — сигнал ConsentGate
-      // перечитать статус. Окно событий: сам http.ts про Query ничего не знает.
+
       if (envelope?.code === 'CONSENT_REQUIRED') {
         window.dispatchEvent(new Event('consent-required'));
       }
@@ -215,9 +157,9 @@ http.interceptors.response.use(undefined, (error: unknown) => {
 
 interface RequestOpts {
   body?: unknown;
-  /** false — не добавлять Bearer и не пытаться refresh (эндпоинты /auth/*). */
+
   auth?: boolean;
-  /** внутренний флаг повтора после refresh — наружу не передаётся. */
+
   retry?: boolean;
   signal?: AbortSignal;
 }
@@ -231,20 +173,10 @@ async function rawRequest<T>(
   const headers: Record<string, string> = {};
   if (auth && stored?.accessToken) headers['Authorization'] = `Bearer ${stored.accessToken}`;
 
-  // Интерцептор выше разворачивает AxiosResponse в уже очищенные данные,
-  // поэтому типы ядра не отражают реальный возвращаемый результат.
   const data = await http.request({ method, url: path, data: body, headers, signal });
   return data as unknown as T;
 }
 
-/**
- * Запрос с авто-обновлением токена:
- *  * если access близок к истечению (< 60 c) — обновляем заранее;
- *  * на 401 (кроме самих /auth/*) — один refresh и точный повтор запроса
- *    с тем же signal;
- *  * не удалось обновиться — локальный logout (эмит события, провайдер
- *    переведёт приложение на /login).
- */
 async function request<T>(
   method: string,
   path: string,
@@ -266,15 +198,13 @@ async function request<T>(
 
     const refreshed = await refreshSessionOnce();
     if (!refreshed) {
-      // Сессии реально больше нет (отзыв/истечение) — выход.
+
       clearStoredSession();
       throw error;
     }
     return request<T>(method, path, { ...opts, retry: true });
   }
 }
-
-// ── Публичный API модуля ────────────────────────────────────────────────────
 
 export const api = {
   get: <T>(path: string, opts?: ApiRequestConfig) => request<T>('GET', path, opts),
@@ -285,12 +215,12 @@ export const api = {
   patch: <T>(path: string, body?: unknown, opts?: ApiRequestConfig) =>
     request<T>('PATCH', path, { ...opts, body }),
   del: <T>(path: string, opts?: ApiRequestConfig) => request<T>('DELETE', path, opts),
-  /** запросы без Bearer/refresh: /auth/register, /auth/login, /auth/refresh. */
+
   publicPost: <T>(path: string, body?: unknown, opts?: ApiRequestConfig) =>
     request<T>('POST', path, { ...opts, body, auth: false }),
   publicPatch: <T>(path: string, body?: unknown, opts?: ApiRequestConfig) =>
     request<T>('PATCH', path, { ...opts, body, auth: false }),
-  /** GET без Bearer: публичные /legal/* (текст доступен и незалогиненным). */
+
   publicGet: <T>(path: string, opts?: ApiRequestConfig) =>
     request<T>('GET', path, { ...opts, auth: false }),
 };

@@ -1,6 +1,3 @@
-/* DonutChart — кольцевая диаграмма.
- * Base = compact: total title-large-emphasized, тултип — инверсная пара. */
-
 .wrapper {
   position: relative;
   flex-shrink: 0;

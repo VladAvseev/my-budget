@@ -8,8 +8,7 @@ import { OnboardingCard } from './components/OnboardingCard';
 import { OverviewCard } from './components/OverviewCard';
 
 export const Page: React.FC = () => {
-  // Один bootstrap на всю страницу: при ошибке карточки не рендерятся —
-  // вместо них карточка с повтором.
+
   const { error, refetch, isFetching } = useBootstrap();
 
   return (

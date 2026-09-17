@@ -6,7 +6,6 @@ export const accountsQueryKey = (userId: string) => ['accounts', userId] as cons
 
 export type UseAccountsResponse = Account[];
 
-/** Без is_closed: профиль показывает и открытые, и закрытые счета. */
 export const useAccounts = (userId: string) =>
   useQuery<UseAccountsResponse>({
     queryKey: [...accountsQueryKey(userId), 'all'],

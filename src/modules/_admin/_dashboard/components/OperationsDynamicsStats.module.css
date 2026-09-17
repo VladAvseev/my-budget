@@ -1,5 +1,3 @@
-/* Hero-цифры динамики: подпись сверху, значение крупно с tabular-nums. */
-
 .stats {
   display: flex;
   flex-wrap: wrap;

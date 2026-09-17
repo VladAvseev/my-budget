@@ -11,7 +11,6 @@ interface CachedRates {
 const CACHE_KEY = 'exchangeRates_usd';
 const today = () => new Date().toISOString().slice(0, 10);
 
-/** Ответ внешнего курса: код валюты → множитель к USD (данные не из нашего API). */
 export type UseExchangeRatesResponse = Record<string, number>;
 
 export const useExchangeRates = () =>

@@ -14,19 +14,19 @@ import { buildLogsDynamics } from '../utils/buildLogsDynamicsData';
 import { buildLogsDynamicsStats } from '../utils/buildLogsDynamicsStats';
 import styles from './LogsDynamicsCard.module.css';
 
-// Фильтр по роли автора логов: всего (user + admin) / только пользователи.
+
 const audienceOptions: VButtonGroupOption[] = [
   { value: 'all', label: 'Все' },
   { value: 'users', label: 'Без админов' },
 ];
 
-// Метрика графика: количество логов или уникальные авторы.
+
 const metricOptions: VButtonGroupOption[] = [
   { value: 'count', label: 'Логи' },
   { value: 'unique_users', label: 'Пользователи' },
 ];
 
-// Гранулярность точек графика: группировка логов за час или за день.
+
 const bucketOptions: VButtonGroupOption[] = [
   { value: 'hour', label: 'Час' },
   { value: 'day', label: 'День' },
@@ -55,7 +55,7 @@ export const LogsDynamicsCard = () => {
   const dynamicsQuery = useAdminLogsDynamics({ audience, metric, bucket });
 
   const isLoading = dynamicsQuery.isLoading;
-  // keepPreviousData: на смене фильтра держим прошлый график приглушённым.
+  
   const isStale = dynamicsQuery.isPlaceholderData;
 
   const built = useMemo(

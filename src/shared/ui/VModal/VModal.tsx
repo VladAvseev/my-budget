@@ -14,12 +14,7 @@ export interface VModalProps {
   width?: string;
   style?: CSSProperties;
   className?: string;
-  /**
-   * Блокирующий режим (consent-gate): крестик скрыт, Escape не закрывает —
-   * пользователь обязан принять решение (принять согласие или выйти/удалить
-   * аккаунт кнопками внутри), «закрыть на секунду» недоступно. onClose при
-   * этом обязателен: его использует вложенное подтверждение удаления.
-   */
+
   blocking?: boolean;
 }
 
@@ -59,7 +54,7 @@ export const VModal = ({
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        // В блокирующем режиме Escape не закрывает окно (consent-gate).
+
         if (!blockingRef.current) {
           onCloseRef.current();
         }
@@ -117,7 +112,7 @@ export const VModal = ({
         <div className={styles.header}>
           <div className={styles.title}>{title}</div>
           {blocking ? (
-            // Пустой элемент вместо крестика сохраняет раскладку заголовка.
+
             <span aria-hidden="true" />
           ) : (
             <button type="button" aria-label="Закрыть" onClick={onClose} className={styles.close}>

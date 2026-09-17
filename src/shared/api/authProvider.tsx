@@ -27,11 +27,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    /**
-     * Посев кэша ['profile'] из сессии: login/register/refresh уже принесли
-     * ApiUser — первый экран не ждёт GET /users/me на критическом пути
-     * (useProfile догружает данные в фоне по своему staleTime).
-     */
+
     const seedProfile = (u: ApiUser | null | undefined) => {
       if (u) {
         queryClient.setQueryData(['profile', u.id], toProfile(u));
@@ -56,8 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const {
       data: { subscription },
     } = authService.onAuthStateChange((_event, session) => {
-      // Выход/смерть сессии: сбрасываем весь кэш — ключи без userId
-      // (['bootstrap'], ['profile'] до ре-посева) иначе утекут в следующий аккаунт.
+
       if (!session) queryClient.clear();
       setSession(session);
       setUser(session?.user ?? null);

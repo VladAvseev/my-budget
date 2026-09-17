@@ -9,12 +9,7 @@ import { Link } from 'react-router-dom';
 import type { ComponentProps } from 'react';
 import styles from './LegalDocumentView.module.css';
 
-/**
- * Ссылки внутри markdown-текста документа: относительные (/legal/...) ведут
- * через react-router без перезагрузки SPA (важно и для документа внутри
- * ConsentGate), внешние http(s) открываются в новой вкладке, mailto/tel —
- * обычным <a> (перехватывать их роутером смысла нет).
- */
+
 const DocumentLink = ({ href, children }: ComponentProps<'a'>) => {
   if (href?.startsWith('/')) {
     return <Link to={href}>{children}</Link>;
@@ -31,18 +26,11 @@ const DocumentLink = ({ href, children }: ComponentProps<'a'>) => {
 
 export interface LegalDocumentViewProps {
   documentType: LegalDocumentType;
-  /** Конкретная (в т.ч. историческая) версия; пусто/'current' — действующая. */
+  
   version?: string;
 }
 
-/**
- * Рендер юридического документа из БД (Markdown → React через react-markdown).
- *
- * Единая точка вывода текста для страницы /legal/*, consent-gate и любых
- * будущих мест: копия текста в компоненте не дублируется нигде (п.2
- * требований). react-markdown не исполняет raw HTML по умолчанию — санитайзер
- * не нужен, XSS из Markdown-исходника исключён.
- */
+
 export const LegalDocumentView = ({ documentType, version }: LegalDocumentViewProps) => {
   const { data, isPending, isError, refetch } = useLegalDocument(
     documentType,

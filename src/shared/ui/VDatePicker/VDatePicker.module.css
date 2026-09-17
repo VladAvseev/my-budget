@@ -1,6 +1,3 @@
-/* VDatePicker — M3 Expressive date field + calendar (web-адаптация).
- * Триггер как outlined-поле 44px; календарь — surface-container-low, дни pill 40px. */
-
 .root {
   position: relative;
   display: flex;

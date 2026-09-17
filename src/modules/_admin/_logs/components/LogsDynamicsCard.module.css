@@ -1,6 +1,3 @@
-/* LogsDynamicsCard — hero-карта логов, зеркалит OperationsDynamicsCard.
- * Base = compact: заголовок + hero-цифра, чипы wrap-рядом. */
-
 .card {
   display: flex;
   flex-direction: column;
@@ -102,7 +99,6 @@
   gap: 8px 16px;
 }
 
-/* Прошлый график под keepPreviousData: приглушаем до прихода новых данных. */
 .stale {
   opacity: 0.5;
   transition: opacity var(--md-sys-motion-expressive-fast-effects);

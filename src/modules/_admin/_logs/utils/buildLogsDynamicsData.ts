@@ -1,30 +1,12 @@
 import type { AdminChartPoint, AdminLogsBucket } from '@/shared/api/types/admin';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 
-/**
- * Построение данных для графика «Количество логов» по МСК-часам/дням.
- *
- * Сервер (GET /admin/logs/dynamics) отдаёт только НЕПУСТЫЕ бакеты выбранной
- * гранулярности: 'YYYY-MM-DDTHH:00:00' для часов и 'YYYY-MM-DD' для суток
- * (wall-clock Москвы без смещения). Клиент достраивает пропущенные часы/дни
- * нулями, чтобы график был непрерывным.
- *
- * Для metric=unique_users сервер считает count(distinct user_id) уже на бакете;
- * клиент не агрегирует часы в сутки суммированием, иначе уникальные пользователи
- * за день были бы завышены.
- *
- * Точки синтетические: UTC-поля Date равны московскому календарю (тот же приём,
- * что в buildOperationsDynamicsData), поэтому отображение не зависит от таймзоны
- * браузера, а группировка по часам/дням — арифметикой над этими Date.
- */
-
 export type LogsBucket = AdminLogsBucket;
 
 export const MOSCOW_UTC_OFFSET_MS = 3 * 60 * 60 * 1000;
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
 
-// 'YYYY-MM-DDTHH:00:00' -> синтетическая дата (полный час), UTC-поля == МСК.
 export const parseHourPoint = (value: string): Date | null => {
   const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):\d{2}:\d{2}$/.exec(value);
   if (!match) return null;
@@ -32,7 +14,6 @@ export const parseHourPoint = (value: string): Date | null => {
   return new Date(Date.UTC(year, month - 1, day, hour));
 };
 
-// 'YYYY-MM-DD' -> синтетическая дата (полночь МСК-суток), UTC-поля == МСК.
 export const parseDayPoint = (value: string): Date | null => {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   if (!match) return null;
@@ -43,7 +24,6 @@ export const parseDayPoint = (value: string): Date | null => {
 const parsePeriod = (value: string, bucket: LogsBucket): Date | null =>
   bucket === 'hour' ? parseHourPoint(value) : parseDayPoint(value);
 
-// Текущий МСК-час как синтетическая дата (минуты/секунды обнулены).
 export const moscowCurrentHour = (): Date => {
   const shifted = new Date(Date.now() + MOSCOW_UTC_OFFSET_MS);
   return new Date(
@@ -56,13 +36,11 @@ export const moscowCurrentHour = (): Date => {
   );
 };
 
-// Текущие МСК-сутки как синтетическая дата (полночь).
 export const moscowCurrentDay = (): Date => {
   const shifted = new Date(Date.now() + MOSCOW_UTC_OFFSET_MS);
   return new Date(Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate()));
 };
 
-// Синтетическая дата -> полночь её МСК-суток.
 const startOfDay = (date: Date): Date =>
   new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
 
@@ -103,10 +81,6 @@ export interface BuildLogsDynamicsResult {
   total: number;
 }
 
-/**
- * Готовит ряд для графика по выбранному бакету и общий итог из ответа сервера.
- * Среднее и значение за последний бакет считает buildLogsDynamicsStats.
- */
 export const buildLogsDynamics = (
   points: AdminChartPoint[],
   bucket: LogsBucket,

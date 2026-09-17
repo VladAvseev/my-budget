@@ -32,10 +32,6 @@ export const trimIncompletePeriod = (
   return now < periodEnd(last.month) ? points.slice(0, -1) : points;
 };
 
-// Первый агрегированный период неполный, если серия начинается не с первого
-// календарного месяца своего периода (для кв/пг/год): прирост в нём занижен.
-// Когда известна дата начала активности точнее месяца (регистрация), период
-// неполный и если активность началась внутри него (середина месяца).
 export const trimLeadingPartialPeriod = (
   points: ChartPoint[],
   aggregation: GrowthAggregation,

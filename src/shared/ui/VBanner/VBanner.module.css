@@ -1,7 +1,3 @@
-/* VBanner — M3 Expressive tonal banner (web-адаптация).
- * Base = compact: borderless tonal, radius medium, body-medium.
- * success/warning — локальные компонентные переменные (глобальные роли не вводим). */
-
 .banner {
   display: flex;
   align-items: center;

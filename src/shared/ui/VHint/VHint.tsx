@@ -43,7 +43,6 @@ export const VHint = ({
   };
   const tooltipId = useId();
 
-  // Связываем триггер с тултипом для скринридеров, не меняя DOM-структуру.
   const describedChildren = isValidElement<{ 'aria-describedby'?: string }>(children)
     ? cloneElement(children, {
         'aria-describedby': [children.props['aria-describedby'], tooltipId]

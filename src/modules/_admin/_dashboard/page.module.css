@@ -1,6 +1,3 @@
-/* Дашборд — M3 Expressive сетка.
- * Base = compact: одна колонка hero → пользователи → хранилище. */
-
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

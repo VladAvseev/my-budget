@@ -31,7 +31,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const operationsQuery = useOperations(reportId, type);
-  // У переводов категорий нет: пустой userId отключает запрос в хуке.
+  
   const categoryType = categoryTypeForOperation(type);
   const categoriesQuery = useCategoriesByType(
     categoryType ? userId : '',
@@ -42,7 +42,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const [groupedByType, setGroupedByType] = useAtom(groupedByTypeAtom);
   const currency = useCurrency();
 
-  // Стабильная ссылка между рендерами: groups-memo ниже зависит от operations.
+  
   const operations = useMemo(() => operationsQuery.data ?? [], [operationsQuery.data]);
   const operationsLoading = operationsQuery.isLoading;
   const operationsError = operationsQuery.error;
@@ -50,7 +50,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const categories = categoriesQuery.data ?? [];
   const limits = limitsQuery.data ?? [];
   const isTransfer = type === 'transfer';
-  // Переводы не группируются по категориям: переключатель скрыт, группировка выключена.
+  
   const isGrouped = !isTransfer && (groupedByType[type] ?? false);
 
   const toggleGrouping = (next: boolean) => {

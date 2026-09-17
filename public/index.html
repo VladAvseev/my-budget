@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <script>
-      // Применяем тему до загрузки стилей, чтобы избежать вспышки другого фона.
+      // Тема до стилей — без вспышки фона.
       try {
         const savedTheme = localStorage.getItem('theme');
         document.documentElement.dataset.theme = savedTheme === 'light' ? 'light' : 'dark';
       } catch {
-        // Без доступа к хранилищу остаётся тёмная тема.
+        // Без хранилища — тёмная тема.
       }
     </script>
     <meta

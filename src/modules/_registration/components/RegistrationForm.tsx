@@ -29,8 +29,7 @@ export const RegistrationForm = () => {
   const [confirmError, setConfirmError] = useState<string>();
 
   const registration = useRegistration();
-  // Кнопка заблокирована, пока чекбокс согласия не отмечен вручную (п.3) —
-  // сервер всё равно проверит флаг повторно (п.4), обход UI не создаёт аккаунт.
+
   const isEmpty = !login || !password || !confirmPassword || !consent;
 
   const validate = () => {
@@ -119,11 +118,6 @@ export const RegistrationForm = () => {
         }}
       />
 
-      {/* Неотмеченный по умолчанию чекбокс + явные ссылки на оба документа
-          (требование п.3): принятие «Политики конфиденциальности» считается
-          согласием на обработку ПДн. Без чекбокса кнопка сабмита неактивна,
-          сервер всё равно проверит флаг повторно (п.4), обход UI не создаёт
-          аккаунт. */}
       <VCheckbox checked={consent} onChange={setConsent} disabled={registration.isPending}>
         Принимаю{' '}
         <Link

@@ -7,11 +7,6 @@ import { StorageCard } from './components/StorageCard';
 import { UsersActivityCard } from './components/UsersActivityCard';
 import styles from './page.module.css';
 
-/**
- * Дашборд грузится параллельно: карточки динамики операций и хранилища делают
- * свои запросы сами, карточки на useAdminStats показывают скелетон/ошибку
- * независимо — сбой сводки не гасит весь экран.
- */
 export const Page: React.FC = () => {
   const statsQuery = useAdminStats();
 

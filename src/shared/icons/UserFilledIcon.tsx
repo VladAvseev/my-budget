@@ -1,6 +1,5 @@
 import type { IconProps } from './types';
 
-/** Залитый вариант для активного пункта навигации. */
 export const UserFilledIcon = ({ size = 16, color = 'currentColor', style }: IconProps) => (
   <svg
     width={size}

@@ -1,6 +1,6 @@
 import { useAccounts } from '@/shared/api/hooks/useAccounts';
 
-/** Общий источник капитала для шапки, главной и аналитики. */
+
 export const useCapital = (userId: string) => {
   const query = useAccounts(userId);
   const accounts = (query.data ?? [])
@@ -8,7 +8,7 @@ export const useCapital = (userId: string) => {
     .sort((a, b) => Number(b.is_primary) - Number(a.is_primary) || b.balance - a.balance)
     .map((account) => ({
       ...account,
-      // Итог совпадает с суммой отображаемых балансов до копейки.
+      
       cents: Math.round(Number(account.balance.toFixed(2)) * 100),
     }));
   return {

@@ -21,7 +21,6 @@ const formatLabel = (date: Date): string =>
 
 const startOfMonth = (date: Date): Date => new Date(date.getFullYear(), date.getMonth(), 1);
 
-/** 'YYYY-MM' → первое число месяца в ЛОКАЛЬНОЙ зоне (без UTC-сдвига парсинга ISO). */
 const parseMonth = (month: string): Date | null => {
   const [year, m] = month.split('-').map(Number);
   if (!year || !m || m < 1 || m > 12) return null;
@@ -29,24 +28,14 @@ const parseMonth = (month: string): Date | null => {
 };
 
 export interface BuildCapitalChartDataArgs {
-  /** Дельты капитала по периодам из GET /reports/capital-dynamics (отсортированы по началу периода). */
+
   months: CapitalMonth[];
-  /** База кривой: сумма initial_balance всех счетов. */
+
   base: number;
-  /** Сегодня (переопределяется в ручных проверках границ). */
+
   now?: Date;
 }
 
-/**
- * Кумулятивный график капитала: первая точка — база (сумма стартовых балансов
- * всех счетов) + дельта первого периода, каждая следующая — предыдущая +
- * дельта следующего периода.
- *
- * Диапазон — от месяца первой точки (месяц первого периода точнее помесячный
- * эндпоинт не даёт) по текущий месяц включительно: дубли одного месяца
- * суммируются, месяцы без периодов наследуют последнее значение, будущие
- * месяцы отбрасываются.
- */
 export const buildCapitalChartData = ({
   months,
   base,

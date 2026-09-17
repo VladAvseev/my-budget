@@ -1,5 +1,3 @@
-/* Amount — суммы наследуют шрифт контекста; tabular-nums обязателен для цифр. */
-
 .sign {
   display: inline;
   white-space: nowrap;

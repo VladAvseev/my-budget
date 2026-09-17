@@ -6,7 +6,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Локальное переопределение VBadge, включая его nowrap и плотность. */
+
 .badge.badge {
   display: block;
   min-width: 0;

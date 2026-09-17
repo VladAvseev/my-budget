@@ -3,17 +3,10 @@ import type { ApiUser } from '@/shared/api/http';
 import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/**
- * PATCH /users/me { currency }: смена валюты профиля.
- */
-
-/** Запрос — код валюты или null (сброс). */
 export type UseUpdateCurrencyRequest = string | null;
 
-/** Ответ PATCH /users/me — обновлённый публичный профиль (200). */
 export type UseUpdateCurrencyResponse = ApiUser;
 
-/** Тело на проводе (серверный UpdateProfileInput). */
 interface UpdateProfileBody {
   currency: string | null;
 }

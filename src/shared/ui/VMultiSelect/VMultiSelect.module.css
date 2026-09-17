@@ -1,6 +1,3 @@
-/* VMultiSelect — M3 Expressive menu select (web-адаптация).
- * Единый паттерн с VSelect: триггер 44px, меню surface-container-low. */
-
 .root {
   display: flex;
   flex-direction: column;

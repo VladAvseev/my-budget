@@ -2,7 +2,6 @@ import { BynIcon } from '@/shared/icons/BynIcon';
 import { formatAmount, type ConvertOptions } from '@/shared/utils/format';
 import styles from '@/shared/ui/Amount/Amount.module.css';
 
-/** Строка остаётся пригодной для копирования; знак отображается отдельным SVG. */
 export const CurrencyText = ({ children }: { children: string }) => (
   <>
     {children.split(/(\bBYN\b)/).map((part, index) =>

@@ -1,9 +1,3 @@
-/* Лендинг — M3 Expressive, уровень Excellent (web-адаптация).
- * Base = compact (одна колонка): шапка → hero-текст → primary action →
- * демо-карта баланса (единственный hero-момент) → списки → CTA → футер.
- * Расширение — только через min-width; desktop добавляет контекст рядом,
- * а не растягивает мобильную колонку. */
-
 .landing {
   display: flex;
   flex-direction: column;
@@ -19,7 +13,7 @@
   padding: 0 16px;
 }
 
-/* ---------- Шапка ---------- */
+
 
 .header {
   position: sticky;
@@ -46,7 +40,7 @@
   gap: 8px;
 }
 
-/* ---------- Hero ---------- */
+
 
 .hero {
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
@@ -111,7 +105,7 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-/* ---------- Демо-карта: hero-момент ---------- */
+
 
 .demoCard {
   display: flex;
@@ -196,7 +190,7 @@
   }
 }
 
-/* ---------- Секции ---------- */
+
 
 .section {
   padding-top: 48px;
@@ -233,7 +227,7 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-/* ---------- Возможности: строки с иконками, не карточки ---------- */
+
 
 .featuresList {
   margin: 0;
@@ -290,9 +284,7 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-/* ---------- Преимущества:-editorial список без нумерации ----------
- * Нумерация 01/02/03 убрана осознанно: это не последовательность и не
- * процесс, а равнозначные свойства — цифры здесь были бы декором. */
+
 
 .advantagesList {
   margin: 0;
@@ -327,7 +319,7 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-/* ---------- CTA ---------- */
+
 
 .ctaPanel {
   display: flex;
@@ -363,7 +355,7 @@
   margin-top: 4px;
 }
 
-/* ---------- Футер ---------- */
+
 
 .footer {
   border-top: 1px solid var(--md-sys-color-outline-variant);
@@ -410,7 +402,7 @@
   outline-offset: 2px;
 }
 
-/* ---------- Расширения через min-width ---------- */
+
 
 @media (min-width: 600px) {
   .heroInner {

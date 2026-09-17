@@ -3,13 +3,10 @@ import type { Category } from '@/shared/api/types/domain';
 import { invalidateHomeCaches } from '@/shared/api/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** DELETE /categories/:id + оптимистичное удаление. */
 const removeCategoryMutationKey = ['removeCategory'] as const;
 
-/** Запрос DELETE /categories/:id — id категории. */
 export type UseRemoveCategoryRequest = string;
 
-/** Ответ DELETE /categories/:id — 204 без тела. */
 export type UseRemoveCategoryResponse = void;
 
 export const useRemoveCategory = (userId: string) => {

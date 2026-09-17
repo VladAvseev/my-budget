@@ -11,10 +11,6 @@ interface AmountAdjusterProps {
   controlsDisabled: boolean;
 }
 
-/**
- * Корректор суммы для редактирования операции: дельта + кнопки −/+.
- * Используется только при редактировании (operation !== undefined).
- */
 export const AmountAdjuster = ({
   amount,
   onAmountChange,

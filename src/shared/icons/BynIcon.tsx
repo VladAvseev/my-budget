@@ -1,6 +1,5 @@
 import type { SVGProps } from 'react';
 
-/** Контур существующего графического знака белорусского рубля, без загрузки шрифта. */
 export const BynIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 1149 2789" fill="currentColor" aria-hidden="true" focusable="false" {...props}>
     <path

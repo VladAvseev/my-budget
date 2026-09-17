@@ -8,7 +8,6 @@ interface AuthLayoutProps {
   children: ReactNode;
 }
 
-/** Статика из лендинга: та же тройка преимуществ, без новой логики. */
 const PROMO_POINTS = [
   {
     title: 'Простота',
@@ -24,13 +23,6 @@ const PROMO_POINTS = [
   },
 ];
 
-/**
- * Общий каркас экранов входа и регистрации. Compact — одна центрированная
- * колонка; на expanded и шире — сплит: слева форма, справа декоративная
- * панель. Сплит собран чистым CSS (без условного рендера по брейкпоинту),
- * поэтому ввод, фокус и `isPending` при ресайзе не теряются. Панель
- * декоративна: только статика, никакого интерактива и логики.
- */
 export const AuthLayout = ({ title, children }: AuthLayoutProps) => {
   return (
     <div className={styles.root}>

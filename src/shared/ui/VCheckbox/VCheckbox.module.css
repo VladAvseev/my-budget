@@ -1,6 +1,3 @@
-/* VCheckbox — M3 Expressive checkbox (web-адаптация) поверх нативного input.
- * Кастомный квадрат 20px: рамка 2px, checked — primary-заливка с галкой. */
-
 .root {
   display: flex;
   align-items: flex-start;

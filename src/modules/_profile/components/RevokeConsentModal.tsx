@@ -7,18 +7,14 @@ import styles from './RevokeConsentModal.module.css';
 
 interface RevokeConsentModalProps {
   visible: boolean;
-  /** Логин текущего пользователя (user?.login ?? '—' из AccountCard). */
+  
   login: string;
   isPending: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }
 
-/**
- * Подтверждение отзыва согласия вводом своего логина: действие необратимо
- * (обезличивание данных, разрыв сессий), поэтому одного клика недостаточно.
- * Кнопка активна, только когда ввод совпал с логином (регистронезависимо).
- */
+
 export const RevokeConsentModal = ({
   visible,
   login,
@@ -28,7 +24,7 @@ export const RevokeConsentModal = ({
 }: RevokeConsentModalProps) => {
   const [confirmLogin, setConfirmLogin] = useState('');
 
-  // Заглушку '—' и пустой логин подтвердить нельзя.
+  
   const isConfirmed =
     login.trim() !== '' &&
     login !== '—' &&

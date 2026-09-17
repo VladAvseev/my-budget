@@ -13,11 +13,7 @@ interface DeleteUserModalProps {
   onClose: () => void;
 }
 
-/**
- * Модалка подтверждения удаления: кнопка активна, только когда введён точный
- * логин пользователя (регистронезависимо). Размонтируется вместе с parent
- * (рендерится по условию), поэтому состояние ввода не нужно сбрасывать эффектом.
- */
+
 export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ user, onClose }) => {
   const [confirmLogin, setConfirmLogin] = useState('');
   const deleteMutation = useDeleteAdminUser();

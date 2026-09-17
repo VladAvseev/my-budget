@@ -8,13 +8,10 @@ import { operationsKeyForType } from './keys';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/**
- * POST /operations: reportId уходит в теле,
- * user_id сервер берёт из JWT. Привязку к счетам проверяет сервер.
- */
+
 const createOperationMutationKey = ['createOperation'] as const;
 
-/** Запрос POST /operations — payload модалки (прежний OperationInput). */
+
 export type UseCreateOperationRequest = {
   amount: number;
   description?: string | null;
@@ -36,10 +33,10 @@ export type UseCreateOperationRequest = {
     }
 );
 
-/** Ответ POST /operations — созданная операция (201). */
+
 export type UseCreateOperationResponse = Operation;
 
-/** Тело на проводе (серверный CreateOperationInput). */
+
 type CreateOperationBody = UseCreateOperationRequest & { reportId: string };
 
 export const useCreateOperation = (reportId: string) => {

@@ -1,10 +1,6 @@
 import { api } from '@/shared/api/http';
 import { useQuery } from '@tanstack/react-query';
 
-/**
- * Строка серверной сводки GET /operations/category-summary: сумма операций
- * одного отчёта по типу и категории.
- */
 export interface CategorySummaryRow {
   report_id: string;
   type: string;
@@ -12,17 +8,11 @@ export interface CategorySummaryRow {
   category_id: string | null;
 }
 
-/**
- * Карта «отчёт → сводка по категориям» для аналитики overview: вместо сырых
- * операций тянем только сгруппированные сервером суммы.
- */
 const overviewCategorySummaryQueryKey = (reportIds: string[]) =>
   ['overview', 'category-summary', [...reportIds].sort().join('|')] as const;
 
-/** Фильтр запроса: id отчётов (уходят в query `reportIds`). */
 export type UseOverviewCategorySummaryRequest = string[];
 
-/** Данные хука: карта report_id → строки сводки выбранного отчёта. */
 export type UseOverviewCategorySummaryResponse = Map<string, CategorySummaryRow[]>;
 
 export const useOverviewCategorySummary = (reportIds: UseOverviewCategorySummaryRequest) =>

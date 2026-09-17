@@ -23,6 +23,6 @@ export function setStoredTheme(theme: ThemeName): void {
   try {
     localStorage.setItem(THEME_STORAGE_KEY, theme);
   } catch {
-    // localStorage недоступен — сохранить выбранную тему не получится
+    return;
   }
 }

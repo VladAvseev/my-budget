@@ -8,11 +8,6 @@ export interface OnboardingItem {
   done: boolean;
 }
 
-/**
- * Чек-лист онбординга из срезов GET /users/me/bootstrap (profile + onboarding):
- * отдельного запроса на главной больше нет — данные приходят вместе
- * с остальными цифрами одним bootstrap-ответом.
- */
 const EMPTY_ONBOARDING = { categories: 0, reports: 0, operations: 0 };
 
 export const useOnboardingChecklist = () => {

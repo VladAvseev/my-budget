@@ -6,19 +6,18 @@ import commonStyles from '@/shared/styles/common.module.css';
 import styles from './VErrorCard.module.css';
 
 export interface VErrorCardProps {
-  /** Заголовок: «Не удалось загрузить …». */
+
   title: string;
-  /** Ошибка запроса — её текст показывается подзаголовком. */
+
   error?: unknown;
-  /** Обработчик повтора; если не передан — кнопка не рендерится. */
+
   onRetry?: () => void;
-  /** Идёт ли сейчас повтор (спиннер в кнопке). */
+
   isRetrying?: boolean;
   className?: string;
   style?: CSSProperties;
 }
 
-/** Карточка ошибки загрузки с рекомендацией попробовать ещё раз (как на главной). */
 export const VErrorCard = ({
   title,
   error,

@@ -59,7 +59,7 @@ export const CreateGoalModal = ({ onClose }: CreateGoalModalProps) => {
     }
     setAccountIdError(undefined);
 
-    // Порог > 0, как на сервере (requireAmount strict + check amount > 0 в goals).
+    
     if (trimmedAmount === '' || !Number.isFinite(amountValue) || amountValue <= 0) {
       setAmountError('Сумма должна быть больше нуля');
       return;

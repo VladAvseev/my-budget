@@ -1,4 +1,3 @@
-// src/components/ProtectedRoute.tsx
 import commonStyles from '@/shared/styles/common.module.css';
 import { VLoader } from '@/shared/ui/VLoader';
 import type { ReactNode } from 'react';

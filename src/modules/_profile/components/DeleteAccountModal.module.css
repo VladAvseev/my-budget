@@ -1,6 +1,3 @@
-/* DeleteAccountModal — M3 Expressive тело диалога.
- * Сам VModal не трогаем: только иерархия предупреждения и пилюля логина. */
-
 .body {
   display: flex;
   flex-direction: column;

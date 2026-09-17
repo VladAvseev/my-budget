@@ -8,16 +8,10 @@ import type { ChartPoint } from '@/shared/utils/chartPoints';
 export type DynamicsChartMode = 'cumulative' | 'period';
 export type DynamicsAggregation = AdminOperationsAggregation;
 
-// Метки времени приводятся к московскому календарному дню. МСК = UTC+3,
-// переход на летнее время отменён с 2014 года, поэтому смещение постоянно.
 export const MOSCOW_UTC_OFFSET_MS = 3 * 60 * 60 * 1000;
 
-// Дата запуска проекта: с неё начинается график роста и, соответственно,
-// расчёт среднего роста. Операций с created_at раньше этой даты в базе нет
-// (исторические данные мигрированы позже запуска).
 export const DYNAMICS_START_DATE = '2026-07-31';
 
-// «Синтетическая» дата: полночь UTC, чьи UTC-поля равны московскому календарю.
 export const moscowToday = (): Date => {
   const shifted = new Date(Date.now() + MOSCOW_UTC_OFFSET_MS);
   return new Date(Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate()));
@@ -32,9 +26,6 @@ const parseNumbers = (parts: string[], expected: number): number[] | null => {
   return numbers.every(Number.isFinite) ? numbers : null;
 };
 
-// Сервер отдаёт ключ периода в зависимости от aggregation: 'YYYY-MM-DD',
-// 'YYYY-MM' или 'YYYY'. Разбираем напрямую в синтетическую дату, без привязки
-// к таймзоне браузера (SQL уже считает границы в московском времени).
 const parsePeriod = (period: string, aggregation: DynamicsAggregation): Date | null => {
   const parts = period.split('-');
   if (aggregation === 'D') {
@@ -143,21 +134,12 @@ export const buildOperationsDynamicsData = ({
 
   if (!lastDate) return [];
 
-  // Правый край доводим до сегодняшнего дня (или до последней даты, если данные
-  // опережают «сегодня»): иначе накопительный итог расходится с общим
-  // количеством операций в таблице.
   const today = moscowToday();
   const now = lastDate > today ? lastDate : today;
-  // Левый край фиксирован — дата запуска: график и среднее роста всегда
-  // считаются с 31.07.2026, даже если первые операции приходят позже (до
-  // них серия идёт нулями). В будущее не уходим: если сегодня раньше
-  // запуска, отсчитываем от сегодняшнего дня.
+
   const launch = parsePeriod(DYNAMICS_START_DATE, 'D');
   const startDate = launch && launch < now ? launch : now;
 
-  // Накопление имеет смысл только для count: уникальных пользователей за
-  // несколько периодов нельзя получить суммой точек, поэтому режим unique_users
-  // всегда остаётся «За период».
   const cumulativeMode = mode === 'cumulative' && metric === 'count';
 
   const chartPoints: ChartPoint[] = [];

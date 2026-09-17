@@ -8,14 +8,8 @@ import { invalidateReportCache } from './invalidateReportCache';
 import { operationsKeyForType } from './keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/**
- * PATCH /operations/:id. Отправляем только реально
- * заполненные поля: null в amount смысл иметь не может (NOT NULL), а
- * categoryId/description = null — легальное «очистить».
- */
 const updateOperationMutationKey = ['updateOperation'] as const;
 
-/** Запрос PATCH /operations/:id — id + payload модалки (прежний OperationUpdateInput). */
 export interface UseUpdateOperationRequest {
   id: string;
   input: {
@@ -30,10 +24,8 @@ export interface UseUpdateOperationRequest {
   };
 }
 
-/** Ответ PATCH /operations/:id — обновлённая операция (200). */
 export type UseUpdateOperationResponse = Operation;
 
-/** Тело на проводе (серверный UpdateOperationInput). */
 interface UpdateOperationBody {
   amount?: number;
   categoryId?: string | null;
@@ -69,7 +61,6 @@ export const useUpdateOperation = (reportId: string) => {
       await queryClient.cancelQueries({ queryKey: prefix });
       const previous = queryClient.getQueriesData<Operation[]>({ queryKey: prefix });
 
-      // Снимок сводки: убираем старый вклад операции и вносим новый.
       const oldOperation = previous
         .flatMap(([, items]) => items ?? [])
         .find((item) => item.id === id);
@@ -113,7 +104,6 @@ export const useUpdateOperation = (reportId: string) => {
         ),
       );
 
-      // После смены типа операция должна сразу перейти в соответствующий список.
       if (oldOperation && input.type && input.type !== oldOperation.type) {
         const updated = queryClient
           .getQueriesData<Operation[]>({ queryKey: prefix })

@@ -6,23 +6,16 @@ import { trimStrings } from '@/shared/utils';
 import { categoriesQueryKey } from './keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/**
- * POST /categories с прежним оптимистичным обновлением:
- * добавляем черновик в кэш «все» и «по типу», при ошибке откатываем.
- */
 const createCategoryMutationKey = ['createCategory'] as const;
 
-/** Запрос POST /categories — payload модалки (прежний CategoryCreateInput). */
 export interface UseCreateCategoryRequest {
   type: CategoryType;
   name: string;
   color?: string | null;
 }
 
-/** Ответ POST /categories — созданная категория (201). */
 export type UseCreateCategoryResponse = Category;
 
-/** Тело на проводе (серверный CreateCategoryInput). */
 interface CreateCategoryBody {
   type: CategoryType;
   name: string;

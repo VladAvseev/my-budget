@@ -127,7 +127,7 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
       }
       const trimmedAmount = limit.amount.trim();
       const amountValue = Number(trimmedAmount);
-      // Порог > 0, как на сервере (requireAmount strict в setCategoryLimits).
+      
       if (trimmedAmount === '' || !Number.isFinite(amountValue) || amountValue <= 0) {
         parts.push('укажите положительную сумму');
         isValid = false;

@@ -63,7 +63,7 @@ export const buildGoalForecast = (
   const targetDate = goal.target_date ? new Date(`${goal.target_date}T00:00:00`) : null;
   let monthsLeft: number | null = null;
   if (remaining > 0 && targetDate && targetDate > now) {
-    // К первому числу сумма уже нужна: месяц желаемой даты не включается.
+
     monthsLeft = Math.max(
       1,
       (targetDate.getFullYear() - now.getFullYear()) * 12 +
@@ -79,7 +79,6 @@ export const buildGoalForecast = (
   };
 };
 
-/** Прогноз по общему темпу капитала; желаемая дата влияет только на рекомендацию. */
 export const forecastAchievement = (remaining: number, avg: number | null, now = new Date()) => {
   if (remaining <= 0 || avg === null || avg <= 0) return null;
   const months = Math.ceil(remaining / avg);
@@ -101,7 +100,6 @@ export const goalMonthlyContribution = (
     : Math.ceil(Math.max(0, progress.goal.amount - progress.savedAmount) / overallMonths);
 };
 
-/** Нетто операций текущего отчёта; внутренние переводы между целями взаимно гасятся. */
 export const currentGoalContributions = (
   operations: Operation[],
   accountIds: ReadonlySet<string>,

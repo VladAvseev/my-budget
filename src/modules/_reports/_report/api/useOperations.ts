@@ -3,17 +3,15 @@ import { api } from '@/shared/api/http';
 import { operationsQueryKey } from './keys';
 import { useQuery } from '@tanstack/react-query';
 
-/**
- * GET /operations?reportId=&type=.
- */
 
-/** Параметры запроса (уходят в query-строку). */
+
+
 export interface UseOperationsRequest {
   reportId: string;
   type: ApiOperationType;
 }
 
-/** Ответ GET /operations?reportId=&type=. */
+
 export type UseOperationsResponse = Operation[];
 
 const fetchOperations = async ({ reportId, type }: UseOperationsRequest, signal?: AbortSignal) =>

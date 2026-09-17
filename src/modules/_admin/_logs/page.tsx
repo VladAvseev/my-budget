@@ -45,7 +45,7 @@ const STATUS_OPTIONS: VButtonGroupOption[] = [
   { value: 'error', label: 'Error' },
 ];
 
-/** Статический список методов для фильтра: сервер логирует только эти. */
+
 const METHOD_OPTIONS: VMultiSelectOption[] = [
   { value: 'GET', label: 'GET' },
   { value: 'POST', label: 'POST' },
@@ -134,7 +134,7 @@ interface SortHeaderProps {
   onSort: (field: AdminLogsSortField) => void;
 }
 
-/** Заголовок сортируемого столбца: клик — выбрать поле, повторный — сменить порядок. */
+
 const SortHeader: React.FC<SortHeaderProps> = ({ label, field, activeField, order, onSort }) => {
   const isActive = activeField === field;
   return (
@@ -158,7 +158,7 @@ const SortHeader: React.FC<SortHeaderProps> = ({ label, field, activeField, orde
   );
 };
 
-/** Скелетон таблицы логов: те же 6 колонок, что у реальной таблицы. */
+
 const LogsTableSkeleton: React.FC = () => (
   <div className={styles.tableWrapper}>
     <table className={styles.table} aria-busy="true">
@@ -207,7 +207,7 @@ export const Page: React.FC = () => {
     setPage(1);
   };
 
-  // Лёгкие id+login для селекта автора — без тяжёлых агрегатов GET /admin/users.
+  
   const optionsQuery = useAdminUserOptions();
   const userOptions = useMemo<VSelectOption[]>(
     () => [
@@ -378,15 +378,15 @@ export const Page: React.FC = () => {
                     </tr>
                   ) : (
                     logs.items.map((row: AdminLogRow) => {
-                      // Чип статуса: info — тихо, warning (4xx) — акцент, error (5xx) — ошибка.
+                      
                       const statusClass =
                         row.status >= 500
                           ? styles.statusError
                           : row.status >= 400
                             ? styles.statusWarning
                             : styles.statusOk;
-                      // Раскрытие строки нужно только ради текста ошибки —
-                      // параметров запроса сервер не хранит.
+                      
+                      
                       const isExpanded = row.error !== null && expandedIds.has(row.id);
                       return (
                         <Fragment key={row.id}>

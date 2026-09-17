@@ -1,9 +1,5 @@
-/* AccountCard — M3E hero + настройки + опасная зона.
- * База compact без media query. Hero крупнее обычных секций (shape-иерархия).
- * Цвета только из --md-sys-*, плотность — локальные --profile-*. */
-
 .card {
-  /* Hero-карта выделяется формой среди секций (VCard по умолчанию medium/large). */
+  
   border-radius: var(--md-sys-shape-corner-extra-large);
 }
 
@@ -14,7 +10,7 @@
   gap: var(--profile-gap);
 }
 
-/* ---------- Hero: единственный сильный акцент ---------- */
+
 
 .hero {
   display: flex;
@@ -76,7 +72,7 @@
   opacity: 0.8;
 }
 
-/* ---------- Настройки ---------- */
+
 
 .settingsGroup {
   display: flex;
@@ -112,7 +108,7 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-/* Сви тч слева текст, справа: инвертируем порядок VToggle (трек слева по умолчанию). */
+
 .themeToggle {
   width: 100%;
   flex-direction: row-reverse;
@@ -131,7 +127,7 @@
   flex: 1 1 140px;
 }
 
-/* ---------- Опасная зона: внизу, отдельным контуром ---------- */
+
 
 .danger {
   display: flex;
@@ -172,7 +168,7 @@
   flex: 1 1 160px;
 }
 
-/* ---------- Правовые документы ---------- */
+
 
 .legalSection {
   display: flex;

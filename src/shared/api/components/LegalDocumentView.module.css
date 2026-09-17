@@ -23,8 +23,7 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-/* Предупреждение над исторической версией: человек мог перейти сюда из
-   профиля («версия, с которой он согласился») — важно, что это не current. */
+
 .historical {
   margin: 0 0 12px;
   padding: 8px 12px;
@@ -34,7 +33,7 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-/* Типографика Markdown'а: элементы рендерятся внутри .document. */
+
 .document h1 {
   margin: 0 0 12px;
   --heading-size: 20px;

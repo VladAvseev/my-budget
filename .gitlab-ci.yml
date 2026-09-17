@@ -1,22 +1,14 @@
-# Полный пайплайн: сборка React → деплой docker-образа web на свой сервер
-# (когда заведён DEPLOY_SSH_KEY) → зеркало репозитория в GitHub.
-#
-# Легаси-деплой в Yandex Object Storage (прод my-finance.site до реза)
-# отключён: бакет удалён, статика легаси-прода больше не обновляется.
+# Пайплайн: сборка React → деплой web-образа → зеркало в GitHub.
 
 stages:
   - build
   - deploy
 
 variables:
-  # Общие переменные для всех джоб (не секретные)
+  # Общие несекретные переменные
   NODE_IMAGE: node:20-alpine
 
-# ─────────────────────────────────────────────────────────────
-# Этап 1: Сборка React-приложения
-# Секретов в бандле нет: API вызывается по same-origin '/api/v1',
-# поэтому никаких env-файлов на этапе сборки не генерируется.
-# ─────────────────────────────────────────────────────────────
+# Этап 1: сборка (секретов в бандле нет, env не генерируется)
 build:
   stage: build
   image: $NODE_IMAGE
@@ -31,13 +23,7 @@ build:
   only:
     - develop
 
-# ─────────────────────────────────────────────────────────────
-# Этап 2: Деплой web на свой сервер (docker compose, сервис web)
-# Джоба создаётся только после заведения DEPLOY_SSH_KEY в Variables —
-# до этого пайплайн ограничивается сборкой и зеркалом.
-# На сервере: hard-reset клона client на origin/develop и пересборка
-# ТОЛЬКО web из общего стека /opt/mybudget/server (api и db не трогаются).
-# ─────────────────────────────────────────────────────────────
+# Этап 2: деплой web (только после DEPLOY_SSH_KEY; api и db не трогаются)
 deploy-web:
   stage: deploy
   image: alpine:latest
@@ -47,7 +33,7 @@ deploy-web:
   before_script:
     - apk add --no-cache openssh-client
     - eval $(ssh-agent -s)
-    # tr -d '\r' — страховка от CRLF при вставке ключа в веб-форму GitLab
+    # CRLF-страховка ключа из веб-формы GitLab
     - echo "$DEPLOY_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
@@ -61,17 +47,13 @@ deploy-web:
       && cd /opt/mybudget/server
       && docker compose up -d --build web"
 
-# ─────────────────────────────────────────────────────────────
-# Этап 3: Копирование репозитория в gitHub
-# ─────────────────────────────────────────────────────────────
+# Этап 3: зеркало в GitHub
 mirror-to-github:
   stage: deploy
   only:
     - develop
   variables:
-    # GitLab по умолчанию делает shallow-клон (--depth 20): thin-pack из такого
-    # клона при push на GitHub ссылается на дельта-базы за пределами окна
-    # ("remote unpack failed: did not receive expected object") — нужен полный клон.
+    # Shallow-клон ломает push (thin-pack) — нужен полный (GIT_DEPTH: 0)
     GIT_DEPTH: 0
   before_script:
     - mkdir -p ~/.ssh
@@ -80,6 +62,5 @@ mirror-to-github:
     - ssh-keyscan github.com >> ~/.ssh/known_hosts
     - git remote add github git@github.com:VladAvseev/my-budget.git
   script:
-    # --force: зеркало однонаправленное (GitLab → GitHub), расходимость перезаписываем
-    # --no-thin: самодостаточный пак, без внешних дельта-баз на стороне GitHub
+    # Зеркало однонаправленное (--force) и самодостаточное (--no-thin)
     - git push --no-thin --force github "HEAD:refs/heads/${CI_COMMIT_REF_NAME}"

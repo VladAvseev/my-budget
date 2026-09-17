@@ -4,7 +4,6 @@ export interface Currency {
   symbol: string;
 }
 
-// Текстовый код для строк; визуальный знак выводит общий компонент Amount.
 export const BYN_SIGN = 'BYN';
 
 export const QUICK_CURRENCIES = ['BYN', 'RUB', 'USD'] as const;

@@ -1,6 +1,3 @@
-/* GrowthStats — строки статистики под заголовком динамики.
- * Значения — tabular-nums; тон — существующими классами positive/negative. */
-
 .stats {
   display: flex;
   flex-direction: column;

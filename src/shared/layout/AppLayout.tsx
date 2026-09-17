@@ -29,8 +29,7 @@ interface NavItem {
   to: string;
   label: string;
   icon: ComponentType<IconProps>;
-  /** Залитый глиф активного пункта (M3: filled = selected). Без него пункт
-   * в активном состоянии остаётся контурным — пилюля всё равно его выделяет. */
+
   activeIcon?: ComponentType<IconProps>;
   end?: boolean;
 }
@@ -39,12 +38,10 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Главная', icon: HomeIcon, activeIcon: HomeFilledIcon, end: true },
   { to: '/reports', label: 'Периоды', icon: ReportsIcon, activeIcon: ReportsFilledIcon },
   { to: '/capital', label: 'Капитал', icon: CapitalIcon, activeIcon: CapitalFilledIcon },
-  // У bar_chart нет отдельного filled-варианта: столбики залиты в обоих.
+
   { to: '/overview', label: 'Аналитика', icon: OverviewIcon },
 ];
 
-// Ширина, на которой нижняя навигация сменяется ссылками в шапке.
-// Совпадает с min-width: 840px в AppLayout.module.css.
 const TOP_NAV_QUERY = '(min-width: 840px)';
 
 const ProfileLink = () => {
@@ -97,9 +94,6 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  // Обе навигации смонтированы всегда, видима одна (переключение чистым CSS).
-  // Если фокус был в навигации, скрытой ресайзом, переносим его на ту же
-  // ссылку в ставшей видимой навигации, чтобы не ронять фокус в body.
   useEffect(() => {
     const query = window.matchMedia(TOP_NAV_QUERY);
     const transferFocus = () => {

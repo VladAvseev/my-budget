@@ -3,13 +3,13 @@ import { api } from '@/shared/api/http';
 import type { Report } from '@/shared/api/types/domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** DELETE /reports/:id + оптимистичное удаление из списка. */
+
 const removeReportMutationKey = ['removeReport'] as const;
 
-/** Запроса нет (id — из хука). */
+
 export type UseRemoveReportRequest = void;
 
-/** Ответ DELETE /reports/:id — 204 без тела. */
+
 export type UseRemoveReportResponse = void;
 
 export const useRemoveReport = (id: string) => {
@@ -37,8 +37,8 @@ export const useRemoveReport = (id: string) => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       queryClient.invalidateQueries({ queryKey: ['reports', id] });
-      // Операции удаляются каскадно вместе с периодом: сбрасываем их кэш,
-      // иначе список операций удалённого отчёта мог остаться в памяти.
+      
+      
       queryClient.invalidateQueries({ queryKey: ['reports', id, 'operations'] });
       queryClient.invalidateQueries({ queryKey: ['reports', id, 'summary'] });
       queryClient.invalidateQueries({ queryKey: ['reports', id, 'limits'] });

@@ -1,6 +1,5 @@
 import type { IconProps } from './types';
 
-/** Перенос данных из прошлого периода: стрелка вниз в лоток. */
 export const ImportIcon = ({ size = 16, color = 'currentColor', style }: IconProps) => (
   <svg
     width={size}

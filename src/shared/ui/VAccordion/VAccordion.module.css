@@ -1,7 +1,3 @@
-/* VAccordion — M3 Expressive expansion (web-адаптация).
- * Base = compact: filled surface-container-low, radius medium.
- * Поворот шеврона и высота тела управляются из TSX через data-open на корне. */
-
 .accordion {
   width: 100%;
   border-radius: var(--md-sys-shape-corner-medium);

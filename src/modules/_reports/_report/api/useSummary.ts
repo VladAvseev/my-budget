@@ -3,12 +3,12 @@ import type { OperationSummary } from '@/shared/api/hooks';
 import { summaryQueryKey } from './keys';
 import { useQuery } from '@tanstack/react-query';
 
-/** GET /reports/:id/summary. */
 
-/** Запрос — id отчёта из пути. */
+
+
 export type UseSummaryRequest = string;
 
-/** Ответ GET /reports/:id/summary — общая форма со сводкой пользователя. */
+
 export type UseSummaryResponse = OperationSummary;
 
 export const useSummary = (reportId: UseSummaryRequest) =>

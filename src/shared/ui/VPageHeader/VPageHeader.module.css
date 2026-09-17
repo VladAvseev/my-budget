@@ -1,6 +1,3 @@
-/* VPageHeader — заголовок экрана.
- * Продуктовый акцент: emphasized headline-small. Раскрытие на expanded (840px). */
-
 .header {
   display: flex;
   align-items: center;

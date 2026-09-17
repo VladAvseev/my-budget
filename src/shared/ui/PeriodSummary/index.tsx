@@ -10,7 +10,6 @@ interface PeriodSummaryProps {
   convertOptions?: ConvertOptions;
 }
 
-/** Сводка периода по всем счетам: переводы исключены сервером. */
 export const PeriodSummary = ({
   income,
   expenses,

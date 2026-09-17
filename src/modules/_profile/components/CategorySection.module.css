@@ -1,7 +1,3 @@
-/* CategorySection — M3E список категорий.
- * База compact: одна колонка. Грид включается только когда ширины хватает.
- * Цвета только из --md-sys-*. */
-
 .root {
   display: flex;
   flex-direction: column;
@@ -52,7 +48,6 @@
   gap: 4px;
 }
 
-/* Medium: страница в одну колонку и широко — два столбца категорий. */
 @media (min-width: 600px) {
   .list {
     display: grid;
@@ -60,7 +55,6 @@
   }
 }
 
-/* Expanded: категории живут в узкой правой колонке — снова один столбец. */
 @media (min-width: 840px) {
   .list {
     display: flex;
@@ -68,7 +62,6 @@
   }
 }
 
-/* Large: правая колонка снова широкая — два столбца. */
 @media (min-width: 1200px) {
   .list {
     display: grid;

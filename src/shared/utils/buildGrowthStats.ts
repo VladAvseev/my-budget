@@ -12,8 +12,6 @@ export interface MonthlyStats {
   pct: number | null;
 }
 
-// Окно «за последний год» из завершённых календарных месяцев: ровно один раз
-// попадает каждый месяц, поэтому годовая сезонность компенсируется.
 export const RECENT_WINDOW_MONTHS = 12;
 
 const AGGREGATION_LABELS: Record<GrowthAggregation, string> = {
@@ -68,12 +66,6 @@ export const buildMonthlyStats = (data: ChartPoint[], base = 0): MonthlyStats | 
   return { abs, pct };
 };
 
-/**
- * Средний прирост за последние `windowMonths` завершённых месяцев:
- * abs — рост внутри окна (базой служит точка перед окном, а не ноль),
- * pct — среднегеометрический рост по окну. null, если завершённых месяцев
- * не больше `windowMonths` (при равном окне строка дублировала бы общее).
- */
 export const buildWindowedMonthlyStats = (
   data: ChartPoint[],
   windowMonths: number,
@@ -112,13 +104,12 @@ export const buildWindowedMonthlyStats = (
 };
 
 export interface BuildGrowthStatsOptions {
-  /** Дата начала активности (регистрация): точнее месяца отсекает неполный первый период. */
+
   firstActivityDate?: Date | null;
-  /** Сегодня (переопределяется в ручных проверках границ). */
+
   now?: Date;
 }
 
-/** Единое окно прогноза и графика: только полные месяцы, без стартового капитала. */
 export const buildRecentMonthlyGrowth = (
   data: ChartPoint[],
   base = 0,
@@ -145,8 +136,7 @@ export const buildGrowthStats = (
   options: BuildGrowthStatsOptions = {},
 ): VGrowthStatsData => {
   const now = options.now ?? new Date();
-  // Края из среднего исключаются, на графике точки остаются: незавершённый
-  // текущий период и первый период, начавшийся не с первого дня/месяца.
+
   const trimmed = trimLeadingPartialPeriod(
     trimIncompletePeriod(filteredData, getPeriodEnd(aggregation), now),
     aggregation,
@@ -155,7 +145,7 @@ export const buildGrowthStats = (
 
   const firstIndex = trimmed.length ? filteredData.indexOf(trimmed[0]) : 0;
   const trimmedBase = firstIndex > 0 ? filteredData[firstIndex - 1].value : base;
-  // Строка «за последний год» считается только для помесячной группировки.
+
   const recent =
     aggregation === 'M' && trimmed.length > RECENT_WINDOW_MONTHS
       ? {

@@ -16,8 +16,8 @@ export interface CapitalStructureData {
   hasNegative: boolean;
 }
 
-// У счетов нет своих цветов, поэтому сегменты красятся циклически
-// из дизайн-токенов (работает во всех темах, без хардкода hex).
+
+
 export const CAPITAL_PALETTE = [
   'var(--md-sys-color-primary)',
   'var(--md-sys-color-primary)',
@@ -29,11 +29,7 @@ export const CAPITAL_PALETTE = [
   'var(--md-sys-color-tertiary-container)',
 ] as const;
 
-/**
- * Доли текущих балансов открытых счетов для кольцевой диаграммы.
- * Логика пустых/отрицательных данных — как в buildChartData структуры операций:
- * при отрицательных балансах или неположительном итоге сегменты не строятся.
- */
+
 export const buildCapitalStructureData = (accounts: Account[]): CapitalStructureData => {
   const open = accounts
     .filter((account) => !account.is_closed)
@@ -50,7 +46,7 @@ export const buildCapitalStructureData = (accounts: Account[]): CapitalStructure
   let cursor = 0;
 
   open.forEach((account, index) => {
-    // Нулевые счета долю не занимают — дуга нулевой длины диаграмме не нужна.
+    
     if (account.balance <= 0) return;
     const percent = (account.balance / total) * 100;
     segments.push({

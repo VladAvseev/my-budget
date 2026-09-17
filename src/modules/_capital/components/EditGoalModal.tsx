@@ -56,7 +56,7 @@ export const EditGoalModal = ({ goal, onClose }: EditGoalModalProps) => {
     const trimmedAmount = amount.trim();
     const amountValue = Number(trimmedAmount);
 
-    // Порог > 0, как на сервере (requireAmount strict + check amount > 0 в goals).
+    
     if (trimmedAmount === '' || !Number.isFinite(amountValue) || amountValue <= 0) {
       setAmountError('Сумма должна быть больше нуля');
       return;

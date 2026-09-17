@@ -1,6 +1,3 @@
-/* VDeltaChart — столбчатый график значений за период (дельт).
- * Сетка 1px outline-variant, тултип — инверсная пара, как у VGrowthChart. */
-
 .wrapper {
   display: flex;
   position: relative;

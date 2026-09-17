@@ -9,7 +9,6 @@ import styles from '../homeCard.module.css';
 export const NewReportCard = () => {
   const { data } = useBootstrap();
 
-  // «Последний» — тот же отчёт, что в LastReportCard: максимум по period_end.
   const lastReport = data?.lastReport ?? null;
   const latestPeriodEnd = lastReport?.period_end ?? null;
 

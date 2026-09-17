@@ -53,7 +53,7 @@ export const AccountCard = () => {
     }
   };
 
-  /** Отзыв согласия (п.7): сервер сразу обезличивает данные и рвёт сессии. */
+  
   const handleRevoke = () => {
     setConsentError(undefined);
     revokeConsent.mutate(undefined, {
@@ -151,9 +151,7 @@ export const AccountCard = () => {
           </div>
         </section>
 
-        {/* Правовые документы (п.2 требований): все тексты живут в БД, отсюда
-            только ссылки. Версия принятого согласия ведёт на историческую
-            версию политики — «какой текст я видел, когда соглашался». */}
+        
         <div className={styles.legalSection}>
           <span className={styles.legalTitle}>Правовые документы</span>
           <LegalLinks className={styles.legalNav} itemClassName={styles.legalLink} />

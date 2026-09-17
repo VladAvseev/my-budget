@@ -35,10 +35,6 @@ export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCard
   const isLoading = dynamicsQuery.isLoading || accountsQuery.isLoading || profileQuery.isLoading;
   const isError = dynamicsQuery.isError || accountsQuery.isError;
 
-  // База кривой — сумма initial_balance ВСЕХ счетов (и открытых, и закрытых),
-  // далее точки идут по периодам-отчётам (дельта всех операций периода).
-  // Из-за закрытых счетов и операций вне отчётов последняя точка кривой
-  // может расходиться с «Капиталом» (там только открытые счета) — принято осознанно.
   const rawBase = useMemo(
     () => (accountsQuery.data ?? []).reduce((sum, account) => sum + account.initial_balance, 0),
     [accountsQuery.data],
@@ -68,8 +64,6 @@ export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCard
     return convertAmount(rawBase, defaultCurrency, displayCurrency, rates);
   }, [rawBase, displayCurrency, rates, defaultCurrency]);
 
-  // Дата регистрации точнее месяца отсекает неполный первый период из среднего.
-  // Профиль уже закэширован useDisplayCurrency, отдельного запроса обычно нет.
   const firstActivityDate = useMemo(() => {
     const raw = profileQuery.data?.created_at;
     if (!raw) return null;

@@ -9,7 +9,7 @@ export interface UseGoalPeriodOperationsRequest {
 
 export const useGoalPeriodOperations = ({ reportId }: UseGoalPeriodOperationsRequest) =>
   useQuery({
-    // Общий префикс с операциями отчёта обеспечивает обновление после любых мутаций.
+    
     queryKey: ['reports', reportId, 'operations', 'goal-period'],
     enabled: Boolean(reportId),
     queryFn: ({ signal }) =>

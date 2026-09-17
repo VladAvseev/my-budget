@@ -1,8 +1,3 @@
-/* VButton — M3 Expressive common buttons (web-адаптация).
- * Base = compact/mobile: скруглённый прямоугольник 40px, label-large.
- * Desktop не растягиваем, только чуть больше горизонтальные отступы
- * через min-width. */
-
 .base {
   position: relative;
   display: inline-flex;

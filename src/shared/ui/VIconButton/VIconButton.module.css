@@ -1,6 +1,3 @@
-/* VIconButton — M3 Expressive icon button (web-адаптация).
- * Нейтральный служебный вариант; визуал 40px, хит-зона 48px через ::before. */
-
 .button {
   position: relative;
   display: inline-flex;
@@ -20,7 +17,7 @@
     border-radius var(--md-sys-motion-expressive-fast-spatial);
 }
 
-/* Расширенная touch-зона до 48px без изменения визуала */
+
 .button::before {
   content: '';
   position: absolute;

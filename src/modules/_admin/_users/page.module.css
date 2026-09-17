@@ -1,6 +1,3 @@
-/* Пользователи — M3 Expressive таблица.
- * Base = compact: поиск во всю ширину, таблица в карточке со скроллом. */
-
 .search {
   width: 100%;
   max-width: 100%;
@@ -111,8 +108,6 @@
   text-align: left;
 }
 
-/* VIconButton по умолчанию display: flex (блочный) и растягивается на всю ячейку,
-   из-за чего text-align не центрирует его. Возвращаем строчный уровень. */
 .actionCell > * {
   display: inline-flex;
 }

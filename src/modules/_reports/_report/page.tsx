@@ -74,8 +74,7 @@ export const Page: React.FC = () => {
 
       {!notFound && (
         <>
-          {/* Вкладки монтируются сразу: операции/категории/лимиты запрашиваются
-              параллельно с отчётом, а не дождавшись его. */}
+          
           <div>
             {summaryLoading ? (
               <div className={styles.summaryGrid}>

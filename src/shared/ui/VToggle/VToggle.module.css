@@ -1,6 +1,3 @@
-/* VToggle — M3 Expressive switch (web-адаптация).
- * Трек 52×32 pill, ручка 16→24, анимация через left/size spatial-токеном. */
-
 .root {
   display: flex;
   align-items: center;

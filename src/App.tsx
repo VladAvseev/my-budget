@@ -20,10 +20,7 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        {/* ConsentGate — поверх всех маршрутов, кроме публичных /legal/* (там
-            окно не рисуется, чтобы документы можно было прочитать): '/' для
-            авторизованных идёт через AuthSwitch, минуя ProtectedRoute,
-            поэтому gate не в гарде. */}
+
         <ConsentGate>
           <Routes>
             {login()}

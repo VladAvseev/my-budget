@@ -4,23 +4,19 @@ import type { Report } from '@/shared/api/types/domain';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/**
- * PATCH /reports/:id: { name?, periodStart?, periodEnd? } — переименование
- * и правка периода. Отсылаются только переданные поля —
- * сервер обновляет ровно их.
- */
 
-/** Запрос PATCH /reports/:id — payload настроек (прежний ReportUpdateInput). */
+
+
 export interface UseUpdateReportRequest {
   name?: string;
   periodStart?: string;
   periodEnd?: string;
 }
 
-/** Ответ PATCH /reports/:id — обновлённый отчёт (200). */
+
 export type UseUpdateReportResponse = Report;
 
-/** Тело на проводе. */
+
 interface UpdateReportBody {
   name?: string;
   periodStart?: string;

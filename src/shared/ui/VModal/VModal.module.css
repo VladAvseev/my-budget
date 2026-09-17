@@ -1,6 +1,3 @@
-/* VModal — M3 Expressive dialog (web-адаптация).
- * Base = compact: scrim, elevated surface-container-high, shape extra-large. */
-
 .overlay {
   position: fixed;
   top: 0;

@@ -5,13 +5,8 @@ import { type OptimisticItem } from '@/shared/optimistic';
 import { trimStrings } from '@/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/**
- * PATCH /categories/:id. Отправляем только реально
- * переданные поля — серверный PATCH-whitelist не затирает остальное null'ами.
- */
 const updateCategoryMutationKey = ['updateCategory'] as const;
 
-/** Запрос PATCH /categories/:id — id + payload модалки (прежний CategoryUpdateInput). */
 export interface UseUpdateCategoryRequest {
   id: string;
   input: {
@@ -20,10 +15,8 @@ export interface UseUpdateCategoryRequest {
   };
 }
 
-/** Ответ PATCH /categories/:id — обновлённая категория (200). */
 export type UseUpdateCategoryResponse = Category;
 
-/** Тело на проводе (серверный UpdateCategoryInput). */
 interface UpdateCategoryBody {
   name?: string;
   color?: string | null;

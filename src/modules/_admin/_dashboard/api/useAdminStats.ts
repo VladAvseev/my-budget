@@ -1,18 +1,15 @@
 import { api } from '@/shared/api/http';
 import { useQuery } from '@tanstack/react-query';
 
-/**
- * Ответ GET /admin/dashboard/stats — структура агрегатов дашборда
- * (серверный AdminDashboardStats в `_admin/types.ts`).
- */
+
 export interface AdminDashboardStats {
   users: {
     total: number;
-    /** Пользователи без единого отчёта — «не начали пользоваться». */
+    
     withoutReports: number;
     onboarded: number;
   };
-  /** Активные по окну активности (DAU…YAU) — счётчики last_active_at. */
+  
   activity: {
     dau: number;
     wau: number;
@@ -21,7 +18,7 @@ export interface AdminDashboardStats {
     sau: number;
     yau: number;
   };
-  /** Отток: неактивнее окна (последний из двух — всего, сколько «спят» дольше). */
+  
   churn: {
     inactive1d: number;
     inactive7d: number;
@@ -40,10 +37,10 @@ export interface AdminDashboardStats {
   };
 }
 
-/** Запроса нет (пользователь — из JWT, фильтров нет). */
+
 export type UseAdminStatsRequest = void;
 
-/** Ответ GET /admin/dashboard/stats. */
+
 export type UseAdminStatsResponse = AdminDashboardStats;
 
 export const useAdminStats = () =>

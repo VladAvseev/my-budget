@@ -1,6 +1,3 @@
-/* VTreeSelect — M3 Expressive tree menu (web-адаптация).
- * Единый паттерн с VSelect; отступ уровня через --level, стрелка через data-collapsed. */
-
 .root {
   display: flex;
   flex-direction: column;

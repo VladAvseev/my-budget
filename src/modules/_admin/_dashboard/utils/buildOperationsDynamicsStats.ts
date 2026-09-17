@@ -86,8 +86,7 @@ export const buildOperationsDynamicsStats = (
   mode: DynamicsChartMode,
   metric: AdminChartMetric,
 ): DynamicsStats => {
-  // Единственная точка — текущий незавершённый период: после обрезки серия
-  // пуста, поэтому в качестве среднего показываем значение этой точки.
+
   const trimmed = trimIncompletePeriod(data, getPeriodEnd(aggregation), moscowToday());
   const periodRate =
     trimmed.length > 0

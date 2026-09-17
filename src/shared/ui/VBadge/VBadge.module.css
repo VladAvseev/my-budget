@@ -1,7 +1,3 @@
-/* VBadge — M3 Expressive tonal badge (web-адаптация).
- * Base = pill label-small; neutral — outlined, остальные — borderless tonal.
- * success/warning — локальные компонентные переменные (глобальные роли не вводим). */
-
 .badge {
   display: inline-flex;
   align-items: center;

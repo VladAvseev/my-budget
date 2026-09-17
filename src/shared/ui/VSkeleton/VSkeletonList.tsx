@@ -4,17 +4,16 @@ import styles from './VSkeleton.module.css';
 
 export interface VSkeletonListProps {
   count?: number;
-  /** Промежуток каскадной задержки появления между карточками, сек. */
+
   stagger?: number;
-  /** Рендер элемента: по умолчанию — VSkeletonCard. */
+
   renderItem?: (index: number) => ReactNode;
-  /** Пропсы для дефолтных VSkeletonCard-элементов. */
+
   cardProps?: Omit<VSkeletonCardProps, 'delay'>;
   className?: string;
   style?: CSSProperties;
 }
 
-/** Вертикальный список скелетон-карточек с каскадной задержкой. */
 export const VSkeletonList = ({
   count = 3,
   stagger = 0.05,

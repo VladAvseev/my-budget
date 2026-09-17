@@ -1,7 +1,3 @@
-/* AccountsSection — M3E список счетов.
- * База compact без media query. Строки разделены дивайдерами, глубина без теней.
- * Цвета только из --md-sys-*, плотность — локальные значения. */
-
 .sectionHeader {
   display: flex;
   flex-wrap: wrap;
@@ -24,7 +20,6 @@
   color: var(--md-sys-color-on-surface);
 }
 
-/* Счётчик счетов — единственный pill-акцент секции. */
 .count {
   display: inline-flex;
   align-items: center;

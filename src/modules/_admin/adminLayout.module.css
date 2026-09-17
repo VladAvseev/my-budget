@@ -1,7 +1,3 @@
-/* AdminLayout — M3 Expressive навигация раздела.
- * Base = compact: заголовок + сегментированный pill-ряд с горизонтальным скроллом.
- * Rail включается с 840px: табы становятся вертикальной колонкой. */
-
 .root {
   display: flex;
   flex-direction: column;

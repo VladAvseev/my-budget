@@ -4,13 +4,10 @@ import { applySummaryDelta, restoreSummary } from './applySummaryDelta';
 import { invalidateReportCache } from './invalidateReportCache';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-/** DELETE /operations/:id + оптимистичное удаление. */
 const removeOperationMutationKey = ['removeOperation'] as const;
 
-/** Запрос DELETE /operations/:id — id операции. */
 export type UseRemoveOperationRequest = string;
 
-/** Ответ DELETE /operations/:id — 204 без тела. */
 export type UseRemoveOperationResponse = void;
 
 export const useRemoveOperation = (reportId: string) => {

@@ -1,6 +1,3 @@
-/* Карточки «Пользователи / Активность / Хранилище» — M3 Expressive.
- * Base = compact: section-заголовки, скролл-контейнеры, tabular-nums. */
-
 .card {
   display: flex;
   flex-direction: column;
