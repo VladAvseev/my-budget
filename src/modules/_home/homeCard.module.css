@@ -55,7 +55,6 @@
   box-shadow: none;
   transition: background-color var(--md-sys-motion-expressive-fast-effects);
   overflow-wrap: anywhere;
-  --positive-ink: var(--md-sys-color-primary);
 }
 
 .card.newReportCard {

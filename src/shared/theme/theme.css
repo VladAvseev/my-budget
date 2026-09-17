@@ -17,7 +17,7 @@
   --md-sys-color-on-primary: #ffffff;
   --md-sys-color-primary-container: #c9e6ff;
   --md-sys-color-on-primary-container: #004b6f; /* [ANDROIDX-M3E] Tone 30 container foreground */
-  --md-sys-color-inverse-primary: #0099dc;
+  --md-sys-color-inverse-primary: #8bceff; /* [ANDROIDX-M3E] Tone 80 for WCAG AA compliance on inverse-surface */
 
   /* Secondary */
   --md-sys-color-secondary: #50606e;
@@ -36,6 +36,30 @@
   --md-sys-color-on-error: #ffffff;
   --md-sys-color-error-container: #ffdad6;
   --md-sys-color-on-error-container: #93000a; /* [ANDROIDX-M3E] Tone 30 */
+
+  /* Custom Semantic Roles: Success / Positive / Income */
+  --md-custom-color-success: #1b6c3e;
+  --md-custom-color-on-success: #ffffff;
+  --md-custom-color-success-container: #a4f5ba;
+  --md-custom-color-on-success-container: #00391c; /* [ANDROIDX-M3E] Tone 30 container foreground */
+
+  /* Custom Semantic Roles: Warning / Caution / Near-limit */
+  --md-custom-color-warning: #755b00;
+  --md-custom-color-on-warning: #ffffff;
+  --md-custom-color-warning-container: #ffe088;
+  --md-custom-color-on-warning-container: #473600; /* [ANDROIDX-M3E] Tone 30 */
+
+  /* Semantic Aliases for Financial Domain */
+  --sys-color-positive-ink: var(--md-custom-color-success);
+  --sys-color-positive-fill: var(--md-custom-color-success-container);
+  --sys-color-positive-on-fill: var(--md-custom-color-on-success-container);
+  --sys-color-caution-ink: var(--md-custom-color-warning);
+  --sys-color-caution-fill: var(--md-custom-color-warning-container);
+  --sys-color-caution-on-fill: var(--md-custom-color-on-warning-container);
+  --positive-ink: var(--sys-color-positive-ink);
+  --positive-fill: var(--sys-color-positive-fill);
+  --caution-ink: var(--sys-color-caution-ink);
+  --caution-fill: var(--sys-color-caution-fill);
 
   /* Background & Surface */
   --md-sys-color-background: #f9f9fc;
@@ -62,7 +86,7 @@
   --md-sys-color-inverse-on-surface: #f0f0f3;
 
   /* Tints & Scrim */
-  --md-sys-color-surface-tint: #0099dc;
+  --md-sys-color-surface-tint: #006492; /* [ANDROIDX-M3E] surfaceTint == primary */
   --md-sys-color-shadow: #000000;
   --md-sys-color-scrim: #000000;
 
@@ -112,6 +136,30 @@
   --md-sys-color-on-error: #690005;
   --md-sys-color-error-container: #93000a;
   --md-sys-color-on-error-container: #ffdad6;
+
+  /* Custom Semantic Roles: Success / Positive / Income */
+  --md-custom-color-success: #88d89f;
+  --md-custom-color-on-success: #00391c;
+  --md-custom-color-success-container: #00522c;
+  --md-custom-color-on-success-container: #a4f5ba;
+
+  /* Custom Semantic Roles: Warning / Caution / Near-limit */
+  --md-custom-color-warning: #f1c232;
+  --md-custom-color-on-warning: #3e2e00;
+  --md-custom-color-warning-container: #5c4500;
+  --md-custom-color-on-warning-container: #ffe088;
+
+  /* Semantic Aliases for Financial Domain */
+  --sys-color-positive-ink: var(--md-custom-color-success);
+  --sys-color-positive-fill: var(--md-custom-color-success-container);
+  --sys-color-positive-on-fill: var(--md-custom-color-on-success-container);
+  --sys-color-caution-ink: var(--md-custom-color-warning);
+  --sys-color-caution-fill: var(--md-custom-color-warning-container);
+  --sys-color-caution-on-fill: var(--md-custom-color-on-warning-container);
+  --positive-ink: var(--sys-color-positive-ink);
+  --positive-fill: var(--sys-color-positive-fill);
+  --caution-ink: var(--sys-color-caution-ink);
+  --caution-fill: var(--sys-color-caution-fill);
 
   /* Background & Surface (Tone 6 base with 5 distinct elevation tiers) */
   --md-sys-color-background: #111416;

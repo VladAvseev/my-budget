@@ -62,10 +62,7 @@
   flex-shrink: 0;
 }
 
-.root {
-  --positive-ink: light-dark(#167b43, #1bc5bd);
-  --caution-ink: light-dark(#795600, #fea135);
-}
+
 
 .toolbar {
   flex-wrap: wrap;

@@ -63,6 +63,7 @@
 }
 
 .navLink {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -75,6 +76,7 @@
   letter-spacing: var(--md-sys-typescale-label-large-tracking);
   color: var(--md-sys-color-on-surface-variant);
   background-color: transparent;
+  overflow: hidden;
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects),
@@ -113,6 +115,7 @@
 
 .mobileProfileLink,
 .mobileAdminLink {
+  position: relative;
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -124,6 +127,7 @@
   border-radius: var(--md-sys-shape-corner-full);
   color: var(--md-sys-color-on-surface-variant);
   background-color: var(--md-sys-color-surface-container-highest);
+  overflow: hidden;
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects);
@@ -216,6 +220,7 @@
 }
 
 .pill {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -226,6 +231,7 @@
   border-radius: var(--md-sys-shape-corner-full);
   background-color: transparent;
   color: var(--md-sys-color-on-surface-variant);
+  overflow: hidden;
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects),
@@ -269,6 +275,22 @@
   outline-offset: -2px;
 }
 
+/* [ANDROIDX-M3E] Independent state layer for navigation items */
+.navLink::before,
+.mobileProfileLink::before,
+.mobileAdminLink::before,
+.profileLink::before,
+.pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .navLink:hover,
   .mobileProfileLink:hover,
@@ -282,12 +304,23 @@
   .mobileAdminLink[aria-current='page']:hover,
   .profileLink[aria-current='page']:hover,
   .bottomNavItem[aria-current='page']:hover .pill {
-    background-color: color-mix(
-      in srgb,
-      var(--md-sys-color-primary-container) 92%,
-      var(--md-sys-color-on-primary-container) 8%
-    );
+    background-color: var(--md-sys-color-primary-container);
   }
+  .navLink[aria-current='page']:hover::before,
+  .mobileProfileLink[aria-current='page']:hover::before,
+  .mobileAdminLink[aria-current='page']:hover::before,
+  .profileLink[aria-current='page']:hover::before,
+  .bottomNavItem[aria-current='page']:hover .pill::before {
+    opacity: var(--md-sys-state-hover-opacity);
+  }
+}
+
+.navLink[aria-current='page']:active::before,
+.mobileProfileLink[aria-current='page']:active::before,
+.mobileAdminLink[aria-current='page']:active::before,
+.profileLink[aria-current='page']:active::before,
+.bottomNavItem[aria-current='page']:active .pill::before {
+  opacity: var(--md-sys-state-pressed-opacity);
 }
 
 @media (min-width: 600px) {
@@ -331,6 +364,7 @@
     display: none;
   }
   .profileLink {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -341,6 +375,7 @@
     border-radius: var(--md-sys-shape-corner-full);
     text-decoration: none;
     background-color: var(--md-sys-color-surface-container-high);
+    overflow: hidden;
     transition: background-color var(--md-sys-motion-expressive-fast-effects);
   }
   .profileLink[aria-current='page'] {

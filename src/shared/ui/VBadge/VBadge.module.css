@@ -25,18 +25,14 @@
 }
 
 .success {
-  --positive-ink: light-dark(#167b43, #1bc5bd);
-  --positive-fill: light-dark(#e2f5ea, #19312f);
-  color: var(--positive-ink);
-  background-color: var(--positive-fill);
+  color: var(--sys-color-positive-on-fill);
+  background-color: var(--sys-color-positive-fill);
   border-color: transparent;
 }
 
 .warning {
-  --caution-ink: light-dark(#795600, #fea135);
-  --caution-fill: light-dark(#fff4d6, #332c24);
-  color: var(--caution-ink);
-  background-color: var(--caution-fill);
+  color: var(--sys-color-caution-on-fill);
+  background-color: var(--sys-color-caution-fill);
   border-color: transparent;
 }
 

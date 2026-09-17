@@ -31,10 +31,11 @@
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: var(--md-sys-shape-corner-full);
-  background-color: var(--md-sys-color-surface-container-high);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 .total {

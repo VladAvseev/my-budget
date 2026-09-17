@@ -79,10 +79,6 @@
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
 }
 
-.content {
-  --positive-ink: light-dark(#167b43, #1bc5bd);
-  --caution-ink: light-dark(#795600, #fea135);
-}
 
 .row {
   gap: 12px;

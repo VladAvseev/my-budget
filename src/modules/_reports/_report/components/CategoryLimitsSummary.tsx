@@ -8,7 +8,7 @@ import styles from './CategoryLimitsSummary.module.css';
 
 export const getLimitColor = (spent: number, limit: number): string => {
   if (spent > limit) return 'var(--md-sys-color-error)';
-  if (spent === limit) return 'var(--caution-ink)';
+  if (spent === limit) return 'var(--sys-color-caution-ink)';
   return 'var(--md-sys-color-on-surface)';
 };
 
@@ -63,8 +63,8 @@ export const CategoryLimitsSummary = ({
               spent > limitAmount
                 ? 'var(--md-sys-color-error)'
                 : spent === limitAmount
-                  ? 'var(--caution-ink)'
-                  : 'var(--positive-ink)';
+                  ? 'var(--sys-color-caution-ink)'
+                  : 'var(--sys-color-positive-ink)';
             return (
               <div key={limit.id} className={styles.rowItem}>
                 <div className={styles.row}>

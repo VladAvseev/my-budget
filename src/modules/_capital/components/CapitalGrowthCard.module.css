@@ -4,7 +4,6 @@
   min-width: 0;
 }
 .root .mobileCompact {
-  --positive-ink: var(--md-sys-color-primary);
   padding: 12px;
   border-radius: var(--md-sys-shape-corner-extra-large-increased)
     var(--md-sys-shape-corner-extra-large-increased) var(--md-sys-shape-corner-large)
@@ -36,9 +35,6 @@
   font: var(--md-sys-typescale-title-medium-emphasized);
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
-}
-.root .positive {
-  color: var(--md-sys-color-primary);
 }
 @media (min-width: 600px) {
   .root .mobileCompact {

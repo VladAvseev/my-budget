@@ -12,18 +12,14 @@
 }
 
 .success {
-  --positive-ink: light-dark(#167b43, #1bc5bd);
-  --positive-fill: light-dark(#e2f5ea, #19312f);
-  color: var(--positive-ink);
-  background-color: var(--positive-fill);
+  color: var(--sys-color-positive-on-fill);
+  background-color: var(--sys-color-positive-fill);
   border-color: transparent;
 }
 
 .warning {
-  --caution-ink: light-dark(#795600, #fea135);
-  --caution-fill: light-dark(#fff4d6, #332c24);
-  color: var(--caution-ink);
-  background-color: var(--caution-fill);
+  color: var(--sys-color-caution-on-fill);
+  background-color: var(--sys-color-caution-fill);
   border-color: transparent;
 }
 
@@ -34,6 +30,7 @@
 }
 
 .close {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -46,11 +43,27 @@
   background: transparent;
   color: inherit;
   cursor: pointer;
-  transition: background-color var(--md-sys-motion-expressive-fast-effects);
+  overflow: hidden;
 }
 
-.close:hover {
-  background-color: color-mix(in srgb, currentColor 8%, transparent);
+/* [ANDROIDX-M3E] Independent state layer */
+.close::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+.close:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.close:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
 }
 
 .close:focus-visible {

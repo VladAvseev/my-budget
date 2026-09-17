@@ -71,7 +71,7 @@
 .labelX {
   fill: var(--md-sys-color-on-surface-variant);
   font: var(--md-sys-typescale-label-medium);
-  font-family: var(--md-ref-typeface-plain);
+  font-family: var(--m3e-font-plain);
   text-anchor: end;
 }
 

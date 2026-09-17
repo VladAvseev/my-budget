@@ -55,7 +55,7 @@ export const VGrowthDynamicsCard = ({
     ) : (
       <VGrowthChart
         data={chartData}
-        color="var(--positive-ink)"
+        color="var(--sys-color-positive-ink)"
         showChange={true}
         displaySymbol={displaySymbol}
         base={base}

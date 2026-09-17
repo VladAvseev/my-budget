@@ -17,8 +17,7 @@
 }
 
 .positive {
-  --positive-ink: light-dark(#167b43, #1bc5bd);
-  color: var(--positive-ink);
+  color: var(--sys-color-positive-ink);
 }
 
 .negative {

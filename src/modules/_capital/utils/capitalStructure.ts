@@ -20,13 +20,13 @@ export interface CapitalStructureData {
 
 export const CAPITAL_PALETTE = [
   'var(--md-sys-color-primary)',
-  'var(--md-sys-color-primary)',
+  'var(--md-sys-color-secondary)',
   'var(--md-sys-color-tertiary)',
-  'var(--md-sys-color-inverse-primary)',
-  'var(--md-sys-color-outline)',
+  'var(--md-sys-color-primary-fixed-dim)',
+  'var(--md-sys-color-secondary-fixed-dim)',
+  'var(--md-sys-color-tertiary-fixed-dim)',
   'var(--md-sys-color-primary-container)',
-  'var(--md-sys-color-primary-container)',
-  'var(--md-sys-color-tertiary-container)',
+  'var(--md-sys-color-secondary-container)',
 ] as const;
 
 
