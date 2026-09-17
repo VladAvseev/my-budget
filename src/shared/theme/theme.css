@@ -8,115 +8,153 @@
 
 /* [PRODUCT] Custom Color Scheme: Light Mode
  * Derived brand palette for my-budget mapped to complete M3E ColorScheme contract.
+ * Upstream spec: AndroidX Compose Material3 1.5.0-alpha28 expressiveLightColorScheme()
  */
 :root,
 [data-theme='light'] {
-  --md-sys-color-primary: #0099dc;
+  /* Primary */
+  --md-sys-color-primary: #006492;
   --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #a8d7fd;
-  --md-sys-color-on-primary-container: #164c6b;
-  --md-sys-color-secondary: #596066;
+  --md-sys-color-primary-container: #c9e6ff;
+  --md-sys-color-on-primary-container: #004b6f; /* [ANDROIDX-M3E] Tone 30 container foreground */
+  --md-sys-color-inverse-primary: #0099dc;
+
+  /* Secondary */
+  --md-sys-color-secondary: #50606e;
   --md-sys-color-on-secondary: #ffffff;
   --md-sys-color-secondary-container: #d3e5f5;
-  --md-sys-color-on-secondary-container: #435461;
-  --md-sys-color-tertiary: #4d6076;
+  --md-sys-color-on-secondary-container: #384956; /* [ANDROIDX-M3E] Tone 30 */
+
+  /* Tertiary */
+  --md-sys-color-tertiary: #64597b;
   --md-sys-color-on-tertiary: #ffffff;
-  --md-sys-color-tertiary-container: #d6e3f5;
-  --md-sys-color-on-tertiary-container: #1e344e;
-  --md-sys-color-error: #a83836;
-  --md-sys-color-on-error: #fff7f6;
-  --md-sys-color-error-container: #fa746f;
-  --md-sys-color-on-error-container: #6e0a12;
+  --md-sys-color-tertiary-container: #eaddff;
+  --md-sys-color-on-tertiary-container: #4c4162; /* [ANDROIDX-M3E] Tone 30 */
 
-  --md-sys-color-background: #f4f6fa;
-  --md-sys-color-on-background: #191c20;
+  /* Error */
+  --md-sys-color-error: #ba1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #ffdad6;
+  --md-sys-color-on-error-container: #93000a; /* [ANDROIDX-M3E] Tone 30 */
 
-  --md-sys-color-surface: #f4f6fa;
-  --md-sys-color-surface-dim: #d2d8e1;
-  --md-sys-color-surface-bright: #fbfcfe;
+  /* Background & Surface */
+  --md-sys-color-background: #f9f9fc;
+  --md-sys-color-on-background: #1a1c1e;
+
+  --md-sys-color-surface: #f9f9fc;
+  --md-sys-color-surface-dim: #d9dadd;
+  --md-sys-color-surface-bright: #f9f9fc;
   --md-sys-color-surface-container-lowest: #ffffff;
-  --md-sys-color-surface-container-low: #edf0f5;
-  --md-sys-color-surface-container: #e6eaf0;
-  --md-sys-color-surface-container-high: #dfe4eb;
-  --md-sys-color-surface-container-highest: #d7dde6;
-  --md-sys-color-on-surface: #191c20;
-  --md-sys-color-on-surface-variant: #43474e;
-  --md-sys-color-outline: #73777f;
-  --md-sys-color-outline-variant: #c3c7cf;
-  --md-sys-color-inverse-surface: #2f333a;
-  --md-sys-color-inverse-on-surface: #eef1f6;
-  --md-sys-color-inverse-primary: #acd7f9;
+  --md-sys-color-surface-container-low: #f3f3f6;
+  --md-sys-color-surface-container: #edeef1;
+  --md-sys-color-surface-container-high: #e7e8eb;
+  --md-sys-color-surface-container-highest: #e2e2e5;
+  --md-sys-color-on-surface: #1a1c1e;
+  --md-sys-color-surface-variant: #dde3ea;
+  --md-sys-color-on-surface-variant: #41474d; /* [ANDROIDX-M3E] Tone 30 for high legibility */
+
+  /* Outlines */
+  --md-sys-color-outline: #72787e;
+  --md-sys-color-outline-variant: #c1c7ce;
+
+  /* Inverse Roles */
+  --md-sys-color-inverse-surface: #2e3133;
+  --md-sys-color-inverse-on-surface: #f0f0f3;
+
+  /* Tints & Scrim */
   --md-sys-color-surface-tint: #0099dc;
   --md-sys-color-shadow: #000000;
   --md-sys-color-scrim: #000000;
 
-  --md-sys-color-primary-fixed: #a8d7fd;
-  --md-sys-color-primary-fixed-dim: #9bc9ee;
-  --md-sys-color-on-primary-fixed: #003854;
-  --md-sys-color-on-primary-fixed-variant: #235575;
+  /* Fixed Accent Tokens (unified across light and dark) */
+  --md-sys-color-primary-fixed: #c9e6ff;
+  --md-sys-color-primary-fixed-dim: #8bceff;
+  --md-sys-color-on-primary-fixed: #001e2f;
+  --md-sys-color-on-primary-fixed-variant: #004b6f;
+
   --md-sys-color-secondary-fixed: #d3e5f5;
-  --md-sys-color-secondary-fixed-dim: #c5d7e7;
-  --md-sys-color-on-secondary-fixed: #31414e;
-  --md-sys-color-on-secondary-fixed-variant: #4d5d6b;
-  --md-sys-color-tertiary-fixed: #d6e3f5;
-  --md-sys-color-tertiary-fixed-dim: #c2d3e8;
-  --md-sys-color-on-tertiary-fixed: #1a2f47;
-  --md-sys-color-on-tertiary-fixed-variant: #3d546e;
+  --md-sys-color-secondary-fixed-dim: #b7c9d9;
+  --md-sys-color-on-secondary-fixed: #0c1d29;
+  --md-sys-color-on-secondary-fixed-variant: #384956;
+
+  --md-sys-color-tertiary-fixed: #eaddff;
+  --md-sys-color-tertiary-fixed-dim: #cfc0e8;
+  --md-sys-color-on-tertiary-fixed: #201634;
+  --md-sys-color-on-tertiary-fixed-variant: #4c4162;
 }
 
 /* [PRODUCT] Custom Color Scheme: Dark Mode
  * Calibrated for high contrast on dark surfaces in accordance with M3E dark scheme rules.
+ * Upstream spec: AndroidX Compose Material3 1.5.0-alpha28 darkColorScheme()
  */
 [data-theme='dark'] {
+  /* Primary: User brand tone Tone 60 #0099dc */
   --md-sys-color-primary: #0099dc;
-  --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #24455c;
-  --md-sys-color-on-primary-container: #cbe7ff;
+  --md-sys-color-on-primary: #001e2f; /* [ACCESSIBILITY] Tone 10: 5.37:1 contrast (WCAG AA Pass) */
+  --md-sys-color-primary-container: #004b6f; /* Tone 30 */
+  --md-sys-color-on-primary-container: #c9e6ff; /* Tone 90: 7.27:1 contrast */
+  --md-sys-color-inverse-primary: #006492;
+
+  /* Secondary */
   --md-sys-color-secondary: #b7c9d9;
-  --md-sys-color-on-secondary: #32424f;
-  --md-sys-color-secondary-container: #2d3d4a;
-  --md-sys-color-on-secondary-container: #b0c1d1;
-  --md-sys-color-tertiary: #b9cde8;
-  --md-sys-color-on-tertiary: #23384f;
-  --md-sys-color-tertiary-container: #3c4f66;
-  --md-sys-color-on-tertiary-container: #d9e6f7;
-  --md-sys-color-error: #fa746f;
-  --md-sys-color-on-error: #490006;
-  --md-sys-color-error-container: #871f21;
-  --md-sys-color-on-error-container: #ff9993;
+  --md-sys-color-on-secondary: #22323f;
+  --md-sys-color-secondary-container: #384956;
+  --md-sys-color-on-secondary-container: #d3e5f5;
 
-  --md-sys-color-background: #232529;
-  --md-sys-color-on-background: #e8eaed;
+  /* Tertiary */
+  --md-sys-color-tertiary: #cfc0e8;
+  --md-sys-color-on-tertiary: #352b4b;
+  --md-sys-color-tertiary-container: #4c4162;
+  --md-sys-color-on-tertiary-container: #eaddff;
 
-  --md-sys-color-surface: #232529;
-  --md-sys-color-surface-dim: #1d1e22;
-  --md-sys-color-surface-bright: #35363a;
-  --md-sys-color-surface-container-lowest: #17181c;
-  --md-sys-color-surface-container-low: #202124;
-  --md-sys-color-surface-container: #26272c;
-  --md-sys-color-surface-container-high: #292a2d;
-  --md-sys-color-surface-container-highest: #2e2f34;
-  --md-sys-color-on-surface: #e8eaed;
-  --md-sys-color-on-surface-variant: #9aa0a6;
-  --md-sys-color-outline: #80868b;
-  --md-sys-color-outline-variant: #3c4043;
-  --md-sys-color-inverse-surface: #e6eaf0;
-  --md-sys-color-inverse-on-surface: #2f333a;
-  --md-sys-color-inverse-primary: #acd7f9;
+  /* Error */
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+
+  /* Background & Surface (Tone 6 base with 5 distinct elevation tiers) */
+  --md-sys-color-background: #111416;
+  --md-sys-color-on-background: #e2e2e5;
+
+  --md-sys-color-surface: #111416;
+  --md-sys-color-surface-dim: #111416;
+  --md-sys-color-surface-bright: #37393c;
+  --md-sys-color-surface-container-lowest: #0c0e11;
+  --md-sys-color-surface-container-low: #1a1c1e;
+  --md-sys-color-surface-container: #1e2022;
+  --md-sys-color-surface-container-high: #282a2d;
+  --md-sys-color-surface-container-highest: #333537;
+  --md-sys-color-on-surface: #e2e2e5;
+  --md-sys-color-surface-variant: #41474d;
+  --md-sys-color-on-surface-variant: #c1c7ce;
+
+  /* Outlines */
+  --md-sys-color-outline: #8b9198;
+  --md-sys-color-outline-variant: #41474d;
+
+  /* Inverse Roles */
+  --md-sys-color-inverse-surface: #e2e2e5;
+  --md-sys-color-inverse-on-surface: #2e3133;
+
+  /* Tints & Scrim */
   --md-sys-color-surface-tint: #0099dc;
   --md-sys-color-shadow: #000000;
   --md-sys-color-scrim: #000000;
 
-  --md-sys-color-primary-fixed: #bee1ff;
-  --md-sys-color-primary-fixed-dim: #b0d3f0;
-  --md-sys-color-on-primary-fixed: #1b3f57;
-  --md-sys-color-on-primary-fixed-variant: #395b74;
+  /* Fixed Accent Tokens (identical to light theme) */
+  --md-sys-color-primary-fixed: #c9e6ff;
+  --md-sys-color-primary-fixed-dim: #8bceff;
+  --md-sys-color-on-primary-fixed: #001e2f;
+  --md-sys-color-on-primary-fixed-variant: #004b6f;
+
   --md-sys-color-secondary-fixed: #d3e5f5;
-  --md-sys-color-secondary-fixed-dim: #c5d7e7;
-  --md-sys-color-on-secondary-fixed: #31414e;
-  --md-sys-color-on-secondary-fixed-variant: #4d5d6b;
-  --md-sys-color-tertiary-fixed: #d6e3f5;
-  --md-sys-color-tertiary-fixed-dim: #c2d3e8;
-  --md-sys-color-on-tertiary-fixed: #1a2f47;
-  --md-sys-color-on-tertiary-fixed-variant: #3d546e;
+  --md-sys-color-secondary-fixed-dim: #b7c9d9;
+  --md-sys-color-on-secondary-fixed: #0c1d29;
+  --md-sys-color-on-secondary-fixed-variant: #384956;
+
+  --md-sys-color-tertiary-fixed: #eaddff;
+  --md-sys-color-tertiary-fixed-dim: #cfc0e8;
+  --md-sys-color-on-tertiary-fixed: #201634;
+  --md-sys-color-on-tertiary-fixed-variant: #4c4162;
 }
