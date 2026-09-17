@@ -5,13 +5,15 @@
   justify-content: center;
   gap: 8px;
   min-height: 40px;
-  padding: 8px 12px;
-  border-radius: var(--md-sys-shape-corner-large-increased);
+  padding: 8px 16px;
+  border-radius: var(--md-sys-shape-corner-full);
   font: var(--md-sys-typescale-label-large);
   letter-spacing: var(--md-sys-typescale-label-large-tracking);
   font-family: inherit;
   text-transform: none;
   cursor: pointer;
+  overflow: hidden;
+  box-sizing: border-box;
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects),
@@ -20,11 +22,36 @@
     box-shadow var(--md-sys-motion-expressive-fast-effects);
 }
 
+/* [ANDROIDX-M3E] Independent state layer */
+.base::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+.base:hover:not(:disabled)::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.base:focus-visible::before {
+  opacity: var(--md-sys-state-focus-opacity);
+}
+
+.base:active:not(:disabled)::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
 .base:focus-visible {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }
 
+/* [ANDROIDX-M3E] Pressed shape is CornerSmall (8dp) */
 .base:active:not(:disabled) {
   border-radius: var(--md-sys-shape-corner-small);
 }
@@ -33,77 +60,46 @@
   cursor: not-allowed;
 }
 
-.base:disabled:not([aria-busy='true']) {
-  opacity: 0.38;
-}
-
+/* Primary Filled Button */
 .primary {
   border: none;
   background-color: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
 }
 
-.primary:hover:not(:disabled) {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-primary) 92%,
-    var(--md-sys-color-on-primary) 8%
-  );
+.primary:disabled:not([aria-busy='true']) {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 
-.primary:active:not(:disabled) {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-primary) 88%,
-    var(--md-sys-color-on-primary) 12%
-  );
-}
-
+/* Secondary Outlined Button */
 .secondary {
   border: 1px solid var(--md-sys-color-outline);
   background-color: transparent;
   color: var(--md-sys-color-primary);
 }
 
-.secondary:hover:not(:disabled) {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-primary) 8%,
-    transparent
-  );
+.secondary:disabled:not([aria-busy='true']) {
+  border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  background-color: transparent;
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 
-.secondary:active:not(:disabled) {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-primary) 12%,
-    transparent
-  );
-}
-
+/* Danger Filled Button */
 .danger {
   border: none;
   background-color: var(--md-sys-color-error);
   color: var(--md-sys-color-on-error);
 }
 
-.danger:hover:not(:disabled) {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-error) 92%,
-    var(--md-sys-color-on-error) 8%
-  );
-}
-
-.danger:active:not(:disabled) {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-error) 88%,
-    var(--md-sys-color-on-error) 12%
-  );
+.danger:disabled:not([aria-busy='true']) {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 
 .content {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -119,20 +115,16 @@
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
 }
 
-@media (min-width: 600px) {
-  .base {
-    padding-inline: 16px;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .base {
+  .base,
+  .base::before {
     transition: none;
   }
 }

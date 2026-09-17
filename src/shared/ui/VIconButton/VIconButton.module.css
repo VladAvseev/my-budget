@@ -11,26 +11,42 @@
   background-color: transparent;
   color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
+  box-sizing: border-box;
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects),
     border-radius var(--md-sys-motion-expressive-fast-spatial);
 }
 
-
+/* [WEB-PORT] 48x48dp minimum touch target expansion */
 .button::before {
   content: '';
   position: absolute;
   inset: -4px;
 }
 
+/* [ANDROIDX-M3E] Independent state layer */
+.button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+.button:hover:not(:disabled)::after {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
 .button:hover:not(:disabled) {
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface-variant) 8%,
-    transparent
-  );
   color: var(--md-sys-color-on-surface);
+}
+
+.button:focus-visible::after {
+  opacity: var(--md-sys-state-focus-opacity);
 }
 
 .button:focus-visible {
@@ -38,25 +54,27 @@
   outline-offset: 2px;
 }
 
+.button:active:not(:disabled)::after {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+/* [ANDROIDX-M3E] Pressed shape is CornerSmall (8dp) */
 .button:active:not(:disabled) {
   border-radius: var(--md-sys-shape-corner-small);
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface-variant) 12%,
-    transparent
-  );
 }
 
 .button:disabled {
   cursor: not-allowed;
 }
 
+/* [ANDROIDX-M3E] Separate content disabled color instead of root opacity: 0.38 */
 .button:disabled:not([aria-busy='true']) {
-  opacity: 0.38;
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .button {
+  .button,
+  .button::after {
     transition: none;
   }
 }

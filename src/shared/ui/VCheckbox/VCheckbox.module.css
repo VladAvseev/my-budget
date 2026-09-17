@@ -29,12 +29,14 @@
 .input:hover:not(:disabled) {
   border-color: var(--md-sys-color-on-surface);
   box-shadow: 0 0 0 8px
-    color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+    color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent);
 }
 
 .input:focus-visible {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
+  box-shadow: 0 0 0 8px
+    color-mix(in srgb, var(--md-sys-color-primary) calc(var(--md-sys-state-focus-opacity) * 100%), transparent);
 }
 
 .input:checked {

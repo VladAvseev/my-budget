@@ -1,7 +1,9 @@
 .card {
+  position: relative;
   background-color: var(--md-sys-color-surface-container-high);
   border-radius: var(--md-sys-shape-corner-medium);
   padding: 10px;
+  box-sizing: border-box;
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
     box-shadow var(--md-sys-motion-expressive-fast-effects),
@@ -11,17 +13,32 @@
 @media (min-width: 600px) {
   .card {
     padding: 14px;
-    border-radius: var(--md-sys-shape-corner-large);
   }
 }
 
 .interactive {
   cursor: pointer;
+  overflow: hidden;
 }
 
-.interactive:hover {
-  background-color: var(--md-sys-color-surface-container-high);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+/* [ANDROIDX-M3E] State layer for interactive cards */
+.interactive::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: var(--md-sys-color-on-surface);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+.interactive:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.interactive:focus-visible::before {
+  opacity: var(--md-sys-state-focus-opacity);
 }
 
 .interactive:focus-visible {
@@ -29,12 +46,13 @@
   outline-offset: 2px;
 }
 
-.interactive:active {
-  background-color: var(--md-sys-color-surface-container-highest);
+.interactive:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card {
+  .card,
+  .interactive::before {
     transition: none;
   }
 }

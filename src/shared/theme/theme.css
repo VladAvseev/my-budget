@@ -1,294 +1,122 @@
+@import './m3e-tokens.css';
+
+/* [PRODUCT] Typeface input for my-budget Web application */
 :root {
-  --md-ref-typeface-brand: 'Roboto Flex Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --md-ref-typeface-plain: 'Roboto Flex Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --m3e-font-brand: 'Roboto Flex Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --m3e-font-plain: 'Roboto Flex Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
-
-:root {
-  --md-sys-shape-corner-none: 0;
-  --md-sys-shape-corner-extra-small: 4px;
-  --md-sys-shape-corner-small: 6px;
-  --md-sys-shape-corner-medium: 8px;
-  --md-sys-shape-corner-large: 10px;
-  --md-sys-shape-corner-large-increased: 12px;
-  --md-sys-shape-corner-extra-large: 16px;
-  --md-sys-shape-corner-extra-large-increased: 20px;
-  --md-sys-shape-corner-extra-extra-large: 24px;
-  --md-sys-shape-corner-full: 999px;
-}
-
-
-@media (min-width: 600px) {
-  :root {
-    --md-sys-shape-corner-medium: 10px;
-    --md-sys-shape-corner-large: 12px;
-    --md-sys-shape-corner-large-increased: 16px;
-    --md-sys-shape-corner-extra-large: 20px;
-    --md-sys-shape-corner-extra-large-increased: 24px;
-    --md-sys-shape-corner-extra-extra-large: 28px;
-  }
-}
-
-
-:root {
-  --md-sys-motion-expressive-fast-spatial: 350ms cubic-bezier(0.42, 1.67, 0.21, 0.9);
-  --md-sys-motion-expressive-default-spatial: 500ms cubic-bezier(0.38, 1.21, 0.22, 1);
-  --md-sys-motion-expressive-slow-spatial: 650ms cubic-bezier(0.39, 1.29, 0.35, 0.98);
-  --md-sys-motion-expressive-fast-effects: 150ms cubic-bezier(0.31, 0.94, 0.34, 1);
-  --md-sys-motion-expressive-default-effects: 200ms cubic-bezier(0.34, 0.8, 0.34, 1);
-  --md-sys-motion-expressive-slow-effects: 300ms cubic-bezier(0.34, 0.88, 0.34, 1);
-  --md-sys-motion-standard-fast-spatial: 350ms cubic-bezier(0.27, 1.06, 0.18, 1);
-  --md-sys-motion-standard-default-spatial: 500ms cubic-bezier(0.27, 1.06, 0.18, 1);
-  --md-sys-motion-standard-slow-spatial: 750ms cubic-bezier(0.27, 1.06, 0.18, 1);
-  --md-sys-motion-standard-fast-effects: 150ms cubic-bezier(0.31, 0.94, 0.34, 1);
-  --md-sys-motion-standard-default-effects: 200ms cubic-bezier(0.34, 0.8, 0.34, 1);
-  --md-sys-motion-standard-slow-effects: 300ms cubic-bezier(0.34, 0.88, 0.34, 1);
-}
-
-
-
-:root {
-  --md-sys-typescale-display-large-size: 2.25rem;
-  --md-sys-typescale-display-large-line-height: 2.75rem;
-  --md-sys-typescale-display-large-weight: 400;
-  --md-sys-typescale-display-large-tracking: -0.0125rem; 
-  --md-sys-typescale-display-large: var(--md-sys-typescale-display-large-weight) var(--md-sys-typescale-display-large-size)/var(--md-sys-typescale-display-large-line-height) var(--md-ref-typeface-brand);
-
-  --md-sys-typescale-display-medium-size: 2rem;
-  --md-sys-typescale-display-medium-line-height: 2.5rem;
-  --md-sys-typescale-display-medium-weight: 400;
-  --md-sys-typescale-display-medium-tracking: 0;
-  --md-sys-typescale-display-medium: var(--md-sys-typescale-display-medium-weight) var(--md-sys-typescale-display-medium-size)/var(--md-sys-typescale-display-medium-line-height) var(--md-ref-typeface-brand);
-
-  --md-sys-typescale-display-small-size: 1.75rem;
-  --md-sys-typescale-display-small-line-height: 2.125rem;
-  --md-sys-typescale-display-small-weight: 400;
-  --md-sys-typescale-display-small-tracking: 0;
-  --md-sys-typescale-display-small: var(--md-sys-typescale-display-small-weight) var(--md-sys-typescale-display-small-size)/var(--md-sys-typescale-display-small-line-height) var(--md-ref-typeface-brand);
-
-  --md-sys-typescale-headline-large-size: 1.5rem;
-  --md-sys-typescale-headline-large-line-height: 1.875rem;
-  --md-sys-typescale-headline-large-weight: 400;
-  --md-sys-typescale-headline-large-tracking: 0;
-  --md-sys-typescale-headline-large: var(--md-sys-typescale-headline-large-weight) var(--md-sys-typescale-headline-large-size)/var(--md-sys-typescale-headline-large-line-height) var(--md-ref-typeface-brand);
-
-  --md-sys-typescale-headline-medium-size: 1.375rem;
-  --md-sys-typescale-headline-medium-line-height: 1.75rem;
-  --md-sys-typescale-headline-medium-weight: 400;
-  --md-sys-typescale-headline-medium-tracking: 0;
-  --md-sys-typescale-headline-medium: var(--md-sys-typescale-headline-medium-weight) var(--md-sys-typescale-headline-medium-size)/var(--md-sys-typescale-headline-medium-line-height) var(--md-ref-typeface-brand);
-
-  --md-sys-typescale-headline-small-size: 1.25rem;
-  --md-sys-typescale-headline-small-line-height: 1.625rem;
-  --md-sys-typescale-headline-small-weight: 400;
-  --md-sys-typescale-headline-small-tracking: 0;
-  --md-sys-typescale-headline-small: var(--md-sys-typescale-headline-small-weight) var(--md-sys-typescale-headline-small-size)/var(--md-sys-typescale-headline-small-line-height) var(--md-ref-typeface-brand);
-
-  --md-sys-typescale-title-large-size: 1.125rem;
-  --md-sys-typescale-title-large-line-height: 1.5rem;
-  --md-sys-typescale-title-large-weight: 400;
-  --md-sys-typescale-title-large-tracking: 0;
-  --md-sys-typescale-title-large: var(--md-sys-typescale-title-large-weight) var(--md-sys-typescale-title-large-size)/var(--md-sys-typescale-title-large-line-height) var(--md-ref-typeface-brand);
-
-  --md-sys-typescale-title-medium-size: 1rem;
-  --md-sys-typescale-title-medium-line-height: 1.5rem;
-  --md-sys-typescale-title-medium-weight: 500;
-  --md-sys-typescale-title-medium-tracking: 0.0125rem; 
-  --md-sys-typescale-title-medium: var(--md-sys-typescale-title-medium-weight) var(--md-sys-typescale-title-medium-size)/var(--md-sys-typescale-title-medium-line-height) var(--md-ref-typeface-plain);
-
-  --md-sys-typescale-title-small-size: 0.875rem;
-  --md-sys-typescale-title-small-line-height: 1.25rem;
-  --md-sys-typescale-title-small-weight: 500;
-  --md-sys-typescale-title-small-tracking: 0.00625rem; 
-  --md-sys-typescale-title-small: var(--md-sys-typescale-title-small-weight) var(--md-sys-typescale-title-small-size)/var(--md-sys-typescale-title-small-line-height) var(--md-ref-typeface-plain);
-
-  --md-sys-typescale-body-large-size: 1rem;
-  --md-sys-typescale-body-large-line-height: 1.5rem;
-  --md-sys-typescale-body-large-weight: 400;
-  --md-sys-typescale-body-large-tracking: 0.03125rem; 
-  --md-sys-typescale-body-large: var(--md-sys-typescale-body-large-weight) var(--md-sys-typescale-body-large-size)/var(--md-sys-typescale-body-large-line-height) var(--md-ref-typeface-plain);
-
-  --md-sys-typescale-body-medium-size: 0.875rem;
-  --md-sys-typescale-body-medium-line-height: 1.25rem;
-  --md-sys-typescale-body-medium-weight: 400;
-  --md-sys-typescale-body-medium-tracking: 0.0125rem; 
-  --md-sys-typescale-body-medium: var(--md-sys-typescale-body-medium-weight) var(--md-sys-typescale-body-medium-size)/var(--md-sys-typescale-body-medium-line-height) var(--md-ref-typeface-plain);
-
-  --md-sys-typescale-body-small-size: 0.75rem;
-  --md-sys-typescale-body-small-line-height: 1rem;
-  --md-sys-typescale-body-small-weight: 400;
-  --md-sys-typescale-body-small-tracking: 0.025rem; 
-  --md-sys-typescale-body-small: var(--md-sys-typescale-body-small-weight) var(--md-sys-typescale-body-small-size)/var(--md-sys-typescale-body-small-line-height) var(--md-ref-typeface-plain);
-
-  --md-sys-typescale-label-large-size: 0.875rem;
-  --md-sys-typescale-label-large-line-height: 1.25rem;
-  --md-sys-typescale-label-large-weight: 500;
-  --md-sys-typescale-label-large-tracking: 0.00625rem; 
-  --md-sys-typescale-label-large: var(--md-sys-typescale-label-large-weight) var(--md-sys-typescale-label-large-size)/var(--md-sys-typescale-label-large-line-height) var(--md-ref-typeface-plain);
-
-  --md-sys-typescale-label-medium-size: 0.75rem;
-  --md-sys-typescale-label-medium-line-height: 1rem;
-  --md-sys-typescale-label-medium-weight: 500;
-  --md-sys-typescale-label-medium-tracking: 0.03125rem; 
-  --md-sys-typescale-label-medium: var(--md-sys-typescale-label-medium-weight) var(--md-sys-typescale-label-medium-size)/var(--md-sys-typescale-label-medium-line-height) var(--md-ref-typeface-plain);
-
-  --md-sys-typescale-label-small-size: 0.6875rem;
-  --md-sys-typescale-label-small-line-height: 1rem;
-  --md-sys-typescale-label-small-weight: 500;
-  --md-sys-typescale-label-small-tracking: 0.03125rem; 
-  --md-sys-typescale-label-small: var(--md-sys-typescale-label-small-weight) var(--md-sys-typescale-label-small-size)/var(--md-sys-typescale-label-small-line-height) var(--md-ref-typeface-plain);
-}
-
-
-:root {
-  --md-sys-typescale-display-large-emphasized-weight: 500;
-  --md-sys-typescale-display-large-emphasized-tracking: 0;
-  --md-sys-typescale-display-large-emphasized: 500 var(--md-sys-typescale-display-large-size)/var(--md-sys-typescale-display-large-line-height) var(--md-ref-typeface-brand);
-  --md-sys-typescale-display-medium-emphasized-weight: 500;
-  --md-sys-typescale-display-medium-emphasized-tracking: 0;
-  --md-sys-typescale-display-medium-emphasized: 500 var(--md-sys-typescale-display-medium-size)/var(--md-sys-typescale-display-medium-line-height) var(--md-ref-typeface-brand);
-  --md-sys-typescale-display-small-emphasized-weight: 500;
-  --md-sys-typescale-display-small-emphasized-tracking: 0;
-  --md-sys-typescale-display-small-emphasized: 500 var(--md-sys-typescale-display-small-size)/var(--md-sys-typescale-display-small-line-height) var(--md-ref-typeface-brand);
-
-  --md-sys-typescale-headline-large-emphasized-weight: 500;
-  --md-sys-typescale-headline-large-emphasized-tracking: 0;
-  --md-sys-typescale-headline-large-emphasized: 500 var(--md-sys-typescale-headline-large-size)/var(--md-sys-typescale-headline-large-line-height) var(--md-ref-typeface-brand);
-  --md-sys-typescale-headline-medium-emphasized-weight: 500;
-  --md-sys-typescale-headline-medium-emphasized-tracking: 0;
-  --md-sys-typescale-headline-medium-emphasized: 500 var(--md-sys-typescale-headline-medium-size)/var(--md-sys-typescale-headline-medium-line-height) var(--md-ref-typeface-brand);
-  --md-sys-typescale-headline-small-emphasized-weight: 500;
-  --md-sys-typescale-headline-small-emphasized-tracking: 0;
-  --md-sys-typescale-headline-small-emphasized: 500 var(--md-sys-typescale-headline-small-size)/var(--md-sys-typescale-headline-small-line-height) var(--md-ref-typeface-brand);
-
-  --md-sys-typescale-title-large-emphasized-weight: 500;
-  --md-sys-typescale-title-large-emphasized-tracking: 0;
-  --md-sys-typescale-title-large-emphasized: 500 var(--md-sys-typescale-title-large-size)/var(--md-sys-typescale-title-large-line-height) var(--md-ref-typeface-brand);
-  --md-sys-typescale-title-medium-emphasized-weight: 700;
-  --md-sys-typescale-title-medium-emphasized-tracking: 0.009375rem; 
-  --md-sys-typescale-title-medium-emphasized: 700 var(--md-sys-typescale-title-medium-size)/var(--md-sys-typescale-title-medium-line-height) var(--md-ref-typeface-plain);
-  --md-sys-typescale-title-small-emphasized-weight: 700;
-  --md-sys-typescale-title-small-emphasized-tracking: 0.00625rem;
-  --md-sys-typescale-title-small-emphasized: 700 var(--md-sys-typescale-title-small-size)/var(--md-sys-typescale-title-small-line-height) var(--md-ref-typeface-plain);
-
-  --md-sys-typescale-body-large-emphasized-weight: 500;
-  --md-sys-typescale-body-large-emphasized-tracking: 0.009375rem;
-  --md-sys-typescale-body-large-emphasized: 500 var(--md-sys-typescale-body-large-size)/var(--md-sys-typescale-body-large-line-height) var(--md-ref-typeface-plain);
-  --md-sys-typescale-body-medium-emphasized-weight: 500;
-  --md-sys-typescale-body-medium-emphasized-tracking: 0.015625rem; 
-  --md-sys-typescale-body-medium-emphasized: 500 var(--md-sys-typescale-body-medium-size)/var(--md-sys-typescale-body-medium-line-height) var(--md-ref-typeface-plain);
-  --md-sys-typescale-body-small-emphasized-weight: 500;
-  --md-sys-typescale-body-small-emphasized-tracking: 0.025rem;
-  --md-sys-typescale-body-small-emphasized: 500 var(--md-sys-typescale-body-small-size)/var(--md-sys-typescale-body-small-line-height) var(--md-ref-typeface-plain);
-
-  --md-sys-typescale-label-large-emphasized-weight: 700;
-  --md-sys-typescale-label-large-emphasized-tracking: 0.00625rem;
-  --md-sys-typescale-label-large-emphasized: 700 var(--md-sys-typescale-label-large-size)/var(--md-sys-typescale-label-large-line-height) var(--md-ref-typeface-plain);
-  --md-sys-typescale-label-medium-emphasized-weight: 700;
-  --md-sys-typescale-label-medium-emphasized-tracking: 0.03125rem;
-  --md-sys-typescale-label-medium-emphasized: 700 var(--md-sys-typescale-label-medium-size)/var(--md-sys-typescale-label-medium-line-height) var(--md-ref-typeface-plain);
-  --md-sys-typescale-label-small-emphasized-weight: 700;
-  --md-sys-typescale-label-small-emphasized-tracking: 0.03125rem;
-  --md-sys-typescale-label-small-emphasized: 700 var(--md-sys-typescale-label-small-size)/var(--md-sys-typescale-label-small-line-height) var(--md-ref-typeface-plain);
-}
-
-
+/* [PRODUCT] Custom Color Scheme: Light Mode
+ * Derived brand palette for my-budget mapped to complete M3E ColorScheme contract.
+ */
 :root,
 [data-theme='light'] {
-  --md-sys-color-primary: #0099dc; 
-  --md-sys-color-on-primary: #ffffff; 
-  --md-sys-color-primary-container: #a8d7fd; 
-  --md-sys-color-on-primary-container: #164c6b; 
-  --md-sys-color-secondary: #596066; 
-  --md-sys-color-on-secondary: #ffffff; 
-  --md-sys-color-secondary-container: #d3e5f5; 
-  --md-sys-color-on-secondary-container: #435461; 
-  --md-sys-color-tertiary: #4d6076; 
-  --md-sys-color-on-tertiary: #ffffff; 
-  --md-sys-color-tertiary-container: #d6e3f5; 
-  --md-sys-color-on-tertiary-container: #1e344e; 
-  --md-sys-color-error: #a83836; 
-  --md-sys-color-on-error: #fff7f6; 
-  --md-sys-color-error-container: #fa746f; 
-  --md-sys-color-on-error-container: #6e0a12; 
-  --md-sys-color-surface: #f4f6fa; 
-  --md-sys-color-surface-dim: #d2d8e1; 
-  --md-sys-color-surface-bright: #fbfcfe; 
-  --md-sys-color-surface-container-lowest: #ffffff; 
-  --md-sys-color-surface-container-low: #edf0f5; 
-  --md-sys-color-surface-container: #e6eaf0; 
-  --md-sys-color-surface-container-high: #dfe4eb; 
-  --md-sys-color-surface-container-highest: #d7dde6; 
-  --md-sys-color-on-surface: #191c20; 
-  --md-sys-color-on-surface-variant: #43474e; 
-  --md-sys-color-outline: #73777f; 
-  --md-sys-color-outline-variant: #c3c7cf; 
-  --md-sys-color-inverse-surface: #2f333a; 
-  --md-sys-color-inverse-on-surface: #eef1f6; 
-  --md-sys-color-inverse-primary: #acd7f9; 
-  --md-sys-color-surface-tint: #0099dc; 
-  --md-sys-color-shadow: #000000; 
-  --md-sys-color-scrim: #000000; 
-  --md-sys-color-primary-fixed: #a8d7fd; 
-  --md-sys-color-primary-fixed-dim: #9bc9ee; 
-  --md-sys-color-on-primary-fixed: #003854; 
-  --md-sys-color-on-primary-fixed-variant: #235575; 
-  --md-sys-color-secondary-fixed: #d3e5f5; 
-  --md-sys-color-secondary-fixed-dim: #c5d7e7; 
-  --md-sys-color-on-secondary-fixed: #31414e; 
-  --md-sys-color-on-secondary-fixed-variant: #4d5d6b; 
-  --md-sys-color-tertiary-fixed: #d6e3f5; 
-  --md-sys-color-tertiary-fixed-dim: #c2d3e8; 
-  --md-sys-color-on-tertiary-fixed: #1a2f47; 
-  --md-sys-color-on-tertiary-fixed-variant: #3d546e; 
+  --md-sys-color-primary: #0099dc;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #a8d7fd;
+  --md-sys-color-on-primary-container: #164c6b;
+  --md-sys-color-secondary: #596066;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #d3e5f5;
+  --md-sys-color-on-secondary-container: #435461;
+  --md-sys-color-tertiary: #4d6076;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #d6e3f5;
+  --md-sys-color-on-tertiary-container: #1e344e;
+  --md-sys-color-error: #a83836;
+  --md-sys-color-on-error: #fff7f6;
+  --md-sys-color-error-container: #fa746f;
+  --md-sys-color-on-error-container: #6e0a12;
+
+  --md-sys-color-background: #f4f6fa;
+  --md-sys-color-on-background: #191c20;
+
+  --md-sys-color-surface: #f4f6fa;
+  --md-sys-color-surface-dim: #d2d8e1;
+  --md-sys-color-surface-bright: #fbfcfe;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #edf0f5;
+  --md-sys-color-surface-container: #e6eaf0;
+  --md-sys-color-surface-container-high: #dfe4eb;
+  --md-sys-color-surface-container-highest: #d7dde6;
+  --md-sys-color-on-surface: #191c20;
+  --md-sys-color-on-surface-variant: #43474e;
+  --md-sys-color-outline: #73777f;
+  --md-sys-color-outline-variant: #c3c7cf;
+  --md-sys-color-inverse-surface: #2f333a;
+  --md-sys-color-inverse-on-surface: #eef1f6;
+  --md-sys-color-inverse-primary: #acd7f9;
+  --md-sys-color-surface-tint: #0099dc;
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+
+  --md-sys-color-primary-fixed: #a8d7fd;
+  --md-sys-color-primary-fixed-dim: #9bc9ee;
+  --md-sys-color-on-primary-fixed: #003854;
+  --md-sys-color-on-primary-fixed-variant: #235575;
+  --md-sys-color-secondary-fixed: #d3e5f5;
+  --md-sys-color-secondary-fixed-dim: #c5d7e7;
+  --md-sys-color-on-secondary-fixed: #31414e;
+  --md-sys-color-on-secondary-fixed-variant: #4d5d6b;
+  --md-sys-color-tertiary-fixed: #d6e3f5;
+  --md-sys-color-tertiary-fixed-dim: #c2d3e8;
+  --md-sys-color-on-tertiary-fixed: #1a2f47;
+  --md-sys-color-on-tertiary-fixed-variant: #3d546e;
 }
 
-
+/* [PRODUCT] Custom Color Scheme: Dark Mode
+ * Calibrated for high contrast on dark surfaces in accordance with M3E dark scheme rules.
+ */
 [data-theme='dark'] {
-  --md-sys-color-primary: #0099dc; 
-  --md-sys-color-on-primary: #ffffff; 
-  --md-sys-color-primary-container: #24455c; 
-  --md-sys-color-on-primary-container: #cbe7ff; 
-  --md-sys-color-secondary: #b7c9d9; 
-  --md-sys-color-on-secondary: #32424f; 
-  --md-sys-color-secondary-container: #2d3d4a; 
-  --md-sys-color-on-secondary-container: #b0c1d1; 
-  --md-sys-color-tertiary: #b9cde8; 
-  --md-sys-color-on-tertiary: #23384f; 
-  --md-sys-color-tertiary-container: #3c4f66; 
-  --md-sys-color-on-tertiary-container: #d9e6f7; 
-  --md-sys-color-error: #fa746f; 
-  --md-sys-color-on-error: #490006; 
-  --md-sys-color-error-container: #871f21; 
-  --md-sys-color-on-error-container: #ff9993; 
-  --md-sys-color-surface: #232529; 
-  --md-sys-color-surface-dim: #1d1e22; 
-  --md-sys-color-surface-bright: #35363a; 
-  --md-sys-color-surface-container-lowest: #17181c; 
-  --md-sys-color-surface-container-low: #202124; 
-  --md-sys-color-surface-container: #26272c; 
-  --md-sys-color-surface-container-high: #292a2d; 
-  --md-sys-color-surface-container-highest: #2e2f34; 
-  --md-sys-color-on-surface: #e8eaed; 
-  --md-sys-color-on-surface-variant: #9aa0a6; 
-  --md-sys-color-outline: #80868b; 
-  --md-sys-color-outline-variant: #3c4043; 
-  --md-sys-color-inverse-surface: #e6eaf0; 
-  --md-sys-color-inverse-on-surface: #2f333a; 
-  --md-sys-color-inverse-primary: #41637c; 
-  --md-sys-color-surface-tint: #0099dc; 
-  --md-sys-color-shadow: #000000; 
-  --md-sys-color-scrim: #000000; 
-  --md-sys-color-primary-fixed: #bee1ff; 
-  --md-sys-color-primary-fixed-dim: #b0d3f0; 
-  --md-sys-color-on-primary-fixed: #1b3f57; 
-  --md-sys-color-on-primary-fixed-variant: #395b74; 
-  --md-sys-color-secondary-fixed: #d3e5f5; 
-  --md-sys-color-secondary-fixed-dim: #c5d7e7; 
-  --md-sys-color-on-secondary-fixed: #31414e; 
-  --md-sys-color-on-secondary-fixed-variant: #4d5d6b; 
-  --md-sys-color-tertiary-fixed: #d6e3f5; 
-  --md-sys-color-tertiary-fixed-dim: #c2d3e8; 
-  --md-sys-color-on-tertiary-fixed: #1a2f47; 
-  --md-sys-color-on-tertiary-fixed-variant: #3d546e; 
+  --md-sys-color-primary: #0099dc;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #24455c;
+  --md-sys-color-on-primary-container: #cbe7ff;
+  --md-sys-color-secondary: #b7c9d9;
+  --md-sys-color-on-secondary: #32424f;
+  --md-sys-color-secondary-container: #2d3d4a;
+  --md-sys-color-on-secondary-container: #b0c1d1;
+  --md-sys-color-tertiary: #b9cde8;
+  --md-sys-color-on-tertiary: #23384f;
+  --md-sys-color-tertiary-container: #3c4f66;
+  --md-sys-color-on-tertiary-container: #d9e6f7;
+  --md-sys-color-error: #fa746f;
+  --md-sys-color-on-error: #490006;
+  --md-sys-color-error-container: #871f21;
+  --md-sys-color-on-error-container: #ff9993;
+
+  --md-sys-color-background: #232529;
+  --md-sys-color-on-background: #e8eaed;
+
+  --md-sys-color-surface: #232529;
+  --md-sys-color-surface-dim: #1d1e22;
+  --md-sys-color-surface-bright: #35363a;
+  --md-sys-color-surface-container-lowest: #17181c;
+  --md-sys-color-surface-container-low: #202124;
+  --md-sys-color-surface-container: #26272c;
+  --md-sys-color-surface-container-high: #292a2d;
+  --md-sys-color-surface-container-highest: #2e2f34;
+  --md-sys-color-on-surface: #e8eaed;
+  --md-sys-color-on-surface-variant: #9aa0a6;
+  --md-sys-color-outline: #80868b;
+  --md-sys-color-outline-variant: #3c4043;
+  --md-sys-color-inverse-surface: #e6eaf0;
+  --md-sys-color-inverse-on-surface: #2f333a;
+  --md-sys-color-inverse-primary: #acd7f9;
+  --md-sys-color-surface-tint: #0099dc;
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+
+  --md-sys-color-primary-fixed: #bee1ff;
+  --md-sys-color-primary-fixed-dim: #b0d3f0;
+  --md-sys-color-on-primary-fixed: #1b3f57;
+  --md-sys-color-on-primary-fixed-variant: #395b74;
+  --md-sys-color-secondary-fixed: #d3e5f5;
+  --md-sys-color-secondary-fixed-dim: #c5d7e7;
+  --md-sys-color-on-secondary-fixed: #31414e;
+  --md-sys-color-on-secondary-fixed-variant: #4d5d6b;
+  --md-sys-color-tertiary-fixed: #d6e3f5;
+  --md-sys-color-tertiary-fixed-dim: #c2d3e8;
+  --md-sys-color-on-tertiary-fixed: #1a2f47;
+  --md-sys-color-on-tertiary-fixed-variant: #3d546e;
 }
