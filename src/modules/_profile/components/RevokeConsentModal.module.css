@@ -1,0 +1,61 @@
+/* RevokeConsentModal — M3 Expressive тело диалога.
+ * Сам VModal не трогаем: только иерархия предупреждения и пилюля логина. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.warning {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background-color: var(--md-sys-color-error-container);
+  min-width: 0;
+}
+
+.warningIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
+  font: var(--md-sys-typescale-title-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-medium-emphasized-tracking);
+}
+
+.warningText {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  color: var(--md-sys-color-on-error-container);
+}
+
+.confirmText {
+  margin: 0;
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+  color: var(--md-sys-color-on-surface);
+}
+
+.login {
+  display: inline-block;
+  max-width: 100%;
+  padding: 2px 8px;
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}

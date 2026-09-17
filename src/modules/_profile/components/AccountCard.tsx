@@ -19,6 +19,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { changePasswordOpenAtom } from '../atoms/profile';
 import { ChangePasswordModal } from './ChangePasswordModal';
+import { DeleteAccountModal } from './DeleteAccountModal';
+import { RevokeConsentModal } from './RevokeConsentModal';
 import styles from './AccountCard.module.css';
 
 export const AccountCard = () => {
@@ -187,34 +189,19 @@ export const AccountCard = () => {
         onConfirm={handleSignOut}
       />
 
-      <VConfirmModal
+      <RevokeConsentModal
         visible={isRevokeConfirmOpen}
-        title="Отозвать согласие"
-        message={
-          'Вы отзываете согласие на обработку персональных данных. Это необратимо: ' +
-          'отчёты, операции, категории будут удалены немедленно, ' +
-          'аккаунт — обезличен (войти в него станет невозможно), вы выйдете на всех ' +
-          'устройствах. Восстановить данные нельзя, только зарегистрировать новый аккаунт.'
-        }
-        confirmLabel="Отозвать и удалить данные"
-        cancelLabel="Отмена"
-        isLoading={revokeConsent.isPending}
-        onCancel={() => setIsRevokeConfirmOpen(false)}
+        login={login}
+        isPending={revokeConsent.isPending}
+        onClose={() => setIsRevokeConfirmOpen(false)}
         onConfirm={handleRevoke}
       />
 
-      <VConfirmModal
+      <DeleteAccountModal
         visible={isDeleteConfirmOpen}
-        title="Удалить аккаунт"
-        message={
-          'Аккаунт и все финансовые данные будут удалены безвозвратно (в юридическом ' +
-          'журнале согласий останутся только факт и дата обезличивания). Вы выйдете ' +
-          'на всех устройствах.'
-        }
-        confirmLabel="Удалить навсегда"
-        cancelLabel="Отмена"
-        isLoading={deleteAccount.isPending}
-        onCancel={() => setIsDeleteConfirmOpen(false)}
+        login={login}
+        isPending={deleteAccount.isPending}
+        onClose={() => setIsDeleteConfirmOpen(false)}
         onConfirm={handleDelete}
       />
     </VCard>
