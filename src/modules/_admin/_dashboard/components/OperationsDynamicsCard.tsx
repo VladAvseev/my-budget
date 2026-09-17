@@ -85,10 +85,15 @@ export const OperationsDynamicsCard = () => {
     metric === 'unique_users' ? 'Активность уникальных пользователей' : 'Рост количества операций';
 
   return (
-    <VCard className={styles.card}>
+    <VCard className={`${styles.card} ${styles.hero}`}>
       <div className={styles.header}>
-        <div className={styles.title}>{title}</div>
-        {!isLoading && <span className={styles.total}>Всего: {totalOperations}</span>}
+        <h2 className={styles.title}>{title}</h2>
+        {!isLoading && (
+          <div className={styles.totalWrap}>
+            <span className={styles.totalLabel}>Всего</span>
+            <span className={styles.total}>{totalOperations.toLocaleString('ru-RU')}</span>
+          </div>
+        )}
       </div>
       <div className={styles.controls}>
         <VButtonGroup options={metricOptions} value={metric} onChange={setMetric} />
@@ -107,7 +112,7 @@ export const OperationsDynamicsCard = () => {
         ) : effectiveMode === 'cumulative' ? (
           <VGrowthChart
             data={chartData}
-            color="var(--positive-ink)"
+            color="var(--md-sys-color-tertiary)"
             formatValue={formatCount}
             showChange={true}
           />

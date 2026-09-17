@@ -1,51 +1,83 @@
+/* Логи — M3 Expressive.
+ * Base = compact: hero → метрики 2 в ряд → топы → тулбар колонкой → таблица в карточке. */
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .metricsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+  min-width: 0;
 }
 
 .metricCard {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 12px;
+  min-width: 0;
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+
+.metricHero {
+  background-color: var(--md-sys-color-primary-container);
+}
+
+.metricHero .metricLabel {
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.metricHero .metricValue {
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.metricError {
+  background-color: var(--md-sys-color-error-container);
+}
+
+.metricError .metricLabel,
+.metricError .metricValue {
+  color: var(--md-sys-color-on-error-container);
 }
 
 .metricLabel {
-  font-size: var(--md-sys-typescale-label-medium-size);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .metricValue {
-  --heading-size: 20px;
-  font-size: var(--heading-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  font: var(--md-sys-typescale-title-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-large-emphasized-tracking);
   color: var(--md-sys-color-on-surface);
-}
-
-.metricValueError {
-  --heading-size: 20px;
-  font-size: var(--heading-size);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  color: var(--md-sys-color-error);
+  font-variant-numeric: tabular-nums;
 }
 
 .toolbar {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
-  align-items: flex-start;
+  align-items: stretch;
+  min-width: 0;
 }
 
 .userSelect {
-  flex: 1 1 260px;
-  min-width: 200px;
-  max-width: 360px;
+  width: 100%;
+  min-width: 0;
 }
 
 .methodSelect {
-  flex: 0 1 200px;
-  min-width: 170px;
+  width: 100%;
+  min-width: 0;
 }
 
 .userAnonymous {
@@ -57,23 +89,27 @@
 .endpointTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--md-sys-typescale-body-small-size);
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
 }
 
 .seriesTable th,
 .endpointTable th {
-  padding: 4px;
+  padding: 8px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
   color: var(--md-sys-color-on-surface-variant);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   text-align: left;
+  white-space: nowrap;
 }
 
 .seriesTable td,
 .endpointTable td {
-  padding: 4px;
+  padding: 8px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
   color: var(--md-sys-color-on-surface);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Длинные пути эндпоинтов не переносим — таблица скроллится горизонтально. */
@@ -82,104 +118,213 @@
   white-space: nowrap;
 }
 
+.endpointTable td:first-child {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .twoCol {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
 }
 
 .tableWrapper {
-  overflow-x: auto;
   min-width: 0;
+  overflow-x: auto;
+  border-radius: var(--md-sys-shape-corner-large);
+  background-color: var(--md-sys-color-surface-container-low);
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--md-sys-typescale-label-medium-size);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
 }
 
 .table th {
-  padding: 8px 4px;
+  padding: 8px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface-container-low);
   color: var(--md-sys-color-on-surface-variant);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   text-align: left;
   white-space: nowrap;
 }
 
 .table td {
-  padding: 8px 4px;
+  padding: 10px 8px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
   color: var(--md-sys-color-on-surface);
   white-space: nowrap;
 }
 
+.table tbody tr {
+  transition: background-color var(--md-sys-motion-expressive-fast-effects);
+}
+
+.table tbody tr:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.table tbody tr:focus-within {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
 .table tbody tr.rowClickable {
   cursor: pointer;
-  transition: background-color var(--md-sys-motion-standard-fast-effects);
-}
-
-.sortHeader {
-  cursor: pointer;
-  user-select: none;
-}
-
-.sortHeader:hover {
-  color: var(--md-sys-color-on-surface);
-}
-
-.sortIndicator {
-  margin-left: 4px;
 }
 
 .table tbody tr.rowClickable:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.sorted {
+  color: var(--md-sys-color-on-surface);
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+  margin: -8px;
+  padding: 8px;
+  border: none;
+  border-radius: var(--md-sys-shape-corner-small);
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    border-radius var(--md-sys-motion-expressive-fast-spatial);
+}
+
+.sortButton:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
+  color: var(--md-sys-color-on-surface);
+}
+
+.sortButton:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.sortButton:active {
+  border-radius: var(--md-sys-shape-corner-extra-small);
+}
+
+.sortIndicator {
+  display: inline-block;
+  min-width: 1em;
+  color: var(--md-sys-color-primary);
+}
+
+.numCell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.expandButton {
+  padding: 0;
+  border: none;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.expandButton:hover {
+  color: var(--md-sys-color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.expandButton:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 28px;
+  padding: 2px 10px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font: var(--md-sys-typescale-label-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-label-medium-emphasized-tracking);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.methodChip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 8px;
+  border-radius: var(--md-sys-shape-corner-small);
   background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-label-medium-emphasized-tracking);
+  white-space: nowrap;
 }
 
 .statusOk {
-  color: var(--md-sys-color-primary);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
 }
 
 .statusError {
-  color: var(--md-sys-color-error);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
 }
 
 .statusWarning {
-  /* Тот же предупреждающий чернила, что .warning в VBadge: глобальной warning-роли нет. */
-  --caution-ink: light-dark(#795600, #fea135);
-  color: var(--caution-ink);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
 }
 
 .detailsCell {
   padding: 8px;
-  background-color: var(--md-sys-color-surface-container-highest);
+  background-color: var(--md-sys-color-surface-container-high);
+  white-space: normal;
 }
 
 .detailsBlock {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   /* Позволяет grid-элементу сжиматься, чтобы .tableWrapper скроллился внутри карточки. */
   min-width: 0;
+  border-radius: var(--md-sys-shape-corner-medium);
 }
 
 .detailsTitle {
-  font-size: var(--md-sys-typescale-body-small-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  margin: 0;
+  font: var(--md-sys-typescale-title-small-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-small-emphasized-tracking);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .detailsCode {
   margin: 0;
-  padding: 8px;
+  padding: 12px;
   max-height: 240px;
   overflow: auto;
-  border-radius: var(--md-sys-shape-corner-extra-small);
-  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: var(--md-sys-color-surface-container-lowest);
   font-family: monospace;
   font-size: var(--md-sys-typescale-body-small-size);
   color: var(--md-sys-color-on-surface);
@@ -195,16 +340,73 @@
   padding: 24px 12px;
   text-align: center;
   color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
 }
 
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px 12px;
 }
 
 .paginationInfo {
-  font-size: var(--md-sys-typescale-body-small-size);
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
   color: var(--md-sys-color-on-surface-variant);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 600px) {
+  .metricsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .toolbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .userSelect {
+    flex: 1 1 260px;
+    min-width: 200px;
+    max-width: 360px;
+  }
+
+  .methodSelect {
+    flex: 0 1 200px;
+    min-width: 170px;
+  }
+
+  .twoCol {
+    gap: 16px;
+  }
+
+  .table th {
+    padding: 10px 12px;
+  }
+
+  .table td {
+    padding: 12px;
+  }
+}
+
+@media (min-width: 840px) {
+  .metricsGrid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .twoCol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .table tbody tr,
+  .sortButton {
+    transition: none;
+  }
 }

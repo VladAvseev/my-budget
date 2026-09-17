@@ -1,10 +1,51 @@
+/* Дашборд — M3 Expressive сетка.
+ * Base = compact: одна колонка hero → пользователи → хранилище. */
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
   align-items: start;
+  min-width: 0;
 }
 
-.fullWidth {
+.section {
+  min-width: 0;
+}
+
+.hero,
+.users,
+.storage {
   grid-column: 1 / -1;
+}
+
+@media (min-width: 600px) {
+  .grid {
+    gap: 16px;
+  }
+}
+
+@media (min-width: 840px) {
+  .grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .hero {
+    grid-column: 1 / -1;
+  }
+
+  .users {
+    grid-column: 1 / span 7;
+  }
+
+  .storage {
+    grid-column: 8 / span 5;
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    gap: 20px;
+  }
 }

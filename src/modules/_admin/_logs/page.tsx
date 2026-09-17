@@ -73,13 +73,15 @@ const formatMetric = (value: number | null, suffix = ''): string =>
 interface MetricCardProps {
   label: string;
   value: string;
-  isError?: boolean;
+  tone?: 'hero' | 'error' | 'neutral';
 }
 
-const MetricCard: React.FC<MetricCardProps> = ({ label, value, isError }) => (
-  <VCard className={styles.metricCard}>
+const MetricCard: React.FC<MetricCardProps> = ({ label, value, tone = 'neutral' }) => (
+  <VCard
+    className={`${styles.metricCard}${tone === 'hero' ? ` ${styles.metricHero}` : ''}${tone === 'error' ? ` ${styles.metricError}` : ''}`}
+  >
     <span className={styles.metricLabel}>{label}</span>
-    <span className={isError ? styles.metricValueError : styles.metricValue}>{value}</span>
+    <span className={styles.metricValue}>{value}</span>
   </VCard>
 );
 
@@ -90,7 +92,7 @@ interface EndpointListProps {
 
 const EndpointList: React.FC<EndpointListProps> = ({ title, items }) => (
   <VCard className={styles.detailsBlock}>
-    <span className={styles.detailsTitle}>{title}</span>
+    <h3 className={styles.detailsTitle}>{title}</h3>
     {items.length === 0 ? (
       <span className={commonStyles.textSecondary}>Нет данных за период</span>
     ) : (
@@ -98,19 +100,21 @@ const EndpointList: React.FC<EndpointListProps> = ({ title, items }) => (
         <table className={styles.endpointTable}>
           <thead>
             <tr>
-              <th>Эндпоинт</th>
-              <th>Запросов</th>
-              <th>Ср. время</th>
-              <th>Ошибок</th>
+              <th scope="col">Эндпоинт</th>
+              <th scope="col">Запросов</th>
+              <th scope="col">Ср. время</th>
+              <th scope="col">Ошибок</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => (
               <tr key={item.endpoint}>
                 <td>{item.endpoint}</td>
-                <td>{formatNumber(item.count)}</td>
-                <td>{formatNumber(item.avgDurationMs)} мс</td>
-                <td className={item.errorCount > 0 ? styles.errorText : undefined}>
+                <td className={styles.numCell}>{formatNumber(item.count)}</td>
+                <td className={styles.numCell}>{formatNumber(item.avgDurationMs)} мс</td>
+                <td
+                  className={`${styles.numCell}${item.errorCount > 0 ? ` ${styles.errorText}` : ''}`}
+                >
                   {formatNumber(item.errorCount)}
                 </td>
               </tr>
@@ -131,27 +135,41 @@ interface SortHeaderProps {
 }
 
 /** Заголовок сортируемого столбца: клик — выбрать поле, повторный — сменить порядок. */
-const SortHeader: React.FC<SortHeaderProps> = ({ label, field, activeField, order, onSort }) => (
-  <th className={styles.sortHeader} onClick={() => onSort(field)}>
-    {label}
-    <span className={styles.sortIndicator}>
-      {activeField === field ? (order === 'asc' ? '↑' : '↓') : '↕'}
-    </span>
-  </th>
-);
+const SortHeader: React.FC<SortHeaderProps> = ({ label, field, activeField, order, onSort }) => {
+  const isActive = activeField === field;
+  return (
+    <th
+      scope="col"
+      aria-sort={isActive ? (order === 'asc' ? 'ascending' : 'descending') : undefined}
+      className={isActive ? styles.sorted : undefined}
+    >
+      <button
+        type="button"
+        className={styles.sortButton}
+        onClick={() => onSort(field)}
+        aria-label={`Сортировать по «${label}»`}
+      >
+        <span>{label}</span>
+        <span className={styles.sortIndicator} aria-hidden="true">
+          {isActive ? (order === 'asc' ? '↑' : '↓') : '↕'}
+        </span>
+      </button>
+    </th>
+  );
+};
 
 /** Скелетон таблицы логов: те же 6 колонок, что у реальной таблицы. */
 const LogsTableSkeleton: React.FC = () => (
   <div className={styles.tableWrapper}>
-    <table className={styles.table}>
+    <table className={styles.table} aria-busy="true">
       <thead>
         <tr>
-          <th>Дата и время</th>
-          <th>Метод</th>
-          <th>Путь</th>
-          <th>Статус</th>
-          <th>Выполнение</th>
-          <th>Пользователь</th>
+          <th scope="col">Дата и время</th>
+          <th scope="col">Метод</th>
+          <th scope="col">Путь</th>
+          <th scope="col">Статус</th>
+          <th scope="col">Выполнение</th>
+          <th scope="col">Пользователь</th>
         </tr>
       </thead>
       <tbody>
@@ -260,13 +278,13 @@ export const Page: React.FC = () => {
       ) : (
         <>
           <div className={styles.metricsGrid}>
-            <MetricCard label="Запросов" value={formatNumber(metrics.total)} />
+            <MetricCard label="Запросов" value={formatNumber(metrics.total)} tone="hero" />
             <MetricCard label="Info" value={formatNumber(metrics.infoCount)} />
             <MetricCard label="Warning" value={formatNumber(metrics.warningCount)} />
             <MetricCard
               label="Error"
               value={formatNumber(metrics.errorCount)}
-              isError={metrics.errorCount > 0}
+              tone={metrics.errorCount > 0 ? 'error' : 'neutral'}
             />
             <MetricCard label="Ср. время" value={formatMetric(metrics.avgDurationMs, ' мс')} />
             <MetricCard label="p95" value={formatMetric(metrics.p95DurationMs, ' мс')} />
@@ -328,6 +346,7 @@ export const Page: React.FC = () => {
           <>
             <div className={styles.tableWrapper}>
               <table className={styles.table}>
+                <caption className={styles.caption}>Логи запросов</caption>
                 <thead>
                   <tr>
                     <SortHeader
@@ -337,9 +356,9 @@ export const Page: React.FC = () => {
                       order={sortOrder}
                       onSort={handleSort}
                     />
-                    <th>Метод</th>
-                    <th>Путь</th>
-                    <th>Статус</th>
+                    <th scope="col">Метод</th>
+                    <th scope="col">Путь</th>
+                    <th scope="col">Статус</th>
                     <SortHeader
                       label="Выполнение"
                       field="duration"
@@ -347,7 +366,7 @@ export const Page: React.FC = () => {
                       order={sortOrder}
                       onSort={handleSort}
                     />
-                    <th>Пользователь</th>
+                    <th scope="col">Пользователь</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -359,7 +378,7 @@ export const Page: React.FC = () => {
                     </tr>
                   ) : (
                     logs.items.map((row: AdminLogRow) => {
-                      // Класс статуса: info — тихо, warning (4xx) — акцент, error (5xx) — ошибка.
+                      // Чип статуса: info — тихо, warning (4xx) — акцент, error (5xx) — ошибка.
                       const statusClass =
                         row.status >= 500
                           ? styles.statusError
@@ -375,11 +394,34 @@ export const Page: React.FC = () => {
                             className={row.error ? styles.rowClickable : undefined}
                             onClick={row.error ? () => toggleRow(row.id) : undefined}
                           >
-                            <td>{formatDateTime(row.createdAt)}</td>
-                            <td>{row.method}</td>
+                            <td>
+                              {row.error ? (
+                                <button
+                                  type="button"
+                                  className={styles.expandButton}
+                                  aria-expanded={isExpanded}
+                                  aria-label={`Детали ошибки от ${formatDateTime(row.createdAt)}`}
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    toggleRow(row.id);
+                                  }}
+                                >
+                                  {formatDateTime(row.createdAt)}
+                                </button>
+                              ) : (
+                                formatDateTime(row.createdAt)
+                              )}
+                            </td>
+                            <td>
+                              <span className={styles.methodChip}>{row.method}</span>
+                            </td>
                             <td>{row.path}</td>
-                            <td className={statusClass}>{row.status}</td>
-                            <td>{formatNumber(row.durationMs)} мс</td>
+                            <td>
+                              <span className={`${styles.chip} ${statusClass}`}>{row.status}</span>
+                            </td>
+                            <td className={styles.numCell}>
+                              {formatNumber(row.durationMs)} мс
+                            </td>
                             <td>
                               {row.userLogin ?? (
                                 <span className={styles.userAnonymous}>

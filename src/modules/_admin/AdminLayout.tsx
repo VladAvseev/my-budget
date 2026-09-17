@@ -16,18 +16,20 @@ const ADMIN_TABS: AdminTab[] = [
 export const AdminLayout: React.FC = () => {
   return (
     <div className={styles.root}>
-      <nav className={styles.tabs}>
-        {ADMIN_TABS.map((tab) =>
-          tab.stub ? (
-            <span key={tab.label} className={styles.tabStub}>
-              {tab.label}
-            </span>
-          ) : (
-            <NavLink key={tab.to} to={tab.to ?? ''} className={styles.tabLink}>
-              <span className={styles.tabLabel}>{tab.label}</span>
-            </NavLink>
-          ),
-        )}
+      <nav className={styles.tabs} aria-label="Разделы администрирования">
+        <ul className={styles.tabList}>
+          {ADMIN_TABS.map((tab) => (
+            <li key={tab.to ?? tab.label} className={styles.tabItem}>
+              {tab.stub ? (
+                <span className={styles.tabStub}>{tab.label}</span>
+              ) : (
+                <NavLink to={tab.to ?? ''} className={styles.tabLink}>
+                  <span className={styles.tabLabel}>{tab.label}</span>
+                </NavLink>
+              )}
+            </li>
+          ))}
+        </ul>
       </nav>
       <div className={styles.content}>
         <Outlet />

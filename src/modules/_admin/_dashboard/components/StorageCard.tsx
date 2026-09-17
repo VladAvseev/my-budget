@@ -1,4 +1,3 @@
-import commonStyles from '@/shared/styles/common.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { formatBytes } from '@/shared/utils/bytes';
 import { useAdminStorageBreakdown } from '../api/useAdminStorageBreakdown';
@@ -13,7 +12,7 @@ export const StorageCard: React.FC = () => {
   if (isLoading) {
     return (
       <VCard className={styles.card}>
-        <div className={commonStyles.cardTitle}>Хранилище</div>
+        <h2 className={styles.sectionTitle}>Хранилище</h2>
         <div className={styles.statLabel}>Загрузка…</div>
       </VCard>
     );
@@ -22,7 +21,7 @@ export const StorageCard: React.FC = () => {
   if (isError || !data) {
     return (
       <VCard className={styles.card}>
-        <div className={commonStyles.cardTitle}>Хранилище</div>
+        <h2 className={styles.sectionTitle}>Хранилище</h2>
         <div className={styles.statLabel}>Не удалось загрузить</div>
       </VCard>
     );
@@ -34,11 +33,12 @@ export const StorageCard: React.FC = () => {
 
   return (
     <VCard className={styles.card}>
-      <div className={commonStyles.cardTitle}>Хранилище</div>
+      <h2 className={styles.sectionTitle}>Хранилище</h2>
+      <div className={styles.tableScroll}>
       <div className={styles.statGrid}>
         <span className={styles.statHeaderCell}>Объект</span>
         <span className={styles.statHeaderCell}>Размер</span>
-        <span className={styles.statHeaderCell}>%</span>
+        <span className={styles.statHeaderCell}>Доля</span>
 
         <span className={styles.statRowGroup}>
           <span className={styles.statLabel}>База данных</span>
@@ -59,6 +59,7 @@ export const StorageCard: React.FC = () => {
           <span className={styles.statValue}>{formatBytes(otherBytes)}</span>
           <span className={styles.statPercent}>{percentOf(otherBytes, databaseBytes)}%</span>
         </span>
+      </div>
       </div>
     </VCard>
   );

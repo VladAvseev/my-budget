@@ -29,10 +29,10 @@ export const Page: React.FC = () => {
   return (
     <div className={commonStyles.page}>
       <div className={styles.grid}>
-        <div className={`${commonStyles.animateCard} ${styles.fullWidth}`}>
+        <div className={`${styles.section} ${styles.hero}`}>
           <OperationsDynamicsCard />
         </div>
-        <div className={commonStyles.animateCard} style={{ animationDelay: '0.03s' }}>
+        <div className={`${styles.section} ${styles.users}`}>
           {statsQuery.isLoading ? (
             <VSkeletonCard compact lines={3} delay="0.05s" />
           ) : statsQuery.isError || !users || !activity || !churn ? (
@@ -41,10 +41,7 @@ export const Page: React.FC = () => {
             <UsersActivityCard users={users} activity={activity} churn={churn} />
           )}
         </div>
-        <div
-          className={`${commonStyles.animateCard} ${styles.fullWidth}`}
-          style={{ animationDelay: '0.09s' }}
-        >
+        <div className={`${styles.section} ${styles.storage}`}>
           <StorageCard />
         </div>
       </div>

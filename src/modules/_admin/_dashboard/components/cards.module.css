@@ -1,7 +1,25 @@
+/* Карточки «Пользователи / Активность / Хранилище» — M3 Expressive.
+ * Base = compact: section-заголовки, скролл-контейнеры, tabular-nums. */
+
 .card {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  font: var(--md-sys-typescale-title-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-large-emphasized-tracking);
+  color: var(--md-sys-color-on-surface);
+}
+
+.tableScroll {
+  min-width: 0;
+  overflow-x: auto;
+  border-radius: var(--md-sys-shape-corner-small);
 }
 
 .statGrid {
@@ -9,6 +27,7 @@
   grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 4px 12px;
   align-items: baseline;
+  min-width: min-content;
 }
 
 .statGrid4 {
@@ -16,55 +35,84 @@
   grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 4px 12px;
   align-items: baseline;
+  min-width: min-content;
 }
 
 .statGrid5 {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto auto auto;
+  grid-template-columns: minmax(96px, 1.4fr) repeat(4, minmax(44px, auto));
   gap: 4px 12px;
   align-items: baseline;
+  min-width: min-content;
 }
 
 .statRowGroup {
   display: contents;
 }
 
+.statRowGroup > span {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
 .statHeaderCell {
-  font-size: var(--md-sys-typescale-body-small-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  padding-bottom: 4px;
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
+  white-space: nowrap;
 }
 
 .statSubheader {
   grid-column: 1 / -1;
   margin-top: 8px;
-  font-size: var(--md-sys-typescale-body-small-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .statLabel {
   min-width: 0;
-  font-size: var(--md-sys-typescale-label-large-size);
+  overflow-wrap: anywhere;
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   color: var(--md-sys-color-on-surface);
 }
 
 .statValue {
-  font-size: var(--md-sys-typescale-body-medium-size);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
   color: var(--md-sys-color-on-surface);
   justify-self: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .statPercent {
-  font-size: var(--md-sys-typescale-body-medium-size);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
   justify-self: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .valueWarning {
-  --caution-ink: light-dark(#795600, #fea135);
-  font-size: var(--md-sys-typescale-body-medium-size);
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  color: var(--caution-ink);
+  color: var(--md-sys-color-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 600px) {
+  .card {
+    gap: 16px;
+  }
+
+  .statGrid5 {
+    grid-template-columns: minmax(0, 1fr) auto auto auto auto;
+  }
 }

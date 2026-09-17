@@ -1,4 +1,3 @@
-import commonStyles from '@/shared/styles/common.module.css';
 import type { AdminDashboardStats } from '../api/useAdminStats';
 import { VCard } from '@/shared/ui/VCard';
 import styles from './cards.module.css';
@@ -53,36 +52,40 @@ export const UsersActivityCard: React.FC<UsersActivityCardProps> = ({ users, act
 
   return (
     <VCard className={styles.card}>
-      <div className={commonStyles.cardTitle}>Пользователи</div>
-      <div className={styles.statGrid}>
-        <span className={styles.statHeaderCell}>Показатель</span>
-        <span className={styles.statHeaderCell}>Кол-во</span>
-        <span className={styles.statHeaderCell}>%</span>
-        {userRows.map(({ label, value }) => (
-          <span key={label} className={styles.statRowGroup}>
-            <span className={styles.statLabel}>{label}</span>
-            <span className={styles.statValue}>{value}</span>
-            <span className={styles.statPercent}>{percent(value, total)}%</span>
-          </span>
-        ))}
+      <h2 className={styles.sectionTitle}>Пользователи</h2>
+      <div className={styles.tableScroll}>
+        <div className={styles.statGrid}>
+          <span className={styles.statHeaderCell}>Показатель</span>
+          <span className={styles.statHeaderCell}>Кол-во</span>
+          <span className={styles.statHeaderCell}>Доля</span>
+          {userRows.map(({ label, value }) => (
+            <span key={label} className={styles.statRowGroup}>
+              <span className={styles.statLabel}>{label}</span>
+              <span className={styles.statValue}>{value}</span>
+              <span className={styles.statPercent}>{percent(value, total)}%</span>
+            </span>
+          ))}
+        </div>
       </div>
 
-      <div className={commonStyles.cardTitle}>Активность</div>
-      <div className={styles.statGrid5}>
-        <span className={styles.statHeaderCell}>Период</span>
-        <span className={styles.statHeaderCell}>Активные</span>
-        <span className={styles.statHeaderCell}>%</span>
-        <span className={styles.statHeaderCell}>Неактивные</span>
-        <span className={styles.statHeaderCell}>%</span>
-        {activityRows.map(({ period, active, inactive }) => (
-          <span key={period} className={styles.statRowGroup}>
-            <span className={styles.statLabel}>{period}</span>
-            <span className={styles.statValue}>{active}</span>
-            <span className={styles.statPercent}>{percent(active, total)}%</span>
-            <span className={styles.statValue}>{inactive}</span>
-            <span className={styles.statPercent}>{percent(inactive, total)}%</span>
-          </span>
-        ))}
+      <h2 className={styles.sectionTitle}>Активность</h2>
+      <div className={styles.tableScroll}>
+        <div className={styles.statGrid5}>
+          <span className={styles.statHeaderCell}>Период</span>
+          <span className={styles.statHeaderCell}>Активные</span>
+          <span className={styles.statHeaderCell}>Доля</span>
+          <span className={styles.statHeaderCell}>Неактивные</span>
+          <span className={styles.statHeaderCell}>Доля</span>
+          {activityRows.map(({ period, active, inactive }) => (
+            <span key={period} className={styles.statRowGroup}>
+              <span className={styles.statLabel}>{period}</span>
+              <span className={styles.statValue}>{active}</span>
+              <span className={styles.statPercent}>{percent(active, total)}%</span>
+              <span className={styles.statValue}>{inactive}</span>
+              <span className={styles.statPercent}>{percent(inactive, total)}%</span>
+            </span>
+          ))}
+        </div>
       </div>
     </VCard>
   );

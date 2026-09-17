@@ -1,41 +1,101 @@
+/* AdminLayout — M3 Expressive навигация раздела.
+ * Base = compact: заголовок + сегментированный pill-ряд с горизонтальным скроллом.
+ * Rail включается с 840px: табы становятся вертикальной колонкой. */
+
 .root {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font: var(--md-sys-typescale-headline-small-emphasized);
+  letter-spacing: var(--md-sys-typescale-headline-small-emphasized-tracking);
+  color: var(--md-sys-color-on-surface);
 }
 
 .tabs {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 4px;
+  min-width: 0;
   overflow-x: auto;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  padding: 4px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+.tabList {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tabItem {
+  display: flex;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .tabLink {
+  display: inline-flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
   padding: 8px 16px;
-  border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
-  text-decoration: none;
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  border-radius: var(--md-sys-shape-corner-full);
   color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-large);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  text-decoration: none;
+  white-space: nowrap;
   transition:
-    background-color var(--md-sys-motion-standard-fast-effects),
-    color var(--md-sys-motion-standard-fast-effects);
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects),
+    border-radius var(--md-sys-motion-expressive-fast-spatial);
 }
 
-.tabLink:hover,
+.tabLink:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
+  color: var(--md-sys-color-on-surface);
+}
+
+.tabLink:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.tabLink:active {
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+
 .tabLink[aria-current='page'] {
-  color: var(--md-sys-color-on-primary-container);
-  background-color: var(--md-sys-color-primary-container);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font: var(--md-sys-typescale-label-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-label-large-emphasized-tracking);
 }
 
 .tabStub {
+  display: inline-flex;
   flex-shrink: 0;
+  align-items: center;
+  min-height: 40px;
   padding: 8px 16px;
-  font-size: var(--md-sys-typescale-label-large-size);
+  border-radius: var(--md-sys-shape-corner-full);
   color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-large);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  white-space: nowrap;
   opacity: 0.6;
   cursor: default;
 }
@@ -49,4 +109,69 @@
 .content {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+}
+
+@media (min-width: 600px) {
+  .root {
+    gap: 16px;
+  }
+}
+
+@media (min-width: 840px) {
+  .root {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    grid-template-areas:
+      'header header'
+      'tabs content';
+    gap: 16px 24px;
+    align-items: start;
+  }
+
+  .header {
+    grid-area: header;
+  }
+
+  .tabs {
+    grid-area: tabs;
+    position: sticky;
+    top: 16px;
+    overflow: visible;
+  }
+
+  .tabList {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tabItem {
+    flex-shrink: 1;
+  }
+
+  .tabLink,
+  .tabStub {
+    flex: 1 1 auto;
+    justify-content: flex-start;
+    min-height: 48px;
+    padding: 12px 16px;
+  }
+
+  .content {
+    grid-area: content;
+  }
+}
+
+@media (min-width: 1200px) {
+  .root {
+    width: 100%;
+    max-width: 1360px;
+    margin: 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabLink {
+    transition: none;
+  }
 }

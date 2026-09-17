@@ -7,6 +7,7 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils/date';
+import { formatAmount } from '@/shared/utils/format';
 import { useMemo, useState } from 'react';
 import { useAdminUsers } from './api/useAdminUsers';
 import { DeleteUserModal } from './components/DeleteUserModal';
@@ -26,9 +27,7 @@ const COLUMNS: Column[] = [
   { key: 'login', label: 'Пользователь', sortType: 'string' },
   { key: 'last_active_at', label: 'Активность', sortType: 'date' },
   { key: 'reportsCount', label: 'Периоды', sortType: 'number' },
-  { key: 'operationsCount', label: 'Опер', sortType: 'number' },
-  { key: 'incomeCount', label: 'Доходы', sortType: 'number' },
-  { key: 'expenseCount', label: 'Расходы', sortType: 'number' },
+  { key: 'operationsCount', label: 'Операции', sortType: 'number' },
   { key: 'categoriesCount', label: 'Категории', sortType: 'number' },
   { key: 'accountsCount', label: 'Счета', sortType: 'number' },
   { key: 'goalsCount', label: 'Цели', sortType: 'number' },
@@ -125,12 +124,15 @@ export const Page: React.FC = () => {
         <VSkeleton width={360} height={38} radius="var(--md-sys-shape-corner-small)" />
         <div className={styles.tableWrapper}>
           <table className={styles.table} aria-busy="true">
+            <caption className={styles.caption}>Пользователи</caption>
             <thead>
               <tr>
                 {COLUMNS.map(({ key, label }) => (
-                  <th key={key}>{label}</th>
+                  <th key={key} scope="col">
+                    {label}
+                  </th>
                 ))}
-                <th>Действие</th>
+                <th scope="col">Действие</th>
               </tr>
             </thead>
             <tbody>
@@ -173,21 +175,36 @@ export const Page: React.FC = () => {
       />
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
+          <caption className={styles.caption}>Пользователи</caption>
           <thead>
             <tr>
               {COLUMNS.map(({ key, label }) => (
-                <th key={key}>
+                <th
+                  key={key}
+                  scope="col"
+                  aria-sort={
+                    key === sortKey
+                      ? sortDirection === 'asc'
+                        ? 'ascending'
+                        : 'descending'
+                      : undefined
+                  }
+                  className={key === sortKey ? styles.sorted : undefined}
+                >
                   <button
                     type="button"
                     className={styles.sortButton}
                     onClick={() => handleSort(key)}
+                    aria-label={`Сортировать по «${label}»`}
                   >
-                    {label}
-                    <span className={styles.sortIndicator}>{sortIndicator(key)}</span>
+                    <span>{label}</span>
+                    <span className={styles.sortIndicator} aria-hidden="true">
+                      {sortIndicator(key)}
+                    </span>
                   </button>
                 </th>
               ))}
-              <th>Действие</th>
+              <th scope="col">Действие</th>
             </tr>
           </thead>
           <tbody>
@@ -202,13 +219,11 @@ export const Page: React.FC = () => {
                 <tr key={row.user_id}>
                   <td>{row.login}</td>
                   <td>{formatDate(row.last_active_at)}</td>
-                  <td className={styles.numCell}>{row.reportsCount}</td>
-                  <td className={styles.numCell}>{row.operationsCount}</td>
-                  <td className={styles.numCell}>{row.incomeCount}</td>
-                  <td className={styles.numCell}>{row.expenseCount}</td>
-                  <td className={styles.numCell}>{row.categoriesCount}</td>
-                  <td className={styles.numCell}>{row.accountsCount}</td>
-                  <td className={styles.numCell}>{row.goalsCount}</td>
+                  <td>{formatAmount(row.reportsCount)}</td>
+                  <td>{formatAmount(row.operationsCount)}</td>
+                  <td>{formatAmount(row.categoriesCount)}</td>
+                  <td>{formatAmount(row.accountsCount)}</td>
+                  <td>{formatAmount(row.goalsCount)}</td>
                   <td className={styles.actionCell}>
                     {row.user_id !== current?.id && (
                       <VIconButton

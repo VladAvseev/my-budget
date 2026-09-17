@@ -1,16 +1,29 @@
+/* Hero-цифры динамики: подпись сверху, значение крупно с tabular-nums. */
+
 .stats {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px 24px;
   margin-bottom: 8px;
+  min-width: 0;
 }
 
 .stat {
-  font-size: var(--md-sys-typescale-body-small-size);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.statLabel {
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .statValue {
+  font: var(--md-sys-typescale-title-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-large-emphasized-tracking);
   color: var(--md-sys-color-on-surface);
+  font-variant-numeric: tabular-nums;
 }

@@ -19,12 +19,14 @@ export const OperationsDynamicsStats = ({ stats }: OperationsDynamicsStatsProps)
     <div className={styles.stats}>
       {periodLine && (
         <div className={styles.stat}>
-          {periodLabel}: <span className={styles.statValue}>{periodLine}</span>
+          <span className={styles.statLabel}>{periodLabel}</span>
+          <span className={styles.statValue}>{periodLine}</span>
         </div>
       )}
       {lastLine && (
         <div className={styles.stat}>
-          {lastPeriodLabel}: <span className={styles.statValue}>{lastLine}</span>
+          <span className={styles.statLabel}>{lastPeriodLabel}</span>
+          <span className={styles.statValue}>{lastLine}</span>
         </div>
       )}
     </div>

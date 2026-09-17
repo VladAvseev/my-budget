@@ -43,7 +43,8 @@ interface StatProps {
 
 const Stat: React.FC<StatProps> = ({ label, value }) => (
   <div className={styles.stat}>
-    {label}: <span className={styles.statValue}>{value}</span>
+    <span className={styles.statLabel}>{label}</span>
+    <span className={styles.statValue}>{value}</span>
   </div>
 );
 
@@ -78,10 +79,15 @@ export const LogsDynamicsCard = () => {
     metric === 'unique_users' ? 'Активность уникальных пользователей' : 'Количество логов';
 
   return (
-    <VCard className={styles.card}>
+    <VCard className={`${styles.card} ${styles.hero}`}>
       <div className={styles.header}>
-        <div className={styles.title}>{title}</div>
-        {!isLoading && <span className={styles.total}>Всего: {formatCount(built.total)}</span>}
+        <h2 className={styles.title}>{title}</h2>
+        {!isLoading && (
+          <div className={styles.totalWrap}>
+            <span className={styles.totalLabel}>Всего</span>
+            <span className={styles.total}>{formatCount(built.total)}</span>
+          </div>
+        )}
       </div>
       <div className={styles.controls}>
         <VButtonGroup options={metricOptions} value={metric} onChange={setMetric} />
