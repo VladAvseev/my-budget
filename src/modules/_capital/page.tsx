@@ -1,14 +1,12 @@
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCurrencyRates } from '@/shared/ui/VCurrencyRates';
 import { VHint } from '@/shared/ui/VHint';
-import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useAuth } from '@/shared/api/authProvider';
 import { useBreakpoint } from '@/shared/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
 import styles from './page.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { selectedDisplayCurrencyAtom } from './atoms/capital';
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
 import { GoalsSection } from './components/GoalsSection';
@@ -22,7 +20,6 @@ const CURRENCY_OPTIONS: VButtonGroupOption[] = [
 ];
 
 export const Page: React.FC = () => {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { isDesktop } = useBreakpoint();
   const userId = user?.id ?? '';
@@ -59,11 +56,6 @@ export const Page: React.FC = () => {
     <div className={styles.page}>
       {isDesktop && (
         <div className={styles.header}>
-          <VPageHeader
-            title="Капитал"
-            onBack={() => navigate('/')}
-            backAriaLabel="Назад на главную"
-          />
           <div className={styles.headerActions}>
             <VCurrencyRates selectedCurrency={displayCurrency} rates={rates} orientation="row" />
             {currencySwitcher}

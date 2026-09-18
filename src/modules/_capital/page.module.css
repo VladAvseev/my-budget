@@ -14,7 +14,10 @@
   gap: 12px;
   min-width: 0;
 }
-.header,
+.header {
+  justify-content: flex-end;
+}
+
 .currencyRow {
   justify-content: space-between;
 }
