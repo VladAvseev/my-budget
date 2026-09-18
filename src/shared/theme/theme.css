@@ -112,9 +112,9 @@
  * Upstream spec: AndroidX Compose Material3 1.5.0-alpha28 darkColorScheme()
  */
 [data-theme='dark'] {
-  /* Primary: User brand tone Tone 60 #0099dc */
-  --md-sys-color-primary: #0099dc;
-  --md-sys-color-on-primary: #001e2f; /* [ACCESSIBILITY] Tone 10: 5.37:1 contrast (WCAG AA Pass) */
+  /* Primary: User brand tone calibrated for white text (Tone ~50 #007eb6) */
+  --md-sys-color-primary: #007eb6;
+  --md-sys-color-on-primary: #ffffff; /* [ACCESSIBILITY] 4.51:1 contrast with #ffffff (WCAG AA Pass) */
   --md-sys-color-primary-container: #004b6f; /* Tone 30 */
   --md-sys-color-on-primary-container: #c9e6ff; /* Tone 90: 7.27:1 contrast */
   --md-sys-color-inverse-primary: #006492;
@@ -186,7 +186,7 @@
   --md-sys-color-inverse-on-surface: #2e3133;
 
   /* Tints & Scrim */
-  --md-sys-color-surface-tint: #0099dc;
+  --md-sys-color-surface-tint: #007eb6; /* [ANDROIDX-M3E] surfaceTint == primary */
   --md-sys-color-shadow: #000000;
   --md-sys-color-scrim: #000000;
 
