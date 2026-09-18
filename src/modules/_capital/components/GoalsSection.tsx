@@ -227,7 +227,7 @@ export const GoalsSection = () => {
               </div>
               {showPeriodProgress && periodReady && (
                 <div className={styles.periodRow}>
-                  Пополнено в текущем периоде:{' '}
+                  Пополнено в этом месяце:{' '}
                   <Amount
                     value={currentPeriodSaved}
                     currencySymbol={displaySymbol}
@@ -238,8 +238,7 @@ export const GoalsSection = () => {
                     value={monthlyPlan}
                     currencySymbol={displaySymbol}
                     convert={convertOptions}
-                  />{' '}
-                  ({periodPlanPercent}%)
+                  />
                 </div>
               )}
               {!periodReady && (
