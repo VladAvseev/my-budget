@@ -22,10 +22,10 @@ const AGGREGATION_LABELS: Record<GrowthAggregation, string> = {
 };
 
 const CURRENT_PERIOD_LABELS: Record<GrowthAggregation, string> = {
-  M: 'За текущий месяц',
-  Q: 'За текущий квартал',
-  HY: 'За текущее полугодие',
-  Y: 'За текущий год',
+  M: 'За этот месяц',
+  Q: 'За этот квартал',
+  HY: 'За это полугодие',
+  Y: 'За этот год',
 };
 
 export const buildMonthlyStats = (data: ChartPoint[], base = 0): MonthlyStats | null => {

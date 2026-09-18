@@ -50,7 +50,7 @@ export const GrowthStats = ({ stats, displaySymbol }: GrowthStatsProps) => {
       )}
       {recent !== null && (
         <div className={styles.stat}>
-          В месяц (за последний год):{' '}
+          В месяц (за год):{' '}
           <span className={`${styles.statValue} ${colorClass(recent.abs)}`}>
             <CurrencyText>{formatChange(recent)}</CurrencyText>
           </span>

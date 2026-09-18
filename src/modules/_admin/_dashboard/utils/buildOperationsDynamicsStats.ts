@@ -31,10 +31,10 @@ const AGGREGATION_LABELS: Record<AdminChartMetric, Record<DynamicsAggregation, s
 const LAST_PERIOD_LABELS: Record<AdminChartMetric, Record<DynamicsAggregation, string>> = {
   count: {
     D: 'За сегодня',
-    M: 'За текущий месяц',
-    Y: 'За текущий год',
+    M: 'За этот месяц',
+    Y: 'За этот год',
   },
-  unique_users: { D: 'За сегодня', M: 'За текущий месяц', Y: 'За текущий год' },
+  unique_users: { D: 'За сегодня', M: 'За этот месяц', Y: 'За этот год' },
 };
 
 const buildPeriodRate = (
