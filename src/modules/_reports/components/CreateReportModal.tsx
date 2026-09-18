@@ -118,7 +118,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
   return (
     <VModal
       visible={visible}
-      title="Создать период"
+      title="Новый период"
       className={styles.dialog}
       onClose={handleClose}
       error={submitError}
@@ -128,7 +128,7 @@ export const CreateReportModal = ({ visible, onClose }: CreateReportModalProps) 
             Отмена
           </VButton>
           <VButton onClick={handleSubmit} isLoading={create.isPending} isDisabled={codeExists}>
-            Создать период
+            Сохранить
           </VButton>
         </>
       }

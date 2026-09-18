@@ -94,7 +94,7 @@ export const OperationForm = ({
   const accountError =
     !accountStatusError && !isClosed
       ? openAccounts.length === 0
-        ? 'Без открытого счёта создать операцию нельзя. Откройте счёт в профиле.'
+        ? 'Без открытого счёта добавить операцию нельзя. Откройте счёт в профиле.'
         : type === 'transfer' && openAccounts.length < 2
           ? 'Для перевода нужны два разных открытых счёта.'
           : undefined

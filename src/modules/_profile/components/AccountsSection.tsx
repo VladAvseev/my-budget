@@ -56,7 +56,7 @@ export const AccountsSection = () => {
           )}
         </div>
         <VButton onClick={() => setEditor({ account: null })}>
-          Создать счёт
+          Добавить счёт
         </VButton>
       </div>
 

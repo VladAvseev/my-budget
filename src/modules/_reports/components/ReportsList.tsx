@@ -45,7 +45,7 @@ export const ReportsList = () => {
           onClick={() => setIsCreateOpen(true)}
           isDisabled={isLoading}
         >
-          <PlusIcon size={20} color="currentColor" /> Создать период
+          <PlusIcon size={20} color="currentColor" /> Добавить период
         </VButton>
         <VTextInput
           type="search"
@@ -84,7 +84,7 @@ export const ReportsList = () => {
             variant="secondary"
             onClick={() => (reports.length === 0 ? setIsCreateOpen(true) : setSearchQuery(''))}
           >
-            {reports.length === 0 ? 'Создать период' : 'Сбросить поиск'}
+            {reports.length === 0 ? 'Добавить период' : 'Сбросить поиск'}
           </VButton>
         </VCard>
       )}

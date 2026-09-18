@@ -138,7 +138,7 @@ export const AccountFormModal = ({ account, onClose, onRequestDelete }: AccountF
               Отмена
             </VButton>
             <VButton onClick={save} isLoading={pending}>
-              Создать
+              Сохранить
             </VButton>
           </>
         )
