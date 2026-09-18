@@ -1,10 +1,8 @@
 import type { Report } from '@/shared/api/types/domain';
-import { VLoader } from '@/shared/ui/VLoader';
 import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import { comparedReportIdAtom } from '../atoms/overview';
-import styles from './PeriodCompareSelect.module.css';
 
 interface PeriodCompareSelectProps {
   reports: Report[];
@@ -23,25 +21,12 @@ export const PeriodCompareSelect = ({ reports, isLoading }: PeriodCompareSelectP
   );
 
   return (
-    <div className={styles.row}>
-      <VSelect
-        className={styles.select}
-        label="Период для сравнения"
-        options={options}
-        value={comparedId}
-        onChange={setComparedId}
-      />
-      <span className={styles.loader}>
-        {isLoading && (
-          <span
-            role="status"
-            aria-label="Загружаются данные по выбранному периоду"
-            title="Загружаются данные по выбранному периоду"
-          >
-            <VLoader size={20} />
-          </span>
-        )}
-      </span>
-    </div>
+    <VSelect
+      label="Период для сравнения"
+      options={options}
+      value={comparedId}
+      onChange={setComparedId}
+      loading={isLoading}
+    />
   );
 };

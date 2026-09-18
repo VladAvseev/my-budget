@@ -19,30 +19,42 @@ export const PeriodSummary = ({
   const balance = income - expenses;
   const balancePercent = percentOfIncome(balance, income);
 
-  const items: {
-    label: string;
-    value: number;
-    tone: 'positive' | 'negative' | 'neutral';
-    percentText: string | null;
-  }[] = [
+  let savingsBadge: { shortText: string; fullText: string; tone: 'positive' | 'negative' } | null =
+    null;
+  if (balancePercent !== null && income > 0) {
+    if (balance >= 0) {
+      savingsBadge = {
+        shortText: `${formatAmount(balancePercent)}% сбережения`,
+        fullText: `${formatAmount(balancePercent)}% норма сбережений`,
+        tone: 'positive',
+      };
+    } else {
+      savingsBadge = {
+        shortText: `${formatAmount(Math.abs(balancePercent))}% дефицит`,
+        fullText: `${formatAmount(Math.abs(balancePercent))}% дефицит`,
+        tone: 'negative',
+      };
+    }
+  }
+
+  const items = [
     {
       label: 'Доходы',
       value: income,
-      tone: 'positive',
-      percentText: null,
+      tone: 'positive' as const,
+      badge: null,
     },
     {
       label: 'Расходы',
       value: expenses,
-      tone: 'negative',
-      percentText: null,
+      tone: 'negative' as const,
+      badge: null,
     },
     {
       label: 'Остаток',
       value: balance,
-      tone: balance >= 0 ? 'positive' : 'negative',
-      percentText:
-        balancePercent !== null && income > 0 ? `сбережения: ${formatAmount(balancePercent)}%` : null,
+      tone: balance >= 0 ? ('positive' as const) : ('negative' as const),
+      badge: savingsBadge,
     },
   ];
 
@@ -54,7 +66,12 @@ export const PeriodSummary = ({
           <div className={styles.value} data-tone={item.tone}>
             <Amount value={item.value} currencySymbol={currencySymbol} convert={convertOptions} />
           </div>
-          {item.percentText && <div className={styles.percent}>{item.percentText}</div>}
+          {item.badge && (
+            <span className={styles.savingsBadge} data-tone={item.badge.tone}>
+              <span className={styles.savingsBadgeShort}>{item.badge.shortText}</span>
+              <span className={styles.savingsBadgeFull}>{item.badge.fullText}</span>
+            </span>
+          )}
         </VCard>
       ))}
     </div>

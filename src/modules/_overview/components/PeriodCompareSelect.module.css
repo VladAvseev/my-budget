@@ -1,27 +1,2 @@
-.row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 48px;
-  align-items: end;
-  gap: 8px;
-  padding: 12px;
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-surface-container-high);
-}
-.select {
-  min-width: 0;
-}
-.loader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 48px;
-  color: var(--md-sys-color-on-surface-variant);
-}
-.loader > span {
-  display: flex;
-}
-@media (min-width: 600px) {
-  .row {
-    padding: 16px;
-  }
-}
+/* Intentionally empty: VSelect handles layout natively */
+

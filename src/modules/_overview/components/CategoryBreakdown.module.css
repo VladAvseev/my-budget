@@ -42,7 +42,7 @@
   font-weight: var(--md-sys-typescale-label-large-weight);
 }
 .deltaGood {
-  color: var(--md-sys-color-primary);
+  color: var(--sys-color-positive-ink);
 }
 .deltaBad {
   color: var(--md-sys-color-error);

@@ -1,11 +1,2 @@
-.summary {
-  min-width: 0;
-  padding: 12px;
-  border-radius: var(--md-sys-shape-corner-extra-large-increased);
-  background: var(--md-sys-color-surface-container-high);
-}
-@media (min-width: 600px) {
-  .summary {
-    padding: 16px;
-  }
-}
+/* Intentionally empty: PeriodSummary handles grid layout natively */
+

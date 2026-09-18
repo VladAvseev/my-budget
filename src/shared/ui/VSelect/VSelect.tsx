@@ -1,4 +1,5 @@
 import { ChevronDownIcon, ClearIcon } from '@/shared/icons';
+import { VLoader } from '@/shared/ui/VLoader';
 import {
   useEffect,
   useId,
@@ -24,6 +25,7 @@ export interface VSelectProps {
   error?: string;
   disabled?: boolean;
   required?: boolean;
+  loading?: boolean;
   onChange?: (value: string) => void;
   style?: CSSProperties;
   className?: string;
@@ -37,6 +39,7 @@ export const VSelect = ({
   error,
   disabled,
   required,
+  loading,
   onChange,
   style,
   className,
@@ -106,6 +109,7 @@ export const VSelect = ({
         role="combobox"
         aria-expanded={isOpen}
         aria-invalid={hasError}
+        aria-busy={loading ? 'true' : undefined}
         aria-haspopup="listbox"
         aria-labelledby={label ? labelId : undefined}
         tabIndex={disabled ? -1 : 0}
@@ -120,13 +124,14 @@ export const VSelect = ({
         data-open={isOpen ? 'true' : undefined}
         data-invalid={hasError ? 'true' : undefined}
         data-disabled={disabled ? 'true' : undefined}
+        data-loading={loading ? 'true' : undefined}
       >
         <span className={styles.triggerText}>
           {selectedOption?.prefix}
           <span className={styles.triggerTextValue}>{displayText}</span>
         </span>
         <span className={styles.triggerActions}>
-          {hasValue && !disabled && !required && (
+          {hasValue && !disabled && !required && !loading && (
             <button
               type="button"
               aria-label="Очистить"
@@ -139,9 +144,15 @@ export const VSelect = ({
               <ClearIcon size={16} color="currentColor" />
             </button>
           )}
-          <span className={styles.chevron}>
-            <ChevronDownIcon size={16} color="currentColor" />
-          </span>
+          {loading ? (
+            <span className={styles.loader} role="status" aria-label="Загрузка">
+              <VLoader size={16} />
+            </span>
+          ) : (
+            <span className={styles.chevron}>
+              <ChevronDownIcon size={16} color="currentColor" />
+            </span>
+          )}
         </span>
       </div>
       {isOpen && !disabled && (
