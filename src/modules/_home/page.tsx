@@ -1,5 +1,4 @@
 import { useBootstrap } from '@/shared/api/hooks';
-import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import styles from './homeCard.module.css';
 import { LastReportCard } from './components/LastReportCard';
@@ -13,7 +12,6 @@ export const Page: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      <VPageHeader title="Главная" hideOnMobile className={styles.pageHeader} />
       <div className={styles.cardList}>
         {error ? (
           <VErrorCard
