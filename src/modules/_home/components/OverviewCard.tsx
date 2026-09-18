@@ -56,9 +56,6 @@ export const OverviewCard = () => {
           </span>
           <div className={styles.title}>Аналитика</div>
         </div>
-        <div className={styles.subtitle}>
-          Доходы и расходы за всё время по всем счетам
-        </div>
         <div className={styles.capitalBlock}>
           <div className={styles.capitalKicker}>Капитал</div>
           <div className={styles.metricRow}>

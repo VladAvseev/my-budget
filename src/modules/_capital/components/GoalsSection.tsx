@@ -255,6 +255,10 @@ export const GoalsSection = () => {
               const pending = Boolean((goal as { _optimistic?: boolean })._optimistic);
               const targetAmount = Number(goal.amount) || 0;
               const requiredMonthly = goalMonthlyContribution(progress, overallForecastMonths);
+              const goalMonthlySaved = currentGoalContributions(
+                operationsQuery.data ?? [],
+                new Set([goal.account_id]),
+              );
 
               return (
                 <VCard
@@ -318,6 +322,22 @@ export const GoalsSection = () => {
 
                   {!progress.reached && !pending && (
                     <>
+                      {periodReady && (
+                        <div className={styles.periodRow}>
+                          Пополнено в этом месяце:{' '}
+                          <span
+                            className={
+                              goalMonthlySaved > 0 ? styles.positiveContribution : undefined
+                            }
+                          >
+                            <Amount
+                              value={goalMonthlySaved}
+                              currencySymbol={displaySymbol}
+                              convert={convertOptions}
+                            />
+                          </span>
+                        </div>
+                      )}
                       {requiredMonthly > 0 && (
                         <div className={styles.forecast}>
                           Рекомендуется пополнять на{' '}
@@ -329,10 +349,6 @@ export const GoalsSection = () => {
                           в месяц
                         </div>
                       )}
-                      <AchievementInfo
-                        remaining={goal.amount - progress.savedAmount}
-                        growth={growth}
-                      />
                     </>
                   )}
                 </VCard>

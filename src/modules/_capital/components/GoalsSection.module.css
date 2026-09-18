@@ -51,10 +51,22 @@
 }
 .root .card[aria-disabled='true'] {
   cursor: default;
-  opacity: 0.65;
+  pointer-events: none;
+}
+.root .card[aria-disabled='true'] .cardTitle,
+.root .card[aria-disabled='true'] .savedAmount,
+.root .card[aria-disabled='true'] .percent {
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+.root .card[aria-disabled='true'] .fill {
+  background: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 .root .card:hover:not([aria-disabled='true']) {
   border-color: var(--md-sys-color-outline);
+}
+.positiveContribution {
+  color: var(--sys-color-positive-ink);
+  font: var(--md-sys-typescale-body-medium-emphasized);
 }
 .root .overall {
   background: var(--md-sys-color-primary-container);

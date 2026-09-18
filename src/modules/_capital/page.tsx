@@ -3,7 +3,6 @@ import { VCurrencyRates } from '@/shared/ui/VCurrencyRates';
 import { VHint } from '@/shared/ui/VHint';
 import { useAuth } from '@/shared/api/authProvider';
 import { useBreakpoint } from '@/shared/hooks';
-import commonStyles from '@/shared/styles/common.module.css';
 import styles from './page.module.css';
 import { useAtom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
@@ -54,22 +53,16 @@ export const Page: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      {isDesktop && (
+      {isDesktop ? (
         <div className={styles.header}>
           <div className={styles.headerActions}>
             <VCurrencyRates selectedCurrency={displayCurrency} rates={rates} orientation="row" />
             {currencySwitcher}
           </div>
         </div>
-      )}
-
-      {!isDesktop && (
+      ) : (
         <div className={styles.currencyRow}>
-          {displayCurrency ? (
-            <VCurrencyRates selectedCurrency={displayCurrency} rates={rates} orientation="stack" />
-          ) : (
-            <div className={commonStyles.titleXl}>Капитал</div>
-          )}
+          <VCurrencyRates selectedCurrency={displayCurrency} rates={rates} orientation="stack" />
           {currencySwitcher}
         </div>
       )}

@@ -319,8 +319,14 @@ export const VGrowthChart = ({
               const change = getPointChange(data, data.indexOf(tooltip.point), base);
               if (!change) return null;
               const sign = change.abs > 0 ? '+' : change.abs < 0 ? '' : '±';
+              const changeClass =
+                change.abs > 0
+                  ? styles.positive
+                  : change.abs < 0
+                    ? styles.negative
+                    : '';
               return (
-                <div className={styles.tooltipChange}>
+                <div className={`${styles.tooltipChange} ${changeClass}`.trim()}>
                   {sign}
                   <CurrencyText>{format(change.abs)}</CurrencyText>
                   {change.pct !== null &&
