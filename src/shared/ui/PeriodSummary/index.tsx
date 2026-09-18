@@ -1,6 +1,6 @@
 import { Amount } from '@/shared/ui/Amount';
 import { VCard } from '@/shared/ui/VCard';
-import { formatAmount, percentOfIncome, type ConvertOptions } from '@/shared/utils';
+import { type ConvertOptions } from '@/shared/utils';
 import styles from './PeriodSummary.module.css';
 
 interface PeriodSummaryProps {
@@ -29,17 +29,11 @@ export const PeriodSummary = ({
   return (
     <div className={styles.grid}>
       {items.map((item) => {
-        const percent = percentOfIncome(item.value, income);
         return (
           <VCard key={item.label} className={styles.card}>
             <div className={styles.label}>{item.label}</div>
             <div className={styles.value} data-tone={item.tone}>
               <Amount value={item.value} currencySymbol={currencySymbol} convert={convertOptions} />
-            </div>
-            <div className={styles.percent}>
-              {percent === null
-                ? 'Доля не определена: нет дохода'
-                : `${formatAmount(percent)}% от дохода`}
             </div>
           </VCard>
         );

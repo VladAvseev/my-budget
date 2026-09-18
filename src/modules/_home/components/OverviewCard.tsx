@@ -45,7 +45,6 @@ export const OverviewCard = () => {
   }
   const { income, expense } = bootstrap.globalTotals;
   const capital = capitalQuery.capital ?? 0;
-  const expensePercent = percentOfIncome(expense, income);
   const capitalSavingsRate = capital > 0 ? percentOfIncome(capital, income) : null;
 
   return (
@@ -86,9 +85,6 @@ export const OverviewCard = () => {
             <span className={styles.cardFactLabel}>Расходы</span>
             <span className={`${styles.cardFactValue} ${styles.expenseValue}`}>
               <CurrencyText>{formatAmount(expense, currency?.symbol)}</CurrencyText>
-              {expensePercent != null && (
-                <span className={styles.cardFactSub}> · {expensePercent}% от доходов</span>
-              )}
             </span>
           </div>
         </div>

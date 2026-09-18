@@ -41,7 +41,6 @@ export const LastReportCard = () => {
 
   const expenses = summary.expense;
   const balance = summary.income - expenses;
-  const expensePercent = percentOfIncome(expenses, summary.income);
   const balanceSavingsRate = balance > 0 ? percentOfIncome(balance, summary.income) : null;
 
   return (
@@ -80,9 +79,6 @@ export const LastReportCard = () => {
               <span className={styles.heroFactLabel}>Расходы</span>
               <span className={styles.heroFactValue}>
                 <CurrencyText>{formatAmount(expenses, currency?.symbol)}</CurrencyText>
-                {expensePercent != null && (
-                  <span className={styles.heroFactSub}> · {expensePercent}% от доходов</span>
-                )}
               </span>
             </div>
           </div>
