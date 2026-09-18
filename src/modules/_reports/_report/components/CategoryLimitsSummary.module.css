@@ -55,7 +55,7 @@
 .barFill {
   height: 100%;
   border-radius: var(--md-sys-shape-corner-extra-small);
-  transition: width var(--md-sys-motion-standard-fast-spatial);
+  transition: width var(--md-sys-motion-expressive-fast-spatial);
 }
 
 .dot {

@@ -1,12 +1,19 @@
 .accordion {
   width: 100%;
   border-radius: var(--md-sys-shape-corner-medium);
-  background-color: var(--md-sys-color-surface-container-high);
-  transition: background-color var(--md-sys-motion-expressive-fast-effects);
+  background-color: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .accordion:hover {
-  background-color: var(--md-sys-color-surface-container-high);
+  border-color: var(--md-sys-color-outline);
+}
+
+.accordion[data-open='true'] {
+  background-color: var(--md-sys-color-surface-container-low);
 }
 
 .header {

@@ -32,8 +32,10 @@ export const TransferOperationCard = ({
       description={operation.description}
       badge={
         fromName && toName ? (
-          <VBadge className={styles.transferBadge}>
-            {fromName}&nbsp;&rarr;&nbsp;{toName}
+          <VBadge className={styles.transferBadge} title={`${fromName} → ${toName}`}>
+            <span className={styles.transferBadgeText}>
+              {fromName}&nbsp;&rarr;&nbsp;{toName}
+            </span>
           </VBadge>
         ) : null
       }

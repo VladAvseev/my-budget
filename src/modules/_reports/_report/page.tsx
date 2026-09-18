@@ -16,7 +16,6 @@ import { EditOperationModal } from './components/EditOperationModal';
 import styles from './pageSkeleton.module.css';
 import layout from '../reports.module.css';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
-import { formatDisplay } from '@/shared/utils';
 
 export const Page: React.FC = () => {
   const navigate = useNavigate();
@@ -53,11 +52,6 @@ export const Page: React.FC = () => {
         )}
       </div>
 
-      {report && (
-        <p className={layout.dates}>
-          {formatDisplay(report.period_start)} — {formatDisplay(report.period_end)}
-        </p>
-      )}
       {error && (
         <VErrorCard
           title="Не удалось загрузить период"

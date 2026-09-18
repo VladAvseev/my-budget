@@ -16,6 +16,7 @@ interface OperationCardBaseProps {
 
   badge?: ReactNode;
   date?: string | null;
+  accountName?: string | null;
   pending?: boolean;
   onOpen: () => void;
 }
@@ -27,6 +28,7 @@ export const OperationCardBase = ({
   category,
   badge,
   date,
+  accountName,
   pending = false,
   onOpen,
 }: OperationCardBaseProps) => {
@@ -63,11 +65,25 @@ export const OperationCardBase = ({
         ) : badge ? (
           badge
         ) : category?.name ? (
-          <VBadge color={category?.color ?? undefined} className={styles.badge}>
-            {category?.name}
+          <VBadge
+            color={category?.color ?? undefined}
+            className={styles.badge}
+            title={category?.name}
+          >
+            <span className={styles.badgeText}>{category?.name}</span>
           </VBadge>
         ) : null}
-        {date && <div className={styles.date}>{formatDisplay(date)}</div>}
+        {(accountName || date) && (
+          <div className={styles.meta}>
+            {accountName && (
+              <span className={styles.accountName} title={accountName}>
+                {accountName}
+              </span>
+            )}
+            {accountName && date && <span className={styles.dotSeparator}>&middot;</span>}
+            {date && <span className={styles.date}>{formatDisplay(date)}</span>}
+          </div>
+        )}
       </div>
     </VCard>
   );

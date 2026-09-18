@@ -1,10 +1,19 @@
 .card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 8px;
   cursor: pointer;
   border-radius: var(--md-sys-shape-corner-medium);
+  background-color: var(--md-sys-color-surface-container-high);
+  border: 1px solid var(--md-sys-color-outline-variant);
   box-shadow: none;
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects);
+}
+
+.card:hover:not(.cardPending) {
+  border-color: var(--md-sys-color-outline);
 }
 
 .cardPending {
@@ -20,8 +29,10 @@
 }
 
 .amount {
-  font-size: var(--md-sys-typescale-body-large-size);
+  font: var(--md-sys-typescale-title-medium-emphasized);
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
   color: var(--md-sys-color-on-surface);
 }
 
@@ -31,42 +42,84 @@
   color: var(--md-sys-color-on-surface-variant);
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: normal;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 
 .right {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
+  text-align: right;
   align-self: stretch;
   gap: 4px;
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .date {
   font-size: var(--md-sys-typescale-body-small-size);
   color: var(--md-sys-color-on-surface-variant);
   margin-top: auto;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+  margin-top: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.accountName {
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 90px;
+}
+
+.dotSeparator {
+  color: var(--md-sys-color-outline);
+  flex-shrink: 0;
+  font-size: var(--md-sys-typescale-body-small-size);
 }
 
 .badge {
   font-size: var(--md-sys-typescale-label-large-size);
   font-weight: var(--md-sys-typescale-label-large-weight);
   color: var(--md-sys-color-on-surface);
+  max-width: 140px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.badgeText {
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  flex-shrink: 0;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .transferBadge {
-  max-width: 100%;
+  max-width: 160px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.transferBadgeText {
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: normal;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .row {
@@ -80,22 +133,19 @@
   font-size: var(--md-sys-typescale-body-large-size);
 }
 
-.amount {
-  font: var(--md-sys-typescale-title-medium-emphasized);
-  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  font-variant-numeric: tabular-nums;
-  overflow-wrap: anywhere;
-}
 .card:focus-visible {
   outline: 3px solid var(--md-sys-color-primary);
   outline-offset: 3px;
 }
+
 @media (min-width: 600px) {
-  .card {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  .badge {
+    max-width: 240px;
   }
-  .right {
-    align-items: flex-end;
-    text-align: right;
+  .transferBadge {
+    max-width: 240px;
+  }
+  .accountName {
+    max-width: 160px;
   }
 }

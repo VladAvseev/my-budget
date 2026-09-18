@@ -254,29 +254,29 @@ export const CategoryLimitsCard = ({ report }: CategoryLimitsCardProps) => {
           ))}
 
         {!isLoading && (
-          <div>
+          <div className={styles.actionsFooter}>
             <VButton variant="secondary" onClick={addLimit} isDisabled={setLimits.isPending}>
               Добавить
             </VButton>
+
+            <div className={styles.rowEndGap}>
+              <VButton
+                variant="secondary"
+                onClick={handleCancel}
+                isDisabled={!isDirty || setLimits.isPending}
+              >
+                Отмена
+              </VButton>
+              <VButton
+                onClick={handleSave}
+                isLoading={setLimits.isPending}
+                isDisabled={!isDirty || isLoading}
+              >
+                Сохранить
+              </VButton>
+            </div>
           </div>
         )}
-
-        <div className={styles.rowEndGap}>
-          <VButton
-            variant="secondary"
-            onClick={handleCancel}
-            isDisabled={!isDirty || setLimits.isPending}
-          >
-            Отмена
-          </VButton>
-          <VButton
-            onClick={handleSave}
-            isLoading={setLimits.isPending}
-            isDisabled={!isDirty || isLoading}
-          >
-            Сохранить
-          </VButton>
-        </div>
       </div>
 
       <ImportLimitsModal

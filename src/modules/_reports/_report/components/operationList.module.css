@@ -79,3 +79,7 @@
   overflow-wrap: anywhere;
   flex-shrink: 1;
 }
+
+.toolbarAction {
+  margin-left: auto;
+}

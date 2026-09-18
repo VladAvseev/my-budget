@@ -5,6 +5,7 @@ import { VCard } from '@/shared/ui/VCard';
 import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useNavigate, useParams } from 'react-router-dom';
+import { formatDisplay } from '@/shared/utils';
 import { useReport } from '../api/useReport';
 import { CategoryLimitsCard } from './components/CategoryLimitsCard';
 import { RemoveReportCard } from './components/RemoveReportCard';
@@ -21,6 +22,12 @@ export const Page: React.FC = () => {
         onBack={() => navigate(`/reports/${id ?? ''}`)}
         backAriaLabel="Назад к периоду"
       />
+
+      {report && (
+        <p className={layout.dates}>
+          {formatDisplay(report.period_start)} — {formatDisplay(report.period_end)}
+        </p>
+      )}
 
       {isLoading && (
         <>

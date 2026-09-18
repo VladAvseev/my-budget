@@ -17,6 +17,7 @@ import { groupedByTypeAtom, operationModalAtom } from '../atoms/report';
 import { categoryTypeForOperation } from '../api/categoryTypeForOperation';
 import { useCategoryLimits } from '../api/useCategoryLimits';
 import { useCategoriesByType } from '../api/useCategories';
+import { useAccounts } from '@/shared/api/hooks/useAccounts';
 import { useOperations } from '../api/useOperations';
 import { OperationCard } from './OperationCard';
 import { CategoryLimitsSummary, formatLimitValue, getLimitColor } from './CategoryLimitsSummary';
@@ -31,6 +32,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const operationsQuery = useOperations(reportId, type);
+  const accountsQuery = useAccounts(userId);
   
   const categoryType = categoryTypeForOperation(type);
   const categoriesQuery = useCategoriesByType(
@@ -48,6 +50,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   const operationsError = operationsQuery.error;
   const hasOperationsData = operationsQuery.data != null;
   const categories = categoriesQuery.data ?? [];
+  const accounts = accountsQuery.data ?? [];
   const limits = limitsQuery.data ?? [];
   const isTransfer = type === 'transfer';
   
@@ -58,6 +61,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
   };
 
   const categoriesById = new Map(categories.map((category) => [category.id, category]));
+  const accountsById = new Map(accounts.map((account) => [account.id, account]));
   const limitsByCategory = new Map(limits.map((limit) => [limit.category_id, limit]));
 
   const groups = useMemo(() => {
@@ -111,6 +115,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
         <VIconButton
           variant="filled"
           ariaLabel="Новая операция"
+          className={styles.toolbarAction}
           onClick={() => setModal({ type, operation: null })}
         >
           <PlusIcon size={20} color="currentColor" />
@@ -158,6 +163,7 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
                 operation={operation}
                 pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
                 category={operation.category_id ? categoriesById.get(operation.category_id) : null}
+                account={operation.account_id ? accountsById.get(operation.account_id) : null}
               />
             </div>
           ))}
@@ -206,6 +212,9 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
                         pending={Boolean((operation as { _optimistic?: boolean })._optimistic)}
                         category={
                           operation.category_id ? categoriesById.get(operation.category_id) : null
+                        }
+                        account={
+                          operation.account_id ? accountsById.get(operation.account_id) : null
                         }
                       />
                     ))}
