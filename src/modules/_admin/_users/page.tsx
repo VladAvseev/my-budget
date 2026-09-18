@@ -1,7 +1,7 @@
 import { useAuth } from '@/shared/api/authProvider';
 import commonStyles from '@/shared/styles/common.module.css';
 import type { AdminUserRow } from './api/useAdminUsers';
-import { TrashIcon } from '@/shared/icons';
+import { ClearIcon, TrashIcon } from '@/shared/icons';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
@@ -116,7 +116,7 @@ export const Page: React.FC = () => {
   };
 
   const sortIndicator = (key: ColumnKey): string =>
-    key === sortKey ? (sortDirection === 'asc' ? '▲' : '▼') : '';
+    key === sortKey ? (sortDirection === 'asc' ? '↑' : '↓') : '';
 
   if (usersQuery.isLoading) {
     return (
@@ -127,8 +127,12 @@ export const Page: React.FC = () => {
             <caption className={styles.caption}>Пользователи</caption>
             <thead>
               <tr>
-                {COLUMNS.map(({ key, label }) => (
-                  <th key={key} scope="col">
+                {COLUMNS.map(({ key, label, sortType }) => (
+                  <th
+                    key={key}
+                    scope="col"
+                    className={sortType === 'number' ? styles.thRight : undefined}
+                  >
                     {label}
                   </th>
                 ))}
@@ -139,7 +143,7 @@ export const Page: React.FC = () => {
               {Array.from({ length: 8 }, (_, rowIndex) => (
                 <tr key={rowIndex}>
                   {Array.from({ length: COLUMNS.length + 1 }, (_, cellIndex) => (
-                    <td key={cellIndex}>
+                    <td key={cellIndex} className={cellIndex >= 2 && cellIndex <= 6 ? styles.numCell : undefined}>
                       <VSkeleton height={16} width={cellIndex === 0 ? 140 : 48} />
                     </td>
                   ))}
@@ -167,43 +171,59 @@ export const Page: React.FC = () => {
 
   return (
     <div className={commonStyles.page}>
-      <VTextInput
-        value={search}
-        onChange={setSearch}
-        placeholder="Поиск по всем колонкам"
-        className={styles.search}
-      />
+      <div className={styles.searchWrapper}>
+        <VTextInput
+          value={search}
+          onChange={setSearch}
+          placeholder="Поиск по всем колонкам…"
+          className={styles.search}
+        />
+        {search && (
+          <button
+            type="button"
+            className={styles.clearSearch}
+            aria-label="Очистить поиск"
+            onClick={() => setSearch('')}
+          >
+            <ClearIcon size={16} />
+          </button>
+        )}
+      </div>
+
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <caption className={styles.caption}>Пользователи</caption>
           <thead>
             <tr>
-              {COLUMNS.map(({ key, label }) => (
-                <th
-                  key={key}
-                  scope="col"
-                  aria-sort={
-                    key === sortKey
-                      ? sortDirection === 'asc'
-                        ? 'ascending'
-                        : 'descending'
-                      : undefined
-                  }
-                  className={key === sortKey ? styles.sorted : undefined}
-                >
-                  <button
-                    type="button"
-                    className={styles.sortButton}
-                    onClick={() => handleSort(key)}
-                    aria-label={`Сортировать по «${label}»`}
+              {COLUMNS.map(({ key, label, sortType }) => {
+                const isNum = sortType === 'number';
+                return (
+                  <th
+                    key={key}
+                    scope="col"
+                    aria-sort={
+                      key === sortKey
+                        ? sortDirection === 'asc'
+                          ? 'ascending'
+                          : 'descending'
+                        : undefined
+                    }
+                    className={`${key === sortKey ? styles.sorted : ''}${isNum ? ` ${styles.thRight}` : ''}`.trim() || undefined}
                   >
-                    <span>{label}</span>
-                    <span className={styles.sortIndicator} aria-hidden="true">
-                      {sortIndicator(key)}
-                    </span>
-                  </button>
-                </th>
-              ))}
+                    <button
+                      type="button"
+                      className={`${styles.sortButton}${isNum ? ` ${styles.sortButtonRight}` : ''}`}
+                      onClick={() => handleSort(key)}
+                      aria-label={`Сортировать по «${label}»`}
+                    >
+                      <span>{label}</span>
+                      <span className={styles.sortIndicator} aria-hidden="true">
+                        {sortIndicator(key)}
+                      </span>
+                    </button>
+                  </th>
+                );
+              })}
               <th scope="col">Действие</th>
             </tr>
           </thead>
@@ -211,7 +231,20 @@ export const Page: React.FC = () => {
             {rows.length === 0 ? (
               <tr>
                 <td colSpan={COLUMNS.length + 1} className={styles.empty}>
-                  Пользователи не найдены
+                  {search ? (
+                    <div className={styles.emptySearch}>
+                      <span>Ничего не найдено по запросу «{search}»</span>
+                      <button
+                        type="button"
+                        className={styles.resetFilterButton}
+                        onClick={() => setSearch('')}
+                      >
+                        Сбросить поиск
+                      </button>
+                    </div>
+                  ) : (
+                    'Пользователи не найдены'
+                  )}
                 </td>
               </tr>
             ) : (
@@ -219,11 +252,11 @@ export const Page: React.FC = () => {
                 <tr key={row.user_id}>
                   <td>{row.login}</td>
                   <td>{formatDate(row.last_active_at)}</td>
-                  <td>{formatAmount(row.reportsCount)}</td>
-                  <td>{formatAmount(row.operationsCount)}</td>
-                  <td>{formatAmount(row.categoriesCount)}</td>
-                  <td>{formatAmount(row.accountsCount)}</td>
-                  <td>{formatAmount(row.goalsCount)}</td>
+                  <td className={styles.numCell}>{formatAmount(row.reportsCount)}</td>
+                  <td className={styles.numCell}>{formatAmount(row.operationsCount)}</td>
+                  <td className={styles.numCell}>{formatAmount(row.categoriesCount)}</td>
+                  <td className={styles.numCell}>{formatAmount(row.accountsCount)}</td>
+                  <td className={styles.numCell}>{formatAmount(row.goalsCount)}</td>
                   <td className={styles.actionCell}>
                     {row.user_id !== current?.id && (
                       <VIconButton

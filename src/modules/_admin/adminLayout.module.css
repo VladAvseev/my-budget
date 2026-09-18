@@ -46,6 +46,7 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   min-height: 40px;
   padding: 8px 16px;
   border-radius: var(--md-sys-shape-corner-full);
@@ -61,7 +62,7 @@
 }
 
 .tabLink:hover {
-  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
   color: var(--md-sys-color-on-surface);
 }
 
@@ -76,7 +77,7 @@
 
 .tabLink[aria-current='page'] {
   background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  color: var(--md-sys-color-on-primary-container);
   font: var(--md-sys-typescale-label-large-emphasized);
   letter-spacing: var(--md-sys-typescale-label-large-emphasized-tracking);
 }
@@ -85,6 +86,7 @@
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
+  gap: 8px;
   min-height: 40px;
   padding: 8px 16px;
   border-radius: var(--md-sys-shape-corner-full);

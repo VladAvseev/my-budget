@@ -5,7 +5,7 @@ interface OperationsDynamicsStatsProps {
   stats: DynamicsStatsData;
 }
 
-const formatAbs = (value: number): string => `${Math.round(value)}`;
+const formatAbs = (value: number): string => Math.round(value).toLocaleString('ru-RU');
 
 export const OperationsDynamicsStats = ({ stats }: OperationsDynamicsStatsProps) => {
   const { periodRate, lastPeriod, periodLabel, lastPeriodLabel } = stats;

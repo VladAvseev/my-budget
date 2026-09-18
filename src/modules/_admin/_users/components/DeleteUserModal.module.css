@@ -22,11 +22,10 @@
   justify-content: center;
   width: 32px;
   height: 32px;
+  padding: 6px;
   border-radius: var(--md-sys-shape-corner-full);
   background-color: var(--md-sys-color-error);
   color: var(--md-sys-color-on-error);
-  font: var(--md-sys-typescale-title-medium-emphasized);
-  letter-spacing: var(--md-sys-typescale-title-medium-emphasized-tracking);
 }
 
 .warningText {

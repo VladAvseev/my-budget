@@ -53,12 +53,16 @@ export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ user, onClose 
     >
       <div className={styles.body}>
         <div className={styles.warning}>
-          <span className={styles.warningIcon} aria-hidden="true">
-            !
-          </span>
+          <svg
+            className={styles.warningIcon}
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="currentColor"
+          >
+            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+          </svg>
           <p className={`${commonStyles.textSecondary} ${styles.warningText}`}>
-            Безвозвратно удалит аккаунт и все его данные: периоды, операции, категории. Отменить
-            это действие нельзя.
+            Аккаунт будет деактивирован, а персональные данные обезличены без возможности восстановления. Отменить это действие нельзя.
           </p>
         </div>
         <p className={styles.confirmText}>

@@ -56,15 +56,23 @@ export const UsersActivityCard: React.FC<UsersActivityCardProps> = ({ users, act
       <div className={styles.tableScroll}>
         <div className={styles.statGrid}>
           <span className={styles.statHeaderCell}>Показатель</span>
-          <span className={styles.statHeaderCell}>Кол-во</span>
-          <span className={styles.statHeaderCell}>Доля</span>
-          {userRows.map(({ label, value }) => (
-            <span key={label} className={styles.statRowGroup}>
-              <span className={styles.statLabel}>{label}</span>
-              <span className={styles.statValue}>{value}</span>
-              <span className={styles.statPercent}>{percent(value, total)}%</span>
-            </span>
-          ))}
+          <span className={`${styles.statHeaderCell} ${styles.statHeaderCellRight}`}>Кол-во</span>
+          <span className={`${styles.statHeaderCell} ${styles.statHeaderCellRight}`}>Доля</span>
+          {userRows.map(({ label, value }) => {
+            const pct = percent(value, total);
+            return (
+              <span key={label} className={styles.statRowGroup}>
+                <span className={styles.statLabel}>{label}</span>
+                <span className={styles.statValue}>{value.toLocaleString('ru-RU')}</span>
+                <span className={styles.percentWithBar}>
+                  <span>{pct}%</span>
+                  <span className={styles.miniTrack}>
+                    <span className={styles.miniFill} style={{ width: `${pct}%` }} />
+                  </span>
+                </span>
+              </span>
+            );
+          })}
         </div>
       </div>
 
@@ -72,19 +80,33 @@ export const UsersActivityCard: React.FC<UsersActivityCardProps> = ({ users, act
       <div className={styles.tableScroll}>
         <div className={styles.statGrid5}>
           <span className={styles.statHeaderCell}>Период</span>
-          <span className={styles.statHeaderCell}>Активные</span>
-          <span className={styles.statHeaderCell}>Доля</span>
-          <span className={styles.statHeaderCell}>Неактивные</span>
-          <span className={styles.statHeaderCell}>Доля</span>
-          {activityRows.map(({ period, active, inactive }) => (
-            <span key={period} className={styles.statRowGroup}>
-              <span className={styles.statLabel}>{period}</span>
-              <span className={styles.statValue}>{active}</span>
-              <span className={styles.statPercent}>{percent(active, total)}%</span>
-              <span className={styles.statValue}>{inactive}</span>
-              <span className={styles.statPercent}>{percent(inactive, total)}%</span>
-            </span>
-          ))}
+          <span className={`${styles.statHeaderCell} ${styles.statHeaderCellRight}`}>Активные</span>
+          <span className={`${styles.statHeaderCell} ${styles.statHeaderCellRight}`}>Доля</span>
+          <span className={`${styles.statHeaderCell} ${styles.statHeaderCellRight}`}>Неактивные</span>
+          <span className={`${styles.statHeaderCell} ${styles.statHeaderCellRight}`}>Доля</span>
+          {activityRows.map(({ period, active, inactive }) => {
+            const activePct = percent(active, total);
+            const inactivePct = percent(inactive, total);
+            return (
+              <span key={period} className={styles.statRowGroup}>
+                <span className={styles.statLabel}>{period}</span>
+                <span className={styles.statValue}>{active.toLocaleString('ru-RU')}</span>
+                <span className={styles.percentWithBar}>
+                  <span>{activePct}%</span>
+                  <span className={styles.miniTrack}>
+                    <span className={styles.miniFill} style={{ width: `${activePct}%` }} />
+                  </span>
+                </span>
+                <span className={styles.statValue}>{inactive.toLocaleString('ru-RU')}</span>
+                <span className={styles.percentWithBar}>
+                  <span>{inactivePct}%</span>
+                  <span className={styles.miniTrack}>
+                    <span className={styles.miniFillInactive} style={{ width: `${inactivePct}%` }} />
+                  </span>
+                </span>
+              </span>
+            );
+          })}
         </div>
       </div>
     </VCard>

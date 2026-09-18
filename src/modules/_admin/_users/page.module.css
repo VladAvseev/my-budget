@@ -40,12 +40,20 @@
   background-color: var(--md-sys-color-surface-container-low);
 }
 
+.thRight {
+  text-align: right;
+}
+
 .table td {
   padding: 10px 8px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
   color: var(--md-sys-color-on-surface);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+}
+
+.numCell {
+  text-align: right;
 }
 
 .table tbody tr {
@@ -83,8 +91,13 @@
     border-radius var(--md-sys-motion-expressive-fast-spatial);
 }
 
+.sortButtonRight {
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .sortButton:hover {
-  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
   color: var(--md-sys-color-on-surface);
 }
 
@@ -99,9 +112,54 @@
 
 .sortIndicator {
   display: inline-block;
-  width: 1em;
+  min-width: 1em;
   font-size: var(--md-sys-typescale-body-small-size);
   color: var(--md-sys-color-primary);
+}
+
+.searchWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.clearSearch {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: none;
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+}
+
+.clearSearch:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+  color: var(--md-sys-color-on-surface);
+}
+
+.emptySearch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.resetFilterButton {
+  background: none;
+  border: none;
+  color: var(--md-sys-color-primary);
+  font: var(--md-sys-typescale-label-large);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .actionCell {

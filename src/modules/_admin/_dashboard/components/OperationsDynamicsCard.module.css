@@ -53,8 +53,16 @@
 .controls {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 16px;
+  min-width: 0;
+}
+
+.controlsGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 8px 12px;
   min-width: 0;
 }

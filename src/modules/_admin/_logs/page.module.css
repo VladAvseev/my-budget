@@ -278,8 +278,13 @@
 }
 
 .statusOk {
-  background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-custom-color-success-container);
+  color: var(--md-custom-color-on-success-container);
+}
+
+.statusRedirect {
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .statusError {
@@ -290,6 +295,16 @@
 .statusWarning {
   background-color: var(--md-sys-color-tertiary-container);
   color: var(--md-sys-color-on-tertiary-container);
+}
+
+.numCellWarning {
+  color: var(--sys-color-warning-ink, var(--md-custom-color-warning));
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+}
+
+.numCellError {
+  color: var(--md-sys-color-error);
+  font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
 }
 
 .detailsCell {

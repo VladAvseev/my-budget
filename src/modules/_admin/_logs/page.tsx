@@ -1,4 +1,5 @@
 import commonStyles from '@/shared/styles/common.module.css';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/shared/icons';
 import { VButton } from '@/shared/ui/VButton';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
@@ -378,15 +379,22 @@ export const Page: React.FC = () => {
                     </tr>
                   ) : (
                     logs.items.map((row: AdminLogRow) => {
-                      
                       const statusClass =
                         row.status >= 500
                           ? styles.statusError
                           : row.status >= 400
                             ? styles.statusWarning
-                            : styles.statusOk;
-                      
-                      
+                            : row.status >= 300
+                              ? styles.statusRedirect
+                              : styles.statusOk;
+
+                      const durationClass =
+                        row.durationMs >= 1000
+                          ? styles.numCellError
+                          : row.durationMs >= 500
+                            ? styles.numCellWarning
+                            : undefined;
+
                       const isExpanded = row.error !== null && expandedIds.has(row.id);
                       return (
                         <Fragment key={row.id}>
@@ -419,7 +427,7 @@ export const Page: React.FC = () => {
                             <td>
                               <span className={`${styles.chip} ${statusClass}`}>{row.status}</span>
                             </td>
-                            <td className={styles.numCell}>
+                            <td className={`${styles.numCell}${durationClass ? ` ${durationClass}` : ''}`}>
                               {formatNumber(row.durationMs)} мс
                             </td>
                             <td>
@@ -456,7 +464,8 @@ export const Page: React.FC = () => {
                 isDisabled={page <= 1}
                 onClick={() => setPage((current) => Math.max(1, current - 1))}
               >
-                ← Назад
+                <ChevronLeftIcon size={18} />
+                Назад
               </VButton>
               <span className={styles.paginationInfo}>
                 Стр. {logs.page} из {totalPages} · всего {formatNumber(logs.total)}
@@ -466,7 +475,8 @@ export const Page: React.FC = () => {
                 isDisabled={page >= totalPages}
                 onClick={() => setPage((current) => current + 1)}
               >
-                Вперёд →
+                Вперёд
+                <ChevronRightIcon size={18} />
               </VButton>
             </div>
           </>

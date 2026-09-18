@@ -96,12 +96,16 @@ export const OperationsDynamicsCard = () => {
         )}
       </div>
       <div className={styles.controls}>
-        <VButtonGroup options={metricOptions} value={metric} onChange={setMetric} />
-        <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
-        {metric === 'count' && (
-          <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />
-        )}
-        <VButtonGroup options={aggregationOptions} value={aggregation} onChange={setAggregation} />
+        <div className={styles.controlsGroup}>
+          <VButtonGroup options={metricOptions} value={metric} onChange={setMetric} />
+          <VButtonGroup options={aggregationOptions} value={aggregation} onChange={setAggregation} />
+        </div>
+        <div className={styles.controlsGroup}>
+          {metric === 'count' && (
+            <VButtonGroup options={modeOptions} value={mode} onChange={setMode} />
+          )}
+          <VButtonGroup options={audienceOptions} value={audience} onChange={setAudience} />
+        </div>
       </div>
 
       <div className={isStale ? styles.stale : undefined}>
@@ -112,7 +116,7 @@ export const OperationsDynamicsCard = () => {
         ) : effectiveMode === 'cumulative' ? (
           <VGrowthChart
             data={chartData}
-            color="var(--md-sys-color-tertiary)"
+            color="var(--sys-color-positive-ink)"
             formatValue={formatCount}
             showChange={true}
           />

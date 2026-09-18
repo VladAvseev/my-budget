@@ -61,6 +61,61 @@
   white-space: nowrap;
 }
 
+.statHeaderCellRight {
+  justify-self: end;
+}
+
+.distributionBar {
+  display: flex;
+  height: 8px;
+  width: 100%;
+  border-radius: var(--md-sys-shape-corner-full);
+  overflow: hidden;
+  background-color: var(--md-sys-color-surface-container-highest);
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.distributionSegment {
+  height: 100%;
+}
+
+.percentWithBar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  justify-self: end;
+}
+
+.miniTrack {
+  width: 36px;
+  height: 6px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-surface-container-highest);
+  overflow: hidden;
+  display: inline-flex;
+}
+
+.miniFill {
+  height: 100%;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-primary);
+}
+
+.miniFillInactive {
+  height: 100%;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-outline-variant);
+}
+
+.skeletonRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .statSubheader {
   grid-column: 1 / -1;
   margin-top: 8px;
@@ -100,7 +155,7 @@
   font: var(--md-sys-typescale-body-medium);
   letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  color: var(--md-sys-color-tertiary);
+  color: var(--sys-color-warning-ink, var(--md-custom-color-warning));
   font-variant-numeric: tabular-nums;
 }
 
