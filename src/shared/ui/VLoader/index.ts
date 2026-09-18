@@ -1,2 +1,3 @@
-export { VLoader } from './VLoader';
-export type { VLoaderProps } from './VLoader';
+export { VLoader, type VLoaderProps } from './VLoader';
+export { VBrandLoader, type VBrandLoaderProps } from './VBrandLoader';
+export { VCircularLoader, type VCircularLoaderProps } from './VCircularLoader';

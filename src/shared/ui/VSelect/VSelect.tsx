@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ClearIcon } from '@/shared/icons';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VCircularLoader } from '@/shared/ui/VLoader';
 import {
   useEffect,
   useId,
@@ -146,7 +146,7 @@ export const VSelect = ({
           )}
           {loading ? (
             <span className={styles.loader} role="status" aria-label="Загрузка">
-              <VLoader size={16} />
+              <VCircularLoader size={16} />
             </span>
           ) : (
             <span className={styles.chevron}>

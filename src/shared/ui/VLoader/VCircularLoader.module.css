@@ -1,0 +1,25 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--md-sys-color-primary);
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.spinner {
+  animation: vcircular-spin 0.85s linear infinite;
+  display: block;
+}
+
+@keyframes vcircular-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

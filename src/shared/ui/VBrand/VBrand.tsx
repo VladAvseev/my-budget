@@ -1,18 +1,17 @@
-import { BanknotesIcon } from '@/shared/icons';
+import { VLogo } from '@/shared/ui/VLogo';
 import { Link } from 'react-router-dom';
 import styles from './VBrand.module.css';
 
 export interface VBrandProps {
-  
+  /** Маршрут для перехода при клике (по умолчанию на главную '/') */
   to?: string;
   className?: string;
 }
 
-
-export const VBrand = ({ to, className }: VBrandProps) => {
+export const VBrand = ({ to = '/', className }: VBrandProps) => {
   const content = (
     <>
-      <BanknotesIcon size={24} />
+      <VLogo size={28} className={styles.logo} />
       <span className={styles.title}>Мои финансы</span>
     </>
   );

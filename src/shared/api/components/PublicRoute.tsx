@@ -1,5 +1,5 @@
 import commonStyles from '@/shared/styles/common.module.css';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VBrandLoader } from '@/shared/ui/VLoader';
 import type { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../authProvider';
@@ -14,7 +14,7 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   if (loading) {
     return (
       <div className={commonStyles.centeredContent}>
-        <VLoader size={32} />
+        <VBrandLoader size={64} />
       </div>
     );
   }

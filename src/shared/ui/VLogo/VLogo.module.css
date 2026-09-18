@@ -1,0 +1,98 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.backBill {
+  transform-origin: 22px 22px;
+  transition: transform var(--md-sys-motion-expressive-fast-spatial, 350ms ease);
+}
+
+.frontBill {
+  transform-origin: 25px 26px;
+  transition: transform var(--md-sys-motion-expressive-fast-spatial, 350ms ease);
+}
+
+.sparkle {
+  transform-origin: 0 0;
+  transition: transform var(--md-sys-motion-expressive-default-spatial, 500ms ease);
+}
+
+/* Интерактивный микро-отклик при наведении на ссылку или бренд */
+:global(a:hover) .frontBill,
+:global(a:focus-visible) .frontBill,
+.root:hover .frontBill {
+  transform: translate(25px, 25px) rotate(8deg) translate(-17px, -9.5px);
+}
+
+:global(a:hover) .backBill,
+:global(a:focus-visible) .backBill,
+.root:hover .backBill {
+  transform: translate(22px, 22px) rotate(-17deg) translate(-16px, -8.8px);
+}
+
+:global(a:hover) .sparkle,
+:global(a:focus-visible) .sparkle,
+.root:hover .sparkle {
+  transform: scale(1.25) rotate(15deg);
+}
+
+/* Режим непрерывной анимации (для акцентных карточек / презентаций) */
+.animated .frontBill {
+  animation: vlogo-front-float 2.8s var(--md-sys-motion-expressive-default-spatial-easing, ease-in-out) infinite;
+}
+
+.animated .backBill {
+  animation: vlogo-back-float 2.8s var(--md-sys-motion-expressive-default-spatial-easing, ease-in-out) infinite;
+}
+
+.animated .sparkle {
+  animation: vlogo-sparkle-glint 2.8s var(--md-sys-motion-expressive-default-spatial-easing, ease-in-out) infinite;
+}
+
+@keyframes vlogo-front-float {
+  0%, 100% {
+    transform: translate(25px, 26px) rotate(5deg) translate(-17px, -9.5px);
+  }
+  50% {
+    transform: translate(25px, 24px) rotate(8deg) translate(-17px, -9.5px);
+  }
+}
+
+@keyframes vlogo-back-float {
+  0%, 100% {
+    transform: translate(22px, 22px) rotate(-14deg) translate(-16px, -8.8px);
+  }
+  50% {
+    transform: translate(21px, 23px) rotate(-17deg) translate(-16px, -8.8px);
+  }
+}
+
+@keyframes vlogo-sparkle-glint {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.3) rotate(30deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backBill,
+  .frontBill,
+  .sparkle {
+    transition: none !important;
+    animation: none !important;
+  }
+}

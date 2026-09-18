@@ -17,7 +17,7 @@ export const TopBar = ({ topNavRef, isAdmin }: TopBarProps) => {
   return (
     <header className={styles.topbar}>
       <div className={styles.topbarInner}>
-        <VBrand className={styles.brand} />
+        <VBrand to="/" className={styles.brand} />
 
         <nav ref={topNavRef} className={styles.topNav} aria-label="Основная навигация">
           {NAV_ITEMS.map((item) => (

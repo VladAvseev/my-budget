@@ -1,10 +1,10 @@
 import { lazy, Suspense, type ComponentType } from 'react';
 import commonStyles from '@/shared/styles/common.module.css';
-import { VLoader } from '@/shared/ui/VLoader';
+import { VBrandLoader } from '@/shared/ui/VLoader';
 
 const PageFallback = () => (
   <div className={commonStyles.loaderContainer}>
-    <VLoader size={28} />
+    <VBrandLoader size={64} />
   </div>
 );
 

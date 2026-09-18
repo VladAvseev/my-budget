@@ -1,0 +1,119 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  vertical-align: middle;
+  flex-shrink: 0;
+  user-select: none;
+  overflow: visible;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Орбитальное вращение строго вокруг центра иконки (24px 24px) */
+.rotatingCluster {
+  transform-origin: 24px 24px;
+  animation: vbrand-spin 2.2s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+}
+
+/* Задняя купюра: грациозный веер вокруг центра (24px 24px) */
+.backBill {
+  transform-origin: 24px 24px;
+  animation: vbrand-back-fan 2.2s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+}
+
+/* Передняя купюра: динамический наклон вокруг центра (24px 24px) */
+.frontBill {
+  transform-origin: 24px 24px;
+  animation: vbrand-front-fan 2.2s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+}
+
+/* Монета в центре: мягкая пульсация */
+.coinGlow {
+  transform-origin: 24px 24px;
+  animation: vbrand-coin-pulse 2.2s ease-in-out infinite;
+}
+
+/* Фирменная искра: аккуратное сияние строго на своём месте внутри купюры */
+.sparkle {
+  transform-origin: 0 0;
+  animation: vbrand-sparkle 2.2s ease-in-out infinite;
+}
+
+/* Ключевые кадры вращения вокруг точного центра (24px, 24px) */
+@keyframes vbrand-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes vbrand-back-fan {
+  0%, 100% {
+    transform: rotate(-14deg);
+  }
+  35% {
+    transform: rotate(-24deg);
+  }
+  70% {
+    transform: rotate(-14deg);
+  }
+}
+
+@keyframes vbrand-front-fan {
+  0%, 100% {
+    transform: rotate(5deg);
+  }
+  35% {
+    transform: rotate(14deg);
+  }
+  70% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes vbrand-coin-pulse {
+  0%, 100% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 0px rgba(139, 206, 255, 0));
+  }
+  35% {
+    opacity: 1;
+    filter: drop-shadow(0 0 3px rgba(139, 206, 255, 0.8));
+  }
+}
+
+@keyframes vbrand-sparkle {
+  0%, 100% {
+    transform: scale(0.85) rotate(0deg);
+    opacity: 0.7;
+  }
+  35% {
+    transform: scale(1.25) rotate(90deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 2px var(--md-sys-color-primary-fixed-dim, #8bceff));
+  }
+  70% {
+    transform: scale(0.85) rotate(0deg);
+    opacity: 0.7;
+  }
+}
+
+/* Отключение анимаций при prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .rotatingCluster,
+  .backBill,
+  .frontBill,
+  .coinGlow,
+  .sparkle {
+    animation: none !important;
+  }
+}

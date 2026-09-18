@@ -1,34 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Фон: градиент и тень -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#c6e4b4"/>
-      <stop offset="100%" stop-color="#96cc82"/>
+    <!-- Базовый тёмный фон -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111416" />
+      <stop offset="100%" stop-color="#1a1c1e" />
     </linearGradient>
-    <filter id="dropShadow" x="-10%" y="-10%" width="130%" height="130%">
-      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000000" flood-opacity="0.15"/>
+
+    <!-- Задняя купюра: глубокий синий (tone 20 -> 30) -->
+    <linearGradient id="backBill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#002d45" />
+      <stop offset="100%" stop-color="#004b6f" />
+    </linearGradient>
+
+    <!-- Передняя купюра: брендовый синий (tone 30 -> 50) -->
+    <linearGradient id="frontBill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#004b6f" />
+      <stop offset="100%" stop-color="#007eb6" />
+    </linearGradient>
+
+    <!-- Тень глубины Material 3 между купюрами -->
+    <filter id="shadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.65" />
     </filter>
   </defs>
 
-  <!-- Фон -->
-  <rect x="0" y="0" width="512" height="512" rx="48" fill="url(#bgGrad)"/>
+  <!-- Базовый сквиркл фона -->
+  <rect width="512" height="512" rx="120" fill="url(#bg)" />
+  <rect x="2" y="2" width="508" height="508" rx="118" fill="none" stroke="#282a2d" stroke-width="3" />
 
-  <g filter="url(#dropShadow)">
+  <!-- 1. Задняя купюра (Глубокий синий бренд) -->
+  <g transform="translate(235, 235) rotate(-14) translate(-160, -88)">
+    <rect width="320" height="176" rx="25" fill="url(#backBill)" stroke="#007eb6" stroke-width="11" stroke-opacity="0.85" />
+    <rect x="14" y="14" width="292" height="148" rx="13" fill="none" stroke="#8bceff" stroke-width="8" stroke-opacity="0.35" />
+    <circle cx="85" cy="88" r="28" fill="none" stroke="#8bceff" stroke-width="8" stroke-opacity="0.25" />
+  </g>
 
-    <!-- Задняя купюра -->
-    <g transform="translate(121, 162) rotate(-14)">
-      <rect x="-25" y="65" width="270" height="135" rx="8" fill="transparent" stroke="#0d0d0d" stroke-width="2.5"/>
+  <!-- 2. Передняя купюра (Яркий брендовый синий) -->
+  <g transform="translate(265, 275) rotate(5) translate(-170, -95)" filter="url(#shadow)">
+    <rect width="340" height="190" rx="25" fill="url(#frontBill)" stroke="#8bceff" stroke-width="12" />
+    <rect x="14" y="14" width="312" height="162" rx="14" fill="none" stroke="#c9e6ff" stroke-width="8" stroke-opacity="0.45" />
+
+    <!-- Центральный медальон: чистая минималистичная монета -->
+    <circle cx="170" cy="95" r="48" fill="#002235" stroke="#8bceff" stroke-width="9" />
+
+    <!-- Эмблема монеты: чистый кристалл-ромб с ядром без полосок и пунктира -->
+    <g id="coin-emblem">
+      <path d="M 170 68 L 195 95 L 170 122 L 145 95 Z" fill="none" stroke="#ffffff" stroke-width="8" stroke-linejoin="round" />
+      <path d="M 170 82 L 181 95 L 170 108 L 159 95 Z" fill="#c9e6ff" />
     </g>
 
-    <!-- Передняя купюра -->
-    <g transform="translate(106, 190)">
-      <rect x="0" y="0" width="300" height="150" rx="10" fill="#aadd98" stroke="#0d0d0d" stroke-width="2.5"/>
-
-      <circle cx="150" cy="75" r="46" fill="transparent" stroke="#0d0d0d" stroke-width="2.5"/>
-      <text x="150" y="100" font-family="Arial, Helvetica, sans-serif" font-size="62" font-weight="400" fill="#0d0d0d" text-anchor="middle">₽</text>
-      
-      <path d="M 225 35 L 227 42 L 234 44 L 227 46 L 225 53 L 223 46 L 216 44 L 223 42 Z" fill="#ffffff" stroke="none"/>
-    </g>
-    
+    <!-- Фирменная 4-лучевая искра (звёздочка) -->
+    <path d="M 285 20 Q 285 42 307 42 Q 285 42 285 64 Q 285 42 263 42 Q 285 42 285 20 Z" fill="#c9e6ff" />
   </g>
 </svg>
