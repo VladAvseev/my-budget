@@ -1,2 +1,3 @@
 export { VIconButton } from './VIconButton';
-export type { VIconButtonProps } from './VIconButton';
+export type { VIconButtonProps, VIconButtonVariant } from './VIconButton';
+

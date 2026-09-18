@@ -1,61 +1,85 @@
-import { ChevronRightIcon, PlusIcon } from '@/shared/icons';
+import { CalendarIcon, ChevronRightIcon, PlusIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/api/authProvider';
 
 import { VCard } from '@/shared/ui/VCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VButton } from '@/shared/ui/VButton';
+import { VIconButton } from '@/shared/ui/VIconButton';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
-import { VTextInput } from '@/shared/ui/VTextInput';
 import { formatDisplay } from '@/shared/utils';
 import { useAtom } from 'jotai';
 import { Link } from 'react-router-dom';
 import { useReports } from '../api/useReports';
-import { createModalOpenAtom, searchQueryAtom } from '../atoms/reports';
+import { createModalOpenAtom } from '../atoms/reports';
 import styles from './ReportsList.module.css';
+
+const pluralize = (count: number, one: string, few: string, many: string): string => {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return `${count} ${one}`;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return `${count} ${few}`;
+  return `${count} ${many}`;
+};
+
+const formatBudgetingBadge = (totalPeriods: number): string => {
+  if (totalPeriods <= 0) return '';
+  const years = Math.floor(totalPeriods / 12);
+  const months = totalPeriods % 12;
+
+  const parts: string[] = [];
+  if (years > 0) {
+    parts.push(pluralize(years, 'год', 'года', 'лет'));
+  }
+  if (months > 0) {
+    parts.push(`${months} мес.`);
+  }
+  return parts.join(' ');
+};
 
 export const ReportsList = () => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
-  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
   const [, setIsCreateOpen] = useAtom(createModalOpenAtom);
   const { data, isLoading, error, refetch, isFetching } = useReports(userId);
 
   const reports = data ?? [];
-  const filtered = searchQuery.trim()
-    ? reports.filter(
-        (report) =>
-          report.code.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
-          report.name.toLowerCase().includes(searchQuery.trim().toLowerCase()),
-      )
-    : reports;
 
   const today = new Date();
   const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  const years = [...new Set(filtered.map((report) => report.period_start.slice(0, 4)))].sort(
+  const years = [...new Set(reports.map((report) => report.period_start.slice(0, 4)))].sort(
     (a, b) => b.localeCompare(a),
   );
 
+  const badgeText =
+    !isLoading && !error && reports.length > 0 ? formatBudgetingBadge(reports.length) : null;
+
   return (
     <div className={styles.root}>
-      <div className={styles.toolbar}>
-        <p className={styles.intro}>Доходы, расходы и бюджет — месяц за месяцем.</p>
-        <VButton
-          className={styles.createButton}
+      <div className={styles.header}>
+        <div className={styles.left}>
+          <h1 className={styles.srOnly}>Периоды</h1>
+          {badgeText && (
+            <span
+              className={styles.durationBadge}
+              title="Срок ведения учёта бюджета"
+              aria-label={`Срок ведения учёта бюджета: ${badgeText}`}
+            >
+              <CalendarIcon size={16} aria-hidden="true" />
+              <span>{badgeText}</span>
+            </span>
+          )}
+        </div>
+        <VIconButton
+          variant="filled"
+          ariaLabel="Добавить период"
           onClick={() => setIsCreateOpen(true)}
           isDisabled={isLoading}
         >
-          <PlusIcon size={20} color="currentColor" /> Добавить период
-        </VButton>
-        <VTextInput
-          type="search"
-          aria-label="Поиск периодов по названию или коду"
-          placeholder="Название или код периода"
-          value={searchQuery}
-          onChange={setSearchQuery}
-          className={styles.searchInput}
-        />
+          <PlusIcon size={20} color="currentColor" />
+        </VIconButton>
       </div>
+
       {error && !isLoading && (
         <VErrorCard
           title="Не удалось загрузить периоды"
@@ -67,25 +91,11 @@ export const ReportsList = () => {
       {isLoading && (
         <VSkeletonList count={4} cardProps={{ compact: true, title: false, lines: 2 }} />
       )}
-      {!isLoading && !error && (
-        <p className={styles.resultCount} role="status">
-          {searchQuery.trim() ? `Найдено: ${filtered.length}` : `Всего периодов: ${reports.length}`}
-        </p>
-      )}
-      {!isLoading && !error && filtered.length === 0 && (
+      {!isLoading && !error && reports.length === 0 && (
         <VCard className={styles.emptyState}>
-          <h2>{reports.length === 0 ? 'Начните с первого месяца' : 'Периоды не найдены'}</h2>
-          <p>
-            {reports.length === 0
-              ? 'Создайте период, чтобы записывать доходы и расходы и планировать бюджет.'
-              : 'Попробуйте другое название или код периода.'}
-          </p>
-          <VButton
-            variant="secondary"
-            onClick={() => (reports.length === 0 ? setIsCreateOpen(true) : setSearchQuery(''))}
-          >
-            {reports.length === 0 ? 'Добавить период' : 'Сбросить поиск'}
-          </VButton>
+          <h2>Начните с первого месяца</h2>
+          <p>Создайте период, чтобы записывать доходы и расходы и планировать бюджет.</p>
+          <VButton onClick={() => setIsCreateOpen(true)}>Добавить период</VButton>
         </VCard>
       )}
       {!isLoading &&
@@ -95,7 +105,7 @@ export const ReportsList = () => {
               {year}
             </h2>
             <ul className={styles.list}>
-              {filtered
+              {reports
                 .filter((report) => report.period_start.startsWith(year))
                 .map((report) => {
                   const pending = Boolean((report as { _optimistic?: boolean })._optimistic);

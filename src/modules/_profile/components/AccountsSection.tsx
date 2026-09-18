@@ -5,11 +5,12 @@ import type { Account } from '@/shared/api/types/domain';
 import { CURRENCIES } from '@/shared/constants/currencies';
 import commonStyles from '@/shared/styles/common.module.css';
 import { VBanner } from '@/shared/ui/VBanner';
-import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
+import { VIconButton } from '@/shared/ui/VIconButton';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
+import { PlusIcon } from '@/shared/icons';
 import { getErrorMessage } from '@/shared/utils';
 import { useRemoveAccount } from '../api/useRemoveAccount';
 import { accountEditorAtom, deletingAccountAtom } from '../atoms/profile';
@@ -55,9 +56,13 @@ export const AccountsSection = () => {
             </span>
           )}
         </div>
-        <VButton onClick={() => setEditor({ account: null })}>
-          Добавить счёт
-        </VButton>
+        <VIconButton
+          variant="filled"
+          ariaLabel="Добавить счёт"
+          onClick={() => setEditor({ account: null })}
+        >
+          <PlusIcon size={20} color="currentColor" />
+        </VIconButton>
       </div>
 
       {accounts.error && (

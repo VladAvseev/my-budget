@@ -60,11 +60,11 @@ export const CategorySection = () => {
           <VButtonGroup options={TABS} value={activeType} onChange={setActiveType} fullWidth />
         </div>
         <VIconButton
+          variant="filled"
           ariaLabel="Добавить категорию"
           onClick={() => setIsAddOpen(true)}
-          color="var(--md-sys-color-primary)"
         >
-          <PlusIcon size={24} color="currentColor" />
+          <PlusIcon size={20} color="currentColor" />
         </VIconButton>
       </div>
 

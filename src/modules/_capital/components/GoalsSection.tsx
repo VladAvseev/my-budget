@@ -134,6 +134,7 @@ export const GoalsSection = () => {
       <div className={styles.header}>
         <h2 className={styles.heading}>Цели</h2>
         <VIconButton
+          variant="filled"
           ariaLabel="Установить цель"
           onClick={() => setGoalModal({ goal: null })}
           isDisabled={
@@ -142,9 +143,8 @@ export const GoalsSection = () => {
             !!goalsQuery.error ||
             availableAccounts.length === 0
           }
-          color="var(--md-sys-color-primary)"
         >
-          <PlusIcon size={24} color="currentColor" />
+          <PlusIcon size={20} color="currentColor" />
         </VIconButton>
       </div>
 

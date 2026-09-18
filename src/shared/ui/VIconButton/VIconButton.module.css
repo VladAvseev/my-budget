@@ -8,13 +8,13 @@
   padding: 0;
   border: none;
   border-radius: var(--md-sys-shape-corner-full);
-  background-color: transparent;
-  color: var(--md-sys-color-on-surface-variant);
+  flex-shrink: 0;
   cursor: pointer;
   box-sizing: border-box;
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects),
+    border-color var(--md-sys-motion-expressive-fast-effects),
     border-radius var(--md-sys-motion-expressive-fast-spatial);
 }
 
@@ -41,10 +41,6 @@
   opacity: var(--md-sys-state-hover-opacity);
 }
 
-.button:hover:not(:disabled) {
-  color: var(--md-sys-color-on-surface);
-}
-
 .button:focus-visible::after {
   opacity: var(--md-sys-state-focus-opacity);
 }
@@ -67,8 +63,55 @@
   cursor: not-allowed;
 }
 
-/* [ANDROIDX-M3E] Separate content disabled color instead of root opacity: 0.38 */
-.button:disabled:not([aria-busy='true']) {
+/* [ANDROIDX-M3E] Standard IconButton (default) */
+.standard {
+  background-color: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.standard:hover:not(:disabled) {
+  color: var(--md-sys-color-on-surface);
+}
+
+.standard:disabled:not([aria-busy='true']) {
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
+/* [ANDROIDX-M3E] Filled IconButton */
+.filled {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.filled:disabled:not([aria-busy='true']) {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
+/* [ANDROIDX-M3E] Filled Tonal IconButton */
+.filledTonal {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.filledTonal:disabled:not([aria-busy='true']) {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
+/* [ANDROIDX-M3E] Outlined IconButton */
+.outlined {
+  background-color: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  border: 1px solid var(--md-sys-color-outline);
+}
+
+.outlined:hover:not(:disabled) {
+  color: var(--md-sys-color-on-surface);
+}
+
+.outlined:disabled:not([aria-busy='true']) {
+  border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
   color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 

@@ -109,11 +109,11 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
           />
         )}
         <VIconButton
+          variant="filled"
           ariaLabel="Новая операция"
           onClick={() => setModal({ type, operation: null })}
-          color="var(--md-sys-color-primary)"
         >
-          <PlusIcon size={24} color="currentColor" />
+          <PlusIcon size={20} color="currentColor" />
         </VIconButton>
       </div>
 
