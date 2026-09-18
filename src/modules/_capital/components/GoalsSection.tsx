@@ -120,10 +120,6 @@ export const GoalsSection = () => {
     !reportsQuery.error &&
     (!currentReport || (!operationsQuery.isLoading && !operationsQuery.error));
   const showPeriodProgress = monthlyPlan > 0;
-  const periodPlanPercent =
-    monthlyPlan > 0
-      ? Math.min(100, Math.max(0, Math.round((currentPeriodSaved / monthlyPlan) * 100)))
-      : 0;
 
   const isLoading = goalsQuery.isLoading || accountsQuery.isLoading;
   const accountById = useMemo(
