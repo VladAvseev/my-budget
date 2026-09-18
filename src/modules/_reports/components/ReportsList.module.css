@@ -38,7 +38,7 @@
   min-height: 32px;
   padding: 4px 12px;
   border-radius: var(--md-sys-shape-corner-full);
-  background-color: var(--md-sys-color-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-secondary-container);
   font: var(--md-sys-typescale-label-medium);
   letter-spacing: var(--md-sys-typescale-label-medium-tracking);

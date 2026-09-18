@@ -16,8 +16,6 @@ export interface CapitalStructureData {
   hasNegative: boolean;
 }
 
-
-
 export const CAPITAL_PALETTE = [
   'var(--md-sys-color-primary)',
   'var(--md-sys-color-secondary)',
@@ -28,7 +26,6 @@ export const CAPITAL_PALETTE = [
   'var(--md-sys-color-primary-container)',
   'var(--md-sys-color-secondary-container)',
 ] as const;
-
 
 export const buildCapitalStructureData = (accounts: Account[]): CapitalStructureData => {
   const open = accounts
@@ -46,7 +43,6 @@ export const buildCapitalStructureData = (accounts: Account[]): CapitalStructure
   let cursor = 0;
 
   open.forEach((account, index) => {
-    
     if (account.balance <= 0) return;
     const percent = (account.balance / total) * 100;
     segments.push({

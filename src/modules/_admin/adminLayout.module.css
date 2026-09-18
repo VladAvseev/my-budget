@@ -75,7 +75,7 @@
 }
 
 .tabLink[aria-current='page'] {
-  background-color: var(--md-sys-color-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-secondary-container);
   font: var(--md-sys-typescale-label-large-emphasized);
   letter-spacing: var(--md-sys-typescale-label-large-emphasized-tracking);

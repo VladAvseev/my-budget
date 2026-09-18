@@ -278,7 +278,7 @@
 }
 
 .statusOk {
-  background-color: var(--md-sys-color-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-secondary-container);
 }
 
