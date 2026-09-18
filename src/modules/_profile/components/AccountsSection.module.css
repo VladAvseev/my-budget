@@ -1,3 +1,9 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .sectionHeader {
   display: flex;
   flex-wrap: wrap;
@@ -35,97 +41,25 @@
   font-variant-numeric: tabular-nums;
 }
 
-.currencyRow {
-  width: 100%;
-  max-width: 320px;
-}
-
 .list {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding: 0;
   margin: 0;
 }
 
-.account {
+.item {
+  min-width: 0;
+}
+
+.emptyCard {
+  border-radius: var(--md-sys-shape-corner-large-increased);
+}
+
+.emptyState {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-block: 16px;
-  border-top: 1px solid var(--md-sys-color-outline-variant);
-}
-
-.account:last-child {
-  padding-bottom: 0;
-}
-
-.accountHead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.identity {
-  min-width: 0;
-  flex: 1 1 160px;
-}
-
-.name {
-  margin: 0 0 8px;
-  font: var(--md-sys-typescale-body-large-emphasized);
-  letter-spacing: var(--md-sys-typescale-body-large-emphasized-tracking);
-  color: var(--md-sys-color-on-surface);
-  overflow-wrap: anywhere;
-}
-
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.balance {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  text-align: end;
-}
-
-.balanceLabel {
-  font: var(--md-sys-typescale-label-medium);
-  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.amount {
-  font: var(--md-sys-typescale-title-large-emphasized);
-  letter-spacing: var(--md-sys-typescale-title-large-emphasized-tracking);
-  font-variant-numeric: tabular-nums;
-  color: var(--md-sys-color-on-surface);
-  overflow-wrap: anywhere;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.actions > * {
-  flex: 1 1 140px;
-}
-
-.hint {
-  margin: 0;
-  color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-body-small);
-  letter-spacing: var(--md-sys-typescale-body-small-tracking);
-}
-
-@media (min-width: 600px) {
-  .account {
-    padding-block: 20px;
-  }
+  gap: 4px;
 }

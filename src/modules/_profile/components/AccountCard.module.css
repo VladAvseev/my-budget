@@ -1,16 +1,13 @@
 .card {
-  
-  border-radius: var(--md-sys-shape-corner-extra-large);
+  border-radius: var(--md-sys-shape-corner-large-increased);
 }
 
 .root {
-  --profile-gap: 12px;
+  --profile-gap: 16px;
   display: flex;
   flex-direction: column;
   gap: var(--profile-gap);
 }
-
-
 
 .hero {
   display: flex;
@@ -72,21 +69,21 @@
   opacity: 0.8;
 }
 
-
-
 .settingsGroup {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 16px;
 }
 
-.themeRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.settingsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 12px;
-  min-height: 48px;
-  padding-block: 8px;
+  align-items: end;
+}
+
+.currencyField {
+  width: 100%;
 }
 
 .themeText {
@@ -108,7 +105,6 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-
 .themeToggle {
   width: 100%;
   flex-direction: row-reverse;
@@ -121,117 +117,24 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  padding-top: 4px;
 }
 
 .quickActions > * {
   flex: 1 1 140px;
 }
 
-
-
-.danger {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  border: 1px solid var(--md-sys-color-error);
-  border-radius: var(--md-sys-shape-corner-large);
-  background-color: color-mix(
-    in srgb,
-    var(--md-sys-color-error-container) 28%,
-    var(--md-sys-color-surface-container-high) 72%
-  );
-}
-
-.dangerTitle {
-  margin: 0;
-  font: var(--md-sys-typescale-label-large-emphasized);
-  letter-spacing: var(--md-sys-typescale-label-large-emphasized-tracking);
-  color: var(--md-sys-color-error);
-}
-
-.dangerHint {
-  margin: 0;
-  font: var(--md-sys-typescale-body-small);
-  letter-spacing: var(--md-sys-typescale-body-small-tracking);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.dangerActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.dangerActions > * {
-  flex: 1 1 160px;
-}
-
-
-
-.legalSection {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 4px;
-  border-top: 1px solid var(--md-sys-color-outline-variant);
-}
-
-.legalTitle {
-  font: var(--md-sys-typescale-label-medium);
-  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.legalNav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 16px;
-}
-
-.legalLink {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font: var(--md-sys-typescale-body-medium);
-  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
-  color: var(--md-sys-color-primary);
-  text-decoration: none;
-  border-radius: var(--md-sys-shape-corner-extra-small);
-}
-
-.legalLink:hover {
-  text-decoration: underline;
-}
-
-.legalLink:focus-visible {
-  outline: 2px solid var(--md-sys-color-primary);
-  outline-offset: 2px;
-}
-
-.consentLine {
-  font: var(--md-sys-typescale-body-small);
-  letter-spacing: var(--md-sys-typescale-body-small-tracking);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
 @media (min-width: 600px) {
   .card {
-    border-radius: var(--md-sys-shape-corner-extra-large-increased);
-  }
-
-  .root {
-    --profile-gap: 16px;
+    border-radius: var(--md-sys-shape-corner-extra-large);
   }
 
   .hero {
     padding: 16px;
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .legalLink {
-    transition: none;
+  .settingsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
   }
 }

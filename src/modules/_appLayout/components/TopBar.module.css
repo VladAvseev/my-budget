@@ -1,7 +1,7 @@
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 30;
   flex-shrink: 0;
   background-color: var(--md-sys-color-surface-container-high);
   border-bottom: 1px solid var(--md-sys-color-outline-variant);

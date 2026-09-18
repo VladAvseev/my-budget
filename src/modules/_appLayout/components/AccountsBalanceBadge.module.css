@@ -87,7 +87,7 @@
 
 .panel {
   max-height: min(
-    calc((var(--md-sys-typescale-body-medium-line-height) + 16px) * 5),
+    calc((var(--md-sys-typescale-body-medium-line-height) + 16px) * 5 + 14px),
     calc(var(--available-height, 50dvh) - 16px)
   );
   overflow-y: auto;

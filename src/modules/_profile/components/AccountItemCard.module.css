@@ -1,0 +1,112 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  padding: 12px 16px;
+  border-radius: var(--md-sys-shape-corner-large);
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    border-radius var(--md-sys-motion-expressive-fast-spatial);
+}
+
+.card:active {
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+
+.closed {
+  opacity: 0.75;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-primary);
+}
+
+.primaryIcon {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.nameGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font: var(--md-sys-typescale-body-large-emphasized);
+  letter-spacing: var(--md-sys-typescale-body-large-emphasized-tracking);
+  color: var(--md-sys-color-on-surface);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  text-align: end;
+}
+
+.amount {
+  font: var(--md-sys-typescale-title-medium-emphasized);
+  letter-spacing: var(--md-sys-typescale-title-medium-emphasized-tracking);
+  font-variant-numeric: tabular-nums;
+  color: var(--md-sys-color-on-surface);
+  white-space: nowrap;
+}
+
+.chevron {
+  color: var(--md-sys-color-on-surface-variant);
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 600px) {
+  .amount {
+    font: var(--md-sys-typescale-title-large-emphasized);
+    letter-spacing: var(--md-sys-typescale-title-large-emphasized-tracking);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}

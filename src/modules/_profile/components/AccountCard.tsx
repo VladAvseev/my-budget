@@ -1,43 +1,34 @@
-import {
-  useProfile,
-  useDeleteAccount,
-  useRevokeConsent,
-  useConsentStatus,
-} from '@/shared/api/hooks';
+import { useState } from 'react';
+import { useAtom } from 'jotai';
 import { useAuth } from '@/shared/api/authProvider';
-import { GATING_DOCUMENT_TYPE, legalDocumentPath } from '@/shared/legal/documents';
-import { LegalLinks } from '@/shared/legal/LegalLinks';
+import { useProfile } from '@/shared/api/hooks';
+import { CURRENCIES, QUICK_CURRENCIES } from '@/shared/constants/currencies';
+import { useTheme } from '@/shared/theme';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButton } from '@/shared/ui/VButton';
 import { VCard } from '@/shared/ui/VCard';
-import { VToggle } from '@/shared/ui/VToggle';
-import { useTheme } from '@/shared/theme';
 import { VConfirmModal } from '@/shared/ui/VConfirmModal';
+import { VSelect } from '@/shared/ui/VSelect';
+import { VToggle } from '@/shared/ui/VToggle';
 import { formatDisplay, getErrorMessage } from '@/shared/utils';
-import { useAtom } from 'jotai';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useUpdateCurrency } from '../api/useUpdateCurrency';
 import { changePasswordOpenAtom } from '../atoms/profile';
 import { ChangePasswordModal } from './ChangePasswordModal';
-import { DeleteAccountModal } from './DeleteAccountModal';
-import { RevokeConsentModal } from './RevokeConsentModal';
 import styles from './AccountCard.module.css';
+
+const currencyOptions = CURRENCIES.filter((c) =>
+  (QUICK_CURRENCIES as readonly string[]).includes(c.code),
+).map((c) => ({ value: c.code, label: `${c.name} (${c.symbol})` }));
 
 export const AccountCard = () => {
   const { theme, setTheme } = useTheme();
-  const { user } = useAuth();
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const { data: profile } = useProfile();
-  const { data: consentStatus } = useConsentStatus();
+  const currency = useUpdateCurrency();
+
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useAtom(changePasswordOpenAtom);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
-  const [isRevokeConfirmOpen, setIsRevokeConfirmOpen] = useState(false);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [consentError, setConsentError] = useState<string>();
-
-  const revokeConsent = useRevokeConsent();
-  const deleteAccount = useDeleteAccount();
 
   const login = user?.login ?? '—';
   const initial = login !== '—' && login ? login[0].toUpperCase() : '?';
@@ -51,29 +42,6 @@ export const AccountCard = () => {
       setIsSigningOut(false);
       setIsLogoutConfirmOpen(false);
     }
-  };
-
-  
-  const handleRevoke = () => {
-    setConsentError(undefined);
-    revokeConsent.mutate(undefined, {
-      onSuccess: () => {
-        setIsRevokeConfirmOpen(false);
-        void signOut();
-      },
-      onError: (error) => setConsentError(getErrorMessage(error)),
-    });
-  };
-
-  const handleDelete = () => {
-    setConsentError(undefined);
-    deleteAccount.mutate(undefined, {
-      onSuccess: () => {
-        setIsDeleteConfirmOpen(false);
-        void signOut();
-      },
-      onError: (error) => setConsentError(getErrorMessage(error)),
-    });
   };
 
   return (
@@ -92,25 +60,41 @@ export const AccountCard = () => {
           </div>
         </div>
 
-        <section aria-label="Оформление и пароль" className={styles.settingsGroup}>
-          <VToggle
-            className={styles.themeToggle}
-            label={
-              <span className={styles.themeText}>
-                <span className={styles.themeLabel}>Тёмная тема</span>
-                <span className={styles.themeHint}>Светлое или тёмное оформление приложения</span>
-              </span>
-            }
-            checked={theme === 'dark'}
-            onChange={(checked) => setTheme(checked ? 'dark' : 'light')}
-          />
+        <section aria-label="Настройки профиля" className={styles.settingsGroup}>
+          <div className={styles.settingsGrid}>
+            <VToggle
+              className={styles.themeToggle}
+              label={
+                <span className={styles.themeText}>
+                  <span className={styles.themeLabel}>Тёмная тема</span>
+                  <span className={styles.themeHint}>Светлое или тёмное оформление</span>
+                </span>
+              }
+              checked={theme === 'dark'}
+              onChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+            />
+
+            <div className={styles.currencyField}>
+              <VSelect
+                label="Основная валюта"
+                options={currencyOptions}
+                value={profile?.currency ?? ''}
+                disabled={currency.isPending || !profile}
+                onChange={(value) => currency.mutate(value || null)}
+              />
+            </div>
+          </div>
+
+          {currency.error && (
+            <VBanner type="error" visible message={getErrorMessage(currency.error)} />
+          )}
 
           <div className={styles.quickActions}>
             <VButton variant="secondary" onClick={() => setIsChangePasswordOpen(true)}>
               Сменить пароль
             </VButton>
             <VButton
-              variant="danger"
+              variant="secondary"
               onClick={() => setIsLogoutConfirmOpen(true)}
               isDisabled={isSigningOut}
             >
@@ -118,57 +102,6 @@ export const AccountCard = () => {
             </VButton>
           </div>
         </section>
-
-        <section aria-label="Опасная зона" className={styles.danger}>
-          <h3 className={styles.dangerTitle}>Опасная зона</h3>
-          <p className={styles.dangerHint}>
-            Отзыв согласия или удаление аккаунта обезличивают все данные безвозвратно (в юридическом
-            журнале остаются только факт и дата событий).
-          </p>
-          {consentError && (
-            <VBanner
-              type="error"
-              visible
-              message={consentError}
-              onClose={() => setConsentError(undefined)}
-            />
-          )}
-          <div className={styles.dangerActions}>
-            <VButton
-              variant="secondary"
-              onClick={() => setIsRevokeConfirmOpen(true)}
-              isDisabled={revokeConsent.isPending || deleteAccount.isPending}
-            >
-              Отозвать согласие
-            </VButton>
-            <VButton
-              variant="danger"
-              onClick={() => setIsDeleteConfirmOpen(true)}
-              isDisabled={revokeConsent.isPending || deleteAccount.isPending}
-            >
-              Удалить аккаунт
-            </VButton>
-          </div>
-        </section>
-
-        
-        <div className={styles.legalSection}>
-          <span className={styles.legalTitle}>Правовые документы</span>
-          <LegalLinks className={styles.legalNav} itemClassName={styles.legalLink} />
-          {consentStatus?.grantedVersion && (
-            <span className={styles.consentLine}>
-              Согласие на обработку ПДн (политика конфиденциальности) принято для версии{' '}
-              <Link
-                to={legalDocumentPath(GATING_DOCUMENT_TYPE, consentStatus.grantedVersion)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.legalLink}
-              >
-                {consentStatus.grantedVersion}
-              </Link>
-            </span>
-          )}
-        </div>
       </div>
 
       <ChangePasswordModal
@@ -185,22 +118,6 @@ export const AccountCard = () => {
         isLoading={isSigningOut}
         onCancel={() => setIsLogoutConfirmOpen(false)}
         onConfirm={handleSignOut}
-      />
-
-      <RevokeConsentModal
-        visible={isRevokeConfirmOpen}
-        login={login}
-        isPending={revokeConsent.isPending}
-        onClose={() => setIsRevokeConfirmOpen(false)}
-        onConfirm={handleRevoke}
-      />
-
-      <DeleteAccountModal
-        visible={isDeleteConfirmOpen}
-        login={login}
-        isPending={deleteAccount.isPending}
-        onClose={() => setIsDeleteConfirmOpen(false)}
-        onConfirm={handleDelete}
       />
     </VCard>
   );
