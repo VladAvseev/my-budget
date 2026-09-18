@@ -76,6 +76,20 @@ export function clearStoredSession(): void {
   emitSessionChange();
 }
 
+// Обновляет пользователя в хранимой сессии без ротации токенов.
+// Нужно после PATCH /users/me: иначе seed профиля из localStorage при
+// перезагрузке затрёт свежие данные (кэш ['profile', id] считается свежим
+// из-за staleTime и рефетч не уходит).
+export function updateStoredSessionUser(user: ApiUser): void {
+  const stored = getStoredSession();
+  if (!stored) {
+    return;
+  }
+  const next: StoredSession = { ...stored, user };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  emitSessionChange();
+}
+
 type SessionListener = () => void;
 const listeners = new Set<SessionListener>();
 

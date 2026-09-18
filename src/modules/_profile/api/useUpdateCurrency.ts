@@ -1,6 +1,7 @@
-import { api } from '@/shared/api/http';
+import { api, updateStoredSessionUser } from '@/shared/api/http';
 import type { ApiUser } from '@/shared/api/http';
 import { invalidateHomeCaches } from '@/shared/api/hooks';
+import { toProfile } from '@/shared/api/profileMapper';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export type UseUpdateCurrencyRequest = string | null;
@@ -19,7 +20,9 @@ export const useUpdateCurrency = () => {
       const body: UpdateProfileBody = { currency };
       return api.patch<UseUpdateCurrencyResponse>('/users/me', body);
     },
-    onSuccess: () => {
+    onSuccess: (updated) => {
+      queryClient.setQueryData(['profile', updated.id], toProfile(updated));
+      updateStoredSessionUser(updated);
       queryClient.invalidateQueries({ queryKey: ['profile'] });
       invalidateHomeCaches(queryClient);
     },
