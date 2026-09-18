@@ -1,0 +1,144 @@
+.profileLink {
+  display: none;
+}
+
+.mobileProfileLink,
+.mobileAdminLink {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  line-height: 0;
+  text-decoration: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface-variant);
+  background-color: var(--md-sys-color-surface-container-highest);
+  overflow: hidden;
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects);
+}
+
+.mobileProfileLink[aria-current='page'],
+.mobileAdminLink[aria-current='page'] {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.profileAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font: var(--md-sys-typescale-label-large-emphasized);
+}
+
+.profileName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: var(--md-sys-typescale-label-large);
+  color: var(--md-sys-color-on-surface);
+}
+
+.profileChevron {
+  display: flex;
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.mobileProfileLink:focus-visible,
+.mobileAdminLink:focus-visible,
+.profileLink:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 3px;
+}
+
+/* [ANDROIDX-M3E] Independent state layer for navigation items */
+.mobileProfileLink::before,
+.mobileAdminLink::before,
+.profileLink::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .mobileProfileLink:hover,
+  .mobileAdminLink:hover,
+  .profileLink:hover {
+    background-color: var(--md-sys-color-surface-container-highest);
+  }
+  .mobileProfileLink[aria-current='page']:hover,
+  .mobileAdminLink[aria-current='page']:hover,
+  .profileLink[aria-current='page']:hover {
+    background-color: var(--md-sys-color-primary-container);
+  }
+  .mobileProfileLink[aria-current='page']:hover::before,
+  .mobileAdminLink[aria-current='page']:hover::before,
+  .profileLink[aria-current='page']:hover::before {
+    opacity: var(--md-sys-state-hover-opacity);
+  }
+}
+
+.mobileProfileLink[aria-current='page']:active::before,
+.mobileAdminLink[aria-current='page']:active::before,
+.profileLink[aria-current='page']:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+@media (min-width: 840px) {
+  .mobileProfileLink,
+  .mobileAdminLink {
+    display: none;
+  }
+  .profileLink {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    max-width: 220px;
+    min-height: 44px;
+    padding: 4px 12px 4px 4px;
+    border-radius: var(--md-sys-shape-corner-full);
+    text-decoration: none;
+    background-color: var(--md-sys-color-surface-container-high);
+    overflow: hidden;
+    transition: background-color var(--md-sys-motion-expressive-fast-effects);
+  }
+  .profileLink[aria-current='page'] {
+    background-color: var(--md-sys-color-primary-container);
+  }
+  .profileLink[aria-current='page'] .profileAvatar {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+  }
+  .profileLink[aria-current='page'] .profileName,
+  .profileLink[aria-current='page'] .profileChevron {
+    color: var(--md-sys-color-on-primary-container);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobileProfileLink,
+  .mobileAdminLink,
+  .profileLink {
+    transition: none;
+  }
+}

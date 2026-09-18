@@ -1,4 +1,4 @@
-import { AppLayout } from '@/shared/layout/AppLayout';
+import { AppLayout } from '@/modules/_appLayout';
 import { RoleRoute } from '@/shared/api/components/RoleRoute';
 import { Navigate, Route } from 'react-router-dom';
 import { dashboard } from './_dashboard';

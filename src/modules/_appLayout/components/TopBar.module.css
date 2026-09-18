@@ -1,0 +1,171 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  flex-shrink: 0;
+  background-color: var(--md-sys-color-surface-container-high);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.topbarInner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  padding-top: max(8px, env(safe-area-inset-top, 0px));
+  padding-left: calc(16px + env(safe-area-inset-left, 0px));
+  padding-right: calc(16px + env(safe-area-inset-right, 0px));
+}
+
+.brand,
+.topNav {
+  display: none;
+}
+
+.actions {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  min-width: 0;
+  margin-left: auto;
+}
+
+.navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 0;
+  padding: 8px 12px;
+  border-radius: var(--md-sys-shape-corner-full);
+  text-decoration: none;
+  font: var(--md-sys-typescale-label-large);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  color: var(--md-sys-color-on-surface-variant);
+  background-color: transparent;
+  overflow: hidden;
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects),
+    border-radius var(--md-sys-motion-expressive-fast-spatial);
+}
+
+.navLink[aria-current='page'] {
+  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-primary-container);
+  font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+}
+
+.navLink:active {
+  border-radius: var(--md-sys-shape-corner-large);
+}
+
+.navLinkContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.adminDivider {
+  align-self: center;
+  flex-shrink: 0;
+  width: 1px;
+  height: 24px;
+  margin-inline: 4px;
+  background-color: var(--md-sys-color-outline-variant);
+}
+
+.navLink:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 3px;
+}
+
+/* [ANDROIDX-M3E] Independent state layer for navigation items */
+.navLink::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navLink:hover {
+    background-color: var(--md-sys-color-surface-container-highest);
+  }
+  .navLink[aria-current='page']:hover {
+    background-color: var(--md-sys-color-primary-container);
+  }
+  .navLink[aria-current='page']:hover::before {
+    opacity: var(--md-sys-state-hover-opacity);
+  }
+}
+
+.navLink[aria-current='page']:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+@media (min-width: 840px) {
+  .topbarInner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px 24px;
+    padding-bottom: 8px;
+  }
+  .brand {
+    display: flex;
+    flex-shrink: 0;
+  }
+  .topNav {
+    display: flex;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+  }
+  .actions {
+    grid-column: 2;
+    grid-row: 1;
+    justify-content: flex-end;
+  }
+}
+
+@media (min-width: 1200px) {
+  .topbarInner {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 8px 24px;
+  }
+  .topNav {
+    flex: 1 1 540px;
+  }
+  .actions {
+    flex: 0 1 auto;
+  }
+}
+
+@media (min-width: 1600px) {
+  .topbarInner {
+    max-width: 1440px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navLink {
+    transition: none;
+  }
+}

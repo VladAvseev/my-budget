@@ -16,7 +16,7 @@ export const OnboardingCard = () => {
   }
 
   return (
-    <VCard className={styles.cardGrow}>
+    <VCard className={`${styles.cardGrow} ${styles.onboardingCard}`}>
       <div className={styles.title}>С чего начать?</div>
 
       <ul className={styles.checklist}>

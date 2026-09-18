@@ -1,0 +1,122 @@
+.bottomNav {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  flex-shrink: 0;
+  padding: 8px;
+  padding-left: calc(8px + env(safe-area-inset-left, 0px));
+  padding-right: calc(8px + env(safe-area-inset-right, 0px));
+  padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.bottomNavList {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.bottomNavItem {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  min-width: 0;
+  min-height: 52px;
+  padding: 2px 0;
+  border-radius: var(--md-sys-shape-corner-large);
+  text-decoration: none;
+}
+
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  max-width: 100%;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  overflow: hidden;
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    color var(--md-sys-motion-expressive-fast-effects),
+    border-radius var(--md-sys-motion-expressive-fast-spatial);
+}
+
+.bottomNavItem[aria-current='page'] .pill {
+  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-primary-container);
+}
+
+.bottomNavItem:active .pill {
+  border-radius: var(--md-sys-shape-corner-small);
+}
+
+.bottomNavLabel {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: center;
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.bottomNavItem[aria-current='page'] .bottomNavLabel {
+  color: var(--md-sys-color-on-surface);
+  font-weight: var(--md-sys-typescale-label-medium-emphasized-weight);
+}
+
+.bottomNavItem:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: -2px;
+}
+
+/* [ANDROIDX-M3E] Independent state layer for navigation items */
+.pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bottomNavItem:hover .pill {
+    background-color: var(--md-sys-color-surface-container-highest);
+  }
+  .bottomNavItem[aria-current='page']:hover .pill {
+    background-color: var(--md-sys-color-primary-container);
+  }
+  .bottomNavItem[aria-current='page']:hover .pill::before {
+    opacity: var(--md-sys-state-hover-opacity);
+  }
+}
+
+.bottomNavItem[aria-current='page']:active .pill::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+@media (min-width: 840px) {
+  .bottomNav {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill {
+    transition: none;
+  }
+}

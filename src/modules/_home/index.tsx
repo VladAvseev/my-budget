@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { AppLayout } from '@/shared/layout/AppLayout';
+import { AppLayout } from '@/modules/_appLayout';
 import { AuthSwitch } from '@/shared/api/components/AuthSwitch';
 import { AsyncPage } from '@/shared/ui/AsyncPage';
 import { Route } from 'react-router-dom';

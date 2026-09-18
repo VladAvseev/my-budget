@@ -1,7 +1,6 @@
 import { CurrencyText } from '@/shared/ui/Amount';
 import { useBootstrap, useCurrency } from '@/shared/api/hooks';
-import { ReportsIcon } from '@/shared/icons';
-import { VButton } from '@/shared/ui/VButton';
+import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
 import { VCard } from '@/shared/ui/VCard';
 import { formatAmount, percentOfIncome } from '@/shared/utils';
 import { Link } from 'react-router-dom';
@@ -32,8 +31,10 @@ export const LastReportCard = () => {
           </div>
           <div className={styles.emptyMessage}>Периоды не найдены</div>
           <div className={styles.subtitle}>Перейдите в раздел «Периоды» и добавьте период.</div>
-          <VButton className={styles.fullWidthButton}>Добавить операцию</VButton>
         </VCard>
+        <span className={styles.chevron} aria-hidden="true">
+          <ChevronRightIcon size={20} />
+        </span>
       </Link>
     );
   }
@@ -46,12 +47,11 @@ export const LastReportCard = () => {
     <Link to={`/reports/${lastReport.id}`} className={`${styles.link} ${styles.heroLink}`}>
       <div className={styles.hero}>
         <div className={styles.titleRow}>
-            <span className={`${styles.titleChip} ${styles.titleChipOnPrimary}`}>
-              <ReportsIcon size={20} />
-            </span>
-          <div className={styles.heroTitle}>Последний период</div>
+          <span className={`${styles.titleChip} ${styles.titleChipOnPrimary}`}>
+            <ReportsIcon size={20} />
+          </span>
+          <div className={styles.heroTitle}>{lastReport.name}</div>
         </div>
-        <div className={styles.heroSubtitle}>{lastReport.name}</div>
         <div className={styles.heroBody}>
           <div className={styles.heroMain}>
             <div className={styles.heroKicker}>Остаток</div>
@@ -79,8 +79,10 @@ export const LastReportCard = () => {
             </div>
           </div>
         </div>
-        <VButton className={styles.fullWidthButton}>Добавить операцию</VButton>
       </div>
+      <span className={`${styles.chevron} ${styles.chevronOnPrimary}`} aria-hidden="true">
+        <ChevronRightIcon size={20} />
+      </span>
     </Link>
   );
 };

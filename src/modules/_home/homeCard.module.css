@@ -59,14 +59,19 @@
 
 .card.newReportCard {
   background-color: var(--md-sys-color-surface-container-high);
-  border-radius: var(--md-sys-shape-corner-large-increased);
+  border-radius: var(--md-sys-shape-corner-extra-large);
+}
+
+.onboardingCard,
+.fullWidthBanner {
+  grid-column: 1 / -1;
 }
 
 .titleRow {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-right: 12px;
+  padding-right: 36px;
   min-width: 0;
 }
 
@@ -104,8 +109,12 @@
   pointer-events: none;
 }
 
+.chevronOnPrimary {
+  color: var(--md-sys-color-on-primary-container);
+}
 
 .hero {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -116,7 +125,34 @@
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
   overflow-wrap: anywhere;
-  transition: background-color var(--md-sys-motion-expressive-fast-effects);
+  overflow: hidden;
+  transition:
+    background-color var(--md-sys-motion-expressive-fast-effects),
+    box-shadow var(--md-sys-motion-expressive-fast-effects);
+}
+
+/* [ANDROIDX-M3E] State layer for hero card */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: var(--md-sys-color-on-primary-container);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+.heroLink:hover .hero::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.heroLink:focus-visible .hero::before {
+  opacity: var(--md-sys-state-focus-opacity);
+}
+
+.heroLink:active .hero::before {
+  opacity: var(--md-sys-state-pressed-opacity);
 }
 
 .titleChipOnPrimary {
@@ -352,7 +388,6 @@
 
 .skeletonCard.skeletonCard {
   min-height: 200px;
-  animation: none;
 }
 
 .skeletonCard.skeletonWide {
@@ -360,7 +395,6 @@
 }
 .skeletonCard > span[aria-hidden='true'] {
   min-height: 16px;
-  animation: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -369,13 +403,6 @@
   }
   .link:hover .newReportCard {
     background-color: var(--md-sys-color-surface-container-highest);
-  }
-  .heroLink:hover .hero {
-    background-color: color-mix(
-      in srgb,
-      var(--md-sys-color-primary-container) 96%,
-      var(--md-sys-color-on-primary-container) 4%
-    );
   }
 }
 
@@ -433,6 +460,7 @@
 @media (prefers-reduced-motion: reduce) {
   .page button,
   .hero,
+  .hero::before,
   .card.card,
   .cardGrow.cardGrow,
   .errorCard.errorCard,

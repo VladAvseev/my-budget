@@ -1,6 +1,5 @@
 import { useBootstrap } from '@/shared/api/hooks';
-import { ReportsIcon } from '@/shared/icons';
-import { VButton } from '@/shared/ui/VButton';
+import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
 import { VCard } from '@/shared/ui/VCard';
 import { formatDisplay } from '@/shared/utils';
 import { Link } from 'react-router-dom';
@@ -19,7 +18,7 @@ export const NewReportCard = () => {
   if (!isPeriodEnded) return null;
 
   return (
-    <Link to="/reports" className={styles.link}>
+    <Link to="/reports" className={`${styles.link} ${styles.fullWidthBanner}`}>
       <VCard interactive className={`${styles.card} ${styles.newReportCard}`}>
         <div className={styles.titleRow}>
           <span className={styles.titleChip}>
@@ -28,11 +27,13 @@ export const NewReportCard = () => {
           <div className={styles.title}>Пришло время добавить новый период</div>
         </div>
         <div className={styles.subtitle}>
-          Последний периода завершился {formatDisplay(latestPeriodEnd)}. Добавьте новый период для
+          Последний период завершился {formatDisplay(latestPeriodEnd)}. Добавьте новый период для
           продолжения учёта.
         </div>
-        <VButton className={styles.fullWidthButton}>Добавить период</VButton>
       </VCard>
+      <span className={styles.chevron} aria-hidden="true">
+        <ChevronRightIcon size={20} />
+      </span>
     </Link>
   );
 };
