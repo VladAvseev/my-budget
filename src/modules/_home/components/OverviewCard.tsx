@@ -45,21 +45,8 @@ export const OverviewCard = () => {
   }
   const { income, expense } = bootstrap.globalTotals;
   const capital = capitalQuery.capital ?? 0;
-
-  const items = [
-    {
-      label: 'Доходы',
-      value: formatAmount(income, currency?.symbol),
-      percent: null,
-      color: 'var(--positive-ink)',
-    },
-    {
-      label: 'Расходы',
-      value: formatAmount(expense, currency?.symbol),
-      percent: percentOfIncome(expense, income),
-      color: 'var(--md-sys-color-error)',
-    },
-  ];
+  const expensePercent = percentOfIncome(expense, income);
+  const capitalSavingsRate = capital > 0 ? percentOfIncome(capital, income) : null;
 
   return (
     <Link to="/overview" className={styles.link}>
@@ -71,36 +58,39 @@ export const OverviewCard = () => {
           <div className={styles.title}>Аналитика</div>
         </div>
         <div className={styles.subtitle}>
-          Доходы и расходы за всё время · капитал по всем счетам
+          Доходы и расходы за всё время по всем счетам
         </div>
         <div className={styles.capitalBlock}>
           <div className={styles.capitalKicker}>Капитал</div>
-          <div
-            className={`${styles.capitalValue}${capital < 0 ? ` ${styles.capitalValueNegative}` : ''}`}
-          >
-            <CurrencyText>{formatAmount(capital, currency?.symbol)}</CurrencyText>
+          <div className={styles.metricRow}>
+            <div
+              className={`${styles.capitalValue}${capital < 0 ? ` ${styles.capitalValueNegative}` : ''}`}
+            >
+              <CurrencyText>{formatAmount(capital, currency?.symbol)}</CurrencyText>
+            </div>
+            {capitalSavingsRate != null && (
+              <span className={`${styles.savingsRateBadge} ${styles.savingsRateBadgeSurface}`}>
+                {capitalSavingsRate}% норма сбережений
+              </span>
+            )}
           </div>
         </div>
-        <div className={styles.summaryGrid}>
-          {items.flatMap((item) => [
-            <div key={`${item.label}-label`} className={styles.summaryLabel}>
-              {item.label}
-            </div>,
-            item.percent != null ? (
-              <div key={`${item.label}-percent`} className={styles.summaryPercent}>
-                {item.percent}% от доходов
-              </div>
-            ) : (
-              <span key={`${item.label}-percent`} />
-            ),
-            <div
-              key={`${item.label}-value`}
-              className={styles.summaryValue}
-              style={{ color: item.color }}
-            >
-              <CurrencyText>{item.value}</CurrencyText>
-            </div>,
-          ])}
+        <div className={styles.cardFacts}>
+          <div className={styles.cardFact}>
+            <span className={styles.cardFactLabel}>Доходы</span>
+            <span className={`${styles.cardFactValue} ${styles.incomeValue}`}>
+              <CurrencyText>{formatAmount(income, currency?.symbol)}</CurrencyText>
+            </span>
+          </div>
+          <div className={styles.cardFact}>
+            <span className={styles.cardFactLabel}>Расходы</span>
+            <span className={`${styles.cardFactValue} ${styles.expenseValue}`}>
+              <CurrencyText>{formatAmount(expense, currency?.symbol)}</CurrencyText>
+              {expensePercent != null && (
+                <span className={styles.cardFactSub}> · {expensePercent}% от доходов</span>
+              )}
+            </span>
+          </div>
         </div>
       </VCard>
       <span className={styles.chevron} aria-hidden="true">

@@ -228,6 +228,33 @@
 }
 
 
+.metricRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+.savingsRateBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font: var(--md-sys-typescale-label-medium-emphasized);
+  white-space: nowrap;
+}
+
+.savingsRateBadgeOnPrimary {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.savingsRateBadgeSurface {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
 .heroValueNegative,
 .capitalValueNegative {
   align-self: flex-start;
@@ -243,47 +270,66 @@
   flex-direction: column;
   gap: 8px;
   min-width: 0;
-  padding-block: 12px;
-  border-block: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .capitalKicker {
+  font: var(--md-sys-typescale-label-large);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .capitalValue {
-  font: var(--md-sys-typescale-headline-small-emphasized);
+  font: var(--md-sys-typescale-display-small-emphasized);
+  letter-spacing: var(--md-sys-typescale-display-small-emphasized-tracking);
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 
-.summaryGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-  gap: 8px 12px;
-  align-items: baseline;
+.cardFacts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  margin-top: auto;
 }
 
-.summaryLabel {
+.cardFact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.cardFactLabel {
   font: var(--md-sys-typescale-body-medium);
   color: var(--md-sys-color-on-surface-variant);
 }
 
-
-.summaryPercent {
-  font: var(--md-sys-typescale-body-small);
-  color: var(--md-sys-color-on-surface-variant);
-  text-align: right;
-}
-
-.summaryValue {
-  grid-column: 1 / -1;
+.cardFactValue {
   min-width: 0;
-  padding-bottom: 12px;
+  margin-left: auto;
   font: var(--md-sys-typescale-title-medium-emphasized);
   font-variant-numeric: tabular-nums;
   text-align: right;
+  color: var(--md-sys-color-on-surface);
   overflow-wrap: anywhere;
+}
+
+.incomeValue {
+  color: var(--positive-ink);
+}
+
+.expenseValue {
+  color: var(--md-sys-color-error);
+}
+
+.cardFactSub {
+  display: block;
+  margin-top: 4px;
+  font: var(--md-sys-typescale-body-small);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .checklist {
@@ -452,7 +498,8 @@
   .cardList {
     gap: 16px;
   }
-  .heroValue {
+  .heroValue,
+  .capitalValue {
     font: var(--md-sys-typescale-display-medium-emphasized);
   }
 }

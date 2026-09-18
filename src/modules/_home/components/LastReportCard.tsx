@@ -42,6 +42,7 @@ export const LastReportCard = () => {
   const expenses = summary.expense;
   const balance = summary.income - expenses;
   const expensePercent = percentOfIncome(expenses, summary.income);
+  const balanceSavingsRate = balance > 0 ? percentOfIncome(balance, summary.income) : null;
 
   return (
     <Link to={`/reports/${lastReport.id}`} className={`${styles.link} ${styles.heroLink}`}>
@@ -55,10 +56,17 @@ export const LastReportCard = () => {
         <div className={styles.heroBody}>
           <div className={styles.heroMain}>
             <div className={styles.heroKicker}>Остаток</div>
-            <div
-              className={`${styles.heroValue}${balance < 0 ? ` ${styles.heroValueNegative}` : ''}`}
-            >
-              <CurrencyText>{formatAmount(balance, currency?.symbol)}</CurrencyText>
+            <div className={styles.metricRow}>
+              <div
+                className={`${styles.heroValue}${balance < 0 ? ` ${styles.heroValueNegative}` : ''}`}
+              >
+                <CurrencyText>{formatAmount(balance, currency?.symbol)}</CurrencyText>
+              </div>
+              {balanceSavingsRate != null && (
+                <span className={`${styles.savingsRateBadge} ${styles.savingsRateBadgeOnPrimary}`}>
+                  {balanceSavingsRate}% норма сбережений
+                </span>
+              )}
             </div>
           </div>
           <div className={styles.heroFacts}>
