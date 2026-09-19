@@ -1,7 +1,7 @@
 import { VBanner } from '@/shared/ui/VBanner';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VCard } from '@/shared/ui/VCard';
-import { VCurrencyRates } from '@/shared/ui/VCurrencyRates';
+import { VCurrencyRates } from '@/shared/widgets/CurrencyRates';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VHint } from '@/shared/ui/VHint';
 import { VSkeletonCard } from '@/shared/ui/VSkeleton';

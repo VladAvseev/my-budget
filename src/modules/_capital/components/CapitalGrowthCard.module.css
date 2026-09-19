@@ -1,5 +1,5 @@
-@value mobileCompact, title, controls from '@/shared/ui/VGrowthDynamicsCard/VGrowthDynamicsCard.module.css';
-@value stats, stat, statValue, positive from '@/shared/ui/VGrowthDynamicsCard/GrowthStats.module.css';
+@value mobileCompact, title, controls from '@/shared/widgets/GrowthDynamicsCard/GrowthDynamicsCard.module.css';
+@value stats, stat, statValue, positive from '@/shared/widgets/GrowthDynamicsCard/GrowthStats.module.css';
 .root {
   min-width: 0;
 }

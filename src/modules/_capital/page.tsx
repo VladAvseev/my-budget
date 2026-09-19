@@ -1,5 +1,5 @@
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
-import { VCurrencyRates } from '@/shared/ui/VCurrencyRates';
+import { VCurrencyRates } from '@/shared/widgets/CurrencyRates';
 import { VHint } from '@/shared/ui/VHint';
 import { useAuth } from '@/shared/api/authProvider';
 import { useBreakpoint } from '@/shared/hooks';

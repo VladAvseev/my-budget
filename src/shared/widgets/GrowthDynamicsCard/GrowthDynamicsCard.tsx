@@ -5,7 +5,7 @@ import type { ChartPoint, GrowthAggregation } from '@/shared/utils/chartPoints';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
 import { GrowthStats } from './GrowthStats';
 import type { VGrowthStatsData } from './types';
-import styles from './VGrowthDynamicsCard.module.css';
+import styles from './GrowthDynamicsCard.module.css';
 
 interface VGrowthDynamicsCardProps {
   title: string;

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useAccounts, useCapitalDynamics, useProfile } from '@/shared/api/hooks';
-import { buildCapitalChartData } from '@/shared/utils/buildCapitalChartData';
-import { buildRecentMonthlyGrowth } from '@/shared/utils/buildGrowthStats';
+import { buildCapitalChartData } from '../utils/buildCapitalChartData';
+import { buildRecentMonthlyGrowth } from '@/shared/widgets/GrowthDynamicsCard/model/buildGrowthStats';
 
 export const useAverageMonthlyGrowth = (userId: string) => {
   const dynamics = useCapitalDynamics();

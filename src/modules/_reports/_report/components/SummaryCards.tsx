@@ -1,5 +1,5 @@
 import { useCurrency, type OperationSummary } from '@/shared/api/hooks';
-import { PeriodSummary } from '@/shared/ui/PeriodSummary';
+import { PeriodSummary } from '@/shared/widgets/PeriodSummary';
 
 export const SummaryCards = ({ summary }: { summary: OperationSummary | undefined }) => {
   const currency = useCurrency();

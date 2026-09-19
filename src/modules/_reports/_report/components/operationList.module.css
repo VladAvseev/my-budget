@@ -9,6 +9,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
+  min-height: 48px;
+  padding-block: 8px;
 }
 
 .empty {
@@ -35,13 +38,14 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 }
 
 .accordionHeader {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .accordionDot {
@@ -59,22 +63,6 @@
 
 .accordionTotal {
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
-  flex-shrink: 0;
-}
-
-
-
-.toolbar {
-  flex-wrap: wrap;
-  padding-block: 8px;
-}
-.list {
-  gap: 4px;
-}
-.accordionHeader {
-  flex-wrap: wrap;
-}
-.accordionTotal {
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
   flex-shrink: 1;

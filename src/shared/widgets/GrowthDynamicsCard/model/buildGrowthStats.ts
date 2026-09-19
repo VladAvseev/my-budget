@@ -1,4 +1,4 @@
-import type { VGrowthStatsData } from '@/shared/ui/VGrowthDynamicsCard';
+import type { VGrowthStatsData } from '../types';
 import type { ChartPoint, GrowthAggregation } from '@/shared/utils/chartPoints';
 import {
   getPeriodEnd,

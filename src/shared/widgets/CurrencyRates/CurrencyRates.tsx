@@ -1,7 +1,7 @@
 import { CurrencyText } from '@/shared/ui/Amount';
 import { getCurrencyByCode } from '@/shared/constants/currencies';
-import { formatCurrencyRate, getOtherCurrencyRates } from '@/shared/utils';
-import styles from './VCurrencyRates.module.css';
+import { formatCurrencyRate, getOtherCurrencyRates } from './model/currencyRates';
+import styles from './CurrencyRates.module.css';
 
 export interface VCurrencyRatesProps {
   selectedCurrency: string | null;

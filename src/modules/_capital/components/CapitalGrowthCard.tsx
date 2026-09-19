@@ -2,9 +2,9 @@ import { useMemo, useState } from 'react';
 import { useAccounts, useCapitalDynamics, useProfile } from '@/shared/api/hooks';
 import { convertAmount } from '@/shared/utils';
 import { aggregatePoints, type GrowthAggregation } from '@/shared/utils/chartPoints';
-import { buildCapitalChartData } from '@/shared/utils/buildCapitalChartData';
-import { buildGrowthStats } from '@/shared/utils/buildGrowthStats';
-import { VGrowthDynamicsCard } from '@/shared/ui/VGrowthDynamicsCard';
+import { buildCapitalChartData } from '../utils/buildCapitalChartData';
+import { buildGrowthStats } from '@/shared/widgets/GrowthDynamicsCard/model/buildGrowthStats';
+import { VGrowthDynamicsCard } from '@/shared/widgets/GrowthDynamicsCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import styles from './CapitalGrowthCard.module.css';
 

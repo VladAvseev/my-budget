@@ -1,4 +1,3 @@
-import { useCurrency } from '@/shared/api/hooks';
 import { CurrencyText } from '@/shared/ui/Amount';
 import type { ChartPoint } from '@/shared/utils/chartPoints';
 import { getPointChange } from '@/shared/utils/chartPoints';
@@ -39,9 +38,8 @@ export const VGrowthChart = ({
   const [clampedX, setClampedX] = useState<number | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const currency = useCurrency();
 
-  const format = formatValue ?? ((v: number) => formatAmount(v, displaySymbol ?? currency?.symbol));
+  const format = formatValue ?? ((v: number) => formatAmount(v, displaySymbol));
 
   useEffect(() => {
     const el = containerRef.current;

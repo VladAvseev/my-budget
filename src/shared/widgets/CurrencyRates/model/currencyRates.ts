@@ -1,5 +1,5 @@
 import { type Currency, CURRENCIES } from '@/shared/constants/currencies';
-import { convertAmount } from './convertCurrency';
+import { convertAmount } from '@/shared/utils/convertCurrency';
 
 export interface CurrencyRateItem {
   from: Currency;
