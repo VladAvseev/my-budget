@@ -15,6 +15,7 @@ const TOP_NAV_QUERY = '(min-width: 840px)';
 export const AppLayout = ({ children }: AppLayoutProps) => {
   const { isAdmin } = useAdminStatus();
   const location = useLocation();
+  const rootRef = useRef<HTMLDivElement>(null);
   const topNavRef = useRef<HTMLElement>(null);
   const bottomNavRef = useRef<HTMLElement>(null);
 
@@ -36,18 +37,29 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     return () => query.removeEventListener('change', transferFocus);
   }, []);
 
+  // Нижняя навигация закреплена через position: fixed (вне потока),
+  // поэтому её высота передаётся контенту через --bottom-nav-height,
+  // чтобы последний элемент страницы не перекрывался.
+  // На широких экранах навигация скрыта (display: none) — высота станет 0.
+  useEffect(() => {
+    const nav = bottomNavRef.current;
+    const root = rootRef.current;
+    if (!nav || !root) return;
+    const updateHeight = () => {
+      root.style.setProperty('--bottom-nav-height', `${nav.offsetHeight}px`);
+    };
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(nav);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className={styles.root}>
-      <a href="#main-content" className={styles.skipLink}>
-        К содержимому
-      </a>
-
+    <div ref={rootRef} className={styles.root}>
       <TopBar topNavRef={topNavRef} isAdmin={isAdmin} />
-
-      <main id="main-content" tabIndex={-1} className={styles.main}>
+      <main className={styles.main}>
         {children}
       </main>
-
       <BottomNav bottomNavRef={bottomNavRef} />
     </div>
   );

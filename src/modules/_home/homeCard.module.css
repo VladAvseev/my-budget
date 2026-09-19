@@ -38,7 +38,6 @@
   border-radius: var(--md-sys-shape-corner-extra-large-increased);
 }
 
-
 .card.card,
 .cardGrow.cardGrow,
 .errorCard.errorCard,
@@ -227,7 +226,6 @@
   font: var(--md-sys-typescale-body-small);
 }
 
-
 .metricRow {
   display: flex;
   align-items: baseline;
@@ -402,7 +400,6 @@
   margin-top: auto;
 }
 
-
 .page button {
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
@@ -452,7 +449,6 @@
   }
 }
 
-
 @media (hover: none), (pointer: coarse) {
   .page button:hover:not(:disabled) {
     background-color: var(--md-sys-color-primary);
@@ -485,7 +481,7 @@
   }
 }
 
-@media (min-width: 840px) {
+@media (min-width: 960px) {
   .cardList {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

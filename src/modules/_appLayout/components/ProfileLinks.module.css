@@ -1,48 +1,74 @@
-.profileLink {
+.desktopRoot {
   display: none;
+  position: relative;
 }
 
-.mobileProfileLink,
-.mobileAdminLink {
+/* Desktop profile pill trigger */
+.profileTrigger {
   position: relative;
   display: flex;
-  flex-shrink: 0;
   align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  line-height: 0;
-  text-decoration: none;
+  gap: 8px;
+  min-height: 40px;
+  height: 40px;
+  padding: 2px 12px 2px 4px;
+  border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-full);
-  color: var(--md-sys-color-on-surface-variant);
-  background-color: var(--md-sys-color-surface-container-highest);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
   overflow: hidden;
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
-    color var(--md-sys-motion-expressive-fast-effects);
+    border-color var(--md-sys-motion-expressive-fast-effects);
 }
 
-.mobileProfileLink[aria-current='page'],
-.mobileAdminLink[aria-current='page'] {
-  background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+.profileTrigger::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+.profileTrigger:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.profileTrigger:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+.profileTrigger:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.profileTriggerActive {
+  background-color: var(--md-sys-color-surface-container-high);
+  border-color: var(--md-sys-color-primary);
 }
 
 .profileAvatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
   border-radius: var(--md-sys-shape-corner-full);
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
-  font: var(--md-sys-typescale-label-large-emphasized);
+  font: var(--md-sys-typescale-label-large);
+  font-weight: 600;
 }
 
 .profileName {
   min-width: 0;
+  max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -52,22 +78,252 @@
 
 .profileChevron {
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  margin-left: auto;
+  color: var(--md-sys-color-on-surface-variant);
+  transition:
+    transform var(--md-sys-motion-expressive-fast-spatial),
+    color var(--md-sys-motion-expressive-fast-effects);
+}
+
+.profileChevron svg {
+  transition: transform var(--md-sys-motion-expressive-fast-spatial);
+}
+
+.profileChevronOpen svg {
+  transform: rotate(180deg);
+  color: var(--md-sys-color-primary);
+}
+
+/* Mobile trigger */
+.mobileProfileLink {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-surface-container);
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color var(--md-sys-motion-expressive-fast-effects);
+}
+
+.mobileProfileLink::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+.mobileProfileLink:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.mobileProfileLink:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+.mobileProfileLink:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.mobileAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font: var(--md-sys-typescale-label-large);
+  font-weight: 600;
+}
+
+/* Desktop Popover */
+.popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  width: 280px;
+  background-color: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--md-sys-color-shadow) 16%, transparent);
+  overflow: hidden;
+  animation: popoverEnter var(--md-sys-motion-expressive-fast-spatial) both;
+}
+
+@keyframes popoverEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Mobile Bottom Sheet */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: color-mix(in srgb, var(--md-sys-color-scrim) 45%, transparent);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn var(--md-sys-motion-expressive-fast-effects) both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sheet {
+  width: 100%;
+  max-height: 80vh;
+  max-height: 80dvh;
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-extra-large) var(--md-sys-shape-corner-extra-large) 0 0;
+  box-shadow: 0 -8px 32px color-mix(in srgb, var(--md-sys-color-shadow) 20%, transparent);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  animation: slideUp var(--md-sys-motion-expressive-default-spatial) both;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Menu content */
+.menuHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.menuAvatar {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.menuUserInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.menuLogin {
+  font: var(--md-sys-typescale-title-small);
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adminBadge,
+.userBadge {
+  align-self: flex-start;
+  font-size: 10px;
+  line-height: 14px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.adminBadge {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.userBadge {
+  background-color: var(--md-sys-color-surface-container-highest);
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.mobileProfileLink:focus-visible,
-.mobileAdminLink:focus-visible,
-.profileLink:focus-visible {
-  outline: 3px solid var(--md-sys-color-primary);
-  outline-offset: 3px;
+.closeBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
 }
 
-/* [ANDROIDX-M3E] Independent state layer for navigation items */
-.mobileProfileLink::before,
-.mobileAdminLink::before,
-.profileLink::before {
+.menuItems {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+}
+
+.menuItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background-color: transparent;
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-body-medium);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--md-sys-motion-expressive-fast-effects);
+}
+
+.menuItem::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -79,66 +335,97 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .mobileProfileLink:hover,
-  .mobileAdminLink:hover,
-  .profileLink:hover {
-    background-color: var(--md-sys-color-surface-container-highest);
+  .menuItem:hover {
+    background-color: var(--md-sys-color-surface-container-high);
   }
-  .mobileProfileLink[aria-current='page']:hover,
-  .mobileAdminLink[aria-current='page']:hover,
-  .profileLink[aria-current='page']:hover {
-    background-color: var(--md-sys-color-primary-container);
-  }
-  .mobileProfileLink[aria-current='page']:hover::before,
-  .mobileAdminLink[aria-current='page']:hover::before,
-  .profileLink[aria-current='page']:hover::before {
+  .menuItem:hover::before {
     opacity: var(--md-sys-state-hover-opacity);
   }
 }
 
-.mobileProfileLink[aria-current='page']:active::before,
-.mobileAdminLink[aria-current='page']:active::before,
-.profileLink[aria-current='page']:active::before {
+.menuItem:active::before {
   opacity: var(--md-sys-state-pressed-opacity);
 }
 
-@media (min-width: 840px) {
-  .mobileProfileLink,
-  .mobileAdminLink {
+.menuItem:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 1px;
+}
+
+.menuItemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.menuItemLabel {
+  flex: 1;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.menuItemChevron {
+  display: flex;
+  align-items: center;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.themeDot {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--md-sys-shape-corner-full);
+  border: 2px solid var(--md-sys-color-outline);
+}
+
+.themeDot[data-theme='dark'] {
+  background-color: #1a1c1e;
+  border-color: #8bceff;
+}
+
+.themeDot[data-theme='light'] {
+  background-color: #ffe088;
+  border-color: #755b00;
+}
+
+.themeToggleText {
+  font: var(--md-sys-typescale-label-small);
+  color: var(--md-sys-color-on-surface-variant);
+  background-color: var(--md-sys-color-surface-container-high);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.menuDivider {
+  height: 1px;
+  background-color: var(--md-sys-color-outline-variant);
+  margin: 4px 6px;
+}
+
+.logoutItem {
+  color: var(--md-sys-color-error);
+}
+
+.logoutItem .menuItemIcon {
+  color: var(--md-sys-color-error);
+}
+
+@media (min-width: 960px) {
+  .desktopRoot {
+    display: block;
+  }
+  .mobileProfileLink {
     display: none;
-  }
-  .profileLink {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-    max-width: 220px;
-    min-height: 44px;
-    padding: 4px 12px 4px 4px;
-    border-radius: var(--md-sys-shape-corner-full);
-    text-decoration: none;
-    background-color: var(--md-sys-color-surface-container-high);
-    overflow: hidden;
-    transition: background-color var(--md-sys-motion-expressive-fast-effects);
-  }
-  .profileLink[aria-current='page'] {
-    background-color: var(--md-sys-color-primary-container);
-  }
-  .profileLink[aria-current='page'] .profileAvatar {
-    background-color: var(--md-sys-color-primary);
-    color: var(--md-sys-color-on-primary);
-  }
-  .profileLink[aria-current='page'] .profileName,
-  .profileLink[aria-current='page'] .profileChevron {
-    color: var(--md-sys-color-on-primary-container);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mobileProfileLink,
-  .mobileAdminLink,
-  .profileLink {
+  .popover,
+  .sheet,
+  .backdrop,
+  .profileChevron svg {
+    animation: none;
     transition: none;
   }
 }

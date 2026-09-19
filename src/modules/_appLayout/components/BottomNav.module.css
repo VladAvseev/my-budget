@@ -1,20 +1,29 @@
 .bottomNav {
-  position: sticky;
+  position: fixed;
   bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 30;
-  flex-shrink: 0;
-  padding: 8px;
+  padding: 4px;
   padding-left: calc(8px + env(safe-area-inset-left, 0px));
   padding-right: calc(8px + env(safe-area-inset-right, 0px));
   padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--md-sys-color-outline-variant);
   background-color: var(--md-sys-color-surface-container-high);
+  transition: transform var(--md-sys-motion-expressive-default-spatial);
+  will-change: transform;
+}
+
+/* Scroll-aware Hide state (Вариант А) */
+.bottomNavHidden {
+  transform: translateY(100%);
 }
 
 .bottomNavList {
   display: flex;
-  align-items: stretch;
-  gap: 4px;
+  align-items: center;
+  justify-content: space-around;
+  gap: 2px;
   max-width: 600px;
   margin-inline: auto;
 }
@@ -24,8 +33,8 @@
   flex: 1;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 4px;
+  justify-content: center;
+  gap: 3px;
   min-width: 0;
   min-height: 52px;
   padding: 2px 0;
@@ -33,12 +42,13 @@
   text-decoration: none;
 }
 
+/* M3E Active indicator pill (Вариант Б) */
 .pill {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
+  width: 56px;
   max-width: 100%;
   height: 32px;
   flex-shrink: 0;
@@ -49,7 +59,8 @@
   transition:
     background-color var(--md-sys-motion-expressive-fast-effects),
     color var(--md-sys-motion-expressive-fast-effects),
-    border-radius var(--md-sys-motion-expressive-fast-spatial);
+    border-radius var(--md-sys-motion-expressive-fast-spatial),
+    transform var(--md-sys-motion-expressive-fast-spatial);
 }
 
 .bottomNavItem[aria-current='page'] .pill {
@@ -59,6 +70,7 @@
 
 .bottomNavItem:active .pill {
   border-radius: var(--md-sys-shape-corner-small);
+  transform: scale(0.94);
 }
 
 .bottomNavLabel {
@@ -66,14 +78,16 @@
   max-width: 100%;
   overflow-wrap: anywhere;
   text-align: center;
-  font: var(--md-sys-typescale-label-medium);
+  font: var(--md-sys-typescale-label-small);
+  font-size: 11px;
   letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
+  transition: color var(--md-sys-motion-expressive-fast-effects);
 }
 
 .bottomNavItem[aria-current='page'] .bottomNavLabel {
   color: var(--md-sys-color-on-surface);
-  font-weight: var(--md-sys-typescale-label-medium-emphasized-weight);
+  font-weight: 600;
 }
 
 .bottomNavItem:focus-visible {
@@ -109,14 +123,72 @@
   opacity: var(--md-sys-state-pressed-opacity);
 }
 
-@media (min-width: 840px) {
+/* Центральный M3E FAB-заглушка (Вариант В) */
+.fabContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.fabStub {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-large);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--md-sys-color-shadow) 18%, transparent);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform var(--md-sys-motion-expressive-fast-spatial),
+    border-radius var(--md-sys-motion-expressive-fast-spatial),
+    box-shadow var(--md-sys-motion-expressive-fast-effects);
+}
+
+.fabStub::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-expressive-fast-effects);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fabStub:hover::before {
+    opacity: var(--md-sys-state-hover-opacity);
+  }
+}
+
+.fabStub:active {
+  transform: scale(0.92);
+  border-radius: var(--md-sys-shape-corner-small);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--md-sys-color-shadow) 22%, transparent);
+}
+
+.fabStub:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+@media (min-width: 960px) {
   .bottomNav {
     display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pill {
+  .bottomNav,
+  .pill,
+  .fabStub {
     transition: none;
   }
 }

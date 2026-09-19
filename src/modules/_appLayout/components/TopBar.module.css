@@ -17,7 +17,7 @@
   padding-right: calc(16px + env(safe-area-inset-right, 0px));
 }
 
-.brand,
+.addButton,
 .topNav {
   display: none;
 }
@@ -25,7 +25,6 @@
 .actions {
   display: flex;
   flex: 1;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px 12px;
@@ -38,9 +37,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
+  min-height: 40px;
+  height: 40px;
   min-width: 0;
-  padding: 8px 12px;
+  padding: 6px 14px;
   border-radius: var(--md-sys-shape-corner-full);
   text-decoration: none;
   font: var(--md-sys-typescale-label-large);
@@ -71,18 +71,9 @@
   white-space: nowrap;
 }
 
-.adminDivider {
-  align-self: center;
-  flex-shrink: 0;
-  width: 1px;
-  height: 24px;
-  margin-inline: 4px;
-  background-color: var(--md-sys-color-outline-variant);
-}
-
 .navLink:focus-visible {
   outline: 3px solid var(--md-sys-color-primary);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 /* [ANDROIDX-M3E] Independent state layer for navigation items */
@@ -113,48 +104,39 @@
   opacity: var(--md-sys-state-pressed-opacity);
 }
 
-@media (min-width: 840px) {
+/* Single-row layout on all desktop/tablet screens (>= 840px) */
+@media (min-width: 960px) {
   .topbarInner {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 8px 24px;
-    padding-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
   }
-  .brand {
+
+  .addButton {
     display: flex;
     flex-shrink: 0;
   }
+
   .topNav {
     display: flex;
-    grid-column: 1 / -1;
-    grid-row: 2;
-    flex-wrap: wrap;
+    flex: 1 1 auto;
     align-items: center;
     justify-content: center;
     gap: 4px;
     min-width: 0;
   }
-  .actions {
-    grid-column: 2;
-    grid-row: 1;
-    justify-content: flex-end;
-  }
-}
 
-@media (min-width: 1200px) {
-  .topbarInner {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    max-width: 1360px;
-    margin: 0 auto;
-    padding: 8px 24px;
-  }
-  .topNav {
-    flex: 1 1 540px;
-  }
   .actions {
-    flex: 0 1 auto;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-left: 0;
   }
 }
 

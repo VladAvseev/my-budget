@@ -55,7 +55,7 @@
   }
 }
 
-@media (min-width: 840px) {
+@media (min-width: 960px) {
   .list {
     display: flex;
     flex-direction: column;

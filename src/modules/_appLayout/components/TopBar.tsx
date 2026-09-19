@@ -1,23 +1,23 @@
-import { NAV_ITEMS } from '../navItems';
-import { SettingsFilledIcon, SettingsIcon } from '@/shared/icons';
-import { VBrand } from '@/shared/ui/VBrand';
+import { VButton } from '@/shared/ui/VButton';
 import { type RefObject } from 'react';
 import { NavLink } from 'react-router-dom';
+import { NAV_ITEMS } from '../navItems';
 import { AccountsBalanceBadge } from './AccountsBalanceBadge';
-import { MobileAdminLink, MobileProfileLink, ProfileLink } from './ProfileLinks';
+import { MobileProfileLink, ProfileLink } from './ProfileLinks';
 import styles from './TopBar.module.css';
+import { PlusIcon } from '@/shared/icons';
 
 interface TopBarProps {
   topNavRef: RefObject<HTMLElement | null>;
-  isAdmin: boolean;
+  isAdmin?: boolean;
 }
 
-// Верхняя шапка приложения: бренд, основная навигация и действия (бейдж капитала, профиль).
-export const TopBar = ({ topNavRef, isAdmin }: TopBarProps) => {
+// Верхняя шапка приложения: бренд, основная навигация и действия (капитал, профиль).
+export const TopBar = ({ topNavRef }: TopBarProps) => {
   return (
     <header className={styles.topbar}>
       <div className={styles.topbarInner}>
-        <VBrand to="/" className={styles.brand} />
+        <VButton className={styles.addButton} onClick={() => {}}><PlusIcon />Добавить операцию</VButton>
 
         <nav ref={topNavRef} className={styles.topNav} aria-label="Основная навигация">
           {NAV_ITEMS.map((item) => (
@@ -39,26 +39,11 @@ export const TopBar = ({ topNavRef, isAdmin }: TopBarProps) => {
               }}
             </NavLink>
           ))}
-
-          {isAdmin && (
-            <>
-              <div className={styles.adminDivider} aria-hidden="true" />
-              <NavLink to="/admin" data-nav-to="/admin" className={styles.navLink}>
-                {({ isActive }) => (
-                  <span className={styles.navLinkContent}>
-                    {isActive ? <SettingsFilledIcon size={18} /> : <SettingsIcon size={18} />}
-                    Админ-панель
-                  </span>
-                )}
-              </NavLink>
-            </>
-          )}
         </nav>
 
         <div className={styles.actions}>
           <AccountsBalanceBadge />
           <ProfileLink />
-          {isAdmin && <MobileAdminLink />}
           <MobileProfileLink />
         </div>
       </div>

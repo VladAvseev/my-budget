@@ -125,7 +125,7 @@
     border-color: var(--md-sys-color-outline);
   }
 }
-@media (min-width: 840px) {
+@media (min-width: 960px) {
   .sectionHeader {
     grid-template-columns: auto minmax(0, 1fr);
     align-items: baseline;

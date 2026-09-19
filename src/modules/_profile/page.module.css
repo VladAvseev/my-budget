@@ -37,7 +37,7 @@
   min-width: 0;
 }
 
-@media (min-width: 840px) {
+@media (min-width: 960px) {
   .page {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:

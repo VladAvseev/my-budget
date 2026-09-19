@@ -155,7 +155,7 @@
   font: var(--md-sys-typescale-label-large);
   color: var(--md-sys-color-on-surface);
 }
-@media (min-width: 840px) {
+@media (min-width: 960px) {
   .list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

@@ -22,7 +22,7 @@
   }
 }
 
-@media (min-width: 840px) {
+@media (min-width: 960px) {
   .grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 16px;

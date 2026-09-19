@@ -7,11 +7,11 @@ import { useCapital, useCurrency } from '@/shared/api/hooks';
 import { useBreakpoint } from '@/shared/hooks';
 import {
   BanknotesIcon,
-  CapitalIcon,
   ChevronDownIcon,
   ClearIcon,
   EyeIcon,
   EyeOffIcon,
+  WalletFilledIcon,
 } from '@/shared/icons';
 import { Amount, CurrencyText } from '@/shared/ui/Amount';
 import { VButton } from '@/shared/ui/VButton';
@@ -223,14 +223,14 @@ export const AccountsBalanceBadge = () => {
         aria-expanded={isOpen}
         aria-controls={panelId}
         aria-haspopup="dialog"
-        aria-label={`Капитал: ${hideBalance ? 'скрыт' : formattedCapital}. Нажмите для просмотра счетов`}
+        aria-label={`Все счета: ${hideBalance ? 'скрыт' : formattedCapital}. Нажмите для просмотра счетов`}
         onClick={toggleOpen}
       >
         <span className={styles.pillIcon} aria-hidden="true">
-          <CapitalIcon size={18} />
+          <WalletFilledIcon size={18} />
         </span>
         <span className={styles.pillContent}>
-          <span className={styles.pillLabel}>Капитал</span>
+          <span className={styles.pillLabel}>Все счета</span>
           <span className={styles.pillValue}>
             <CurrencyText>{formattedCapital}</CurrencyText>
           </span>
@@ -273,7 +273,6 @@ export const AccountsBalanceBadge = () => {
               className={styles.sheet}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className={styles.sheetHandle} aria-hidden="true" />
               {panelContent}
             </div>
           </div>,

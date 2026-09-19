@@ -405,7 +405,7 @@
   }
 }
 
-@media (min-width: 840px) {
+@media (min-width: 960px) {
   .metricsGrid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }

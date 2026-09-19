@@ -83,7 +83,7 @@
 .fieldGroupTop input {
   min-height: 48px;
 }
-@media (min-width: 840px) {
+@media (min-width: 960px) {
   .fieldGroupTop {
     grid-template-columns: minmax(0, 1fr) 120px 48px;
   }
