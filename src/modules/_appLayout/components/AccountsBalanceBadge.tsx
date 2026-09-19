@@ -1,53 +1,84 @@
-import { CurrencyText } from '@/shared/ui/Amount';
-import { Amount } from '@/shared/ui/Amount';
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
+import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
+import { useAtom } from 'jotai';
 import { useAuth } from '@/shared/api/authProvider';
 import { useCapital, useCurrency } from '@/shared/api/hooks';
 import { useBreakpoint } from '@/shared/hooks';
-import { ChevronDownIcon } from '@/shared/icons';
-import { VBadge } from '@/shared/ui/VBadge';
+import {
+  BanknotesIcon,
+  CapitalIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  ClearIcon,
+  EyeIcon,
+  EyeOffIcon,
+} from '@/shared/icons';
+import { Amount, CurrencyText } from '@/shared/ui/Amount';
 import { formatAmount } from '@/shared/utils';
+import { hideBalanceAtom } from '../atoms/privacy';
 import styles from './AccountsBalanceBadge.module.css';
 
 export const AccountsBalanceBadge = () => {
   const { user } = useAuth();
   const accountsQuery = useCapital(user?.id ?? '');
   const currency = useCurrency();
-  const { isDesktop } = useBreakpoint();
+  const { isMobile } = useBreakpoint();
   const [isOpen, setIsOpen] = useState(false);
+  const [hideBalance, setHideBalance] = useAtom(hideBalanceAtom);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
+
   const { accounts, capital } = accountsQuery;
-  const expandable = accounts.length > 1;
-  const expanded = expandable && isOpen;
-  const amount = accountsQuery.data
-    ? formatAmount(capital ?? 0, currency?.symbol)
+  const accountsCount = accounts.length;
+
+  const formattedCapital = accountsQuery.data
+    ? hideBalance
+      ? '••••••'
+      : formatAmount(capital ?? 0, currency?.symbol)
     : accountsQuery.isError
-      ? 'Баланс недоступен'
+      ? 'Недоступен'
       : 'Загрузка…';
 
   useEffect(() => {
-    if (!expanded) return;
-    const handleOutside = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false);
-    };
-    const handleEscape = (event: KeyboardEvent) => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsOpen(false);
-        if (rootRef.current?.contains(document.activeElement)) triggerRef.current?.focus();
+        triggerRef.current?.focus();
       }
     };
-    document.addEventListener('pointerdown', handleOutside);
-    document.addEventListener('keydown', handleEscape);
-    return () => {
-      document.removeEventListener('pointerdown', handleOutside);
-      document.removeEventListener('keydown', handleEscape);
+
+    const handleOutsideClick = (event: PointerEvent) => {
+      if (isMobile) return;
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
     };
-  }, [expanded]);
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('pointerdown', handleOutsideClick);
+    };
+  }, [isOpen, isMobile]);
+
+  useEffect(() => {
+    if (!isOpen || !isMobile) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen, isMobile]);
 
   useLayoutEffect(() => {
-    if (!expanded) return;
+    if (!isOpen || isMobile) return;
     const measure = () => {
       const root = rootRef.current;
       if (!root) return;
@@ -63,72 +94,185 @@ export const AccountsBalanceBadge = () => {
       window.removeEventListener('resize', measure);
       window.removeEventListener('scroll', measure, true);
     };
-  }, [expanded]);
+  }, [isOpen, isMobile]);
 
-  const badge = (
-    <VBadge variant="accent" className={styles.badge}>
-      Капитал <CurrencyText>{amount}</CurrencyText>
-      {expandable && (
-        <span
-          aria-hidden="true"
-          className={expanded ? `${styles.arrow} ${styles.arrowOpen}` : styles.arrow}
+  const toggleOpen = () => setIsOpen((prev) => !prev);
+
+  const togglePrivacy = (e: MouseEvent) => {
+    e.stopPropagation();
+    setHideBalance((prev) => !prev);
+  };
+
+  const panelContent = (
+    <>
+      <div className={styles.panelHeader}>
+        <div className={styles.headerTitleGroup}>
+          <span className={styles.panelTitle}>Счета и балансы</span>
+          {accountsCount > 0 && (
+            <span
+              className={styles.countBadge}
+              aria-label={`Открытых счетов: ${accountsCount}`}
+            >
+              {accountsCount}
+            </span>
+          )}
+        </div>
+        <div className={styles.headerActions}>
+          <button
+            type="button"
+            className={styles.privacyButton}
+            onClick={togglePrivacy}
+            aria-label={hideBalance ? 'Показать суммы' : 'Скрыть суммы'}
+            title={hideBalance ? 'Показать суммы' : 'Скрыть суммы'}
+          >
+            {hideBalance ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+          </button>
+          {isMobile && (
+            <button
+              type="button"
+              className={styles.closeButton}
+              onClick={() => setIsOpen(false)}
+              aria-label="Закрыть"
+            >
+              <ClearIcon size={18} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className={styles.listContainer}>
+        {accountsQuery.isLoading && (
+          <div className={styles.statusState}>Загрузка счетов…</div>
+        )}
+
+        {accountsQuery.isError && (
+          <div className={styles.statusState}>Не удалось загрузить счета</div>
+        )}
+
+        {!accountsQuery.isLoading && accountsCount === 0 && (
+          <div className={styles.emptyState}>
+            <span>У вас пока нет открытых счетов</span>
+            <Link
+              to="/profile"
+              className={styles.addAccountLink}
+              onClick={() => setIsOpen(false)}
+            >
+              Создать счёт в профиле
+            </Link>
+          </div>
+        )}
+
+        {accountsCount > 0 && (
+          <ul className={styles.list}>
+            {accounts.map((account) => (
+              <li key={account.id} className={styles.row}>
+                <span className={styles.accountIcon} aria-hidden="true">
+                  <BanknotesIcon size={18} />
+                </span>
+                <div className={styles.accountInfo}>
+                  <span className={styles.accountName}>{account.name}</span>
+                  {account.is_primary && (
+                    <span className={styles.primaryBadge}>Основной</span>
+                  )}
+                </div>
+                <span className={styles.accountAmount}>
+                  {hideBalance ? (
+                    <span className={styles.maskedAmount}>••••••</span>
+                  ) : (
+                    <Amount value={account.cents / 100} currencySymbol={currency?.symbol} />
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className={styles.panelFooter}>
+        <Link
+          to="/capital"
+          className={styles.footerActionPrimary}
+          onClick={() => setIsOpen(false)}
         >
-          <ChevronDownIcon size={16} color="currentColor" />
-        </span>
-      )}
-    </VBadge>
+          <span>Вся аналитика капитала</span>
+          <ChevronRightIcon size={16} aria-hidden="true" />
+        </Link>
+        <Link
+          to="/profile"
+          className={styles.footerActionSecondary}
+          onClick={() => setIsOpen(false)}
+        >
+          <span>Управление счетами</span>
+        </Link>
+      </div>
+    </>
   );
 
   return (
-    <div
-      ref={rootRef}
-      className={styles.root}
-      onMouseEnter={() => {
-        if (isDesktop) setIsOpen(true);
-      }}
-      onMouseLeave={() => {
-        if (isDesktop) setIsOpen(false);
-      }}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
-      }}
-    >
-      {expandable ? (
-        <button
-          ref={triggerRef}
-          type="button"
-          className={styles.trigger}
-          aria-expanded={expanded}
-          aria-controls={expanded ? panelId : undefined}
-          aria-label={`Капитал: ${amount}. Балансы по счетам`}
-          onClick={() => setIsOpen((open) => !open)}
+    <div ref={rootRef} className={styles.root}>
+      <button
+        ref={triggerRef}
+        type="button"
+        className={`${styles.trigger} ${isOpen ? styles.triggerActive : ''}`}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        aria-haspopup="dialog"
+        aria-label={`Капитал: ${hideBalance ? 'скрыт' : formattedCapital}. Нажмите для просмотра счетов`}
+        onClick={toggleOpen}
+      >
+        <span className={styles.pillIcon} aria-hidden="true">
+          <CapitalIcon size={18} />
+        </span>
+        <span className={styles.pillContent}>
+          <span className={styles.pillLabel}>Капитал</span>
+          <span className={styles.pillValue}>
+            <CurrencyText>{formattedCapital}</CurrencyText>
+          </span>
+        </span>
+        <span
+          aria-hidden="true"
+          className={`${styles.arrow} ${isOpen ? styles.arrowOpen : ''}`}
         >
-          {badge}
-        </button>
-      ) : (
-        badge
-      )}
-      {expanded && (
+          <ChevronDownIcon size={16} />
+        </span>
+      </button>
+
+      {isOpen && !isMobile && (
         <div className={styles.popover}>
           <section
             id={panelId}
-            aria-label="Балансы открытых счетов"
+            role="region"
+            aria-label="Счета и балансы"
             className={styles.panel}
             tabIndex={0}
           >
-            <ul className={styles.list}>
-              {accounts.map((account) => (
-                <li key={account.id} className={styles.row}>
-                  <span className={styles.name}>{account.name}</span>
-                  <span className={styles.accountAmount}>
-                    <Amount value={account.cents / 100} currencySymbol={currency?.symbol} />
-                  </span>
-                </li>
-              ))}
-            </ul>
+            {panelContent}
           </section>
         </div>
       )}
+
+      {isOpen && isMobile &&
+        createPortal(
+          <div
+            className={styles.backdrop}
+            onClick={() => setIsOpen(false)}
+            role="presentation"
+          >
+            <div
+              ref={sheetRef}
+              id={panelId}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Счета и балансы"
+              className={styles.sheet}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={styles.sheetHandle} aria-hidden="true" />
+              {panelContent}
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 };
