@@ -85,6 +85,19 @@
   flex-shrink: 0;
 }
 
+/* Строка степпера: кнопки ‹ / › слева и справа от поля-триггера */
+.stepperRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.stepperRow .trigger {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
 .clearButton {
   display: inline-flex;
   align-items: center;
@@ -168,6 +181,22 @@
 .navButton:focus-visible {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
+}
+
+/* Кнопка шага степпера: геометрия и фокус от navButton, disabled — подходом dayDisabled */
+.stepButton {
+  flex-shrink: 0;
+}
+
+.stepButton:disabled {
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+.stepButton:disabled:hover {
+  background-color: transparent;
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 
 .monthButton {

@@ -23,6 +23,9 @@ export interface VDatePickerProps {
   className?: string;
   minDate?: string;
   maxDate?: string;
+  showStepButtons?: boolean;
+  // Запрет очистки: при обязательной дате крестик не показывается.
+  allowClear?: boolean;
 }
 
 const WEEKDAY_LABELS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
@@ -53,6 +56,8 @@ export const VDatePicker = ({
   className,
   minDate,
   maxDate,
+  showStepButtons = false,
+  allowClear = true,
 }: VDatePickerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -102,6 +107,77 @@ export const VDatePicker = ({
     setIsOpen(false);
   };
 
+  // Шаг строго ±1 календарный день от текущего value. Пустое значение не угадываем.
+  const parsedValue = parseISO(value);
+  const shiftISO = (delta: number): string | null => {
+    if (!parsedValue) {
+      return null;
+    }
+    const next = new Date(parsedValue);
+    next.setDate(next.getDate() + delta);
+    return toISODate(next);
+  };
+  const prevISO = showStepButtons ? shiftISO(-1) : null;
+  const nextISO = showStepButtons ? shiftISO(1) : null;
+  // Границы включительно, как в DayCell: соседняя дата за границей — кнопка disabled.
+  const isPrevDisabled = Boolean(
+    disabled || !parsedValue || !prevISO || (minDate && prevISO < minDate),
+  );
+  const isNextDisabled = Boolean(
+    disabled || !parsedValue || !nextISO || (maxDate && nextISO > maxDate),
+  );
+
+  const handleStep = (delta: number) => (event: ReactMouseEvent) => {
+    // Клик по стрелке не должен открывать/закрывать календарь.
+    event.stopPropagation();
+    if (disabled) {
+      return;
+    }
+    const iso = shiftISO(delta);
+    if (!iso) {
+      return;
+    }
+    if ((delta < 0 && minDate && iso < minDate) || (delta > 0 && maxDate && iso > maxDate)) {
+      return;
+    }
+    onChange?.(iso);
+  };
+
+  const triggerNode = (
+    <div
+      role="combobox"
+      aria-expanded={isOpen}
+      aria-invalid={hasError}
+      aria-haspopup="dialog"
+      aria-labelledby={label ? labelId : undefined}
+      tabIndex={disabled ? -1 : 0}
+      onClick={toggleOpen}
+      onKeyDown={handleTriggerKeyDown}
+      className={styles.trigger}
+      data-has-value={hasValue ? 'true' : undefined}
+      data-open={isOpen ? 'true' : undefined}
+      data-invalid={hasError ? 'true' : undefined}
+      data-disabled={disabled ? 'true' : undefined}
+    >
+      <span className={styles.triggerText}>{hasValue ? formatDisplay(value ?? '') : placeholder}</span>
+      <span className={styles.triggerActions}>
+        {hasValue && !disabled && allowClear && (
+          <button
+            type="button"
+            aria-label="Очистить"
+            onClick={handleClear}
+            className={styles.clearButton}
+          >
+            <ClearIcon size={16} color="currentColor" />
+          </button>
+        )}
+        <span className={styles.calendarIcon}>
+          <CalendarIcon size={16} color="currentColor" />
+        </span>
+      </span>
+    </div>
+  );
+
   return (
     <div
       ref={containerRef}
@@ -113,40 +189,33 @@ export const VDatePicker = ({
           {label}
         </label>
       )}
-      <div
-        role="combobox"
-        aria-expanded={isOpen}
-        aria-invalid={hasError}
-        aria-haspopup="dialog"
-        aria-labelledby={label ? labelId : undefined}
-        tabIndex={disabled ? -1 : 0}
-        onClick={toggleOpen}
-        onKeyDown={handleTriggerKeyDown}
-        className={styles.trigger}
-        data-has-value={hasValue ? 'true' : undefined}
-        data-open={isOpen ? 'true' : undefined}
-        data-invalid={hasError ? 'true' : undefined}
-        data-disabled={disabled ? 'true' : undefined}
-      >
-        <span className={styles.triggerText}>
-          {hasValue ? formatDisplay(value ?? '') : placeholder}
-        </span>
-        <span className={styles.triggerActions}>
-          {hasValue && !disabled && (
-            <button
-              type="button"
-              aria-label="Очистить"
-              onClick={handleClear}
-              className={styles.clearButton}
-            >
-              <ClearIcon size={16} color="currentColor" />
-            </button>
-          )}
-          <span className={styles.calendarIcon}>
-            <CalendarIcon size={16} color="currentColor" />
-          </span>
-        </span>
-      </div>
+      {showStepButtons ? (
+        <div className={styles.stepperRow}>
+          <button
+            type="button"
+            aria-label="Предыдущая дата"
+            aria-disabled={isPrevDisabled}
+            disabled={isPrevDisabled}
+            onClick={handleStep(-1)}
+            className={`${styles.navButton} ${styles.stepButton}`}
+          >
+            <ChevronLeftIcon size={16} color="currentColor" />
+          </button>
+          {triggerNode}
+          <button
+            type="button"
+            aria-label="Следующая дата"
+            aria-disabled={isNextDisabled}
+            disabled={isNextDisabled}
+            onClick={handleStep(1)}
+            className={`${styles.navButton} ${styles.stepButton}`}
+          >
+            <ChevronRightIcon size={16} color="currentColor" />
+          </button>
+        </div>
+      ) : (
+        triggerNode
+      )}
       {isOpen && !disabled && (
         <CalendarDropdown
           value={value}

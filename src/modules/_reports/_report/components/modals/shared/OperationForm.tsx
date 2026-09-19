@@ -14,7 +14,7 @@ import { VModal } from '@/shared/ui/VModal';
 import { VSelect } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { TrashIcon } from '@/shared/icons';
-import { capitalizeFirst, formatDisplay, getErrorMessage } from '@/shared/utils';
+import { capitalizeFirst, formatDisplay, getErrorMessage, toISODate } from '@/shared/utils';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { CategorySelect } from './CategorySelect';
 import { AmountAdjuster } from './AmountAdjuster';
@@ -25,6 +25,20 @@ const isCurrentType = (value: string): value is ApiOperationType =>
 
 const closedMessage =
   'Операцию закрытого счёта нельзя изменить или удалить. Сначала откройте счёт.';
+
+// Дефолт даты: сегодня, если попадает в период отчёта; иначе ближайшая граница —
+// первый день периода (период ещё не начался) или последний день (период уже прошёл).
+// Сравнение строк корректно, т.к. даты в формате ISO YYYY-MM-DD.
+const getDefaultOperationDate = (periodStart: string, periodEnd: string): string => {
+  const today = toISODate(new Date());
+  if (today < periodStart) {
+    return periodStart;
+  }
+  if (today > periodEnd) {
+    return periodEnd;
+  }
+  return today;
+};
 
 interface OperationFormProps {
   initialType?: ApiOperationType;
@@ -50,7 +64,9 @@ export const OperationForm = ({
     operation && isCurrentType(operation.type) ? operation.type : initialType;
   const [amount, setAmount] = useState(operation ? String(operation.amount) : '');
   const [description, setDescription] = useState(operation?.description ?? '');
-  const [date, setDate] = useState(operation?.date ?? '');
+  const [date, setDate] = useState(
+    () => operation?.date ?? getDefaultOperationDate(report.period_start, report.period_end),
+  );
   const [categoryId, setCategoryId] = useState(operation?.category_id ?? '');
   
   const [selectedAccount, setSelectedAccount] = useState<string | undefined>(
@@ -61,6 +77,7 @@ export const OperationForm = ({
   );
   const [toAccountId, setToAccountId] = useState(operation?.to_account_id ?? '');
   const [amountError, setAmountError] = useState<string>();
+  const [dateError, setDateError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
   const [serverLocked, setServerLocked] = useState(false);
   const [isPreparing, setIsPreparing] = useState(false);
@@ -135,6 +152,11 @@ export const OperationForm = ({
     const error = getAmountError(amount);
     setAmountError(error);
     if (error) return;
+    if (!date) {
+      setDateError('Выберите дату операции.');
+      return;
+    }
+    setDateError(undefined);
     const isOpen = (id: string) => openAccounts.some((account) => account.id === id);
     if (type === 'transfer') {
       if (!isOpen(fromAccountId) || !isOpen(toAccountId)) {
@@ -152,8 +174,7 @@ export const OperationForm = ({
     submitting.current = true;
     setIsPreparing(true);
     try {
-      const requestDate = date || null;
-      if (requestDate && (requestDate < report.period_start || requestDate > report.period_end)) {
+      if (date < report.period_start || date > report.period_end) {
         throw new Error(
           `Дата должна быть в пределах периода (${formatDisplay(report.period_start)} — ${formatDisplay(report.period_end)})`,
         );
@@ -161,7 +182,7 @@ export const OperationForm = ({
       const common = {
         amount: Number(amount),
         description: description || null,
-        date: requestDate,
+        date,
       };
       const input =
         type === 'transfer'
@@ -328,10 +349,16 @@ export const OperationForm = ({
         <VDatePicker
           label="Дата"
           value={date}
+          error={dateError}
           disabled={fieldsDisabled}
-          onChange={setDate}
+          onChange={(next) => {
+            setDate(next);
+            setDateError(undefined);
+          }}
           minDate={report.period_start}
           maxDate={report.period_end}
+          showStepButtons
+          allowClear={false}
         />
       </div>
     </VModal>
