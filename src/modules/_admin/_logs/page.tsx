@@ -1,7 +1,7 @@
 import commonStyles from '@/shared/styles/common.module.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@/shared/icons';
-import { VButton } from '@/shared/ui/VButton';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
+import { VIconButton } from '@/shared/ui/VIconButton';
 import { VCard } from '@/shared/ui/VCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
@@ -460,25 +460,23 @@ export const Page: React.FC = () => {
             </div>
 
             <div className={styles.pagination}>
-              <VButton
-                variant="secondary"
+              <VIconButton
+                ariaLabel="Предыдущая страница"
                 isDisabled={page <= 1}
                 onClick={() => setPage((current) => Math.max(1, current - 1))}
               >
-                <ChevronLeftIcon size={18} />
-                Назад
-              </VButton>
+                <ChevronLeftIcon size={20} color="currentColor" />
+              </VIconButton>
               <span className={styles.paginationInfo}>
                 Стр. {logs.page} из {totalPages} · всего {formatNumber(logs.total)}
               </span>
-              <VButton
-                variant="secondary"
+              <VIconButton
+                ariaLabel="Следующая страница"
                 isDisabled={page >= totalPages}
                 onClick={() => setPage((current) => current + 1)}
               >
-                Вперёд
-                <ChevronRightIcon size={18} />
-              </VButton>
+                <ChevronRightIcon size={20} color="currentColor" />
+              </VIconButton>
             </div>
           </>
         )}
