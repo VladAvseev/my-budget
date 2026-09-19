@@ -1,7 +1,7 @@
-import { MenuIcon, OverviewIcon, CapitalIcon, BanknotesIcon } from '@/shared/icons';
+import { BanknotesIcon, CapitalIcon, MenuIcon, OverviewIcon } from '@/shared/icons';
 import { LegalLinks } from '@/shared/legal/LegalLinks';
-import { VButton } from '@/shared/ui/VButton';
 import { VBrand } from '@/shared/ui/VBrand';
+import { VButton } from '@/shared/ui/VButton';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './landing.module.css';
@@ -53,9 +53,6 @@ export const Page: React.FC = () => {
           <nav className={styles.headerActions} aria-label="Вход и регистрация">
             <Link to="/login">
               <VButton variant="secondary">Войти</VButton>
-            </Link>
-            <Link to="/registration">
-              <VButton>Регистрация</VButton>
             </Link>
           </nav>
         </div>
