@@ -1,8 +1,9 @@
 import type { Account } from '@/shared/api/types/domain';
-import { BanknotesIcon, ChevronRightIcon } from '@/shared/icons';
+import { BanknotesIcon, ChevronRightIcon, WalletFilledIcon } from '@/shared/icons';
 import { Amount } from '@/shared/ui/Amount';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VCard } from '@/shared/ui/VCard';
+import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import styles from './AccountItemCard.module.css';
 
 interface AccountItemCardProps {
@@ -37,11 +38,16 @@ export const AccountItemCard = ({ account, currencySymbol, onClick }: AccountIte
           className={`${styles.iconWrap}${account.is_primary ? ` ${styles.primaryIcon}` : ''}`}
           aria-hidden="true"
         >
-          <BanknotesIcon size={22} color="currentColor" />
+          {account.is_primary ? (
+            <WalletFilledIcon size={22} color="currentColor" />
+          ) : (
+            <BanknotesIcon size={22} color="currentColor" />
+          )}
         </div>
 
         <div className={styles.identity}>
           <div className={styles.nameGroup}>
+            <VCategoryDot color={account.color ?? 'var(--md-sys-color-outline-variant)'} />
             <span className={styles.name}>{account.name}</span>
             <div className={styles.badges}>
               {account.is_primary && <VBadge variant="accent">Основной</VBadge>}

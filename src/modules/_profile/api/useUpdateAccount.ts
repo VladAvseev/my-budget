@@ -7,6 +7,7 @@ export type UseUpdateAccountRequest = {
   id: string;
   name?: string;
   initial_balance?: string;
+  color?: string | null;
   is_closed?: boolean;
   is_primary?: true;
 };

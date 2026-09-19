@@ -9,6 +9,7 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { VToggle } from '@/shared/ui/VToggle';
+import { ColorPalette } from '@/shared/ui/ColorPalette';
 import { getErrorMessage } from '@/shared/utils';
 import { useCreateAccount } from '../api/useCreateAccount';
 import { useUpdateAccount } from '../api/useUpdateAccount';
@@ -28,6 +29,7 @@ export const AccountFormModal = ({ account, onClose, onRequestDelete }: AccountF
 
   const [name, setName] = useState(account?.name ?? '');
   const [balance, setBalance] = useState(String(account?.initial_balance ?? 0));
+  const [color, setColor] = useState(account?.color ?? '');
   const [isPrimary, setIsPrimary] = useState(Boolean(account?.is_primary));
   const [isClosed, setIsClosed] = useState(Boolean(account?.is_closed));
   const [nameError, setNameError] = useState<string>();
@@ -73,6 +75,7 @@ export const AccountFormModal = ({ account, onClose, onRequestDelete }: AccountF
       const fields: {
         name: string;
         initial_balance: string;
+        color?: string | null;
         is_closed?: boolean;
         is_primary?: true;
       } = {
@@ -80,6 +83,9 @@ export const AccountFormModal = ({ account, onClose, onRequestDelete }: AccountF
         initial_balance: formattedBalance,
       };
 
+      if ((color || null) !== (account.color ?? null)) {
+        fields.color = color || null;
+      }
       if (isClosed !== account.is_closed) {
         fields.is_closed = isClosed;
       }
@@ -96,7 +102,7 @@ export const AccountFormModal = ({ account, onClose, onRequestDelete }: AccountF
       );
     } else {
       create.mutate(
-        { name: trimmedName, initial_balance: formattedBalance },
+        { name: trimmedName, initial_balance: formattedBalance, color: color || null },
         {
           onSuccess: onClose,
           onError: (error: Error) => setSubmitError(getErrorMessage(error)),
@@ -177,6 +183,8 @@ export const AccountFormModal = ({ account, onClose, onRequestDelete }: AccountF
         <p className={commonStyles.emptyHint}>
           Сумма на счёте до начала учёта операций. Может быть отрицательной.
         </p>
+
+        <ColorPalette value={color} disabled={pending} onChange={setColor} />
 
         {account && (
           <section aria-label="Статус счёта" className={styles.statusSection}>

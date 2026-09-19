@@ -16,16 +16,7 @@ export interface CapitalStructureData {
   hasNegative: boolean;
 }
 
-export const CAPITAL_PALETTE = [
-  'var(--md-sys-color-primary)',
-  'var(--md-sys-color-secondary)',
-  'var(--md-sys-color-tertiary)',
-  'var(--md-sys-color-primary-fixed-dim)',
-  'var(--md-sys-color-secondary-fixed-dim)',
-  'var(--md-sys-color-tertiary-fixed-dim)',
-  'var(--md-sys-color-primary-container)',
-  'var(--md-sys-color-secondary-container)',
-] as const;
+export const ACCOUNT_COLOR_FALLBACK = 'var(--md-sys-color-outline-variant)';
 
 export const buildCapitalStructureData = (accounts: Account[]): CapitalStructureData => {
   const open = accounts
@@ -42,13 +33,13 @@ export const buildCapitalStructureData = (accounts: Account[]): CapitalStructure
   const segments: CapitalStructureSegment[] = [];
   let cursor = 0;
 
-  open.forEach((account, index) => {
+  open.forEach((account) => {
     if (account.balance <= 0) return;
     const percent = (account.balance / total) * 100;
     segments.push({
       key: account.id,
       label: account.name,
-      color: CAPITAL_PALETTE[index % CAPITAL_PALETTE.length],
+      color: account.color ?? ACCOUNT_COLOR_FALLBACK,
       total: account.balance,
       percent,
       start: cursor,

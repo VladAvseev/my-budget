@@ -5,6 +5,7 @@ import type { Account } from '@/shared/api/types/domain';
 import { convertAmount } from '@/shared/utils';
 import { DonutChart, type DonutSegment } from '@/shared/ui/DonutChart';
 import { VCard } from '@/shared/ui/VCard';
+import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
 import type { CapitalGrowthCardCurrency } from './CapitalGrowthCard';
@@ -113,11 +114,7 @@ export const CapitalStructureCard = ({ userId, title, currency }: CapitalStructu
             <ul className={styles.legend}>
               {donutSegments.map((segment) => (
                 <li key={segment.key} className={styles.legendRow}>
-                  <span
-                    aria-hidden="true"
-                    className={styles.dot}
-                    style={{ ['--segment-color' as string]: segment.color }}
-                  />
+                  <VCategoryDot color={segment.color} className={styles.dot} />
                   <span className={styles.accountName}>{segment.label}</span>
                   <span className={styles.percentage}>{segment.percent.toFixed(1)}%</span>
                   <span className={styles.amount}>

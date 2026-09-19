@@ -17,6 +17,7 @@ import { useGoalPeriodOperations } from '../api/useGoalPeriodOperations';
 import { VBadge } from '@/shared/ui/VBadge';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
+import { VCategoryDot } from '@/shared/ui/VCategoryDot';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
@@ -283,7 +284,12 @@ export const GoalsSection = () => {
                 >
                   <div className={styles.cardTop}>
                     <div className={styles.cardHeader}>
-                      <span className={styles.cardTitle}>{account.name}</span>
+                      <span className={styles.cardTitleRow}>
+                        <VCategoryDot
+                          color={account.color ?? 'var(--md-sys-color-outline-variant)'}
+                        />
+                        <span className={styles.cardTitle}>{account.name}</span>
+                      </span>
                       {goal.target_date && (
                         <span className={styles.targetDate}>{formatDisplay(goal.target_date)}</span>
                       )}

@@ -37,7 +37,7 @@
 }
 .legendRow {
   display: grid;
-  grid-template-columns: 12px minmax(0, 1fr) auto;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
   gap: 6px 10px;
   align-items: baseline;
   padding-block: 10px;
@@ -48,10 +48,6 @@
   padding-bottom: 0;
 }
 .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--segment-color);
   align-self: center;
 }
 .accountName {

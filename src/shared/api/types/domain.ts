@@ -68,6 +68,7 @@ export interface Account {
   id: string;
   user_id: string;
   name: string;
+  color: string | null;
   initial_balance: number;
   balance: number;
   is_closed: boolean;

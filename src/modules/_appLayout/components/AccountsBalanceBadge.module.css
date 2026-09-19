@@ -346,6 +346,11 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
+.accountIconPrimary {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
 .accountInfo {
   display: flex;
   flex-direction: column;

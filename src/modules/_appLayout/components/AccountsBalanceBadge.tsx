@@ -167,8 +167,15 @@ export const AccountsBalanceBadge = () => {
           <ul className={styles.list}>
             {accounts.map((account) => (
               <li key={account.id} className={styles.row}>
-                <span className={styles.accountIcon} aria-hidden="true">
-                  <BanknotesIcon size={18} />
+                <span
+                  className={`${styles.accountIcon}${account.is_primary ? ` ${styles.accountIconPrimary}` : ''}`}
+                  aria-hidden="true"
+                >
+                  {account.is_primary ? (
+                    <WalletFilledIcon size={18} />
+                  ) : (
+                    <BanknotesIcon size={18} />
+                  )}
                 </span>
                 <div className={styles.accountInfo}>
                   <span className={styles.accountName}>{account.name}</span>
