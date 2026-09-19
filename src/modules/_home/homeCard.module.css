@@ -282,6 +282,63 @@
   overflow-wrap: anywhere;
 }
 
+.goalsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.goalsTrack {
+  height: 8px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: var(--md-sys-color-surface-container-highest);
+  overflow: hidden;
+}
+
+.goalsFill {
+  height: 100%;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: var(--md-sys-color-primary);
+  transition: width var(--md-sys-motion-standard-fast-spatial);
+}
+
+.goalsBottom {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.goalsSaved {
+  min-width: 0;
+  font: var(--md-sys-typescale-title-large-emphasized);
+  color: var(--md-sys-color-on-surface);
+  overflow-wrap: anywhere;
+}
+
+.goalsTarget {
+  min-width: 0;
+  font: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface-variant);
+  overflow-wrap: anywhere;
+}
+
+.goalsPercent {
+  margin-left: auto;
+  font: var(--md-sys-typescale-label-large);
+  color: var(--md-sys-color-on-surface);
+}
+
+.goalsPeriod,
+.goalsForecast {
+  font: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
 .cardFacts {
   display: flex;
   flex-direction: column;
@@ -507,7 +564,8 @@
   .card.card,
   .cardGrow.cardGrow,
   .errorCard.errorCard,
-  .skeletonCard.skeletonCard {
+  .skeletonCard.skeletonCard,
+  .goalsFill {
     transition: none;
   }
 }

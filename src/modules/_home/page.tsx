@@ -1,6 +1,7 @@
 import { useBootstrap } from '@/shared/api/hooks';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import styles from './homeCard.module.css';
+import { GoalsCard } from './components/GoalsCard';
 import { LastReportCard } from './components/LastReportCard';
 import { OnboardingCard } from './components/OnboardingCard';
 import { OverviewCard } from './components/OverviewCard';
@@ -25,6 +26,7 @@ export const Page: React.FC = () => {
             <OnboardingCard />
             <LastReportCard />
             <OverviewCard />
+            <GoalsCard />
           </>
         )}
       </div>

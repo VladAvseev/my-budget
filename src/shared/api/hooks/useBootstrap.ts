@@ -17,12 +17,27 @@ export interface BootstrapOnboarding {
 }
 
 
+export interface BootstrapGoalsSummary {
+  hasGoals: boolean;
+  totalSaved: number;
+  totalTarget: number;
+  percent: number;
+  monthlyPlan: number;
+  currentPeriodSaved: number;
+  growthAvg: number | null;
+  growthMonths: number;
+  forecastMonths: number | null;
+  forecastDate: string | null;
+}
+
+
 export interface UseBootstrapResponse {
   profile: BootstrapProfile;
   onboarding: BootstrapOnboarding;
   currentMonth: OperationSummary;
   trailingYear: OperationSummary;
   globalTotals: OperationSummary;
+  goalsSummary: BootstrapGoalsSummary;
 }
 
 
@@ -32,6 +47,18 @@ const EMPTY_BOOTSTRAP: UseBootstrapResponse = {
   currentMonth: { income: 0, expense: 0 },
   trailingYear: { income: 0, expense: 0 },
   globalTotals: { income: 0, expense: 0 },
+  goalsSummary: {
+    hasGoals: false,
+    totalSaved: 0,
+    totalTarget: 0,
+    percent: 0,
+    monthlyPlan: 0,
+    currentPeriodSaved: 0,
+    growthAvg: null,
+    growthMonths: 0,
+    forecastMonths: null,
+    forecastDate: null,
+  },
 };
 
 export const bootstrapQueryKey = ['bootstrap'] as const;
