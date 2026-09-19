@@ -1,7 +1,7 @@
 import { PlusIcon } from '@/shared/icons';
 import { useMemo } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
-import type { ApiOperationType, Operation, Report } from '@/shared/api/types/domain';
+import type { ApiOperationType, Operation } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -10,7 +10,7 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { VToggle } from '@/shared/ui/VToggle';
 import { CurrencyText } from '@/shared/ui/Amount';
-import { formatAmount } from '@/shared/utils';
+import { formatAmount, monthRange } from '@/shared/utils';
 import { useCurrency } from '@/shared/api/hooks';
 import { useAtom, useSetAtom } from 'jotai';
 import { groupedByTypeAtom, operationModalAtom } from '../atoms/report';
@@ -29,15 +29,14 @@ import {
 import styles from './operationList.module.css';
 
 interface OperationListProps {
-  reportId: string;
-  report: Report | null;
+  month: string;
   type: ApiOperationType;
 }
 
-export const OperationList = ({ reportId, report, type }: OperationListProps) => {
+export const OperationList = ({ month, type }: OperationListProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
-  const operationsQuery = useOperations(reportId, type);
+  const operationsQuery = useOperations(month, type);
   const accountsQuery = useAccounts(userId);
 
   const categoryType = categoryTypeForOperation(type);
@@ -58,10 +57,8 @@ export const OperationList = ({ reportId, report, type }: OperationListProps) =>
   const isTransfer = type === 'transfer';
   const showBudgets = type === 'expense' || type === 'income';
 
-  const daysLeft = useMemo(
-    () => (report ? getDaysLeft(report.period_start, report.period_end) : null),
-    [report],
-  );
+  const { from, to } = monthRange(month);
+  const daysLeft = useMemo(() => getDaysLeft(from, to), [from, to]);
 
   const isGrouped = !isTransfer && (groupedByType[type] ?? false);
 
@@ -109,7 +106,7 @@ export const OperationList = ({ reportId, report, type }: OperationListProps) =>
   return (
     <div className={styles.root}>
       {showBudgets && (
-        <CategoryBudgetsSummary operations={operations} categories={categories} report={report} />
+        <CategoryBudgetsSummary operations={operations} categories={categories} month={month} />
       )}
 
       <div className={styles.toolbar}>
@@ -152,11 +149,11 @@ export const OperationList = ({ reportId, report, type }: OperationListProps) =>
           <div className={styles.emptyState}>
             <div className={styles.emptyTitle}>
               {type === 'expense' &&
-                'Расход — это списание средств. Расход уменьшает баланс, капитал и остаток в рамках периода.'}
+                'Расход — это списание средств. Расход уменьшает баланс и капитал.'}
               {type === 'income' &&
-                'Доход — это поступление средств. Доход увеличивает баланс, капитал и остаток в рамках периода'}
+                'Доход — это поступление средств. Доход увеличивает баланс и капитал.'}
               {type === 'transfer' &&
-                'Перевод — это перемещение средств между своими счетами. Перевод не меняет капитал и остаток периода.'}
+                'Перевод — это перемещение средств между своими счетами. Перевод не меняет капитал.'}
             </div>
             <div className={styles.emptyHint}>Нажмите «+», чтобы добавить первую операцию.</div>
           </div>

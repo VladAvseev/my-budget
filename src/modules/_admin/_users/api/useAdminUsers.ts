@@ -9,14 +9,14 @@ export interface AdminUserRow {
   login: string;
   last_active_at: string | null;
   onboarded: boolean;
-  reportsCount: number;
   operationsCount: number;
   categoriesCount: number;
   incomeCount: number;
   expenseCount: number;
-  
+  transferCount: number;
+
   accountsCount: number;
-  
+
   goalsCount: number;
 }
 

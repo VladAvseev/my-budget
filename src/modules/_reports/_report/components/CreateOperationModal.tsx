@@ -1,12 +1,12 @@
-import type { ApiOperationType, Report } from '@/shared/api/types/domain';
+import type { ApiOperationType } from '@/shared/api/types/domain';
 import { OperationForm } from './modals/shared/OperationForm';
 
 interface CreateOperationModalProps {
   type: ApiOperationType;
-  report: Report;
+  month: string;
   onClose: () => void;
 }
 
-export const CreateOperationModal = ({ type, report, onClose }: CreateOperationModalProps) => (
-  <OperationForm initialType={type} report={report} onClose={onClose} />
+export const CreateOperationModal = ({ type, month, onClose }: CreateOperationModalProps) => (
+  <OperationForm initialType={type} month={month} onClose={onClose} />
 );

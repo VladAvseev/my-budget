@@ -1,31 +1,31 @@
-import type { Report } from '@/shared/api/types/domain';
 import { VSelect, type VSelectOption } from '@/shared/ui/VSelect';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
-import { comparedReportIdAtom } from '../atoms/overview';
+import { formatMonthTitle } from '@/shared/utils';
+import { comparedMonthAtom } from '../atoms/overview';
 
 interface PeriodCompareSelectProps {
-  reports: Report[];
+  months: string[];
   isLoading?: boolean;
 }
 
-export const PeriodCompareSelect = ({ reports, isLoading }: PeriodCompareSelectProps) => {
-  const [comparedId, setComparedId] = useAtom(comparedReportIdAtom);
+export const PeriodCompareSelect = ({ months, isLoading }: PeriodCompareSelectProps) => {
+  const [compared, setCompared] = useAtom(comparedMonthAtom);
 
   const options = useMemo<VSelectOption[]>(
     () =>
-      [...reports]
-        .sort((a, b) => new Date(b.period_start).getTime() - new Date(a.period_start).getTime())
-        .map((report) => ({ value: report.id, label: report.name })),
-    [reports],
+      [...months]
+        .sort((a, b) => b.localeCompare(a))
+        .map((month) => ({ value: month, label: formatMonthTitle(month) })),
+    [months],
   );
 
   return (
     <VSelect
       label="Период для сравнения"
       options={options}
-      value={comparedId}
-      onChange={setComparedId}
+      value={compared}
+      onChange={setCompared}
       loading={isLoading}
     />
   );

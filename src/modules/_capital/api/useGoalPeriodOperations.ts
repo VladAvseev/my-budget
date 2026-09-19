@@ -4,14 +4,16 @@ import { useQuery } from '@tanstack/react-query';
 
 export type UseGoalPeriodOperationsResponse = Operation[];
 export interface UseGoalPeriodOperationsRequest {
-  reportId: string;
+  month: string;
 }
 
-export const useGoalPeriodOperations = ({ reportId }: UseGoalPeriodOperationsRequest) =>
+export const useGoalPeriodOperations = ({ month }: UseGoalPeriodOperationsRequest) =>
   useQuery({
-    
-    queryKey: ['reports', reportId, 'operations', 'goal-period'],
-    enabled: Boolean(reportId),
+    queryKey: ['operations', month, 'goal-period'],
+    enabled: Boolean(month),
     queryFn: ({ signal }) =>
-      api.get<UseGoalPeriodOperationsResponse>(`/operations?reportId=${reportId}&type=income,expense,transfer`, { signal }),
+      api.get<UseGoalPeriodOperationsResponse>(
+        `/operations?months=${month}&type=income,expense,transfer`,
+        { signal },
+      ),
   });

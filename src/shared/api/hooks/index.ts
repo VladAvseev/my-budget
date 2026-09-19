@@ -35,10 +35,20 @@ export {
   bootstrapQueryKey,
   invalidateHomeCaches,
   useBootstrap,
-  type BootstrapLastReport,
   type BootstrapOnboarding,
   type BootstrapProfile,
   type UseBootstrapResponse,
 } from './useBootstrap';
+export {
+  monthCategorySummaryQueryKey,
+  useMonthCategorySummary,
+  type MonthCategorySummaryRow,
+  type UseMonthCategorySummaryResponse,
+} from './useMonthCategorySummary';
+export {
+  operationMonthsQueryKey,
+  useOperationMonths,
+  type UseOperationMonthsResponse,
+} from './useOperationMonths';
 
 export { useGoals, goalsQueryKey } from './useGoals';

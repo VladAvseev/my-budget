@@ -30,6 +30,15 @@ export {
 export { convertAmount } from './convertCurrency';
 export { sumOperations, emptyAmounts, type OperationAmounts } from './operations';
 export {
+  currentMonthCode,
+  formatMonthShort,
+  formatMonthTitle,
+  isPeriodMonth,
+  monthRange,
+  monthYear,
+  todayISODate,
+} from './months';
+export {
   type ChartPoint,
   type PointChange,
   trimIncompletePeriod,

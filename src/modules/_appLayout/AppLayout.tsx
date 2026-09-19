@@ -1,8 +1,11 @@
 import { useAdminStatus } from '@/shared/api/hooks';
+import { useAtom } from 'jotai';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
+import { createOperationOpenAtom } from './atoms/operationModal';
 import styles from './AppLayout.module.css';
 import { BottomNav } from './components/BottomNav';
+import { CreateOperationModal } from './components/CreateOperationModal';
 import { TopBar } from './components/TopBar';
 
 interface AppLayoutProps {
@@ -18,6 +21,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const topNavRef = useRef<HTMLElement>(null);
   const bottomNavRef = useRef<HTMLElement>(null);
+  const [createOpen, setCreateOpen] = useAtom(createOperationOpenAtom);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -61,6 +65,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
         {children}
       </main>
       <BottomNav bottomNavRef={bottomNavRef} />
+      <CreateOperationModal visible={createOpen} onClose={() => setCreateOpen(false)} />
     </div>
   );
 };

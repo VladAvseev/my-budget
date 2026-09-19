@@ -2,7 +2,6 @@ import { useBootstrap } from '@/shared/api/hooks';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import styles from './homeCard.module.css';
 import { LastReportCard } from './components/LastReportCard';
-import { NewReportCard } from './components/NewReportCard';
 import { OnboardingCard } from './components/OnboardingCard';
 import { OverviewCard } from './components/OverviewCard';
 
@@ -24,7 +23,6 @@ export const Page: React.FC = () => {
         ) : (
           <>
             <OnboardingCard />
-            <NewReportCard />
             <LastReportCard />
             <OverviewCard />
           </>

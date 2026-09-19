@@ -1,30 +1,29 @@
 import { Amount } from '@/shared/ui/Amount';
 import type { OperationType } from '@/shared/api/types/domain';
-import type { Report } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { Link } from 'react-router-dom';
 import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
 import { useOverviewCategories } from '../api/useOverviewCategories';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
-import { buildCategoryGroups, type ReportAmount } from '../utils/overview';
+import { buildCategoryGroups, type MonthAmount } from '../utils/overview';
 import styles from './CategoryBreakdown.module.css';
 
 interface CategoryBreakdownProps {
-  reports: Report[];
-  summaryByReport: Map<string, CategorySummaryRow[]>;
-  comparedReport: Report | null;
-  comparedSummaryByReport: Map<string, CategorySummaryRow[]>;
+  months: string[];
+  summaryByMonth: Map<string, CategorySummaryRow[]>;
+  comparedMonth: string | null;
+  comparedSummaryByMonth: Map<string, CategorySummaryRow[]>;
 }
 
 const EPSILON = 0.005;
 
-const ReportLinkRow = ({ report, amount }: ReportAmount) => {
+const MonthLinkRow = ({ month, label, amount }: MonthAmount) => {
   const { displaySymbol, convertOptions } = useDisplayCurrency();
 
   return (
-    <Link to={`/reports/${report.id}`} className={styles.reportLink}>
-      <span className={styles.reportName}>{report.name}</span>
+    <Link to={`/reports/${month}`} className={styles.reportLink}>
+      <span className={styles.reportName}>{label}</span>
       <span className={styles.reportAmount}>
         <Amount value={amount} currencySymbol={displaySymbol} convert={convertOptions} />
       </span>
@@ -33,10 +32,10 @@ const ReportLinkRow = ({ report, amount }: ReportAmount) => {
 };
 
 const hasOperations = (
-  summaryByReport: Map<string, CategorySummaryRow[]>,
+  summaryByMonth: Map<string, CategorySummaryRow[]>,
   typeFilter: OperationType[],
 ) =>
-  [...summaryByReport.values()].some((rows) =>
+  [...summaryByMonth.values()].some((rows) =>
     rows.some((row) => typeFilter.includes(row.type as OperationType)),
   );
 
@@ -74,15 +73,15 @@ const PeriodLine = ({ name, value, average, lowerIsBetter }: PeriodInfo & { aver
 
 const AccordionSummary = ({
   total,
-  reportCount,
+  monthCount,
   period,
 }: {
   total: number;
-  reportCount: number;
+  monthCount: number;
   period: PeriodInfo | null;
 }) => {
   const { displaySymbol, convertOptions } = useDisplayCurrency();
-  const average = reportCount > 0 ? total / reportCount : 0;
+  const average = monthCount > 0 ? total / monthCount : 0;
 
   return (
     <span className={styles.accordionSummary}>
@@ -98,10 +97,10 @@ const AccordionSummary = ({
 };
 
 export const CategoryBreakdown = ({
-  reports,
-  summaryByReport,
-  comparedReport,
-  comparedSummaryByReport,
+  months,
+  summaryByMonth,
+  comparedMonth,
+  comparedSummaryByMonth,
 }: CategoryBreakdownProps) => {
   const { expenseCategories, incomeCategories, isLoading } = useOverviewCategories();
   const { displaySymbol, convertOptions } = useDisplayCurrency();
@@ -109,21 +108,21 @@ export const CategoryBreakdown = ({
   const expensesLoading = isLoading;
   const incomesLoading = isLoading;
 
-  const expenseGroups = buildCategoryGroups(reports, summaryByReport, expenseCategories, [
+  const expenseGroups = buildCategoryGroups(months, summaryByMonth, expenseCategories, [
     'expense',
   ]);
-  const incomeGroups = buildCategoryGroups(reports, summaryByReport, incomeCategories, ['income']);
+  const incomeGroups = buildCategoryGroups(months, summaryByMonth, incomeCategories, ['income']);
 
-  const comparedReports = comparedReport ? [comparedReport] : [];
+  const comparedMonths = comparedMonth ? [comparedMonth] : [];
   const comparedExpenseGroups = buildCategoryGroups(
-    comparedReports,
-    comparedSummaryByReport,
+    comparedMonths,
+    comparedSummaryByMonth,
     expenseCategories,
     ['expense'],
   );
   const comparedIncomeGroups = buildCategoryGroups(
-    comparedReports,
-    comparedSummaryByReport,
+    comparedMonths,
+    comparedSummaryByMonth,
     incomeCategories,
     ['income'],
   );
@@ -136,7 +135,9 @@ export const CategoryBreakdown = ({
     groups.reduce((sum, group) => sum + group.total, 0);
 
   const periodInfo = (value: number, lowerIsBetter: boolean): PeriodInfo | null =>
-    comparedReport ? { name: comparedReport.name, value, lowerIsBetter } : null;
+    comparedMonth
+      ? { name: comparedMonth, value, lowerIsBetter }
+      : null;
 
   const sectionTitle = (label: string, average: number, period: PeriodInfo | null) => (
     <div className={styles.sectionHeader}>
@@ -160,7 +161,7 @@ export const CategoryBreakdown = ({
     typeFilter: OperationType[],
     lowerIsBetter: boolean,
   ) => {
-    if (loading && hasOperations(summaryByReport, typeFilter)) {
+    if (loading && hasOperations(summaryByMonth, typeFilter)) {
       return <VSkeletonList count={3} cardProps={{ compact: true, title: false, lines: 1 }} />;
     }
     if (groups.length === 0) {
@@ -184,7 +185,7 @@ export const CategoryBreakdown = ({
                   <span className={styles.accordionGrow}>{group.label}</span>
                   <AccordionSummary
                     total={group.total}
-                    reportCount={reports.length}
+                    monthCount={months.length}
                     period={periodInfo(
                       comparedGroupValue(comparedGroups, group.key),
                       lowerIsBetter,
@@ -195,7 +196,7 @@ export const CategoryBreakdown = ({
             >
               <div className={styles.accordionRow}>
                 {group.byReport.map((item) => (
-                  <ReportLinkRow key={item.report.id} report={item.report} amount={item.amount} />
+                  <MonthLinkRow key={item.month} month={item.month} label={item.label} amount={item.amount} />
                 ))}
               </div>
             </VAccordion>
@@ -207,8 +208,8 @@ export const CategoryBreakdown = ({
 
   const totalOf = (groups: ReturnType<typeof buildCategoryGroups>) =>
     groups.reduce((sum, group) => sum + group.total, 0);
-  const sectionAverage = (total: number) => (reports.length > 0 ? total / reports.length : 0);
-  const hasExpense = expenseGroups.length > 0 || hasOperations(summaryByReport, ['expense']);
+  const sectionAverage = (total: number) => (months.length > 0 ? total / months.length : 0);
+  const hasExpense = expenseGroups.length > 0 || hasOperations(summaryByMonth, ['expense']);
 
   return (
     <div className={styles.root}>
@@ -229,7 +230,7 @@ export const CategoryBreakdown = ({
         </section>
       )}
 
-      {(incomeGroups.length > 0 || hasOperations(summaryByReport, ['income'])) && (
+      {(incomeGroups.length > 0 || hasOperations(summaryByMonth, ['income'])) && (
         <section className={styles.section}>
           {sectionTitle(
             'Доходы',

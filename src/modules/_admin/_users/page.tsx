@@ -26,7 +26,6 @@ interface Column {
 const COLUMNS: Column[] = [
   { key: 'login', label: 'Пользователь', sortType: 'string' },
   { key: 'last_active_at', label: 'Активность', sortType: 'date' },
-  { key: 'reportsCount', label: 'Периоды', sortType: 'number' },
   { key: 'operationsCount', label: 'Операции', sortType: 'number' },
   { key: 'categoriesCount', label: 'Категории', sortType: 'number' },
   { key: 'accountsCount', label: 'Счета', sortType: 'number' },
@@ -252,7 +251,6 @@ export const Page: React.FC = () => {
                 <tr key={row.user_id}>
                   <td>{row.login}</td>
                   <td>{formatDate(row.last_active_at)}</td>
-                  <td className={styles.numCell}>{formatAmount(row.reportsCount)}</td>
                   <td className={styles.numCell}>{formatAmount(row.operationsCount)}</td>
                   <td className={styles.numCell}>{formatAmount(row.categoriesCount)}</td>
                   <td className={styles.numCell}>{formatAmount(row.accountsCount)}</td>

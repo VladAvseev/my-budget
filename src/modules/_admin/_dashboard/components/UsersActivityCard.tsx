@@ -36,11 +36,10 @@ const ACTIVITY_ROWS: Array<{
 ];
 
 export const UsersActivityCard: React.FC<UsersActivityCardProps> = ({ users, activity, churn }) => {
-  const { total, withoutReports, onboarded } = users;
+  const { total, onboarded } = users;
 
   const userRows: UserRow[] = [
     { label: 'Всего', value: total },
-    { label: 'Без периодов', value: withoutReports },
     { label: 'Прошли онбординг', value: onboarded },
   ];
 

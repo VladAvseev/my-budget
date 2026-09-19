@@ -1,13 +1,7 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { api } from '@/shared/api/http';
 import type { ApiOperationType, Operation } from '@/shared/api/types/domain';
 import { trimStrings } from '@/shared/utils';
-import { useMutation } from '@tanstack/react-query';
-import { invalidateMonthCache } from './invalidateMonthCache';
-
-
-const createOperationMutationKey = ['createOperation'] as const;
-
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export type UseCreateOperationRequest = {
   amount: number;
@@ -30,15 +24,13 @@ export type UseCreateOperationRequest = {
     }
 );
 
-
 export type UseCreateOperationResponse = Operation;
 
-
-export const useCreateOperation = (month: string) => {
+export const useCreateOperation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: createOperationMutationKey,
+    mutationKey: ['createOperation'],
     mutationFn: async (input: UseCreateOperationRequest) =>
       api.post<UseCreateOperationResponse>('/operations', {
         type: input.type,
@@ -55,6 +47,10 @@ export const useCreateOperation = (month: string) => {
               categoryId: input.categoryId ?? null,
             }),
       }),
-    onSettled: () => invalidateMonthCache(queryClient, month),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['operations'] });
+      queryClient.invalidateQueries({ queryKey: ['overview'] });
+      queryClient.invalidateQueries({ queryKey: ['bootstrap'] });
+    },
   });
 };

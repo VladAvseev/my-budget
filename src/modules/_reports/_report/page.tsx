@@ -4,50 +4,42 @@ import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
 import { useAtom } from 'jotai';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useReport } from './api/useReport';
-import { useSummary } from './api/useSummary';
+import { useSummary } from './api/useMonthSummary';
 import { operationModalAtom } from './atoms/report';
 import { SummaryCards } from './components/SummaryCards';
 import { OperationsTabs } from './components/OperationsTabs';
 import { CreateOperationModal } from './components/CreateOperationModal';
 import { EditOperationModal } from './components/EditOperationModal';
+import { formatMonthTitle, isPeriodMonth } from '@/shared/utils';
 import styles from './pageSkeleton.module.css';
 import layout from '../reports.module.css';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 
 export const Page: React.FC = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
-  const reportId = id ?? '';
-  const { data: report, isLoading, error, refetch, isFetching } = useReport(reportId);
+  const { month } = useParams<{ month: string }>();
+  const monthCode = month ?? '';
+  const valid = isPeriodMonth(monthCode);
   const {
     data: summary,
     isLoading: summaryLoading,
     error: summaryError,
     refetch: refetchSummary,
     isFetching: summaryFetching,
-  } = useSummary(reportId);
+  } = useSummary(valid ? monthCode : '');
   const [operationModal, setOperationModal] = useAtom(operationModalAtom);
 
-  const notFound = !isLoading && (Boolean(error) || report === null);
+  const notFound = !valid;
 
   return (
     <div className={layout.page}>
       <VPageHeader
-        title={report?.name ?? 'Период'}
+        title={valid ? formatMonthTitle(monthCode) : 'Период'}
         onBack={() => navigate('/reports')}
         backAriaLabel="Назад к периодам"
       />
 
-      {error && (
-        <VErrorCard
-          title="Не удалось загрузить период"
-          error={error}
-          onRetry={() => void refetch()}
-          isRetrying={isFetching}
-        />
-      )}
-      {notFound && !error && (
+      {notFound && (
         <VCard>
           <div className={commonStyles.textSecondary}>Период не найден</div>
         </VCard>
@@ -55,7 +47,6 @@ export const Page: React.FC = () => {
 
       {!notFound && (
         <>
-          
           <div>
             {summaryLoading ? (
               <div className={styles.summaryGrid}>
@@ -75,26 +66,25 @@ export const Page: React.FC = () => {
             )}
           </div>
           <section aria-label="Операции периода">
-            <OperationsTabs reportId={reportId} report={report ?? null} />
+            <OperationsTabs month={monthCode} />
           </section>
-          {report &&
-            (operationModal?.operation ? (
-              <EditOperationModal
-                key={operationModal.operation.id}
-                operation={operationModal.operation}
-                report={report}
+          {operationModal?.operation ? (
+            <EditOperationModal
+              key={operationModal.operation.id}
+              operation={operationModal.operation}
+              month={monthCode}
+              onClose={() => setOperationModal(null)}
+            />
+          ) : (
+            operationModal && (
+              <CreateOperationModal
+                key={operationModal.type}
+                type={operationModal.type}
+                month={monthCode}
                 onClose={() => setOperationModal(null)}
               />
-            ) : (
-              operationModal && (
-                <CreateOperationModal
-                  key={operationModal.type}
-                  type={operationModal.type}
-                  report={report}
-                  onClose={() => setOperationModal(null)}
-                />
-              )
-            ))}
+            )
+          )}
         </>
       )}
     </div>

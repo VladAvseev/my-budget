@@ -1,44 +1,41 @@
-import type { Report } from '@/shared/api/types/domain';
 import { VTreeSelect, type VTreeSelectItem } from '@/shared/ui/VTreeSelect';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
-import { selectedReportIdsAtom } from '../atoms/overview';
+import { formatMonthTitle, monthYear } from '@/shared/utils';
+import { selectedMonthsAtom } from '../atoms/overview';
 
 interface ReportsFilterProps {
-  reports: Report[];
+  months: string[];
 }
 
-const getYear = (report: Report): number => {
-  const date = new Date(report.period_start);
-  return date.getFullYear();
-};
-
-export const ReportsFilter = ({ reports }: ReportsFilterProps) => {
-  const [selectedIds, setSelectedIds] = useAtom(selectedReportIdsAtom);
+export const ReportsFilter = ({ months }: ReportsFilterProps) => {
+  const [selected, setSelected] = useAtom(selectedMonthsAtom);
 
   const items = useMemo<VTreeSelectItem[]>(() => {
-    if (reports.length === 0) return [];
+    if (months.length === 0) return [];
 
-    const grouped = new Map<number, Report[]>();
-    for (const report of reports) {
-      const year = getYear(report);
+    const grouped = new Map<string, string[]>();
+    for (const month of months) {
+      const year = monthYear(month);
       const list = grouped.get(year);
-      if (list) list.push(report);
-      else grouped.set(year, [report]);
+      if (list) list.push(month);
+      else grouped.set(year, [month]);
     }
 
     return [...grouped.entries()]
-      .sort(([a], [b]) => b - a)
-      .map(([year, yearReports]) => ({
+      .sort(([a], [b]) => b.localeCompare(a))
+      .map(([year, yearMonths]) => ({
         type: 'group' as const,
         label: `${year} год`,
-        children: yearReports.map((report) => ({
-          type: 'leaf' as const,
-          value: report.id,
-          label: report.name,
-        })),
+        children: [...yearMonths]
+          .sort((a, b) => b.localeCompare(a))
+          .map((month) => ({
+            type: 'leaf' as const,
+            value: month,
+            label: formatMonthTitle(month),
+          })),
       }));
-  }, [reports]);
+  }, [months]);
 
   if (items.length === 0) {
     return null;
@@ -48,8 +45,8 @@ export const ReportsFilter = ({ reports }: ReportsFilterProps) => {
     <VTreeSelect
       label="Периоды"
       items={items}
-      value={selectedIds}
-      onChange={setSelectedIds}
+      value={selected}
+      onChange={setSelected}
       selectAll
     />
   );

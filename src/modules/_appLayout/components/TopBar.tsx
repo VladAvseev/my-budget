@@ -1,7 +1,9 @@
 import { VButton } from '@/shared/ui/VButton';
 import { type RefObject } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useSetAtom } from 'jotai';
 import { NAV_ITEMS } from '../navItems';
+import { createOperationOpenAtom } from '../atoms/operationModal';
 import { AccountsBalanceBadge } from './AccountsBalanceBadge';
 import { MobileProfileLink, ProfileLink } from './ProfileLinks';
 import styles from './TopBar.module.css';
@@ -14,10 +16,11 @@ interface TopBarProps {
 
 // Верхняя шапка приложения: бренд, основная навигация и действия (капитал, профиль).
 export const TopBar = ({ topNavRef }: TopBarProps) => {
+  const setCreateOpen = useSetAtom(createOperationOpenAtom);
   return (
     <header className={styles.topbar}>
       <div className={styles.topbarInner}>
-        <VButton className={styles.addButton} onClick={() => {}}><PlusIcon />Добавить операцию</VButton>
+        <VButton className={styles.addButton} onClick={() => setCreateOpen(true)}><PlusIcon />Добавить операцию</VButton>
 
         <nav ref={topNavRef} className={styles.topNav} aria-label="Основная навигация">
           {NAV_ITEMS.map((item) => (

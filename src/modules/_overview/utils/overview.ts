@@ -1,7 +1,7 @@
 import type { Category } from '@/shared/api/types/domain';
 import type { OperationType } from '@/shared/api/types/domain';
-import type { Report } from '@/shared/api/types/domain';
 import { emptyAmounts, type OperationAmounts } from '@/shared/utils';
+import { formatMonthTitle } from '@/shared/utils';
 import type { CategorySummaryRow } from '../api/useOverviewCategorySummary';
 
 export interface ChartSegment {
@@ -20,10 +20,13 @@ export interface ChartData {
   hasNegative: boolean;
 }
 
-export interface ReportAmount {
-  report: Report;
+export interface MonthAmount {
+  month: string;
+  label: string;
   amount: number;
 }
+
+export type ReportAmount = MonthAmount;
 
 export interface CategoryGroup {
   key: string;
@@ -31,7 +34,7 @@ export interface CategoryGroup {
   label: string;
   color?: string;
   total: number;
-  byReport: ReportAmount[];
+  byReport: MonthAmount[];
 }
 
 const emptyReportBreakdown = new Map<string, number>();
@@ -39,10 +42,10 @@ const emptyReportBreakdown = new Map<string, number>();
 const summaryAmount = (row: CategorySummaryRow): number => Number(row.amount) || 0;
 
 export const sumCategorySummary = (
-  summaryByReport: Map<string, CategorySummaryRow[]>,
+  summaryByMonth: Map<string, CategorySummaryRow[]>,
 ): OperationAmounts => {
   const total = { ...emptyAmounts };
-  for (const rows of summaryByReport.values()) {
+  for (const rows of summaryByMonth.values()) {
     for (const row of rows) {
       const type = row.type as OperationType;
       const amount = Number(row.amount) || 0;
@@ -55,56 +58,56 @@ export const sumCategorySummary = (
 };
 
 export const buildReportGroups = (
-  reports: Report[],
-  summaryByReport: Map<string, CategorySummaryRow[]>,
+  months: string[],
+  summaryByMonth: Map<string, CategorySummaryRow[]>,
   typeFilter: OperationType[],
-): ReportAmount[] => {
-  const result: ReportAmount[] = [];
-  for (const report of reports) {
-    const rows = summaryByReport.get(report.id) ?? [];
+): MonthAmount[] => {
+  const result: MonthAmount[] = [];
+  for (const month of months) {
+    const rows = summaryByMonth.get(month) ?? [];
     const amount = rows.reduce((sum, row) => {
       if (!typeFilter.includes(row.type as OperationType)) return sum;
       return sum + summaryAmount(row);
     }, 0);
     if (amount !== 0) {
-      result.push({ report, amount });
+      result.push({ month, label: formatMonthTitle(month), amount });
     }
   }
   return result;
 };
 
 export const buildCategoryGroups = (
-  reports: Report[],
-  summaryByReport: Map<string, CategorySummaryRow[]>,
+  months: string[],
+  summaryByMonth: Map<string, CategorySummaryRow[]>,
   categories: Category[],
   typeFilter: OperationType[],
 ): CategoryGroup[] => {
   const categoryById = new Map(categories.map((category) => [category.id, category]));
 
   const totalsByKey = new Map<string, number>();
-  const byReportByKey = new Map<string, Map<string, number>>();
+  const byMonthByKey = new Map<string, Map<string, number>>();
 
-  const add = (key: string, reportId: string, amount: number) => {
+  const add = (key: string, month: string, amount: number) => {
     totalsByKey.set(key, (totalsByKey.get(key) ?? 0) + amount);
-    const reportMap = byReportByKey.get(key) ?? new Map<string, number>();
-    reportMap.set(reportId, (reportMap.get(reportId) ?? 0) + amount);
-    byReportByKey.set(key, reportMap);
+    const monthMap = byMonthByKey.get(key) ?? new Map<string, number>();
+    monthMap.set(month, (monthMap.get(month) ?? 0) + amount);
+    byMonthByKey.set(key, monthMap);
   };
 
-  for (const [reportId, rows] of summaryByReport) {
+  for (const [month, rows] of summaryByMonth) {
     for (const row of rows) {
       if (!typeFilter.includes(row.type as OperationType)) continue;
-      add(row.category_id ?? 'none', reportId, summaryAmount(row));
+      add(row.category_id ?? 'none', month, summaryAmount(row));
     }
   }
 
-  const toReportAmounts = (key: string): ReportAmount[] => {
-    const amounts = byReportByKey.get(key) ?? emptyReportBreakdown;
-    const result: ReportAmount[] = [];
-    for (const report of reports) {
-      const amount = amounts.get(report.id);
+  const toMonthAmounts = (key: string): MonthAmount[] => {
+    const amounts = byMonthByKey.get(key) ?? emptyReportBreakdown;
+    const result: MonthAmount[] = [];
+    for (const month of months) {
+      const amount = amounts.get(month);
       if (amount) {
-        result.push({ report, amount });
+        result.push({ month, label: formatMonthTitle(month), amount });
       }
     }
     return result;
@@ -119,7 +122,7 @@ export const buildCategoryGroups = (
       label: category.name,
       color: category.color ?? undefined,
       total: totalsByKey.get(key) ?? 0,
-      byReport: toReportAmounts(key),
+      byReport: toMonthAmounts(key),
     });
   }
   groups.sort((a, b) => Math.abs(b.total) - Math.abs(a.total));
@@ -129,14 +132,14 @@ export const buildCategoryGroups = (
       category: null,
       label: 'Без категории',
       total: totalsByKey.get('none') ?? 0,
-      byReport: toReportAmounts('none'),
+      byReport: toMonthAmounts('none'),
     });
   }
   return groups;
 };
 
 export const buildChartData = (
-  summaryByReport: Map<string, CategorySummaryRow[]>,
+  summaryByMonth: Map<string, CategorySummaryRow[]>,
   typeFilter: OperationType[],
   categories: Category[],
 ): ChartData => {
@@ -148,7 +151,7 @@ export const buildChartData = (
     totalsByKey.set(key, (totalsByKey.get(key) ?? 0) + amount);
   };
 
-  for (const rows of summaryByReport.values()) {
+  for (const rows of summaryByMonth.values()) {
     for (const row of rows) {
       if (!typeFilter.includes(row.type as OperationType)) continue;
       add(row.category_id ?? 'none', summaryAmount(row));

@@ -8,7 +8,7 @@ const Page = AsyncPage(() => import('./page'));
 export function report() {
   return (
     <Route
-      path="/reports/:id"
+      path="/reports/:month"
       element={
         <ProtectedRoute>
           <AppLayout>

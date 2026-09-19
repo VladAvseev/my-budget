@@ -3,7 +3,6 @@ export interface Operation {
   from_account_id: string | null;
   to_account_id: string | null;
   id: string;
-  report_id: string;
   user_id: string;
   type: string;
   amount: number;
@@ -14,16 +13,7 @@ export interface Operation {
   updated_at: string;
 }
 
-export interface Report {
-  id: string;
-  user_id: string;
-  name: string;
-  code: string;
-  period_start: string;
-  period_end: string;
-  created_at: string;
-  updated_at: string;
-}
+export type PeriodMonth = string;
 
 export interface Category {
   id: string;

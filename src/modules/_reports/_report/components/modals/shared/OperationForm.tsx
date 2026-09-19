@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
 import { ApiError } from '@/shared/api/http';
 import { useAccounts } from '@/shared/api/hooks/useAccounts';
-import type { ApiOperationType, Operation, Report } from '@/shared/api/types/domain';
+import type { ApiOperationType, Operation } from '@/shared/api/types/domain';
 import { useCreateOperation } from '../../../api/useCreateOperation';
 import { useUpdateOperation } from '../../../api/useUpdateOperation';
 import { useRemoveOperation } from '../../../api/useRemoveOperation';
@@ -14,7 +14,7 @@ import { VModal } from '@/shared/ui/VModal';
 import { VSelect } from '@/shared/ui/VSelect';
 import { VTextInput } from '@/shared/ui/VTextInput';
 import { TrashIcon } from '@/shared/icons';
-import { capitalizeFirst, formatDisplay, getErrorMessage, toISODate } from '@/shared/utils';
+import { capitalizeFirst, getErrorMessage, toISODate } from '@/shared/utils';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { CategorySelect } from './CategorySelect';
 import { AmountAdjuster } from './AmountAdjuster';
@@ -26,49 +26,33 @@ const isCurrentType = (value: string): value is ApiOperationType =>
 const closedMessage =
   'Операцию закрытого счёта нельзя изменить или удалить. Сначала откройте счёт.';
 
-// Дефолт даты: сегодня, если попадает в период отчёта; иначе ближайшая граница —
-// первый день периода (период ещё не начался) или последний день (период уже прошёл).
-// Сравнение строк корректно, т.к. даты в формате ISO YYYY-MM-DD.
-const getDefaultOperationDate = (periodStart: string, periodEnd: string): string => {
-  const today = toISODate(new Date());
-  if (today < periodStart) {
-    return periodStart;
-  }
-  if (today > periodEnd) {
-    return periodEnd;
-  }
-  return today;
-};
-
 interface OperationFormProps {
   initialType?: ApiOperationType;
   operation?: Operation;
-  report: Report;
+  month: string;
   onClose: () => void;
 }
 
 export const OperationForm = ({
   initialType = 'expense',
   operation,
-  report,
+  month,
   onClose,
 }: OperationFormProps) => {
   const { user } = useAuth();
   const accountsQuery = useAccounts(user?.id ?? '');
-  const createOperation = useCreateOperation(report.id);
-  const updateOperation = useUpdateOperation(report.id);
-  const removeOperation = useRemoveOperation(report.id);
-  
-  
+  const createOperation = useCreateOperation(month);
+  const updateOperation = useUpdateOperation(month);
+  const removeOperation = useRemoveOperation(month);
+
+
   const type: ApiOperationType =
     operation && isCurrentType(operation.type) ? operation.type : initialType;
   const [amount, setAmount] = useState(operation ? String(operation.amount) : '');
   const [description, setDescription] = useState(operation?.description ?? '');
-  const [date, setDate] = useState(
-    () => operation?.date ?? getDefaultOperationDate(report.period_start, report.period_end),
-  );
+  const [date, setDate] = useState(() => operation?.date ?? toISODate(new Date()));
   const [categoryId, setCategoryId] = useState(operation?.category_id ?? '');
-  
+
   const [selectedAccount, setSelectedAccount] = useState<string | undefined>(
     operation ? (operation.account_id ?? '') : undefined,
   );
@@ -131,7 +115,7 @@ export const OperationForm = ({
   const handleError = async (error: unknown, deleting = false) => {
     setSubmitError(getErrorMessage(error));
     if (error instanceof ApiError && error.code === 'ACCOUNT_CLOSED') {
-      
+
       if (deleting) setServerLocked(true);
       const refreshed = await accountsQuery.refetch();
       if (operation && !deleting) {
@@ -174,11 +158,6 @@ export const OperationForm = ({
     submitting.current = true;
     setIsPreparing(true);
     try {
-      if (date < report.period_start || date > report.period_end) {
-        throw new Error(
-          `Дата должна быть в пределах периода (${formatDisplay(report.period_start)} — ${formatDisplay(report.period_end)})`,
-        );
-      }
       const common = {
         amount: Number(amount),
         description: description || null,
@@ -355,8 +334,6 @@ export const OperationForm = ({
             setDate(next);
             setDateError(undefined);
           }}
-          minDate={report.period_start}
-          maxDate={report.period_end}
           showStepButtons
           allowClear={false}
         />

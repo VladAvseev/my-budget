@@ -5,7 +5,6 @@ import { VCurrencyRates } from '@/shared/widgets/CurrencyRates';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VHint } from '@/shared/ui/VHint';
 import { VSkeletonCard } from '@/shared/ui/VSkeleton';
-import { useAuth } from '@/shared/api/authProvider';
 import { useBreakpoint } from '@/shared/hooks';
 import commonStyles from '@/shared/styles/common.module.css';
 import styles from './page.module.css';
@@ -15,11 +14,11 @@ import {
   useOverviewCategorySummary,
   type CategorySummaryRow,
 } from './api/useOverviewCategorySummary';
-import { useReports } from './api/useReports';
+import { useOperationMonths } from '@/shared/api/hooks/useOperationMonths';
 import {
-  comparedReportIdAtom,
-  selectedReportIdsAtom,
+  comparedMonthAtom,
   selectedDisplayCurrencyAtom,
+  selectedMonthsAtom,
 } from './atoms/overview';
 import { useDisplayCurrency } from './hooks/useDisplayCurrency';
 import { CategoryBreakdown } from './components/CategoryBreakdown';
@@ -36,12 +35,10 @@ const CURRENCY_OPTIONS: VButtonGroupOption[] = [
 ];
 
 export const Page: React.FC = () => {
-  const { user } = useAuth();
   const { isDesktop } = useBreakpoint();
-  const userId = user?.id ?? '';
-  const reportsQuery = useReports(userId);
-  const [selectedIds] = useAtom(selectedReportIdsAtom);
-  const [comparedId] = useAtom(comparedReportIdAtom);
+  const monthsQuery = useOperationMonths();
+  const [selectedMonths] = useAtom(selectedMonthsAtom);
+  const [comparedMonth] = useAtom(comparedMonthAtom);
   const [selectedCurrency] = useAtom(selectedDisplayCurrencyAtom);
   const setSelectedCurrency = useSetAtom(selectedDisplayCurrencyAtom);
   const { defaultCurrency, isCurrencyDisabled, displayCurrency, rates } = useDisplayCurrency();
@@ -52,8 +49,11 @@ export const Page: React.FC = () => {
     }
   }, [defaultCurrency, setSelectedCurrency]);
 
-  const reports = useMemo(() => reportsQuery.data ?? [], [reportsQuery.data]);
-  const selectedReports = reports.filter((report) => selectedIds.includes(report.id));
+  const months = useMemo(() => monthsQuery.data ?? [], [monthsQuery.data]);
+  const selected = useMemo(
+    () => selectedMonths.filter((month) => months.includes(month)),
+    [selectedMonths, months],
+  );
 
   const {
     data: summaryMap,
@@ -61,27 +61,24 @@ export const Page: React.FC = () => {
     error: summaryError,
     refetch: refetchSummary,
     isFetching: summaryFetching,
-  } = useOverviewCategorySummary(selectedReports.map((report) => report.id));
+  } = useOverviewCategorySummary(selected);
 
-  const summaryByReport = useMemo(
+  const summaryByMonth = useMemo(
     () => summaryMap ?? new Map<string, CategorySummaryRow[]>(),
     [summaryMap],
   );
 
-  const comparedReport = useMemo(
-    () => reports.find((report) => report.id === comparedId) ?? null,
-    [reports, comparedId],
-  );
+  const compared = comparedMonth && months.includes(comparedMonth) ? comparedMonth : null;
 
   const { data: comparedSummaryMap, isLoading: comparedSummaryLoading } =
-    useOverviewCategorySummary(comparedReport ? [comparedReport.id] : []);
+    useOverviewCategorySummary(compared ? [compared] : []);
 
-  const comparedSummaryByReport = useMemo(
+  const comparedSummaryByMonth = useMemo(
     () => comparedSummaryMap ?? new Map<string, CategorySummaryRow[]>(),
     [comparedSummaryMap],
   );
 
-  const totals = useMemo(() => sumCategorySummary(summaryByReport), [summaryByReport]);
+  const totals = useMemo(() => sumCategorySummary(summaryByMonth), [summaryByMonth]);
 
   const currencySwitcher = isCurrencyDisabled ? (
     <VHint hint="Сначала выберите валюту в профиле" position="bottom-end">
@@ -124,32 +121,32 @@ export const Page: React.FC = () => {
       )}
 
       <div className={styles.block}>
-        <ReportsFilter reports={reports} />
+        <ReportsFilter months={months} />
       </div>
 
-      {reportsQuery.isLoading && <VSkeletonCard compact title={false} lines={1} />}
+      {monthsQuery.isLoading && <VSkeletonCard compact title={false} lines={1} />}
 
-      {reportsQuery.error && (
+      {monthsQuery.error && (
         <VErrorCard
           title="Не удалось загрузить периоды"
-          error={reportsQuery.error}
-          onRetry={() => void reportsQuery.refetch()}
-          isRetrying={reportsQuery.isFetching}
+          error={monthsQuery.error}
+          onRetry={() => void monthsQuery.refetch()}
+          isRetrying={monthsQuery.isFetching}
         />
       )}
 
-      {!reportsQuery.isLoading && !reportsQuery.error && reports.length === 0 && (
+      {!monthsQuery.isLoading && !monthsQuery.error && months.length === 0 && (
         <VCard>
-          <div className={commonStyles.emptyTitle}>Нет периодов</div>
+          <div className={commonStyles.emptyTitle}>Нет операций</div>
           <div className={commonStyles.emptyHint}>
-            Добавьте период в разделе «Периоды», чтобы увидеть обзор.
+            Добавьте первую операцию, чтобы увидеть обзор.
           </div>
         </VCard>
       )}
 
-      {!reportsQuery.isLoading && !reportsQuery.error && reports.length > 0 && (
+      {!monthsQuery.isLoading && !monthsQuery.error && months.length > 0 && (
         <>
-          {selectedReports.length === 0 && (
+          {selected.length === 0 && (
             <VCard>
               <div className={commonStyles.emptyTitle}>Не выбран ни один период</div>
               <div className={commonStyles.emptyHint}>
@@ -160,7 +157,7 @@ export const Page: React.FC = () => {
             </VCard>
           )}
 
-          {selectedReports.length > 0 && (
+          {selected.length > 0 && (
             <>
               {summaryError && summaryMap == null && (
                 <VErrorCard
@@ -192,17 +189,17 @@ export const Page: React.FC = () => {
                     <SummaryCard income={totals.income} expenses={totals.expense} />
                   </div>
                   <div className={styles.block}>
-                    <CategoryDistributionChart summaryByReport={summaryByReport} />
+                    <CategoryDistributionChart summaryByReport={summaryByMonth} />
                   </div>
                   <div className={styles.block}>
-                    <PeriodCompareSelect reports={reports} isLoading={comparedSummaryLoading} />
+                    <PeriodCompareSelect months={months} isLoading={comparedSummaryLoading} />
                   </div>
                   <div className={styles.block}>
                     <CategoryBreakdown
-                      reports={selectedReports}
-                      summaryByReport={summaryByReport}
-                      comparedReport={comparedSummaryMap ? comparedReport : null}
-                      comparedSummaryByReport={comparedSummaryByReport}
+                      months={selected}
+                      summaryByMonth={summaryByMonth}
+                      comparedMonth={comparedSummaryMap ? compared : null}
+                      comparedSummaryByMonth={comparedSummaryByMonth}
                     />
                   </div>
                 </>

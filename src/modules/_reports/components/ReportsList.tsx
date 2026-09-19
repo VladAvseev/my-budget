@@ -1,17 +1,11 @@
-import { CalendarIcon, ChevronRightIcon, PlusIcon } from '@/shared/icons';
-import { useAuth } from '@/shared/api/authProvider';
+import { CalendarIcon, ChevronRightIcon } from '@/shared/icons';
 
 import { VCard } from '@/shared/ui/VCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
-import { VButton } from '@/shared/ui/VButton';
-import { VIconButton } from '@/shared/ui/VIconButton';
-import { VLoader } from '@/shared/ui/VLoader';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
-import { formatDisplay } from '@/shared/utils';
-import { useAtom } from 'jotai';
+import { useOperationMonths } from '@/shared/api/hooks/useOperationMonths';
+import { currentMonthCode, formatMonthTitle, monthYear } from '@/shared/utils';
 import { Link } from 'react-router-dom';
-import { useReports } from '../api/useReports';
-import { createModalOpenAtom } from '../atoms/reports';
 import styles from './ReportsList.module.css';
 
 const pluralize = (count: number, one: string, few: string, many: string): string => {
@@ -38,21 +32,15 @@ const formatBudgetingBadge = (totalPeriods: number): string => {
 };
 
 export const ReportsList = () => {
-  const { user } = useAuth();
-  const userId = user?.id ?? '';
-  const [, setIsCreateOpen] = useAtom(createModalOpenAtom);
-  const { data, isLoading, error, refetch, isFetching } = useReports(userId);
+  const { data, isLoading, error, refetch, isFetching } = useOperationMonths();
 
-  const reports = data ?? [];
-
-  const today = new Date();
-  const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  const years = [...new Set(reports.map((report) => report.period_start.slice(0, 4)))].sort(
-    (a, b) => b.localeCompare(a),
+  const months = data ?? [];
+  const currentMonth = currentMonthCode();
+  const years = [...new Set(months.map((month) => monthYear(month)))].sort((a, b) =>
+    b.localeCompare(a),
   );
 
-  const badgeText =
-    !isLoading && !error && reports.length > 0 ? formatBudgetingBadge(reports.length) : null;
+  const badgeText = !isLoading && !error && months.length > 0 ? formatBudgetingBadge(months.length) : null;
 
   return (
     <div className={styles.root}>
@@ -70,14 +58,6 @@ export const ReportsList = () => {
             </span>
           )}
         </div>
-        <VIconButton
-          variant="filled"
-          ariaLabel="Добавить период"
-          onClick={() => setIsCreateOpen(true)}
-          isDisabled={isLoading}
-        >
-          <PlusIcon size={20} color="currentColor" />
-        </VIconButton>
       </div>
 
       {error && !isLoading && (
@@ -91,11 +71,10 @@ export const ReportsList = () => {
       {isLoading && (
         <VSkeletonList count={4} cardProps={{ compact: true, title: false, lines: 2 }} />
       )}
-      {!isLoading && !error && reports.length === 0 && (
+      {!isLoading && !error && months.length === 0 && (
         <VCard className={styles.emptyState}>
-          <h2>Начните с первого месяца</h2>
-          <p>Создайте период, чтобы записывать доходы и расходы и планировать бюджет.</p>
-          <VButton onClick={() => setIsCreateOpen(true)}>Добавить период</VButton>
+          <h2>Операций пока нет</h2>
+          <p>Добавьте первую операцию кнопкой «Добавить операцию», и месяц появится здесь.</p>
         </VCard>
       )}
       {!isLoading &&
@@ -105,52 +84,29 @@ export const ReportsList = () => {
               {year}
             </h2>
             <ul className={styles.list}>
-              {reports
-                .filter((report) => report.period_start.startsWith(year))
-                .map((report) => {
-                  const pending = Boolean((report as { _optimistic?: boolean })._optimistic);
-                  const current =
-                    report.period_start.slice(0, 10) <= localDate &&
-                    report.period_end.slice(0, 10) >= localDate;
+              {months
+                .filter((month) => month.startsWith(year))
+                .map((month) => {
+                  const current = month === currentMonth;
                   const content = (
                     <>
                       <span className={styles.titleInfo}>
-                        {current && <span className={styles.currentLabel}>Текущий период</span>}
-                        <span className={styles.title}>{report.name}</span>
+                        {current && <span className={styles.currentLabel}>Текущий месяц</span>}
+                        <span className={styles.title}>{formatMonthTitle(month)}</span>
                       </span>
                       <span className={styles.period}>
-                        <time dateTime={report.period_start}>
-                          {formatDisplay(report.period_start)}
-                        </time>{' '}
-                        —{' '}
-                        <time dateTime={report.period_end}>{formatDisplay(report.period_end)}</time>
+                        <time dateTime={month}>{formatMonthTitle(month)}</time>
                       </span>
                       <span className={styles.chevron} aria-hidden="true">
-                        {pending ? <VLoader size={18} /> : <ChevronRightIcon size={20} />}
+                        <ChevronRightIcon size={20} />
                       </span>
                     </>
                   );
                   return (
-                    <li key={report.id}>
-                      {pending ? (
-                        <div
-                          className={styles.row}
-                          data-current={current}
-                          role="status"
-                          aria-label={`${report.name}: создаётся`}
-                          aria-busy="true"
-                        >
-                          {content}
-                        </div>
-                      ) : (
-                        <Link
-                          to={`/reports/${report.id}`}
-                          className={styles.row}
-                          data-current={current}
-                        >
-                          {content}
-                        </Link>
-                      )}
+                    <li key={month}>
+                      <Link to={`/reports/${month}`} className={styles.row} data-current={current}>
+                        {content}
+                      </Link>
                     </li>
                   );
                 })}

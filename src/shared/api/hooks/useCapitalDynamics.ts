@@ -8,7 +8,7 @@ export interface CapitalMonth {
 }
 
 
-export const capitalDynamicsQueryKey = ['reports', 'capital-dynamics'] as const;
+export const capitalDynamicsQueryKey = ['operations', 'capital-dynamics'] as const;
 
 
 export type UseCapitalDynamicsResponse = CapitalMonth[];
@@ -18,5 +18,5 @@ export const useCapitalDynamics = () =>
     queryKey: capitalDynamicsQueryKey,
     staleTime: 5 * 60 * 1000,
     queryFn: async ({ signal }) =>
-      (await api.get<UseCapitalDynamicsResponse>('/reports/capital-dynamics', { signal })) ?? [],
+      (await api.get<UseCapitalDynamicsResponse>('/operations/capital-dynamics', { signal })) ?? [],
   });

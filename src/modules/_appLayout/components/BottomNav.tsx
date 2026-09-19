@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useSetAtom } from 'jotai';
 import { PlusIcon } from '@/shared/icons';
 import { NAV_ITEMS } from '../navItems';
+import { createOperationOpenAtom } from '../atoms/operationModal';
 import styles from './BottomNav.module.css';
 
 interface BottomNavProps {
@@ -10,6 +12,7 @@ interface BottomNavProps {
 
 // Нижняя навигация для мобильных экранов (M3E Navigation Bar).
 export const BottomNav = ({ bottomNavRef }: BottomNavProps) => {
+  const setCreateOpen = useSetAtom(createOperationOpenAtom);
   const [isHidden, setIsHidden] = useState(false);
   const lastScrollYRef = useRef(0);
 
@@ -77,13 +80,14 @@ export const BottomNav = ({ bottomNavRef }: BottomNavProps) => {
       <div className={styles.bottomNavList}>
         {firstItems.map(renderNavItem)}
 
-        {/* Центральный M3E FAB-заглушка (Вариант В) */}
+        {/* Центральный M3E FAB для создания операции */}
         <div className={styles.fabContainer}>
           <button
             type="button"
             className={styles.fabStub}
-            aria-label="Быстрое добавление (скоро)"
-            title="Быстрое добавление (скоро)"
+            aria-label="Добавить операцию"
+            title="Добавить операцию"
+            onClick={() => setCreateOpen(true)}
           >
             <PlusIcon size={22} />
           </button>

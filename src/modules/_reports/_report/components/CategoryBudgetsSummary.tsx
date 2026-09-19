@@ -1,7 +1,7 @@
 import { CurrencyText } from '@/shared/ui/Amount';
-import type { Category, Operation, Report } from '@/shared/api/types/domain';
+import type { Category, Operation } from '@/shared/api/types/domain';
 import { VCard } from '@/shared/ui/VCard';
-import { formatAmount } from '@/shared/utils';
+import { formatAmount, monthRange } from '@/shared/utils';
 import { parseISO } from '@/shared/utils/date';
 import { useCurrency } from '@/shared/api/hooks';
 import { useMemo } from 'react';
@@ -55,13 +55,13 @@ export const formatDailyValue = (
 interface CategoryBudgetsSummaryProps {
   operations: Operation[];
   categories: Category[];
-  report: Report | null;
+  month: string;
 }
 
 export const CategoryBudgetsSummary = ({
   operations,
   categories,
-  report,
+  month,
 }: CategoryBudgetsSummaryProps) => {
   const currency = useCurrency();
   const spentByCategory = useMemo(() => {
@@ -82,10 +82,14 @@ export const CategoryBudgetsSummary = ({
     [categories],
   );
 
-  const daysLeft = useMemo(
-    () => (report ? getDaysLeft(report.period_start, report.period_end) : null),
-    [report],
-  );
+  const daysLeft = useMemo(() => {
+    try {
+      const { from, to } = monthRange(month);
+      return getDaysLeft(from, to);
+    } catch {
+      return null;
+    }
+  }, [month]);
 
   if (budgeted.length === 0) {
     return null;

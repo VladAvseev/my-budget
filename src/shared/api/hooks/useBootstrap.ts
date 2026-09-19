@@ -5,7 +5,6 @@ import type { OperationSummary } from './useGlobalBalance';
 
 
 
-
 export interface BootstrapProfile {
   currency: string | null;
   onboarded: boolean;
@@ -14,33 +13,24 @@ export interface BootstrapProfile {
 
 export interface BootstrapOnboarding {
   categories: number;
-  reports: number;
   operations: number;
-}
-
-
-export interface BootstrapLastReport {
-  id: string;
-  name: string;
-  
-  period_start: string | null;
-  period_end: string | null;
-  summary: OperationSummary;
 }
 
 
 export interface UseBootstrapResponse {
   profile: BootstrapProfile;
   onboarding: BootstrapOnboarding;
-  lastReport: BootstrapLastReport | null;
+  currentMonth: OperationSummary;
+  trailingYear: OperationSummary;
   globalTotals: OperationSummary;
 }
 
 
 const EMPTY_BOOTSTRAP: UseBootstrapResponse = {
   profile: { currency: null, onboarded: false },
-  onboarding: { categories: 0, reports: 0, operations: 0 },
-  lastReport: null,
+  onboarding: { categories: 0, operations: 0 },
+  currentMonth: { income: 0, expense: 0 },
+  trailingYear: { income: 0, expense: 0 },
   globalTotals: { income: 0, expense: 0 },
 };
 

@@ -5,24 +5,23 @@ import { useQuery } from '@tanstack/react-query';
 
 
 
-
 export interface UseOperationsRequest {
-  reportId: string;
+  month: string;
   type: ApiOperationType;
 }
 
 
 export type UseOperationsResponse = Operation[];
 
-const fetchOperations = async ({ reportId, type }: UseOperationsRequest, signal?: AbortSignal) =>
-  (await api.get<UseOperationsResponse>(`/operations?reportId=${reportId}&type=${type}`, {
+const fetchOperations = async ({ month, type }: UseOperationsRequest, signal?: AbortSignal) =>
+  (await api.get<UseOperationsResponse>(`/operations?months=${month}&type=${type}`, {
     signal,
   })) ?? [];
 
-export const useOperations = (reportId: string, type: ApiOperationType) =>
+export const useOperations = (month: string, type: ApiOperationType) =>
   useQuery<UseOperationsResponse>({
-    queryKey: operationsQueryKey(reportId, type),
-    enabled: Boolean(reportId),
+    queryKey: operationsQueryKey(month, type),
+    enabled: Boolean(month),
     staleTime: 5 * 60 * 1000,
-    queryFn: ({ signal }) => fetchOperations({ reportId, type }, signal),
+    queryFn: ({ signal }) => fetchOperations({ month, type }, signal),
   });

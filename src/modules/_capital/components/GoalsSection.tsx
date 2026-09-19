@@ -3,7 +3,7 @@ import { PlusIcon } from '@/shared/icons';
 import { useAccounts, useGoals } from '@/shared/api/hooks';
 import { useAuth } from '@/shared/api/authProvider';
 import { type Goal } from '@/shared/api/types/domain';
-import { formatDisplay, toISODate } from '@/shared/utils';
+import { currentMonthCode, formatDisplay } from '@/shared/utils';
 import {
   buildGoalsOverallProgress,
   buildGoalsProgress,
@@ -23,7 +23,6 @@ import { VIconButton } from '@/shared/ui/VIconButton';
 import { VSkeletonList } from '@/shared/ui/VSkeleton';
 import { useMemo, useState } from 'react';
 import { useAverageMonthlyGrowth } from '../hooks/useAverageMonthlyGrowth';
-import { useReports } from '../api/useReports';
 import { useDisplayCurrency } from '../hooks/useDisplayCurrency';
 import styles from './GoalsSection.module.css';
 
@@ -84,7 +83,6 @@ export const GoalsSection = () => {
   const userId = user?.id ?? '';
   const goalsQuery = useGoals(userId);
   const accountsQuery = useAccounts(userId);
-  const reportsQuery = useReports(userId);
   const [goalModal, setGoalModal] = useState<{ goal: Goal | null } | null>(null);
   const { displaySymbol, convertOptions } = useDisplayCurrency();
   const growth = useAverageMonthlyGrowth(userId);
@@ -107,19 +105,13 @@ export const GoalsSection = () => {
     (sum, p) => sum + goalMonthlyContribution(p, overallForecastMonths),
     0,
   );
-  const todayISO = toISODate(new Date());
-  const currentReport = (reportsQuery.data ?? []).find(
-    (report) => report.period_start <= todayISO && todayISO <= report.period_end,
-  );
-  const operationsQuery = useGoalPeriodOperations({ reportId: currentReport?.id ?? '' });
+  const currentMonth = currentMonthCode();
+  const operationsQuery = useGoalPeriodOperations({ month: currentMonth });
   const currentPeriodSaved = currentGoalContributions(
     operationsQuery.data ?? [],
     new Set(progressList.map((p) => p.goal.account_id)),
   );
-  const periodReady =
-    !reportsQuery.isLoading &&
-    !reportsQuery.error &&
-    (!currentReport || (!operationsQuery.isLoading && !operationsQuery.error));
+  const periodReady = !operationsQuery.isLoading && !operationsQuery.error;
   const showPeriodProgress = monthlyPlan > 0;
 
   const isLoading = goalsQuery.isLoading || accountsQuery.isLoading;
@@ -240,8 +232,8 @@ export const GoalsSection = () => {
               )}
               {!periodReady && (
                 <div className={styles.forecast}>
-                  {reportsQuery.error || operationsQuery.error
-                    ? 'Не удалось загрузить пополнения текущего периода'
+                  {operationsQuery.error
+                    ? 'Не удалось загрузить пополнения текущего месяца'
                     : 'Загрузка пополнений…'}
                 </div>
               )}

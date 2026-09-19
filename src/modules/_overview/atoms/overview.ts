@@ -1,5 +1,8 @@
 import { atom } from 'jotai';
 
-export const selectedReportIdsAtom = atom<string[]>([]);
+export const selectedMonthsAtom = atom<string[]>([]);
 export const selectedDisplayCurrencyAtom = atom<string | null>(null);
-export const comparedReportIdAtom = atom<string>('');
+export const comparedMonthAtom = atom<string>('');
+
+export const selectedReportIdsAtom = selectedMonthsAtom;
+export const comparedReportIdAtom = comparedMonthAtom;

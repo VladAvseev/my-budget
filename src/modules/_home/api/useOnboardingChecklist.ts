@@ -8,7 +8,7 @@ export interface OnboardingItem {
   done: boolean;
 }
 
-const EMPTY_ONBOARDING = { categories: 0, reports: 0, operations: 0 };
+const EMPTY_ONBOARDING = { categories: 0, operations: 0 };
 
 export const useOnboardingChecklist = () => {
   const { data, isLoading, error } = useBootstrap();
@@ -32,15 +32,8 @@ export const useOnboardingChecklist = () => {
       done: counts.categories > 0,
     },
     {
-      id: 'report',
-      label: 'Добавьте первый период в разделе «Периоды»',
-      actionLabel: 'К периодам',
-      route: '/reports',
-      done: counts.reports > 0,
-    },
-    {
       id: 'operations',
-      label: 'Откройте новый период и запишите первую операцию',
+      label: 'Запишите первую операцию',
       actionLabel: 'К периодам',
       route: '/reports',
       done: counts.operations > 0,

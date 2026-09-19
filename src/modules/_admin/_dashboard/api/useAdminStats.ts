@@ -5,11 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 export interface AdminDashboardStats {
   users: {
     total: number;
-    
-    withoutReports: number;
     onboarded: number;
   };
-  
+
   activity: {
     dau: number;
     wau: number;
@@ -18,7 +16,7 @@ export interface AdminDashboardStats {
     sau: number;
     yau: number;
   };
-  
+
   churn: {
     inactive1d: number;
     inactive7d: number;
@@ -27,13 +25,11 @@ export interface AdminDashboardStats {
     inactive180d: number;
     inactive365d: number;
   };
-  reports: {
-    total: number;
-  };
   operations: {
     total: number;
     income: number;
     expense: number;
+    transfer: number;
   };
 }
 

@@ -1,7 +1,7 @@
 import { CurrencyText } from '@/shared/ui/Amount';
 import { useBootstrap, useCurrency } from '@/shared/api/hooks';
 import { ChevronRightIcon, ReportsIcon } from '@/shared/icons';
-import { VCard } from '@/shared/ui/VCard';
+import { currentMonthCode, formatMonthTitle } from '@/shared/utils';
 import { formatAmount, percentOfIncome } from '@/shared/utils';
 import { Link } from 'react-router-dom';
 import { CardSkeleton } from './CardSkeleton';
@@ -11,32 +11,12 @@ const EMPTY_SUMMARY = { income: 0, expense: 0 };
 
 export const LastReportCard = () => {
   const { data, isLoading } = useBootstrap();
-  const lastReport = data?.lastReport ?? null;
-  const summary = lastReport?.summary ?? EMPTY_SUMMARY;
+  const summary = data?.currentMonth ?? EMPTY_SUMMARY;
   const currency = useCurrency();
+  const month = currentMonthCode();
 
   if (isLoading) {
     return <CardSkeleton delay="0.18s" wide />;
-  }
-
-  if (!lastReport) {
-    return (
-      <Link to="/reports" className={`${styles.link} ${styles.heroLink}`}>
-        <VCard interactive className={styles.card}>
-          <div className={styles.titleRow}>
-            <span className={styles.titleChip}>
-              <ReportsIcon size={20} />
-            </span>
-            <div className={styles.title}>Последний период</div>
-          </div>
-          <div className={styles.emptyMessage}>Периоды не найдены</div>
-          <div className={styles.subtitle}>Перейдите в раздел «Периоды» и добавьте период.</div>
-        </VCard>
-        <span className={styles.chevron} aria-hidden="true">
-          <ChevronRightIcon size={20} />
-        </span>
-      </Link>
-    );
   }
 
   const expenses = summary.expense;
@@ -44,13 +24,13 @@ export const LastReportCard = () => {
   const balanceSavingsRate = balance > 0 ? percentOfIncome(balance, summary.income) : null;
 
   return (
-    <Link to={`/reports/${lastReport.id}`} className={`${styles.link} ${styles.heroLink}`}>
+    <Link to={`/reports/${month}`} className={`${styles.link} ${styles.heroLink}`}>
       <div className={styles.hero}>
         <div className={styles.titleRow}>
           <span className={`${styles.titleChip} ${styles.titleChipOnPrimary}`}>
             <ReportsIcon size={20} />
           </span>
-          <div className={styles.heroTitle}>{lastReport.name}</div>
+          <div className={styles.heroTitle}>{formatMonthTitle(month)}</div>
         </div>
         <div className={styles.heroBody}>
           <div className={styles.heroMain}>
