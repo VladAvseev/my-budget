@@ -85,20 +85,36 @@
 }
 .cardTop {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.cardHeader {
+  display: flex;
   align-items: baseline;
-  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 8px 12px;
   min-width: 0;
 }
 .cardTitle {
-  flex: 1 1 100%;
+  flex: 1;
+  min-width: 0;
   font: var(--md-sys-typescale-title-medium-emphasized);
   color: var(--md-sys-color-on-surface);
   overflow-wrap: anywhere;
 }
 .targetDate {
+  margin-left: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
   font: var(--md-sys-typescale-body-small);
   color: var(--md-sys-color-on-surface-variant);
+}
+.cardBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
 }
 .track {
   height: 8px;

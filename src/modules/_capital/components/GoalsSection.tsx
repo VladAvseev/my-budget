@@ -223,7 +223,7 @@ export const GoalsSection = () => {
               </div>
               {showPeriodProgress && periodReady && (
                 <div className={styles.periodRow}>
-                  Пополнено в этом месяце:{' '}
+                  Пополнено в этом месяце на{' '}
                   <Amount
                     value={currentPeriodSaved}
                     currencySymbol={displaySymbol}
@@ -282,12 +282,18 @@ export const GoalsSection = () => {
                   aria-busy={pending}
                 >
                   <div className={styles.cardTop}>
-                    <span className={styles.cardTitle}>{account.name}</span>
-                    {goal.target_date && (
-                      <span className={styles.targetDate}>{formatDisplay(goal.target_date)}</span>
+                    <div className={styles.cardHeader}>
+                      <span className={styles.cardTitle}>{account.name}</span>
+                      {goal.target_date && (
+                        <span className={styles.targetDate}>{formatDisplay(goal.target_date)}</span>
+                      )}
+                    </div>
+                    {(progress.overdue || progress.reached) && (
+                      <div className={styles.cardBadges}>
+                        {progress.overdue && <VBadge variant="warning">Просрочена</VBadge>}
+                        {progress.reached && <VBadge variant="success">Цель достигнута</VBadge>}
+                      </div>
                     )}
-                    {progress.overdue && <VBadge variant="warning">Просрочена</VBadge>}
-                    {progress.reached && <VBadge variant="success">Цель достигнута</VBadge>}
                   </div>
 
                   <div
@@ -324,7 +330,7 @@ export const GoalsSection = () => {
                     <>
                       {periodReady && (
                         <div className={styles.periodRow}>
-                          Пополнено в этом месяце:{' '}
+                          Пополнено в этом месяце на{' '}
                           <span
                             className={
                               goalMonthlySaved > 0 ? styles.positiveContribution : undefined
