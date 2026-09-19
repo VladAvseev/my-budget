@@ -6,6 +6,8 @@ import { buildCapitalChartData } from '../utils/buildCapitalChartData';
 import { buildGrowthStats } from '@/shared/widgets/GrowthDynamicsCard/model/buildGrowthStats';
 import { VGrowthDynamicsCard } from '@/shared/widgets/GrowthDynamicsCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
+import { VBadge } from '@/shared/ui/VBadge';
+import { formatCapitalDuration } from '../utils/formatCapitalDuration';
 import styles from './CapitalGrowthCard.module.css';
 
 export interface CapitalGrowthCardCurrency {
@@ -81,6 +83,11 @@ export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCard
     [chartData, aggregation, base, firstActivityDate],
   );
 
+  const durationText = useMemo(
+    () => (isLoading ? null : formatCapitalDuration(rawChartData.length)),
+    [isLoading, rawChartData.length],
+  );
+
   if (isError) {
     return (
       <div className={styles.root} role="region" aria-label={title}>
@@ -101,6 +108,13 @@ export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCard
     <div className={styles.root} role="region" aria-label={title}>
       <VGrowthDynamicsCard
         title={title}
+        badge={
+          durationText ? (
+            <VBadge variant="accent" title="Срок ведения учёта капитала">
+              {durationText}
+            </VBadge>
+          ) : undefined
+        }
         isLoading={isLoading}
         aggregation={aggregation}
         onAggregationChange={setAggregation}

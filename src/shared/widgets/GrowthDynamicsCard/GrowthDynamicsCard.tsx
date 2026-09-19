@@ -1,6 +1,7 @@
 import { VCard } from '@/shared/ui/VCard';
 import { VButtonGroup, type VButtonGroupOption } from '@/shared/ui/VButtonGroup';
 import { VSkeleton } from '@/shared/ui/VSkeleton';
+import type { ReactNode } from 'react';
 import type { ChartPoint, GrowthAggregation } from '@/shared/utils/chartPoints';
 import { VGrowthChart } from '@/shared/ui/VGrowthChart';
 import { GrowthStats } from './GrowthStats';
@@ -9,6 +10,7 @@ import styles from './GrowthDynamicsCard.module.css';
 
 interface VGrowthDynamicsCardProps {
   title: string;
+  badge?: ReactNode;
   isLoading: boolean;
   aggregation: GrowthAggregation;
   onAggregationChange: (aggregation: GrowthAggregation) => void;
@@ -27,6 +29,7 @@ const aggregationOptions: VButtonGroupOption[] = [
 
 export const VGrowthDynamicsCard = ({
   title,
+  badge,
   isLoading,
   aggregation,
   onAggregationChange,
@@ -38,6 +41,7 @@ export const VGrowthDynamicsCard = ({
   <VCard className={styles.mobileCompact}>
     <div className={styles.header}>
       <div className={styles.title}>{title}</div>
+      {badge}
     </div>
 
     <div className={styles.controls}>
