@@ -1,6 +1,6 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useAuth } from '@/shared/api/authProvider';
 import { useCapital, useCurrency } from '@/shared/api/hooks';
@@ -9,17 +9,18 @@ import {
   BanknotesIcon,
   CapitalIcon,
   ChevronDownIcon,
-  ChevronRightIcon,
   ClearIcon,
   EyeIcon,
   EyeOffIcon,
 } from '@/shared/icons';
 import { Amount, CurrencyText } from '@/shared/ui/Amount';
+import { VButton } from '@/shared/ui/VButton';
 import { formatAmount } from '@/shared/utils';
 import { hideBalanceAtom } from '../atoms/privacy';
 import styles from './AccountsBalanceBadge.module.css';
 
 export const AccountsBalanceBadge = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const accountsQuery = useCapital(user?.id ?? '');
   const currency = useCurrency();
@@ -189,21 +190,26 @@ export const AccountsBalanceBadge = () => {
       </div>
 
       <div className={styles.panelFooter}>
-        <Link
-          to="/capital"
-          className={styles.footerActionPrimary}
-          onClick={() => setIsOpen(false)}
+        <VButton
+          variant="secondary"
+          className={styles.footerButton}
+          onClick={() => {
+            setIsOpen(false);
+            navigate('/profile');
+          }}
         >
-          <span>Вся аналитика капитала</span>
-          <ChevronRightIcon size={16} aria-hidden="true" />
-        </Link>
-        <Link
-          to="/profile"
-          className={styles.footerActionSecondary}
-          onClick={() => setIsOpen(false)}
+          Счета
+        </VButton>
+        <VButton
+          variant="primary"
+          className={styles.footerButton}
+          onClick={() => {
+            setIsOpen(false);
+            navigate('/capital');
+          }}
         >
-          <span>Управление счетами</span>
-        </Link>
+          Капитал
+        </VButton>
       </div>
     </>
   );
