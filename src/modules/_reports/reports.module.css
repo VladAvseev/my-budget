@@ -9,28 +9,6 @@
 .page h1 {
   overflow-wrap: anywhere;
 }
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-.header > :first-child {
-  flex: 1;
-  min-width: 0;
-}
-.dates {
-  margin: 0;
-  color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-body-medium);
-  font-variant-numeric: tabular-nums;
-}
-.settings {
-  display: grid;
-  gap: 12px;
-  align-items: start;
-  min-width: 0;
-}
 .page :is(button, a, [role='button'], [role='combobox']):focus-visible {
   outline: 3px solid var(--md-sys-color-primary);
   outline-offset: 3px;
@@ -38,11 +16,6 @@
 @media (min-width: 600px) {
   .page {
     gap: 16px;
-  }
-}
-@media (min-width: 1200px) {
-  .settings {
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.48fr);
   }
 }
 @media (min-width: 1600px) {

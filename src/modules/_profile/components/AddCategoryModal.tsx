@@ -3,6 +3,7 @@ import { useAuth } from '@/shared/api/authProvider';
 import { VButton } from '@/shared/ui/VButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
+import { VToggle } from '@/shared/ui/VToggle';
 import commonStyles from '@/shared/styles/common.module.css';
 import { capitalizeFirst, getErrorMessage } from '@/shared/utils';
 import { useState } from 'react';
@@ -24,15 +25,37 @@ export const AddCategoryModal = ({ type, visible, onClose }: AddCategoryModalPro
 
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
+  const [limit, setLimit] = useState('');
+  const [showDailyLimit, setShowDailyLimit] = useState(false);
   const [nameError, setNameError] = useState<string>();
+  const [limitError, setLimitError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
+
+  const isExpense = type === 'expense';
+  const limitLabel = isExpense ? 'Бюджет' : 'Цель';
+  const dailyLabel = isExpense ? 'Показывать бюджет на день' : 'Показывать цель на день';
 
   const handleClose = () => {
     setName('');
     setColor('');
+    setLimit('');
+    setShowDailyLimit(false);
     setNameError(undefined);
+    setLimitError(undefined);
     setSubmitError(undefined);
     onClose();
+  };
+
+  const parseLimit = (): number | null | undefined => {
+    const trimmed = limit.trim();
+    if (trimmed === '') return null;
+    const value = Number(trimmed);
+    if (!Number.isFinite(value) || value <= 0) {
+      setLimitError('Укажите положительную сумму');
+      return undefined;
+    }
+    setLimitError(undefined);
+    return value;
   };
 
   const handleSubmit = () => {
@@ -53,9 +76,12 @@ export const AddCategoryModal = ({ type, visible, onClose }: AddCategoryModalPro
       return;
     }
 
+    const limitAmount = parseLimit();
+    if (limitAmount === undefined) return;
+
     setNameError(undefined);
     createCategory.mutate(
-      { type, name: trimmedName, color: color || null },
+      { type, name: trimmedName, color: color || null, limitAmount, showDailyLimit },
       {
         onSuccess: handleClose,
         onError: (error: Error) => setSubmitError(getErrorMessage(error)),
@@ -96,6 +122,24 @@ export const AddCategoryModal = ({ type, visible, onClose }: AddCategoryModalPro
           value={color}
           disabled={createCategory.isPending}
           onChange={setColor}
+        />
+        <VTextInput
+          label={limitLabel}
+          placeholder="0.00"
+          numeric
+          value={limit}
+          error={limitError}
+          disabled={createCategory.isPending}
+          onChange={(nextValue) => {
+            setLimit(nextValue);
+            setLimitError(undefined);
+          }}
+        />
+        <VToggle
+          label={dailyLabel}
+          checked={showDailyLimit}
+          disabled={createCategory.isPending}
+          onChange={setShowDailyLimit}
         />
       </div>
     </VModal>

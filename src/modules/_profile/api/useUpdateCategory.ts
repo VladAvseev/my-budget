@@ -12,6 +12,8 @@ export interface UseUpdateCategoryRequest {
   input: {
     name?: string;
     color?: string | null;
+    limitAmount?: number | null;
+    showDailyLimit?: boolean;
   };
 }
 
@@ -20,6 +22,8 @@ export type UseUpdateCategoryResponse = Category;
 interface UpdateCategoryBody {
   name?: string;
   color?: string | null;
+  limitAmount?: number | null;
+  showDailyLimit?: boolean;
 }
 
 export const useUpdateCategory = (userId: string) => {
@@ -31,6 +35,8 @@ export const useUpdateCategory = (userId: string) => {
       const body: UpdateCategoryBody = {};
       if (input.name !== undefined) body.name = trimStrings(input.name);
       if (input.color !== undefined) body.color = input.color;
+      if (input.limitAmount !== undefined) body.limitAmount = input.limitAmount;
+      if (input.showDailyLimit !== undefined) body.showDailyLimit = input.showDailyLimit;
       return api.patch<UseUpdateCategoryResponse>(`/categories/${id}`, body);
     },
     onMutate: async ({ id, input }) => {
@@ -44,6 +50,10 @@ export const useUpdateCategory = (userId: string) => {
                 ...item,
                 ...(input.name !== undefined ? { name: input.name } : {}),
                 ...(input.color !== undefined ? { color: input.color } : {}),
+                ...(input.limitAmount !== undefined ? { limit_amount: input.limitAmount } : {}),
+                ...(input.showDailyLimit !== undefined
+                  ? { show_daily_limit: input.showDailyLimit }
+                  : {}),
                 _optimistic: true,
               } as Category & OptimisticItem)
             : item,

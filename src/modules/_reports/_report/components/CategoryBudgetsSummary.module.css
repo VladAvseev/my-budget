@@ -77,6 +77,17 @@
 .value {
   font-size: var(--md-sys-typescale-body-small-size);
   font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.daily {
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
+  white-space: nowrap;
 }
 
 

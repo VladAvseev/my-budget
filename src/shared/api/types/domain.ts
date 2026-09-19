@@ -31,16 +31,8 @@ export interface Category {
   type: string;
   name: string;
   color: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface CategoryLimit {
-  id: string;
-  report_id: string;
-  category_id: string;
-  user_id: string;
-  amount: number;
+  limit_amount: number | null;
+  show_daily_limit: boolean;
   created_at: string;
   updated_at: string;
 }

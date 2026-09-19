@@ -12,6 +12,8 @@ export interface UseCreateCategoryRequest {
   type: CategoryType;
   name: string;
   color?: string | null;
+  limitAmount?: number | null;
+  showDailyLimit?: boolean;
 }
 
 export type UseCreateCategoryResponse = Category;
@@ -20,6 +22,8 @@ interface CreateCategoryBody {
   type: CategoryType;
   name: string;
   color: string | null;
+  limitAmount: number | null;
+  showDailyLimit: boolean;
 }
 
 export const useCreateCategory = (userId: string) => {
@@ -32,6 +36,8 @@ export const useCreateCategory = (userId: string) => {
         type: input.type,
         name: trimStrings(input.name),
         color: input.color ?? null,
+        limitAmount: input.limitAmount ?? null,
+        showDailyLimit: input.showDailyLimit ?? false,
       };
       return api.post<UseCreateCategoryResponse>('/categories', body);
     },
@@ -48,6 +54,8 @@ export const useCreateCategory = (userId: string) => {
         type: input.type,
         name: input.name,
         color: input.color ?? null,
+        limit_amount: input.limitAmount ?? null,
+        show_daily_limit: input.showDailyLimit ?? false,
         created_at: now,
         updated_at: now,
         _optimistic: true,

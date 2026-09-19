@@ -1,9 +1,7 @@
-import { SettingsIcon } from '@/shared/icons';
 import commonStyles from '@/shared/styles/common.module.css';
 import { VCard } from '@/shared/ui/VCard';
 import { VSkeletonCard } from '@/shared/ui/VSkeleton';
 import { VPageHeader } from '@/shared/ui/VPageHeader';
-import { VIconButton } from '@/shared/ui/VIconButton';
 import { useAtom } from 'jotai';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReport } from './api/useReport';
@@ -35,22 +33,11 @@ export const Page: React.FC = () => {
 
   return (
     <div className={layout.page}>
-      <div className={layout.header}>
-        <VPageHeader
-          title={report?.name ?? 'Период'}
-          onBack={() => navigate('/reports')}
-          backAriaLabel="Назад к периодам"
-        />
-        {report && (
-          <VIconButton
-            ariaLabel="Настройки"
-            onClick={() => navigate(`/reports/${report.id}/settings`)}
-            color="var(--md-sys-color-on-surface)"
-          >
-            <SettingsIcon size={24} color="currentColor" />
-          </VIconButton>
-        )}
-      </div>
+      <VPageHeader
+        title={report?.name ?? 'Период'}
+        onBack={() => navigate('/reports')}
+        backAriaLabel="Назад к периодам"
+      />
 
       {error && (
         <VErrorCard
@@ -88,7 +75,7 @@ export const Page: React.FC = () => {
             )}
           </div>
           <section aria-label="Операции периода">
-            <OperationsTabs reportId={reportId} />
+            <OperationsTabs reportId={reportId} report={report ?? null} />
           </section>
           {report &&
             (operationModal?.operation ? (

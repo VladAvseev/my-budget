@@ -5,6 +5,7 @@ import { VButton } from '@/shared/ui/VButton';
 import { VIconButton } from '@/shared/ui/VIconButton';
 import { VModal } from '@/shared/ui/VModal';
 import { VTextInput } from '@/shared/ui/VTextInput';
+import { VToggle } from '@/shared/ui/VToggle';
 import commonStyles from '@/shared/styles/common.module.css';
 import modalStyles from '@/shared/styles/modal.module.css';
 import { capitalizeFirst, getErrorMessage } from '@/shared/utils';
@@ -34,8 +35,17 @@ export const EditCategoryModal = ({
 
   const [name, setName] = useState(category?.name ?? '');
   const [color, setColor] = useState(category?.color ?? '');
+  const [limit, setLimit] = useState(
+    category?.limit_amount != null ? String(category.limit_amount) : '',
+  );
+  const [showDailyLimit, setShowDailyLimit] = useState(category?.show_daily_limit ?? false);
   const [nameError, setNameError] = useState<string>();
+  const [limitError, setLimitError] = useState<string>();
   const [submitError, setSubmitError] = useState<string>();
+
+  const isExpense = (category?.type ?? 'expense') === 'expense';
+  const limitLabel = isExpense ? 'Бюджет' : 'Цель';
+  const dailyLabel = isExpense ? 'Показывать бюджет на день' : 'Показывать цель на день';
 
   const handleClose = () => {
     if (!updateCategory.isPending) {
@@ -63,8 +73,24 @@ export const EditCategoryModal = ({
     }
 
     setNameError(undefined);
+
+    const trimmedLimit = limit.trim();
+    let limitAmount: number | null = null;
+    if (trimmedLimit !== '') {
+      const value = Number(trimmedLimit);
+      if (!Number.isFinite(value) || value <= 0) {
+        setLimitError('Укажите положительную сумму');
+        return;
+      }
+      limitAmount = value;
+    }
+    setLimitError(undefined);
+
     updateCategory.mutate(
-      { id: category?.id ?? '', input: { name: trimmedName, color: color || null } },
+      {
+        id: category?.id ?? '',
+        input: { name: trimmedName, color: color || null, limitAmount, showDailyLimit },
+      },
       {
         onSuccess: onClose,
         onError: (error: Error) => setSubmitError(getErrorMessage(error)),
@@ -118,6 +144,24 @@ export const EditCategoryModal = ({
           value={color}
           disabled={updateCategory.isPending}
           onChange={setColor}
+        />
+        <VTextInput
+          label={limitLabel}
+          placeholder="0.00"
+          numeric
+          value={limit}
+          error={limitError}
+          disabled={updateCategory.isPending}
+          onChange={(nextValue) => {
+            setLimit(nextValue);
+            setLimitError(undefined);
+          }}
+        />
+        <VToggle
+          label={dailyLabel}
+          checked={showDailyLimit}
+          disabled={updateCategory.isPending}
+          onChange={setShowDailyLimit}
         />
       </div>
     </VModal>

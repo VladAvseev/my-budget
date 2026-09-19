@@ -1,7 +1,7 @@
 import { PlusIcon } from '@/shared/icons';
 import { useMemo } from 'react';
 import { useAuth } from '@/shared/api/authProvider';
-import type { Operation, ApiOperationType } from '@/shared/api/types/domain';
+import type { ApiOperationType, Operation, Report } from '@/shared/api/types/domain';
 import { VAccordion } from '@/shared/ui/VAccordion';
 import { VBanner } from '@/shared/ui/VBanner';
 import { VCard } from '@/shared/ui/VCard';
@@ -15,45 +15,54 @@ import { useCurrency } from '@/shared/api/hooks';
 import { useAtom, useSetAtom } from 'jotai';
 import { groupedByTypeAtom, operationModalAtom } from '../atoms/report';
 import { categoryTypeForOperation } from '../api/categoryTypeForOperation';
-import { useCategoryLimits } from '../api/useCategoryLimits';
 import { useCategoriesByType } from '../api/useCategories';
 import { useAccounts } from '@/shared/api/hooks/useAccounts';
 import { useOperations } from '../api/useOperations';
 import { OperationCard } from './OperationCard';
-import { CategoryLimitsSummary, formatLimitValue, getLimitColor } from './CategoryLimitsSummary';
+import {
+  CategoryBudgetsSummary,
+  formatBudgetValue,
+  formatDailyValue,
+  getBudgetColor,
+  getDaysLeft,
+} from './CategoryBudgetsSummary';
 import styles from './operationList.module.css';
 
 interface OperationListProps {
   reportId: string;
+  report: Report | null;
   type: ApiOperationType;
 }
 
-export const OperationList = ({ reportId, type }: OperationListProps) => {
+export const OperationList = ({ reportId, report, type }: OperationListProps) => {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const operationsQuery = useOperations(reportId, type);
   const accountsQuery = useAccounts(userId);
-  
+
   const categoryType = categoryTypeForOperation(type);
   const categoriesQuery = useCategoriesByType(
     categoryType ? userId : '',
     categoryType ?? 'expense',
   );
-  const limitsQuery = useCategoryLimits(type === 'expense' ? reportId : '');
   const setModal = useSetAtom(operationModalAtom);
   const [groupedByType, setGroupedByType] = useAtom(groupedByTypeAtom);
   const currency = useCurrency();
 
-  
   const operations = useMemo(() => operationsQuery.data ?? [], [operationsQuery.data]);
   const operationsLoading = operationsQuery.isLoading;
   const operationsError = operationsQuery.error;
   const hasOperationsData = operationsQuery.data != null;
   const categories = categoriesQuery.data ?? [];
   const accounts = accountsQuery.data ?? [];
-  const limits = limitsQuery.data ?? [];
   const isTransfer = type === 'transfer';
-  
+  const showBudgets = type === 'expense' || type === 'income';
+
+  const daysLeft = useMemo(
+    () => (report ? getDaysLeft(report.period_start, report.period_end) : null),
+    [report],
+  );
+
   const isGrouped = !isTransfer && (groupedByType[type] ?? false);
 
   const toggleGrouping = (next: boolean) => {
@@ -62,7 +71,6 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
 
   const categoriesById = new Map(categories.map((category) => [category.id, category]));
   const accountsById = new Map(accounts.map((account) => [account.id, account]));
-  const limitsByCategory = new Map(limits.map((limit) => [limit.category_id, limit]));
 
   const groups = useMemo(() => {
     const result: { key: string; label: string; color?: string; operations: Operation[] }[] = [];
@@ -100,8 +108,8 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
 
   return (
     <div className={styles.root}>
-      {type === 'expense' && (
-        <CategoryLimitsSummary operations={operations} limits={limits} categories={categories} />
+      {showBudgets && (
+        <CategoryBudgetsSummary operations={operations} categories={categories} report={report} />
       )}
 
       <div className={styles.toolbar}>
@@ -173,18 +181,24 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
       {!operationsLoading && isGrouped && (
         <div className={styles.list}>
           {groups.map((group) => {
-            const limit = limitsByCategory.get(group.key);
+            const category = categoriesById.get(group.key);
+            const limitAmount =
+              category?.limit_amount != null ? Number(category.limit_amount) || 0 : 0;
+            const hasLimit = limitAmount > 0;
             const groupTotal = group.operations.reduce(
               (sum, op) => sum + (Number(op.amount) || 0),
               0,
             );
-            const limitAmount = limit ? Number(limit.amount) || 0 : 0;
-            const headerValue = limit
-              ? formatLimitValue(groupTotal, limitAmount, currency?.symbol)
+            const headerValue = hasLimit
+              ? formatBudgetValue(groupTotal, limitAmount, currency?.symbol)
               : formatAmount(groupTotal, currency?.symbol);
-            const headerColor = limit
-              ? getLimitColor(groupTotal, limitAmount)
+            const headerColor = hasLimit
+              ? getBudgetColor(groupTotal, limitAmount)
               : 'var(--md-sys-color-on-surface)';
+            const daily =
+              hasLimit && category?.show_daily_limit && daysLeft != null
+                ? formatDailyValue(limitAmount, daysLeft, currency?.symbol)
+                : null;
 
             return (
               <div key={group.key}>
@@ -199,7 +213,9 @@ export const OperationList = ({ reportId, type }: OperationListProps) => {
                       />
                       <span className={styles.accordionLabel}>{group.label}</span>
                       <span className={styles.accordionTotal} style={{ color: headerColor }}>
-                        <CurrencyText>{headerValue}</CurrencyText>
+                        <CurrencyText>
+                          {daily != null ? `${headerValue} · ${daily} в день` : headerValue}
+                        </CurrencyText>
                       </span>
                     </span>
                   }
