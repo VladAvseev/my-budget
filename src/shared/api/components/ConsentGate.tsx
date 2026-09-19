@@ -9,9 +9,9 @@ import { GATING_DOCUMENT_TYPE, legalDocumentPath } from '@/shared/legal/document
 import { getErrorMessage } from '@/shared/utils';
 import { VButton } from '@/shared/ui/VButton';
 import { VCheckbox } from '@/shared/ui/VCheckbox';
-import { VConfirmModal } from '@/shared/ui/VConfirmModal';
 import { VLoader } from '@/shared/ui/VLoader';
 import { VModal } from '@/shared/ui/VModal';
+import { DeleteAccountConfirmModal } from './DeleteAccountConfirmModal';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
@@ -88,13 +88,15 @@ export const ConsentGate = ({ children }: { children: ReactNode }) => {
 
 
 const ConsentScreen = ({ status }: { status: ConsentStatus }) => {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
   const [checked, setChecked] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
   const grant = useGrantConsent();
   const removeAccount = useDeleteAccount();
+
+  const login = user?.login ?? '—';
 
   const handleAccept = () => {
     setError(undefined);
@@ -187,18 +189,11 @@ const ConsentScreen = ({ status }: { status: ConsentStatus }) => {
         </div>
       </VModal>
 
-      <VConfirmModal
+      <DeleteAccountConfirmModal
         visible={isDeleteConfirmOpen}
-        title="Удалить аккаунт"
-        message={
-          'Аккаунт и все финансовые данные (отчёты, операции, категории) ' +
-          'будут удалены безвозвратно. Выход из всех устройств — немедленный. ' +
-          'Отзыв и обезличивание фиксируются в юридическом журнале согласий.'
-        }
-        confirmLabel="Удалить навсегда"
-        cancelLabel="Отмена"
-        isLoading={removeAccount.isPending}
-        onCancel={() => setIsDeleteConfirmOpen(false)}
+        login={login}
+        isPending={removeAccount.isPending}
+        onClose={() => setIsDeleteConfirmOpen(false)}
         onConfirm={handleDelete}
       />
     </>
