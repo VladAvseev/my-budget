@@ -7,6 +7,7 @@ import { buildGrowthStats } from '@/shared/widgets/GrowthDynamicsCard/model/buil
 import { VGrowthDynamicsCard } from '@/shared/widgets/GrowthDynamicsCard';
 import { VErrorCard } from '@/shared/ui/VErrorCard';
 import { VBadge } from '@/shared/ui/VBadge';
+import { CalendarIcon } from '@/shared/icons';
 import { formatCapitalDuration } from '../utils/formatCapitalDuration';
 import styles from './CapitalGrowthCard.module.css';
 
@@ -110,8 +111,13 @@ export const CapitalGrowthCard = ({ userId, title, currency }: CapitalGrowthCard
         title={title}
         badge={
           durationText ? (
-            <VBadge variant="accent" title="Срок ведения учёта капитала">
-              {durationText}
+            <VBadge
+              variant="accent"
+              className={styles.durationBadge}
+              title="Срок ведения учёта капитала"
+            >
+              <CalendarIcon size={16} aria-hidden="true" />
+              <span>{durationText}</span>
             </VBadge>
           ) : undefined
         }

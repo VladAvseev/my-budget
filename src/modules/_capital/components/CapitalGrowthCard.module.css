@@ -3,6 +3,9 @@
 .root {
   min-width: 0;
 }
+.durationBadge {
+  gap: 6px;
+}
 .root .mobileCompact {
   padding: 12px;
   border-radius: var(--md-sys-shape-corner-extra-large-increased)
